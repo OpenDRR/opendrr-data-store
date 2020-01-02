@@ -1,0 +1,71 @@
+-- script to generate the cDamage_CA tables (baseline, scenario1, scenario2)
+DROP TABLE IF EXISTS cDamage_CA_baseline, cDamage_CA_s1, cDamage_CA_s2;  
+
+-- create tables
+CREATE TABLE cDamage_CA_baseline(
+    PRIMARY KEY (id),
+    id varchar,
+    pd0_None float,
+    pd0_Slight float,
+    pd0_GreenTag float,
+    pd0_Moderate float,
+    pd0_YellowTag_m float,
+    pd0_Extensive float,
+    pd0_Complete float,
+    pd0_RedTag float,
+    pd0_RedTag_m float,
+    pd0_Collapse float,
+    pd0_Collapse_m float
+);
+
+CREATE TABLE cDamage_CA_scenario1(
+    PRIMARY KEY (id),
+    id varchar,
+    pd1_None float,
+    pd1_Slight float,
+    pd1_GreenTag float,
+    pd1_Moderate float,
+    pd1_YellowTag_m float,
+    pd1_Extensive float,
+    pd1_Complete float,
+    pd1_RedTag float,
+    pd1_RedTag_m float,
+    pd1_Collapse float,
+    pd1_Collapse_m float
+);
+
+CREATE TABLE cDamage_CA_scenario2(
+    PRIMARY KEY (id),
+    id varchar,
+    pd2_None float,
+    pd2_Slight float,
+    pd2_GreenTag float,
+    pd2_Moderate float,
+    pd2_YellowTag_m float,
+    pd2_Extensive float,
+    pd2_Complete float,
+    pd2_RedTag float,
+    pd2_RedTag_m float,
+    pd2_Collapse float,
+    pd2_Collapse_m float
+);
+
+-- import results from csv
+COPY cDamage_CA_baseline (id,pd0_None,pd0_Slight,pd0_GreenTag,pd0_Moderate,pd0_YellowTag_m,pd0_Extensive,pd0_Complete,pd0_RedTag,pd0_RedTag_m,pd0_Collapse,pd0_Collapse_m)
+    FROM 'C:\Workspace\eRisk_CA\cDamage_CA\cDamage_CA_baseline.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY cDamage_CA_scenario1 (id,pd1_None,pd1_Slight,pd1_GreenTag,pd1_Moderate,pd1_YellowTag_m,pd1_Extensive,pd1_Complete,pd1_RedTag,pd1_RedTag_m,pd1_Collapse,pd1_Collapse_m)
+    FROM 'C:\Workspace\eRisk_CA\cDamage_CA\cDamage_CA_scenario1.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY cDamage_CA_scenario2 (id,pd2_None,pd2_Slight,pd2_GreenTag,pd2_Moderate,pd2_YellowTag_m,pd2_Extensive,pd2_Complete,pd2_RedTag,pd2_RedTag_m,pd2_Collapse,pd2_Collapse_m)
+    FROM 'C:\Workspace\eRisk_CA\cDamage_CA\cDamage_CA_scenario2.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+

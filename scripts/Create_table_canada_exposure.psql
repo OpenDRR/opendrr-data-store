@@ -1,0 +1,45 @@
+-- script to generate Canada exposure table
+
+DROP TABLE IF EXISTS Canada_Exposure;
+
+
+-- create table
+CREATE TABLE canada_exposure(
+    PRIMARY KEY (id),
+    id varchar,
+    lon float,
+    lat float,
+    taxonomy varchar,
+    number float,
+    structural float,
+    nonstructural float,
+    contents float,
+    day float,
+    night float,
+    transit float,
+    landusetyp varchar,
+    GenOcc varchar,
+    hzOccType varchar,
+    eqOccType varchar,
+    BldgGen varchar,
+    hzTaxon varchar,
+    EqBldgType varchar,
+    EqDesLev varchar,
+    sauid varchar,
+    dauid varchar,
+    adauid varchar,
+    fsauid varchar,
+    csdname varchar,
+    cdname varchar,
+    SAC varchar,
+    prname varchar,
+    ername varchar
+
+);
+
+-- import exposure from csv
+COPY canada_exposure (id, lon, lat, taxonomy, number, structural, nonstructural, contents, day, night, transit, landusetyp, GenOcc, hzOccType, eqOccType, BldgGen, hzTaxon, EqBldgType, EqDesLev, sauid, dauid, adauid, fsauid, csdname, cdname, SAC, prname, ername)
+    FROM 'C:\Workspace\eRisk_CA\Canada.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
