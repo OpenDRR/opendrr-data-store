@@ -1,0 +1,114 @@
+-- create PSRA metrics view from source TABLES
+
+DROP VIEW IF EXISTS prsa_metrics;
+
+CREATE VIEW prsa_metrics AS 
+
+SELECT a.id,
+a.lon,
+a.lat,
+a.taxonomy AS "Taxonomy",
+a.number AS "BldgNum",
+a.structural AS "CostStr",
+a.nonstructural AS "CostNStr",
+a.contents AS "CostCont",
+a.structural + a.nonstructural AS "CostBldgT",
+a.structural + a.nonstructural + a.contents AS "CostAssetT",
+a.day AS "PopDay",
+a.night AS "PopNight",
+a.transit AS "PopTrnst",
+
+--avg_losses_mean_s0
+b.s0_structural AS "s0_AAL_Str",
+b.s0_nonstructural AS "s0_AAL_NStr",
+b.s0_contents AS "S0_AAL_Cont",
+b.s0_structural + b.s0_nonstructural AS "s0_AAL_Bldg",
+b.s0_structural + b.s0_nonstructural + b.s0_contents AS "s0_AAL_Asset",
+(b.s0_structural + b.s0_nonstructural)/(a.structural + a.nonstructural) AS "s0_ALR_Bldg",
+(b.s0_structural + b.s0_nonstructural + b.s0_contents)/(a.structural + a.nonstructural) AS "s0_ALR_Asset",
+b.s0_occupants AS "s0_AAL_Occ",
+
+--loss_curves_mean_s0
+c.s0_pml_50 AS "s0_PML50",
+c.s0_pml_100 AS "S0_PML100",
+c.s0_pml_500 AS "s0_PML500",
+c.s0_pml_1000 AS "S0_PML1000",
+c.s0_pml_2500 AS "S0_PML_2500",
+c.s0_occ_50 AS "s0_OCC50",
+c.s0_occ_100 AS "s0_OCC100",
+c.s0_occ_500 AS "s0_OCC500",
+c.s0_occ_1000 AS "s0_OCC1000",
+c.s0_occ_2500 AS "s0_OCC2500",
+
+--avg_losses_mean_s1
+d.s1_structural AS "s1_AAL_Str",
+d.s1_nonstructural AS "s1_AAL_NStr",
+d.s1_contents AS "s1_AAL_Cont",
+d.s1_structural + d.s1_nonstructural AS "s1_AAL_Bldg",
+d.s1_structural + d.s1_nonstructural + d.s1_contents AS "s1_AAL_Asset",
+(d.s1_structural + d.s1_nonstructural)/(a.structural + a.nonstructural) AS "s1_ALR_Bldg",
+(d.s1_structural + d.s1_nonstructural + d.s1_contents)/(a.structural + a.nonstructural) AS "s1_ALR_Asset",
+d.s1_occupants AS "s1_AAL_Occ",
+
+--loss_curves_mean_s1
+e.s1_pml_50 AS "s1_PML50",
+e.s1_pml_100 AS "s1_PML100",
+e.s1_pml_500 AS "s1_PML500",
+e.s1_pml_1000 AS "s1_PML1000",
+e.s1_pml_2500 AS "s1_PML_2500",
+e.s1_occ_50 AS "s1_OCC50",
+e.s1_occ_100 AS "s1_OCC100",
+e.s1_occ_500 AS "s1_OCC500",
+e.s1_occ_1000 AS "s1_OCC1000",
+e.s1_occ_2500 AS "s1_OCC2500",
+
+--avg_losses_mean_s2
+f.s2_structural AS "s2_AAL_Str",
+f.s2_nonstructural AS "s2_AAL_NStr",
+f.s2_contents AS "s2_AAL_Cont",
+f.s2_structural + f.s2_nonstructural AS "s2_AAL_Bldg",
+f.s2_structural + f.s2_nonstructural + f.s2_contents AS "s2_AAL_Asset",
+(f.s2_structural + f.s2_nonstructural)/(a.structural + a.nonstructural) AS "s2_ALR_Bldg",
+(f.s2_structural + f.s2_nonstructural + f.s2_contents)/(a.structural + a.nonstructural) AS "s2_ALR_Asset",
+f.s2_occupants AS "s2_AAL_Occ",
+
+--loss_curves_mean_s2
+g.s2_pml_50 AS "s2_PML50",
+g.s2_pml_100 AS "s2_PML100",
+g.s2_pml_500 AS "s2_PML500",
+g.s2_pml_1000 AS "s2_PML1000",
+g.s2_pml_2500 AS "s2_PML_2500",
+g.s2_occ_50 AS "s2_OCC50",
+g.s2_occ_100 AS "s2_OCC100",
+g.s2_occ_500 AS "s2_OCC500",
+g.s2_occ_1000 AS "s2_OCC1000",
+g.s2_occ_2500 AS "s2_OCC2500",
+
+a.landusetyp AS "LandUse",
+a.genocc AS "OccGen",
+a.hzocctype AS "Occ_hzType",
+a.eqocctype AS "Occ_oqType",
+a.bldggen AS "BldgGen",
+a.hztaxon AS "hzTaxon",
+a.eqbldgtype AS "eqBldgType",
+a.eqdeslev AS "eqDesLev",
+a.sauid,
+a.dauid,
+a.adauid,
+a.fsauid,
+a.csdname,
+a.cdname,
+a.sac AS "SAC",
+a.ername,
+a.prname
+
+FROM canada_exposure a
+INNER JOIN avg_losses_mean_merge_baseline b ON a.id = b.id
+INNER JOIN loss_curve_mean_merge_baseline c ON a.id = c.id
+INNER JOIN avg_losses_mean_merge_scenario1 d ON a.id = d.id 
+INNER JOIN loss_curve_mean_merge_scenario1 e ON a.id = e.id
+INNER JOIN avg_losses_mean_merge_scenario2 f ON a.id = f.id
+INNER JOIN loss_curve_mean_merge_scenario2 g ON a.id = g.id
+
+ORDER BY A.ID ASC
+
