@@ -1,0 +1,27 @@
+-- script to generate the retrofit costs LUT
+DROP TABLE IF EXISTS retrofit_costs_LUT;
+
+
+-- create tables
+CREATE TABLE retrofit_costs_LUT(
+    Eq_Bldg_Type varchar,
+    Description varchar,
+    BldgArea_ft2 float,
+    Unit_Retrofit_Cost_pre1917_USD_ft2 float,
+    Unit_Retrofit_Cost_1917_1975_USD_ft2 float,
+    Unit_Retrofit_Cost_1975_2019_USD_ft2 float,
+    Retrofit_Cost_Bldg_pc float,
+    Building_Retrofit_Cost_USD float,
+    Building_Retrofit_Cost_CAD float
+
+);
+
+
+-- import results from csv
+COPY retrofit_costs_LUT (Eq_Bldg_Type, Description, BldgArea_ft2, Unit_Retrofit_Cost_pre1917_USD_ft2, Unit_Retrofit_Cost_1917_1975_USD_ft2, Unit_Retrofit_Cost_1975_2019_USD_ft2, Retrofit_Cost_Bldg_pc, Building_Retrofit_Cost_USD, Building_Retrofit_Cost_CAD
+)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\retrofit_costs_LUT.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+

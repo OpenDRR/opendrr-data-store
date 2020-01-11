@@ -1,0 +1,46 @@
+DROP TABLE IF EXISTS dmg_by_asset_rlz_001_xxx;
+
+CREATE TABLE dmg_by_asset_rlz_001_xxx(
+    PRIMARY KEY (id),
+    BldgGen varchar,
+    EqBldgType varchar,
+    EqDesLev varchar,
+    GenOcc varchar,
+    SAC varchar,
+    adauid varchar,
+    cdname varchar,
+    csdname varchar,
+    dauid varchar,
+    eqOccType varchar,
+    ername varchar,
+    fsauid varchar,
+    hzOccType varchar,
+    hzTaxon varchar,
+    id varchar,
+    landusetyp varchar,
+    prname varchar,
+    sauid varchar,
+    taxonomy varchar,
+    lon float,
+    lat float,
+    structural_no_damage_mean float,
+    structural_no_damage_stdv float,
+    structural_slight_mean float,
+    structural_slight_stdv float,
+    structural_moderate_mean float,
+    structural_moderate_stdv float,
+    structural_extensive_mean float,
+    structural_extensive_stdv float,
+    structural_complete_mean float,
+    structural_complete_stdv float
+
+);
+
+-- import results from csv
+COPY dmg_by_asset_rlz_001_xxx (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid,cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, structural_no_damage_mean, structural_no_damage_stdv, structural_slight_mean, 
+structural_slight_stdv, structural_moderate_mean, structural_moderate_stdv, structural_extensive_mean, structural_extensive_stdv, structural_complete_mean, structural_complete_stdv)
+    FROM 'C:\Workspace\eRisk_CA\DataForWill_DSRAInput\dmg_by_asset-rlz-001_454.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+

@@ -39,7 +39,7 @@ CREATE TABLE canada_exposure(
 
 -- import exposure from csv
 COPY canada_exposure (id, lon, lat, taxonomy, number, structural, nonstructural, contents, day, night, transit, landusetyp, GenOcc, hzOccType, eqOccType, BldgGen, hzTaxon, EqBldgType, EqDesLev, sauid, dauid, adauid, fsauid, csdname, cdname, SAC, prname, ername)
-    FROM 'C:\Workspace\eRisk_CA\Canada.csv'
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\Canada.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;

@@ -1,0 +1,115 @@
+-- script to generate the avg_losses-mean tables baseline
+DROP TABLE IF EXISTS avg_losses_mean_baseline;
+
+
+-- create tables
+CREATE TABLE avg_losses_mean_baseline(
+    PRIMARY KEY (id),
+    BldgGen varchar,
+    EqBldgType varchar,
+    EqDesLev varchar,
+    GenOcc varchar,
+    SAC varchar,
+    adauid varchar,
+    cdname varchar,
+    csdname varchar,
+    dauid varchar,
+    eqOccType varchar,
+    ername varchar,
+    fsauid varchar,
+    hzOccType varchar,
+    hzTaxon varchar,
+    id varchar,
+    landusetyp varchar,
+    prname varchar,
+    sauid varchar,
+    taxonomy varchar,
+    lon float,
+    lat float,
+    contents float,
+    nonstructural float,
+    occupants float,
+    structural float
+
+);
+
+
+-- copy test avg losses mean tables into one master baseline table (single OQ run)
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_168.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_169.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_170.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_171.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_172.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_173.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_174.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_175.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_176.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_177.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_178.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_179.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+COPY avg_losses_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+    FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_180.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;

@@ -1,5 +1,5 @@
 -- script to generate the tables SRisk_JdFM7p1_1
-DROP TABLE IF EXISTS sRisk_JdFM7p1_1
+DROP TABLE IF EXISTS sRisk_JdFM7p1_1;
 
 CREATE TABLE sRisk_JdFM7p1_1(
     PRIMARY KEY (asset_ref),
@@ -137,5 +137,6 @@ CREATE TABLE sRisk_JdFM7p1_1(
     sc2_BusInt30 float,
     sc2_BusInt90 float,
     sc2_BusInt180 float,
-    sc2_BusInt360 float,
+    sc2_BusInt360 float
+    
 );
