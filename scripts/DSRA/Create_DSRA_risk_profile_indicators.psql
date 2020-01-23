@@ -1,0 +1,364 @@
+-- create PSRA metric baseline view from source TABLES
+
+DROP VIEW IF EXISTS dsra_indicators_all_baseline, dsra_indicators_buildingperformance_baseline, dsra_indicators_mortality_baseline, dsra_indicators_affectedpeople_baseline,
+                    dsra_indicators_economicsecurity_baseline, dsra_indicators_CI_baseline;
+DROP TABLE IF EXISTS dsra_indicators_all_baseline_table, dsra_indicators_buildingperformance_baseline_table, dsra_indicators_mortality_baseline_table, dsra_indicators_affectedpeople_baseline_table,
+                    dsra_indicators_economicsecurity_baseline_table, dsra_indicators_CI_baseline_table;
+
+-- create dsra_indicators_all_baseline view
+CREATE VIEW dsra_indicators_all_baseline AS 
+
+SELECT a.id,
+
+--building performance
+a.sd_none AS "sd_None",
+a.sd_slight AS "sd_Slight",
+a.sd_none + a.sd_slight AS "sd_GreenTag",
+
+a.sd_moderate AS "sd_Moderate",
+a.sd_moderate / b.bldgnumber AS "sd_YellowTag_r",
+
+a.sd_extensive AS "sd_Extensive",
+a.sd_complete AS "sd_Complete",
+a.sd_extensive + a.sd_complete AS "sd_RedTag",
+(a.sd_extensive + a.sd_complete)/(b.bldgnumber) AS "sd_RedTag_r",
+ 
+ b.sd_collapse AS "sd_Collapse",
+ b.sd_collapse / b.bldgnumber AS "sd_Collapse_r" ,
+
+b.mean_repair_time AS "sc_Repair_m",
+0 AS "sc_Constrxn_m",   -- verify?
+b.sc_recovery_m AS "sc_Recovery_m",
+b.mean_interruption_time AS "sc_Downtime_r",
+
+b.debris_brick_wood_tons AS "sc_Debris_BW",
+b.debris_concrete_steel_tons AS "sc_Debris_CS",
+b.debris_brick_wood_tons + b.debris_concrete_steel_tons AS "sc_DebrisT",
+
+--mortality
+0 AS "sl_FatalDay",
+0 AS "sl_FatalNit",
+c.sl_fatalities AS "sl_Fatal",  --verify?
+0 AS  "sl_Fatal_r",     -- (sl_Fatal + sc_Casl3 (is this day or night or both?) + sc_casl4 (day, night, or both?))
+
+--affected people        
+b.sc_casdayl4 AS "sc_CasDayL4",
+b.sc_casNitl4 AS "sc_CasNitL4",
+0 AS "sc_CasL4",        -- day + night lvl 4 ?
+b.sc_casdayl3 AS "sc_CasDayL3",
+b.sc_casnitl3 AS "Sc_CasNitL3",
+0 AS "sc_CasL3",        -- day + night lvl 3 ?
+0 AS "sc_InjMajor",     --sc_CasL3 + scCasL4  day or night or both?
+0 AS "sc_InjMajor_r",   -- (sc_CasL3 + scCasL4)/PopDay
+
+
+b.sc_casdayl2 AS "sc_CasDayL2",
+b.sc_casnitl2 AS "sc_CasNitL2",
+0 AS "sc_CasL2",        -- day + night lvl 2?
+b.sc_casdayl1 AS "sc_CasdayL1",
+b.sc_casnitl2 AS "sc_CasNitL1",
+0 AS "sc_CasL1",        -- day + night lvl 1?
+0 AS "sc_InjMinor",     -- verify?
+0 AS "InjMinor_r",      -- (scCasL1 + scCasL2) / PopDay ?
+
+0 AS "sc_Shelter",      --verify?
+0 AS "sc_Shelter_r",    --verify?
+
+0 AS "sc_DH3",          --verify? is sc_displxx household or people??, if so the mapping needs to be reversed for this section
+b.sc_displ3 AS "sc_DP3",         
+0 AS "sc_DH30",         --verify?
+b.sc_displ30 AS "sc_DP30",         
+0 AS "sc_DH_lmm",       --verify?
+0 AS "sc_DHlmm_r",      --verify?
+0 AS "sc_DH90",         --verify?
+b.sc_displ90 AS "sc_DP90",
+0 AS "sc_DH180",
+b.sc_displ180 AS "sc_DP180",
+0 AS "sc_DH360",
+b.sc_displ360 AS "sc_DP360",
+0 AS "sc_DH_Sus",       --verify?
+0 AS "sc_DHSus_r",      --verify?
+b.sc_busdispl30 AS "sc_DB30",
+b.sc_displ90 AS "sc_DB90",
+0 AS "sc_DB_Short",     --sc_DB30 + sc_DB90?
+0 AS "sc_DB_Short_r",    --(sc_DB30 + sc_db90) / (business total? missing this?)
+b.sc_busdispl180 AS "sc_DB180",
+b.sc_busdispl360 AS "sc_DB360",
+0 AS "db_Long",         --sc_DB180 + sc_DB360 ?
+0 AS "db_Long_r",       --(sc_DB180 + sc_DB360) / (business total? missing this?)
+
+
+--economic security 
+c.sl_str AS "sl_Str",
+c.sl_nstr AS "sl_NStr",
+c.sl_cont AS "sl_Cont",
+c.sl_str + c.sl_nstr AS "sl_Bldg",
+c.sl_str + c.sl_nstr + c.sl_cont AS "sl_Asset",
+
+0 AS "sl1_DRR",         -- are these the same as the PRSA mitigation DRR/BCR/ROI ?
+0 AS "sl2_DRR",
+0 AS "sl1_BCR",
+0 AS "sl2_BCR",
+0 AS "sl1_ROI",
+0 AS "sl2_ROI",
+
+
+--loss of service  - all values and indicators TBD from hazus
+0 AS "roadways_func",
+0 AS "roadways_restor",
+0 AS "railways_func",
+0 AS "railways_restor",
+0 AS "bridges_func",
+0 AS "bridges_restor",
+0 AS "tunnels_func",
+0 AS "tunnels_restor",
+0 AS "portfacil_dmg",
+0 AS "portfacil_restor",
+0 AS "airfacil_dmg",
+0 AS "airfacil_restor",
+0 AS "potablewaterpl_func",
+0 AS "potablewaterpl_restor",
+0 AS "wastewaterpl_func",
+0 AS "wastewaterpl_restor",
+0 AS "distfacil_dmg",
+0 AS "distfacil_restor",
+0 AS "utilpl_func",
+0 AS "utilpl_restor",
+0 AS "utildistfacil_dmg",
+0 AS "utildistfacil_restor",
+0 AS "healthfacil_dmg",
+0 AS "healthfacil_restor",
+0 AS "financefacil_dmg",
+0 AS "financefacil_restor",
+0 AS "safetyfacil_dmg",
+0 AS "safetyfacil_restor",
+0 AS "govfacil_dmg",
+0 AS "govfacil_restor",
+0 AS "foodfacil_dmg",
+0 AS "foodfacil_restor",
+0 AS "commfacil_dmg",
+0 AS "commfacil_restor",
+
+d.geom
+
+FROM dsra_dmg_by_asset_rlz_001_xxx a
+INNER JOIN dsra_consequences_rlz_001_xxx b ON a.id = b.asset_ref
+INNER JOIN dsra_losses_by_asset_rlz_001_xxx c ON a.id = c.id
+INNER JOIN canada_exposure d ON a.id = d.id;
+
+
+
+-- create dsra_indicators_buildingperformance_baseline view
+CREATE VIEW dsra_indicators_buildingperformance_baseline AS 
+
+SELECT a.id,
+
+--building performance
+a.sd_none AS "sd_None",
+a.sd_slight AS "sd_Slight",
+a.sd_none + a.sd_slight AS "sd_GreenTag",
+
+a.sd_moderate AS "sd_Moderate",
+a.sd_moderate / b.bldgnumber AS "sd_YellowTag_r",
+
+a.sd_extensive AS "sd_Extensive",
+a.sd_complete AS "sd_Complete",
+a.sd_extensive + a.sd_complete AS "sd_RedTag",
+(a.sd_extensive + a.sd_complete)/(b.bldgnumber) AS "sd_RedTag_r",
+ 
+ b.sd_collapse AS "sd_Collapse",
+ b.sd_collapse / b.bldgnumber AS "sd_Collapse_r" ,
+
+b.mean_repair_time AS "sc_Repair_m",
+0 AS "sc_Constrxn_m",   -- verify?
+b.sc_recovery_m AS "sc_Recovery_m",
+b.mean_interruption_time AS "sc_Downtime_r",
+
+b.debris_brick_wood_tons AS "sc_Debris_BW",
+b.debris_concrete_steel_tons AS "sc_Debris_CS",
+b.debris_brick_wood_tons + b.debris_concrete_steel_tons AS "sc_DebrisT",
+
+d.geom
+
+FROM dsra_dmg_by_asset_rlz_001_xxx a
+INNER JOIN dsra_consequences_rlz_001_xxx b ON a.id = b.asset_ref
+INNER JOIN dsra_losses_by_asset_rlz_001_xxx c ON a.id = c.id
+INNER JOIN canada_exposure d ON a.id = d.id;
+
+
+-- create dsra_indicators_mortality_baseline view
+CREATE VIEW dsra_indicators_mortality_baseline AS 
+
+SELECT a.id,
+
+--mortality
+0 AS "sl_FatalDay",
+0 AS "sl_FatalNit",
+c.sl_fatalities AS "sl_Fatal",  --verify?
+0 AS  "sl_Fatal_r",     -- (sl_Fatal + sc_Casl3 (is this day or night or both?) + sc_casl4 (day, night, or both?))
+
+d.geom
+
+FROM dsra_dmg_by_asset_rlz_001_xxx a
+INNER JOIN dsra_consequences_rlz_001_xxx b ON a.id = b.asset_ref
+INNER JOIN dsra_losses_by_asset_rlz_001_xxx c ON a.id = c.id
+INNER JOIN canada_exposure d ON a.id = d.id;
+
+
+
+-- create dsra_indicators_affectedpeople_baseline view
+CREATE VIEW dsra_indicators_affectedpeople_baseline AS 
+
+SELECT a.id,
+
+--affected people        
+b.sc_casdayl4 AS "sc_CasDayL4",
+b.sc_casNitl4 AS "sc_CasNitL4",
+0 AS "sc_CasL4",        -- day + night lvl 4 ?
+b.sc_casdayl3 AS "sc_CasDayL3",
+b.sc_casnitl3 AS "Sc_CasNitL3",
+0 AS "sc_CasL3",        -- day + night lvl 3 ?
+0 AS "sc_InjMajor",     --sc_CasL3 + scCasL4  day or night or both?
+0 AS "sc_InjMajor_r",   -- (sc_CasL3 + scCasL4)/PopDay
+
+
+b.sc_casdayl2 AS "sc_CasDayL2",
+b.sc_casnitl2 AS "sc_CasNitL2",
+0 AS "sc_CasL2",        -- day + night lvl 2?
+b.sc_casdayl1 AS "sc_CasdayL1",
+b.sc_casnitl2 AS "sc_CasNitL1",
+0 AS "sc_CasL1",        -- day + night lvl 1?
+0 AS "sc_InjMinor",     -- verify?
+0 AS "InjMinor_r",      -- (scCasL1 + scCasL2) / PopDay ?
+
+0 AS "sc_Shelter",      --verify?
+0 AS "sc_Shelter_r",    --verify?
+
+0 AS "sc_DH3",          --verify? is sc_displxx household or people??, if so the mapping needs to be reversed for this section
+b.sc_displ3 AS "sc_DP3",         
+0 AS "sc_DH30",         --verify?
+b.sc_displ30 AS "sc_DP30",         
+0 AS "sc_DH_lmm",       --verify?
+0 AS "sc_DHlmm_r",      --verify?
+0 AS "sc_DH90",         --verify?
+b.sc_displ90 AS "sc_DP90",
+0 AS "sc_DH180",
+b.sc_displ180 AS "sc_DP180",
+0 AS "sc_DH360",
+b.sc_displ360 AS "sc_DP360",
+0 AS "sc_DH_Sus",       --verify?
+0 AS "sc_DHSus_r",      --verify?
+b.sc_busdispl30 AS "sc_DB30",
+b.sc_displ90 AS "sc_DB90",
+0 AS "sc_DB_Short",     --sc_DB30 + sc_DB90?
+0 AS "sc_DB_Short_r",    --(sc_DB30 + sc_db90) / (business total? missing this?)
+b.sc_busdispl180 AS "sc_DB180",
+b.sc_busdispl360 AS "sc_DB360",
+0 AS "db_Long",         --sc_DB180 + sc_DB360 ?
+0 AS "db_Long_r",       --(sc_DB180 + sc_DB360) / (business total? missing this?)
+
+d.geom
+
+FROM dsra_dmg_by_asset_rlz_001_xxx a
+INNER JOIN dsra_consequences_rlz_001_xxx b ON a.id = b.asset_ref
+INNER JOIN dsra_losses_by_asset_rlz_001_xxx c ON a.id = c.id
+INNER JOIN canada_exposure d ON a.id = d.id;
+
+
+-- create dsra_indicators_economicsecurity_baseline view
+CREATE VIEW dsra_indicators_economicsecurity_baseline AS 
+
+SELECT a.id,
+
+--economic security 
+c.sl_str AS "sl_Str",
+c.sl_nstr AS "sl_NStr",
+c.sl_cont AS "sl_Cont",
+c.sl_str + c.sl_nstr AS "sl_Bldg",
+c.sl_str + c.sl_nstr + c.sl_cont AS "sl_Asset",
+
+0 AS "sl1_DRR",         -- are these the same as the PRSA mitigation DRR/BCR/ROI ?
+0 AS "sl2_DRR",
+0 AS "sl1_BCR",
+0 AS "sl2_BCR",
+0 AS "sl1_ROI",
+0 AS "sl2_ROI",
+
+d.geom
+
+FROM dsra_dmg_by_asset_rlz_001_xxx a
+INNER JOIN dsra_consequences_rlz_001_xxx b ON a.id = b.asset_ref
+INNER JOIN dsra_losses_by_asset_rlz_001_xxx c ON a.id = c.id
+INNER JOIN canada_exposure d ON a.id = d.id;
+
+
+
+-- create dsra_indicators_CI_baseline view
+CREATE VIEW dsra_indicators_CI_baseline AS 
+
+SELECT a.id,
+
+--loss of service  - all values and indicators TBD from hazus
+0 AS "roadways_func",
+0 AS "roadways_restor",
+0 AS "railways_func",
+0 AS "railways_restor",
+0 AS "bridges_func",
+0 AS "bridges_restor",
+0 AS "tunnels_func",
+0 AS "tunnels_restor",
+0 AS "portfacil_dmg",
+0 AS "portfacil_restor",
+0 AS "airfacil_dmg",
+0 AS "airfacil_restor",
+0 AS "potablewaterpl_func",
+0 AS "potablewaterpl_restor",
+0 AS "wastewaterpl_func",
+0 AS "wastewaterpl_restor",
+0 AS "distfacil_dmg",
+0 AS "distfacil_restor",
+0 AS "utilpl_func",
+0 AS "utilpl_restor",
+0 AS "utildistfacil_dmg",
+0 AS "utildistfacil_restor",
+0 AS "healthfacil_dmg",
+0 AS "healthfacil_restor",
+0 AS "financefacil_dmg",
+0 AS "financefacil_restor",
+0 AS "safetyfacil_dmg",
+0 AS "safetyfacil_restor",
+0 AS "govfacil_dmg",
+0 AS "govfacil_restor",
+0 AS "foodfacil_dmg",
+0 AS "foodfacil_restor",
+0 AS "commfacil_dmg",
+0 AS "commfacil_restor",
+
+d.geom
+
+FROM dsra_dmg_by_asset_rlz_001_xxx a
+INNER JOIN dsra_consequences_rlz_001_xxx b ON a.id = b.asset_ref
+INNER JOIN dsra_losses_by_asset_rlz_001_xxx c ON a.id = c.id
+INNER JOIN canada_exposure d ON a.id = d.id;
+
+
+
+-- copy views into tables to enable viewing in qgis if required
+
+SELECT * INTO dsra_indicators_all_baseline_table FROM dsra_indicators_all_baseline;
+
+SELECT * INTO dsra_indicators_buildingperformance_baseline_table FROM dsra_indicators_buildingperformance_baseline;
+
+SELECT * INTO dsra_indicators_mortality_baseline_table FROM dsra_indicators_mortality_baseline;
+
+SELECT * INTO dsra_indicators_affectedpeople_baseline_table FROM dsra_indicators_affectedpeople_baseline;
+
+SELECT * INTO dsra_indicators_economicsecurity_baseline_table FROM dsra_indicators_economicsecurity_baseline;
+
+SELECT * INTO dsra_indicators_CI_baseline_table FROM dsra_indicators_CI_baseline;
+
+
+
+
+
+
