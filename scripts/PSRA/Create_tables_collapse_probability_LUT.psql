@@ -1,9 +1,9 @@
 -- script to generate the collapse probability LUT
-DROP TABLE IF EXISTS collapse_probability_LUT;
+DROP TABLE IF EXISTS LUT_PSRA_collapse_probability;
 
 
 -- create tables
-CREATE TABLE collapse_probability_LUT(
+CREATE TABLE LUT_PSRA_collapse_probability(
     typology varchar,
     EqBldgType varchar,
     collapse_pc float
@@ -12,7 +12,7 @@ CREATE TABLE collapse_probability_LUT(
 
 
 -- import results from csv
-COPY collapse_probability_LUT (typology, EqBldgType, collapse_pc)
+COPY LUT_PSRA_collapse_probability (typology, EqBldgType, collapse_pc)
     FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\collapse_probability_LUT.csv'
         WITH 
           DELIMITER AS ','
