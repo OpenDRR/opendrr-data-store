@@ -1,0 +1,367 @@
+-- create PSRA indicators baseline view and tables from source TABLES
+
+DROP VIEW IF EXISTS psra_indicators_all_baseline, psra_indicators_buildingperformance_baseline, psra_indicators_mortality_baseline,
+                    psra_indicators_affectedpeople_baseline, psra_indicators_economicsecurity_baseline;
+DROP TABLE IF EXISTS psra_indicators_all_baseline_table, psra_indicators_buildingperformance_baseline_table, psra_indicators_mortality_baseline_table,
+                    psra_indicators_affectedpeople_baseline_table, psra_indicators_economicsecurity_baseline_table;
+
+-- create psra_indicators_all_baseline view
+CREATE VIEW psra_indicators_all_baseline AS 
+
+SELECT a.id,
+a.lon,
+a.lat,
+a.taxonomy AS "Taxonomy",
+a.number AS "BldgNum",
+a.structural AS "CostStr",
+a.nonstructural AS "CostNStr",
+a.contents AS "CostCont",
+a.structural + a.nonstructural AS "CostBldgT",
+a.structural + a.nonstructural + a.contents AS "CostAssetT",
+a.day AS "PopDay",
+a.night AS "PopNight",
+a.transit AS "PopTrnst",
+
+--damage potential baseline - operational
+b.no_damage AS "pd0_None",
+b.slight AS "pd0_Slight",
+(b.no_damage + b.slight) AS "pd0_GreenTag",
+b.moderate AS "pd0_Moderate", 
+(b.moderate/a.number) AS "pd0_YellowTag_r",
+b.extensive AS "pd0_Extensive",
+b.complete AS "pd0_Complete",
+(b.extensive + b.complete) AS "pd0_RedTag",
+(b.extensive + b.complete) / a.number AS "pd0_RedTag_r",
+e.collapse_pc AS "Collapse_pc",
+(b.complete * e.collapse_pc) AS "pd0_Collapse",
+(b.complete * e.collapse_pc) / a.number AS "pd0_Collapse_r",
+
+--placeholder for life safety baseline
+c.s0_occ_50 AS "p10_Fatal50",
+c.s0_occ_100 AS "pl0_Fatal100",
+c.s0_occ_1000 AS "pl0_Fatal1000",
+c.s0_occ_2500 AS "pl0_Fatal2500",
+0 AS "pl0_Fatality_r", -- ?
+
+--placeholder for affected people baseline  -- VALUES FROM LATER transformations / DRSA / PRSA
+0 AS "pc_Shelter",
+0 AS "Shelter_r",
+0 AS "pc_DH",
+0 AS "pc_DP",
+0 AS "pc_DB",
+
+--average_annual_loss_baseline
+d.structural AS "aal0_Str",
+d.nonstructural AS "aal0_NStr",
+d.contents AS "aal0_Cont",
+(d.structural + d.nonstructural) AS "aal0_Bldg",
+(d.structural + d.nonstructural + d.contents) AS "aal0_Asset",
+(d.structural + d.nonstructural)/(a.structural + a.nonstructural) AS "alr0_Bldg",
+(d.structural + d.nonstructural + d.contents)/(a.structural + a.nonstructural) AS "alr0_Asset",
+d.occupants AS "aal0_Fatal",
+
+--placeholder for probable maximium loss baseline
+c.s0_pml_50 AS "pml0_50",
+c.s0_pml_100 AS "pml0_100",
+c.s0_pml_500 AS "pml0_500",
+c.s0_pml_1000 AS "pml0_1000",
+c.s0_pml_2500 AS "pml0_2500",
+c.s0_pml_500 / (a.structural + a.nonstructural + a.contents) AS "pmlr0_500",
+
+
+--mitigation
+c.s0_pml_500 - f.s1_pml_500 AS "pml0_500_DRR1",  
+c.s0_pml_500 - g.s2_pml_500 AS "pml0_500_DRR2",  
+(c.s0_pml_500 - f.s1_pml_500) / (h.building_retrofit_cost_cad) AS "pml0_500_BCR1",  
+(c.s0_pml_500 - g.s2_pml_500) / (h.building_retrofit_cost_cad) AS "pml0_500_BCR2", 
+0 AS "pml0_500_ROI1",  -- equation to be supplied later
+0 AS "pml0_500_ROI2",  -- equation to be supplied later
+
+
+--physical exposure
+a.landusetyp AS "LandUse",
+a.genocc AS "OccGen",
+a.hzocctype AS "Occ_hzType",
+a.eqocctype AS "Occ_oqType",
+a.bldggen AS "BldgGen",
+a.hztaxon AS "hzTaxon",
+a.eqbldgtype AS "eqBldgType",
+a.eqdeslev AS "eqDesLev",
+a.sauid,
+a.dauid,
+a.adauid,
+a.fsauid,
+a.csdname,
+a.cdname,
+a.sac AS "SAC",
+a.ername,
+a.prname,
+a.geom
+
+FROM canada_exposure a
+INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
+INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
+INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
+RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
+INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
+RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+
+
+-- create psra_indicators_buildingperformance_baseline view
+CREATE VIEW psra_indicators_buildingperformance_baseline AS 
+
+SELECT a.id,
+a.lon,
+a.lat,
+a.taxonomy AS "Taxonomy",
+a.number AS "BldgNum",
+a.structural AS "CostStr",
+a.nonstructural AS "CostNStr",
+a.contents AS "CostCont",
+a.structural + a.nonstructural AS "CostBldgT",
+a.structural + a.nonstructural + a.contents AS "CostAssetT",
+a.day AS "PopDay",
+a.night AS "PopNight",
+a.transit AS "PopTrnst",
+
+--damage potential baseline - operational
+b.no_damage AS "pd0_None",
+b.slight AS "pd0_Slight",
+(b.no_damage + b.slight) AS "pd0_GreenTag",
+b.moderate AS "pd0_Moderate", 
+(b.moderate/a.number) AS "pd0_YellowTag_r",
+b.extensive AS "pd0_Extensive",
+b.complete AS "pd0_Complete",
+(b.extensive + b.complete) AS "pd0_RedTag",
+(b.extensive + b.complete) / a.number AS "pd0_RedTag_r",
+e.collapse_pc AS "Collapse_pc",
+(b.complete * e.collapse_pc) AS "pd0_Collapse",
+(b.complete * e.collapse_pc) / a.number AS "pd0_Collapse_r",
+
+--physical exposure
+a.landusetyp AS "LandUse",
+a.genocc AS "OccGen",
+a.hzocctype AS "Occ_hzType",
+a.eqocctype AS "Occ_oqType",
+a.bldggen AS "BldgGen",
+a.hztaxon AS "hzTaxon",
+a.eqbldgtype AS "eqBldgType",
+a.eqdeslev AS "eqDesLev",
+a.sauid,
+a.dauid,
+a.adauid,
+a.fsauid,
+a.csdname,
+a.cdname,
+a.sac AS "SAC",
+a.ername,
+a.prname,
+a.geom
+
+FROM canada_exposure a
+INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
+INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
+INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
+RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
+INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
+RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+
+
+-- create psra_indicators_mortality_baseline view
+CREATE VIEW psra_indicators_mortality_baseline AS 
+
+SELECT a.id,
+a.lon,
+a.lat,
+a.taxonomy AS "Taxonomy",
+a.number AS "BldgNum",
+a.structural AS "CostStr",
+a.nonstructural AS "CostNStr",
+a.contents AS "CostCont",
+a.structural + a.nonstructural AS "CostBldgT",
+a.structural + a.nonstructural + a.contents AS "CostAssetT",
+a.day AS "PopDay",
+a.night AS "PopNight",
+a.transit AS "PopTrnst",
+
+--placeholder for life safety baseline
+c.s0_occ_50 AS "p10_Fatal50",
+c.s0_occ_100 AS "pl0_Fatal100",
+c.s0_occ_1000 AS "pl0_Fatal1000",
+c.s0_occ_2500 AS "pl0_Fatal2500",
+0 AS "pl0_Fatality_r", -- ?
+
+--physical exposure
+a.landusetyp AS "LandUse",
+a.genocc AS "OccGen",
+a.hzocctype AS "Occ_hzType",
+a.eqocctype AS "Occ_oqType",
+a.bldggen AS "BldgGen",
+a.hztaxon AS "hzTaxon",
+a.eqbldgtype AS "eqBldgType",
+a.eqdeslev AS "eqDesLev",
+a.sauid,
+a.dauid,
+a.adauid,
+a.fsauid,
+a.csdname,
+a.cdname,
+a.sac AS "SAC",
+a.ername,
+a.prname,
+a.geom
+
+FROM canada_exposure a
+INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
+INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
+INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
+RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
+INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
+RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+
+
+-- create  psra_indicators_affectedpeople_baseline view
+CREATE VIEW  psra_indicators_affectedpeople_baseline AS 
+
+SELECT a.id,
+a.lon,
+a.lat,
+a.taxonomy AS "Taxonomy",
+a.number AS "BldgNum",
+a.structural AS "CostStr",
+a.nonstructural AS "CostNStr",
+a.contents AS "CostCont",
+a.structural + a.nonstructural AS "CostBldgT",
+a.structural + a.nonstructural + a.contents AS "CostAssetT",
+a.day AS "PopDay",
+a.night AS "PopNight",
+a.transit AS "PopTrnst",
+
+--placeholder for affected people baseline  -- VALUES FROM LATER transformations / DRSA / PRSA
+0 AS "pc_Shelter",
+0 AS "Shelter_r",
+0 AS "pc_DH",
+0 AS "pc_DP",
+0 AS "pc_DB",
+
+--physical exposure
+a.landusetyp AS "LandUse",
+a.genocc AS "OccGen",
+a.hzocctype AS "Occ_hzType",
+a.eqocctype AS "Occ_oqType",
+a.bldggen AS "BldgGen",
+a.hztaxon AS "hzTaxon",
+a.eqbldgtype AS "eqBldgType",
+a.eqdeslev AS "eqDesLev",
+a.sauid,
+a.dauid,
+a.adauid,
+a.fsauid,
+a.csdname,
+a.cdname,
+a.sac AS "SAC",
+a.ername,
+a.prname,
+a.geom
+
+FROM canada_exposure a
+INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
+INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
+INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
+RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
+INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
+RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+
+
+-- create psra_indicators_economicsecurity_baseline view
+CREATE VIEW psra_indicators_economicsecurity_baseline AS 
+
+SELECT a.id,
+a.lon,
+a.lat,
+a.taxonomy AS "Taxonomy",
+a.number AS "BldgNum",
+a.structural AS "CostStr",
+a.nonstructural AS "CostNStr",
+a.contents AS "CostCont",
+a.structural + a.nonstructural AS "CostBldgT",
+a.structural + a.nonstructural + a.contents AS "CostAssetT",
+a.day AS "PopDay",
+a.night AS "PopNight",
+a.transit AS "PopTrnst",
+
+--average_annual_loss_baseline
+d.structural AS "aal0_Str",
+d.nonstructural AS "aal0_NStr",
+d.contents AS "aal0_Cont",
+(d.structural + d.nonstructural) AS "aal0_Bldg",
+(d.structural + d.nonstructural + d.contents) AS "aal0_Asset",
+(d.structural + d.nonstructural)/(a.structural + a.nonstructural) AS "alr0_Bldg",
+(d.structural + d.nonstructural + d.contents)/(a.structural + a.nonstructural) AS "alr0_Asset",
+d.occupants AS "aal0_Fatal",
+
+--placeholder for probable maximium loss baseline
+c.s0_pml_50 AS "pml0_50",
+c.s0_pml_100 AS "pml0_100",
+c.s0_pml_500 AS "pml0_500",
+c.s0_pml_1000 AS "pml0_1000",
+c.s0_pml_2500 AS "pml0_2500",
+c.s0_pml_500 / (a.structural + a.nonstructural + a.contents) AS "pmlr0_500",
+
+--mitigation
+c.s0_pml_500 - f.s1_pml_500 AS "pml0_500_DRR1",  
+c.s0_pml_500 - g.s2_pml_500 AS "pml0_500_DRR2",  
+(c.s0_pml_500 - f.s1_pml_500) / (h.building_retrofit_cost_cad) AS "pml0_500_BCR1",  
+(c.s0_pml_500 - g.s2_pml_500) / (h.building_retrofit_cost_cad) AS "pml0_500_BCR2", 
+0 AS "pml0_500_ROI1",  -- equation to be supplied later
+0 AS "pml0_500_ROI2",  -- equation to be supplied later
+
+
+--physical exposure
+a.landusetyp AS "LandUse",
+a.genocc AS "OccGen",
+a.hzocctype AS "Occ_hzType",
+a.eqocctype AS "Occ_oqType",
+a.bldggen AS "BldgGen",
+a.hztaxon AS "hzTaxon",
+a.eqbldgtype AS "eqBldgType",
+a.eqdeslev AS "eqDesLev",
+a.sauid,
+a.dauid,
+a.adauid,
+a.fsauid,
+a.csdname,
+a.cdname,
+a.sac AS "SAC",
+a.ername,
+a.prname,
+a.geom
+
+FROM canada_exposure a
+INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
+INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
+INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
+RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
+INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
+RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+
+-- copy views into tables to enable viewing in qgis if required
+SELECT * INTO psra_indicators_all_baseline_table FROM psra_indicators_all_baseline;
+
+SELECT * INTO psra_indicators_buildingperformance_baseline_table FROM psra_indicators_buildingperformance_baseline;
+
+SELECT * INTO psra_indicators_mortality_baseline_table FROM psra_indicators_mortality_baseline;
+
+SELECT * INTO psra_indicators_affectedpeople_baseline_table FROM psra_indicators_affectedpeople_baseline;
+
+SELECT * INTO psra_indicators_economicsecurity_baseline_table FROM psra_indicators_economicsecurity_baseline;
+
+
+
+
+
