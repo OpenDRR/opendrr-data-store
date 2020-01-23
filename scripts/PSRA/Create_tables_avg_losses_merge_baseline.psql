@@ -1,9 +1,9 @@
 -- script to generate the avg_losses-mean baseline table
-DROP TABLE IF EXISTS avg_losses_mean_merge_baseline;
+DROP TABLE IF EXISTS PSRA_avg_losses_mean_merge_baseline;
 
 
 -- create tables
-CREATE TABLE avg_losses_mean_merge_baseline(
+CREATE TABLE PSRA_avg_losses_mean_merge_baseline(
     PRIMARY KEY (id),
     BldgGen varchar,
     EqBldgType varchar,
@@ -37,7 +37,7 @@ CREATE TABLE avg_losses_mean_merge_baseline(
 
 
 -- copy test avg losses mean tables into one master baseline table (single OQ run)
-COPY avg_losses_mean_merge_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
+COPY PSRA_avg_losses_mean_merge_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, contents, nonstructural, occupants, structural)
     FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\average-annual-loss\avg_losses-mean_merge_baseline.csv'
         WITH 
           DELIMITER AS ','
