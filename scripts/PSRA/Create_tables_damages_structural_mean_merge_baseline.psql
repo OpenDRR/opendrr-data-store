@@ -1,9 +1,9 @@
 -- script to generate the damages_structural-mean baseline table
 
-DROP TABLE IF EXISTS damages_structural_mean_baseline;  
+DROP TABLE IF EXISTS PSRA_damages_structural_mean_baseline;  
 
 -- create tables
-CREATE TABLE damages_structural_mean_baseline(
+CREATE TABLE PSRA_damages_structural_mean_baseline(
     PRIMARY KEY (id),
     BldgGen varchar,
     EqBldgType varchar,
@@ -37,7 +37,7 @@ CREATE TABLE damages_structural_mean_baseline(
 
 -- import results from csv
 
-COPY damages_structural_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, 
+COPY PSRA_damages_structural_mean_baseline (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid, cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, 
 id, landusetyp, prname, sauid, taxonomy, lon, lat, no_damage, slight, moderate, extensive, complete)
     FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\baseline\c-damage\damages-structural-mean_merge_baseline.csv'
         WITH 
