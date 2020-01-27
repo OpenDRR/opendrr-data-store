@@ -13,15 +13,15 @@ SELECT a.id,
 --building performance
 a.sd_none AS "sd_None",
 a.sd_slight AS "sd_Slight",
-a.sd_none + a.sd_slight AS "sd_GreenTag",
-
 a.sd_moderate AS "sd_Moderate",
-a.sd_moderate / b.bldgnumber AS "sd_YellowTag_r",
+a.sd_slight + a.sd_moderate AS "sd_GreenTag",
 
 a.sd_extensive AS "sd_Extensive",
+a.sd_extensive / b.bldgnumber AS "sd_YellowTag_r",
+
 a.sd_complete AS "sd_Complete",
-a.sd_extensive + a.sd_complete AS "sd_RedTag",
-(a.sd_extensive + a.sd_complete)/(b.bldgnumber) AS "sd_RedTag_r",
+a.sd_complete AS "sd_RedTag",
+(a.sd_complete)/(b.bldgnumber) AS "sd_RedTag_r",
  
  b.sd_collapse AS "sd_Collapse",
  b.sd_collapse / b.bldgnumber AS "sd_Collapse_r" ,
@@ -156,15 +156,15 @@ SELECT a.id,
 --building performance
 a.sd_none AS "sd_None",
 a.sd_slight AS "sd_Slight",
-a.sd_none + a.sd_slight AS "sd_GreenTag",
-
 a.sd_moderate AS "sd_Moderate",
-a.sd_moderate / b.bldgnumber AS "sd_YellowTag_r",
+a.sd_slight + a.sd_moderate AS "sd_GreenTag",
 
 a.sd_extensive AS "sd_Extensive",
+a.sd_extensive / b.bldgnumber AS "sd_YellowTag_r",
+
 a.sd_complete AS "sd_Complete",
-a.sd_extensive + a.sd_complete AS "sd_RedTag",
-(a.sd_extensive + a.sd_complete)/(b.bldgnumber) AS "sd_RedTag_r",
+a.sd_complete AS "sd_RedTag",
+(a.sd_complete)/(b.bldgnumber) AS "sd_RedTag_r",
  
  b.sd_collapse AS "sd_Collapse",
  b.sd_collapse / b.bldgnumber AS "sd_Collapse_r" ,
