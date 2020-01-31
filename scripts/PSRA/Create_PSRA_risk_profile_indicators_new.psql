@@ -105,10 +105,10 @@ FROM canada_exposure a
 INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
 INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
 INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
-RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+LEFT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
 INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
 INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
-RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+LEFT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
 
 
 -- create psra_indicators_buildingperformance_baseline view
@@ -169,10 +169,10 @@ FROM canada_exposure a
 INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
 INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
 INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
-RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+LEFT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
 INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
 INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
-RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+LEFT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
 
 
 -- create psra_indicators_mortality_baseline view
@@ -223,10 +223,10 @@ FROM canada_exposure a
 INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
 INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
 INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
-RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+LEFT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
 INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
 INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
-RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+LEFT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
 
 
 -- create  psra_indicators_affectedpeople_baseline view
@@ -277,10 +277,10 @@ FROM canada_exposure a
 INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
 INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
 INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
-RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+LEFT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
 INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
 INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
-RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+LEFT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
 
 
 -- create psra_indicators_economicsecurity_baseline view
@@ -351,10 +351,10 @@ FROM canada_exposure a
 INNER JOIN PSRA_damages_structural_mean_baseline b ON a.id = b.id
 INNER JOIN PSRA_loss_curve_mean_merge_baseline c ON a.id = c.id
 INNER JOIN PSRA_avg_losses_mean_merge_baseline d ON a.id = d.id
-RIGHT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
+LEFT JOIN LUT_PSRA_collapse_probability e ON a.eqbldgtype = e.eqbldgtype
 INNER JOIN PSRA_loss_curve_mean_merge_scenario1 f ON a.id = f.id
 INNER JOIN PSRA_loss_curve_mean_merge_scenario2 g ON a.id = g.id
-RIGHT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
+LEFT JOIN LUT_PSRA_retrofit_costs h ON a.eqbldgtype = h.eq_bldg_type;
 
 -- copy views into tables to enable viewing in qgis if required
 SELECT * INTO psra_indicators_all_baseline_table FROM psra_indicators_all_baseline;
