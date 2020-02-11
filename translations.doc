@@ -1,0 +1,44 @@
+Translating English Django Application to French language
+The following steps could be applied to other languages as well
+
+1. Install gettext on the host computer(GNU Internationalization utilities)
+   sudo apt-get update -y
+   sudo apt-get install -y gettext
+   or 
+   apk update
+   apk add gettext
+
+2. settings.py
+   2.1 from django.utils.translation import ugettext_lazy as _
+   2.2 USE_I18N = True
+   2.3 LANGUAGE_CODE = 'en' or 'en-us'
+   2.4 LANGUAGES = (
+       ('en', _('English')),
+       ('fr', _('French')),
+       )
+   
+   2.5 add 'django.middleware.locale.LocaleMiddleware', between session and common middlewares
+   2.6. LOCALE_PATHS = (
+        os.path.join(BASE_DIR, 'locale'),
+        )
+3. mkdir locale
+   locale must be at a sibling to django project folder
+
+4. Add {% load i18n %} at top of each template file 
+
+5. add from django.utils.translation import gettext as _ in a file where a template is returned
+
+6. Text to be translated must be prefixed by "_" character
+   e.g.
+   context = {"content":_("This is text is in French language.")}
+   return render(request, 'sample.html', context)
+
+7. Create .po file
+   run /usr/src/app # /usr/local/bin/django-admin compilemessages
+
+8. Edit .po file and insert French text
+   I use https://www.translate.com/english-french for testing purposes
+   
+9. run /usr/src/app # /usr/local/bin//django-admin makemessages -l fr
+
+10. Change default setting language to French on your browser
