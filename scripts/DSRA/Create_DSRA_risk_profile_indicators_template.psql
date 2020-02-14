@@ -1,11 +1,5 @@
 -- create DSRA metric baseline view from source dsra table {eq_scenario}
 
--- create results_{eq_scenario} schema to store results
-DROP SCHEMA IF EXISTS results_{eq_scenario} CASCADE;
-
-CREATE SCHEMA IF NOT EXISTS results_{eq_scenario};
-
-
 
 DROP VIEW IF EXISTS results_{eq_scenario}.dsra_indicators_all_{eq_scenario}_{retrofit_prefix}, results_{eq_scenario}.dsra_indicators_buildingperformance_{eq_scenario}_{retrofit_prefix}, results_{eq_scenario}.dsra_indicators_mortality_{eq_scenario}_{retrofit_prefix}, results_{eq_scenario}.dsra_indicators_affectedpeople_{eq_scenario}_{retrofit_prefix},
                     results_{eq_scenario}.dsra_indicators_economicsecurity_{eq_scenario}_{retrofit_prefix}, results_{eq_scenario}.dsra_indicators_CI_{eq_scenario}_{retrofit_prefix};

@@ -6,11 +6,18 @@ import argparse
 import configparser
 import psycopg2
 
+'''
+Script to create DSRA indicator views 
+Can be run from the command line with mandatory arguments like:
+python Create_DSRA_risk_profile_indicators.py --eqScenario="idm7p1_jdf_rlz_0" --retrofitPrefix="b0"
+'''
+
 #Main Function
 def main ():
     os.chdir(sys.path[0])
     auth = get_config_params('config.ini')
-    sqlquerystring = open('Create_DSRA_risk_profile_indicators_template.psql', 'r').read().format(**{'eq_scenario':'idm7p1_jdf_rlz_2', 'retrofit_prefix':'r2'})
+    args = parse_args()
+    sqlquerystring = open('Create_DSRA_risk_profile_indicators_template.psql', 'r').read().format(**{'eq_scenario':args.eqScenario, 'retrofit_prefix':args.retrofitPrefix})
     try:
         connection = psycopg2.connect(user = auth.get('rds', 'postgres_un'),
                                         password = auth.get('rds', 'postgres_pw'),
@@ -18,6 +25,10 @@ def main ():
                                         port = auth.get('rds', 'postgres_port'),
                                         database = auth.get('rds', 'postgres_db'))
         cursor = connection.cursor()
+        if args.retrofitPrefix == "b0":
+            cursor.execute("DROP SCHEMA IF EXISTS results_{eq_scenario} CASCADE;".format(**{'eq_scenario':args.eqScenario}))
+            cursor.execute("CREATE SCHEMA IF NOT EXISTS results_{eq_scenario};".format(**{'eq_scenario':args.eqScenario}))
+
         cursor.execute(sqlquerystring)
         connection.commit()
     
@@ -45,7 +56,8 @@ def get_config_params(args):
 def parse_args():
  
     parser = argparse.ArgumentParser(description="script description")
-    parser.add_argument("--arg1", type=str, help="First argument")
+    parser.add_argument("--eqScenario", type=str, help="Earthquake scenario id")
+    parser.add_argument("--retrofitPrefix", type=str, help="Retrofit Prefix (b0, r1, r2)")
 
     args = parser.parse_args()
     
