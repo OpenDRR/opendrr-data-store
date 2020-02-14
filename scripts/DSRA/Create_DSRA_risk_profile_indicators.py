@@ -8,7 +8,8 @@ import psycopg2
 
 '''
 Script to create DSRA indicator views 
-Can be run from the command line with mandatory arguments like:
+Can be run from the command line with mandatory arguments 
+Run this script with a command like:
 python Create_DSRA_risk_profile_indicators.py --eqScenario="idm7p1_jdf_rlz_0" --retrofitPrefix="b0"
 '''
 
@@ -25,6 +26,7 @@ def main ():
                                         port = auth.get('rds', 'postgres_port'),
                                         database = auth.get('rds', 'postgres_db'))
         cursor = connection.cursor()
+        #Drop the whole schema for each fresh run
         if args.retrofitPrefix == "b0":
             cursor.execute("DROP SCHEMA IF EXISTS results_{eq_scenario} CASCADE;".format(**{'eq_scenario':args.eqScenario}))
             cursor.execute("CREATE SCHEMA IF NOT EXISTS results_{eq_scenario};".format(**{'eq_scenario':args.eqScenario}))
@@ -54,10 +56,12 @@ def get_config_params(args):
     return configParseObj
 
 def parse_args():
- 
-    parser = argparse.ArgumentParser(description="script description")
+    parser = argparse.ArgumentParser(description='''Script to create DSRA indicator views 
+    Can be run from the command line with mandatory arguments 
+    Run this script with a command like:
+    python Create_DSRA_risk_profile_indicators.py --eqScenario="idm7p1_jdf_rlz_0" --retrofitPrefix="b0"''')
     parser.add_argument("--eqScenario", type=str, help="Earthquake scenario id")
-    parser.add_argument("--retrofitPrefix", type=str, help="Retrofit Prefix (b0, r1, r2)")
+    parser.add_argument("--retrofitPrefix", type=str, help="Retrofit Prefix i.e. (b0, r1, r2)")
 
     args = parser.parse_args()
     
