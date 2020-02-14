@@ -45,6 +45,7 @@ e.collapse_pc AS "Collapse_pc",
 --placeholder for life safety baseline
 c.s0_occ_50 AS "p10_Fatal50",
 c.s0_occ_100 AS "pl0_Fatal100",
+c.s0_occ_500 AS "pl0_Fatal500",
 c.s0_occ_1000 AS "pl0_Fatal1000",
 c.s0_occ_2500 AS "pl0_Fatal2500",
 c.s0_occ_500 / a.day AS "pl0_Fatality_r", 
