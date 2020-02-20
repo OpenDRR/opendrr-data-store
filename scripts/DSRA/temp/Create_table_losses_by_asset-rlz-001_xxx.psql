@@ -1,0 +1,44 @@
+DROP TABLE IF EXISTS dsra_losses_by_asset_rlz_001_xxx;
+
+CREATE TABLE dsra_losses_by_asset_rlz_001_xxx(
+    PRIMARY KEY (id),
+    BldgGen varchar,
+    EqBldgType varchar,
+    EqDesLev varchar,
+    GenOcc varchar,
+    SAC varchar,
+    adauid varchar,
+    cdname varchar,
+    csdname varchar,
+    dauid varchar,
+    eqOccType varchar,
+    ername varchar,
+    fsauid varchar,
+    hzOccType varchar,
+    hzTaxon varchar,
+    id varchar,
+    landusetyp varchar,
+    prname varchar,
+    sauid varchar,
+    taxonomy varchar,
+    lon float,
+    lat float,
+    sl_Cont float,              --contents~mean
+    sl_Cont_stdv float,         --contents~stddev
+    sl_NStr float,              --nonstructural~mean
+    sl_Nstr_stdv float,         --nonstructural~stddev
+    sl_Fatalities float,        --occupants~mean
+    sl_Fatalities_stdv float,   --occupants~stddev
+    sl_Str float,               --structural~mean
+    sl_Str_stdv float           --structural~stddev
+
+);
+
+-- import results from csv
+COPY dsra_losses_by_asset_rlz_001_xxx (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid,cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, sl_Cont, sl_Cont_stdv, sl_NStr, 
+sl_Nstr_stdv, Sl_Fatalities, Sl_Fatalities_stdv, sl_Str, Sl_Str_stdv)
+    FROM 'C:\Workspace\eRisk_CA\DSRA_sample_data\losses_by_asset-rlz-001_455.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
