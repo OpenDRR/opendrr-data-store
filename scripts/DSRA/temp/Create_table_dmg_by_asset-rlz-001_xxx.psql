@@ -1,0 +1,46 @@
+DROP TABLE IF EXISTS dsra_dmg_by_asset_rlz_001_xxx;
+
+CREATE TABLE dsra_dmg_by_asset_rlz_001_xxx(
+    PRIMARY KEY (id),
+    BldgGen varchar,
+    EqBldgType varchar,
+    EqDesLev varchar,
+    GenOcc varchar,
+    SAC varchar,
+    adauid varchar,
+    cdname varchar,
+    csdname varchar,
+    dauid varchar,
+    eqOccType varchar,
+    ername varchar,
+    fsauid varchar,
+    hzOccType varchar,
+    hzTaxon varchar,
+    id varchar,
+    landusetyp varchar,
+    prname varchar,
+    sauid varchar,
+    taxonomy varchar,
+    lon float,
+    lat float,
+    sd_None float,              --structural~no_damage_mean
+    sd_None_stdv float,         --structural~no_damage_stdv
+    sd_Slight float,            --structural~slight_mean
+    sd_Slight_stdv float,       --structural~slight_stdv
+    sd_Moderate float,          --structural~moderate_mean
+    sd_Moderate_stdv float,     --structural~moderate_stdv
+    sd_Extensive float,         --structural~extensive_mean
+    sd_Extensive_stdv float,    --structural~extensive_stdv
+    sd_Complete float,          --structural~complete_mean
+    sd_Complete_stdv float     --structural~complete_stdv
+
+);
+
+-- import results from csv
+COPY dsra_dmg_by_asset_rlz_001_xxx (BldgGen, EqBldgType, EqDesLev, GenOcc, SAC, adauid,cdname, csdname, dauid, eqOccType, ername, fsauid, hzOccType, hzTaxon, id, landusetyp, prname, sauid, taxonomy, lon, lat, sd_None, sd_None_stdv, sd_Slight, 
+sd_Slight_stdv, sd_Moderate, sd_Moderate_stdv, sd_Extensive, sd_Extensive_stdv, sd_Complete, sd_Complete_stdv)
+    FROM 'C:\Workspace\eRisk_CA\DSRA_sample_data\dmg_by_asset-rlz-001_454.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
