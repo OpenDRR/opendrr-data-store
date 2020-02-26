@@ -1,0 +1,55 @@
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_low is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_central is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_high is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+[2019-10-23 16:24:02,123 #24 INFO] murrayjourneay running /Users/murrayjourneay/Dropbox/gitlab/canada/jobs/scenario/regions/JdFM6p8/sDamage_JdFM6p8_s1.ini [--hc=None]
+[2019-10-23 16:24:02,127 #24 INFO] Using engine version 3.7.0
+[2019-10-23 16:24:03,537 #24 INFO] Zipping the input files
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_low is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_central is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_high is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+[2019-10-23 16:24:06,069 #24 WARNING] Using 8 cores on MacBook-Pro-4.local
+[2019-10-23 16:24:06,179 #24 INFO] Checksum of the input files: 2203838128
+[2019-10-23 16:24:06,239 #24 INFO] Reading the risk model if present
+[2019-10-23 16:24:11,575 #24 INFO] Reading /Users/murrayjourneay/Dropbox/gitlab/canada/models/exposure/regions/british_columbia/BC.xml
+[2019-10-23 16:24:43,799 #24 INFO] Associated 162483 assets to 14703 sites
+[2019-10-23 16:24:57,467 #24 INFO] 39412 assets were discarded because too far from the rupture; use `oq show discarded` to show them and `oq plot_assets` to plot them
+[2019-10-23 16:24:57,993 #24 INFO] Reducing risk model from 4224 to 724 taxonomies
+[2019-10-23 16:24:59,366 #24 INFO] Storing exposed_values/agg
+[2019-10-23 16:25:01,451 #24 INFO] There are 3 realization(s)
+[2019-10-23 16:30:22,555 #24 INFO] Building risk inputs from 3 realization(s)
+[2019-10-23 16:32:25,673 #24 INFO] Built 14703 risk inputs
+[2019-10-23 16:34:14,683 #24 INFO] scenario_damage 1.03 GB sent, 9 tasks submitted, 8 queued
+[2019-10-23 16:34:15,795 #24 INFO] scenario_damage  11% [10 tasks submitted, 7 queued]
+[2019-10-23 16:34:15,999 #24 INFO] scenario_damage  17% [11 tasks submitted, 6 queued]
+[2019-10-23 16:34:16,246 #24 INFO] scenario_damage  23% [12 tasks submitted, 5 queued]
+[2019-10-23 16:34:16,438 #24 INFO] scenario_damage  29% [13 tasks submitted, 4 queued]
+[2019-10-23 16:34:16,633 #24 INFO] scenario_damage  35% [14 tasks submitted, 3 queued]
+[2019-10-23 16:34:17,170 #24 INFO] scenario_damage  41% [15 tasks submitted, 2 queued]
+[2019-10-23 16:34:17,422 #24 INFO] scenario_damage  47% [16 tasks submitted, 1 queued]
+[2019-10-23 16:34:22,233 #24 INFO] scenario_damage  52% [17 tasks submitted, 0 queued]
+[2019-10-23 16:35:07,267 #24 INFO] scenario_damage  58% [17 tasks submitted, 0 queued]
+[2019-10-23 16:35:10,121 #24 INFO] scenario_damage  64% [17 tasks submitted, 0 queued]
+[2019-10-23 16:35:10,664 #24 INFO] scenario_damage  70% [17 tasks submitted, 0 queued]
+[2019-10-23 16:35:12,233 #24 INFO] scenario_damage  76% [17 tasks submitted, 0 queued]
+[2019-10-23 16:35:13,024 #24 INFO] scenario_damage  82% [17 tasks submitted, 0 queued]
+[2019-10-23 16:35:14,111 #24 INFO] scenario_damage  88% [17 tasks submitted, 0 queued]
+[2019-10-23 16:35:14,240 #24 INFO] scenario_damage  94% [17 tasks submitted, 0 queued]
+[2019-10-23 16:35:16,009 #24 INFO] scenario_damage 100% [17 tasks submitted, 0 queued]
+[2019-10-23 16:35:16,025 #24 INFO] Received 80.32 MB in 169 seconds, biggest output=5.12 MB
+[2019-10-23 16:35:16,028 #24 INFO] Received {'d_asset': '77.98 MB', 'd_event': '1.95 MB', 'c_asset': '238 B', 'c_event': '401.04 KB'}
+[2019-10-23 16:35:16,795 #24 INFO] Exposing the outputs to the database
+[2019-10-23 16:35:17,009 #24 INFO] Calculation 24 finished correctly in 670 seconds
+  id | name
+ 102 | Aggregate Event Damages
+ 101 | Average Asset Damages
+ 103 | Events
+ 104 | Full Report
+ 105 | Ground Motion Fields
+ 106 | Input Files
+ 107 | Realizations
