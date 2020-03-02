@@ -1,10 +1,10 @@
 -- script to generate Canada exposure table
 
-DROP TABLE IF EXISTS Canada_Exposure;
+DROP TABLE IF EXISTS psra.cascadia_exposure;
 
 
 -- create table
-CREATE TABLE canada_exposure(
+CREATE TABLE psra.cascadia_exposure(
     PRIMARY KEY (id),
     id varchar,
     lon float,
@@ -38,7 +38,7 @@ CREATE TABLE canada_exposure(
 );
 
 -- import exposure from csv
-COPY canada_exposure (id, lon, lat, taxonomy, number, structural, nonstructural, contents, day, night, transit, landusetyp, GenOcc, hzOccType, eqOccType, BldgGen, hzTaxon, EqBldgType, EqDesLev, sauid, dauid, adauid, fsauid, csdname, cdname, SAC, prname, ername)
+COPY C:\GitHub\opendrr-data-store\sample-datasets\model-inputs\Cascadia (id, lon, lat, taxonomy, number, structural, nonstructural, contents, day, night, transit, landusetyp, GenOcc, hzOccType, eqOccType, BldgGen, hzTaxon, EqBldgType, EqDesLev, sauid, dauid, adauid, fsauid, csdname, cdname, SAC, prname, ername)
     FROM 'C:\Workspace\eRisk_CA\PSRA_sample_data\Canada.csv'
         WITH 
           DELIMITER AS ','
@@ -46,7 +46,7 @@ COPY canada_exposure (id, lon, lat, taxonomy, number, structural, nonstructural,
 
 
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE canada_exposure ADD COLUMN geom geometry(Point,4326);
-UPDATE canada_exposure SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+ALTER TABLE psra.cascadia_exposure ADD COLUMN geom geometry(Point,4326);
+UPDATE psra.cascadia_exposure SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 
 
