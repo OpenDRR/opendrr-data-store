@@ -1,4 +1,4 @@
--- create PSRA metric baseline view from source TABLES
+-- create DSRA metric baseline view from source TABLES
 
 DROP VIEW IF EXISTS dsra_indicators_all_baseline, dsra_indicators_buildingperformance_baseline, dsra_indicators_mortality_baseline, dsra_indicators_affectedpeople_baseline,
                     dsra_indicators_economicsecurity_baseline, dsra_indicators_CI_baseline;

@@ -1,0 +1,45 @@
+-- create scenario risk building indicators for Scenario Consequence Bldg
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_consequence_bldg;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_consequence_bldg AS 
+
+-- 3.0 Scenario Risk
+-- 3.2 Scenario Consequence_Bldg
+SELECT 
+a."AssetID",
+a."Rupture_Abbr",    --"Rupture Abbreviation"
+f.magnitude AS "Source_Mag",  --"Rupture Source and Magnitude", hardcoded for now until we figure out how to parse
+'b0' AS "Retrofit_Level",  --"Retrofit Level", 
+a."Realization" AS "RealizationID", 
+a."sC_Repair_b0" AS "sC_Repair",   --"Repair Time"
+a."sC_Construxn_b0" AS "sC_Construxn",    --"Reconstruction Time"
+a."sC_Downtime_b0" AS "sC_Downtime", --"Building Downtime"
+a."sC_CasDayL1_b0" AS "sC_CasDayL1",    --"Minor Injury (Daytime)"
+a."sC_CasDayL2_b0" AS "sC_CasDayL2",    --"Moderate Injury (Daytime)"
+a."sC_CasDayL3_b0" AS "sC_CasDayL3",    --"Serious Injury (Daytime)"
+a."sC_CasDayL4_b0" AS "sC_CasDayL4",    --"Critical Injury (Daytime)"
+a."sC_CasNightL1_b0" AS "sC_CasNightL1",    --"Minor Injury (Nighttime)"
+a."sC_CasNightL2_b0" AS "sC_CasNightL2",    --"Moderate Injury (Nighttime)"
+a."sC_CasNightL3_b0" AS "sC_CasNightL3",    --"Serious Injury (Nighttime)"
+a."sC_CasNightL4_b0" AS "sC_CasNightL4",    --"Critical Injury (Nighttime)"
+a."sC_CasTransitL1_b0" AS "sC_CasTransitL1", --"Minor Injury (In Transit)"
+a."sC_CasTransitL2_b0" AS "sC_CasTransitL2", --"Moderate Injury (In Transit)"
+a."sC_CasTransitL3_b0" AS "sC_CasTransitL3", --"Serious Injury (In Transit)"
+a."sC_CasTransitL4_b0" AS "sC_CasTransitL4", --"Critical Injury (In Transit)"
+a."sC_DisplRes_3_b0" AS "sC_Displ_Res_3",    --"3-Day Residential Displacement"
+a."sC_DisplRes_30_b0" AS "sC_Displ_Res_30",    --"30-Day Residential Displacement"
+a."sC_DisplRes_90_b0" AS "sC_Displ_Res_90",    --"90-Day Residential Displacement"
+a."sC_DisplRes_360_b0" AS "sC_Displ_Res_360",    --"360-Day Residential Displacement"
+a."sC_DisrupEmpl_30_b0" AS "sC_DisrupEmpl_30",    --"30-Day Employee Disruption"
+a."sC_DisrupEmpl_90_b0" AS "sC_DisrupEmpl_90",    --"90-Day Employee Disruption
+a."sC_DisrupEmpl_180_b0" AS "sC_DisrupEmpl_180",    --"180-Day Employee Disruption
+a."sC_DisrupEmpl_360_b0" AS "sC_DisrupEmpl_360",    --"360-Day Employee Disruption
+a."sC_DebrisBW_b0" AS "sC_DebrisBW",
+a."sC_DebrisC_b0" AS "sC_DebrisC",
+b.geom
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN psra.bc_exposure b ON a."AssetID" = b.id 
+LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
+LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr";
