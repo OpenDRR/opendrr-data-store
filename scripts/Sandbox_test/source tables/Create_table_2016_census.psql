@@ -1,0 +1,82 @@
+-- script to generate Canada exposure table
+
+DROP TABLE IF EXISTS lut.census_2016_canada;
+
+-- create table
+CREATE TABLE lut.census_2016_canada(
+    PRIMARY KEY(SAUIDt),
+    OBJECTID varchar,
+    OID varchar,
+    SAUIDt varchar,
+    SAUIDi integer,
+    Lon float,
+    Lat float,
+    Area_km2 float,
+    Area_ha float,
+    DAUIDt varchar,
+    DAUIDi integer,
+    SACCODE varchar,
+    SACTYPE varchar,
+    LandUse varchar,
+    BldgNum float,
+    CensusBldg float,
+    CensusPop float,
+    CensusDU float,
+    People_DU float,
+    Bldg_ha float,
+    Pop_Ha float,
+    Dwelling_ha float,
+    Bus_Ha float,
+    Pre_1975 float,
+    Hshld_NSuit float,
+    Renter float,
+    Hshld_MntnAge float,
+    Live_Alone float,
+    LonePar3Kids float,
+    Fam_GT5 float,
+    Moved_LT1 float,
+    NoWrkPlace float,
+    Imm_LT5 float,
+    No_EngFr float,
+    NoSec_School float,
+    Age_Median float,
+    Age_GT65 float,
+    Age_LT6 float,
+    Indigenous float,
+    Vis_Min float,
+    Pub_Trans float,
+    Shltr_GT30 float,
+    Inc_LowDecile float,
+    Unemployed float,
+    Work_None float,
+    Work_Parttime float,
+    Employ_Inc float,
+    Inc_Hshld float,
+    Inc_Indv float,
+    Hshld_Mntn1 float,
+    Health_Job float,
+    Retail_Job float
+
+);
+
+-- import exposure from csv
+COPY lut.census_2016_canada (OBJECTID, OID, SAUIDt, SAUIDi, Lon, Lat, Area_km2, Area_ha, DAUIDt, DAUIDi, SACCODE, SACTYPE, LandUse, BldgNum, CensusBldg, CensusPop, CensusDU, People_DU, Bldg_ha, Pop_Ha, Dwelling_ha, Bus_Ha, Pre_1975, Hshld_NSuit, Renter, Hshld_MntnAge, Live_Alone, LonePar3Kids, Fam_GT5, Moved_LT1, NoWrkPlace, Imm_LT5, No_EngFr, NoSec_School, Age_Median, Age_GT65, Age_LT6, Indigenous, Vis_Min, Pub_Trans, Shltr_GT30, Inc_LowDecile, Unemployed, Work_None, Work_Parttime, Employ_Inc, Inc_Hshld, Inc_Indv, Hshld_Mntn1, Health_Job, Retail_Job)
+    FROM 'C:\workspace\human-settlement-national\2_census-2016-canada.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+
+/*
+-- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
+ALTER TABLE psra.canada_exposure ADD COLUMN geom geometry(Point,4326);
+UPDATE psra.canada_exposure SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+
+-- create spatial index
+CREATE INDEX Canada_exposure_idx
+ON psra.Canada_exposure using GIST (geom);
+
+*/
+
+
+

@@ -1,0 +1,31 @@
+-- create scenario risk building indicators all
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_damage_state_agg;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_damage_state_agg AS 
+
+-- 4.0 Earthquake Risk
+-- 4.2 Building Performance
+-- 4.2.1 Damage State
+SELECT 
+b.sauid AS "Sauid",
+SUM(a."sD_None_b0") AS "sD_NoneT",
+AVG(a."sD_None_stdv_b0") AS "sD_NoneA_stdv",
+SUM(a."sD_Slight_b0") AS "sD_SlightT",
+AVG(a."sD_Slight_stdv_b0") AS "sD_SlightA_stdv",
+SUM(a."sD_Moderate_b0") AS "sD_ModerateT",
+AVG(a."sD_Moderate_stdv_b0") AS "sD_ModerateA_stdv",
+SUM(a."sD_Extensive_b0") AS "sD_ExtensiveT",
+AVG(a."sD_Extensive_stdv_b0") AS "sD_ExtensiveA_stdv",
+SUM(a."sD_Complete_b0") AS "sD_CompleteT",
+AVG(a."sD_Complete_stdv_b0") AS "sD_CompleteA_stdv",
+SUM(a."sD_Collapse_b0") AS "sD_CollapseT",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+--LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+GROUP BY b.sauid, g.geom, g.geompoint;

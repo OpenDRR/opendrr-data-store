@@ -1,0 +1,36 @@
+-- create scenario risk building indicators all
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_recovery_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_recovery_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.2 Building Performance
+-- 4.2.3 Recovery
+SELECT 
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'b0' AS "Retrofit",
+SUM(a."sD_None_b0" + a."sD_Slight_b0") AS "sD_GreenTag_b",
+SUM(a."sD_None_b0" + a."sD_Slight_b0")/5 AS "sD_GreenTag_i",
+SUM(a."sD_Extensive_b0") AS "sD_YellowTag_d",
+SUM(a."sD_Extensive_b0")/2.5 AS "sD_YellowTag_i",
+SUM(a."sD_Complete_b0") AS "sD_RedTag_b",
+SUM(a."sD_Complete_b0")/5 AS "sD_RedTag_i" ,
+SUM(a."sC_Repair_b0")/(SUM(b.number)) AS "sC_Repair_t",
+SUM(a."sC_Construxn_b0")/(SUM(b.number)) AS "SC_Construxn_t",
+SUM(a."sC_Downtime_b0")/(SUM(b.number)) AS "sC_Downtime_total",
+SUM(a."sC_DebrisBW_b0") AS "sC_Debris_bw",
+SUM(a."sC_DebrisC_b0") AS "sC_Debris_cs",
+SUM(a."sC_DebrisBW_b0" + a."sC_DebrisC_b0") AS "sC_Debris_total",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude;

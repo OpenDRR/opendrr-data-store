@@ -1,0 +1,33 @@
+-- create scenario risk building indicators all
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_casualties CASCADE;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_casualties AS 
+
+-- 4.0 Earthquake Risk
+-- 4.3 Afected People
+-- 4.3.1 Casualties
+SELECT
+a."AssetID",
+a."Rupture_Abbr",
+f.magnitude AS "Source_Mag",
+'b0' AS "Retrofit_Level",
+a."Realization" AS "RealizationID",  
+a."sC_CasDayL1_b0" AS "sC_CasDayL1",
+a."sC_CasDayL2_b0" AS "sC_CasDayL2",
+a."sC_CasDayL3_b0" AS "sC_CasDayL3",
+a."sC_CasDayL4_b0" AS "sC_CasDayL4",
+a."sC_CasNightL1_b0" AS "sC_CasNightL1",
+a."sC_CasNightL2_b0" AS "sC_CasNightL2",
+a."sC_CasNightL3_b0" AS "sC_CasNightL3",
+a."sC_CasNightL4_b0" AS "sC_CasNightL4",
+a."sC_CasTransitL1_b0" AS "sC_CasTransitL1",
+a."sC_CasTransitL2_b0" AS "sC_CasTransitL2",
+a."sC_CasTransitL3_b0" AS "sC_CasTransitL3",
+a."sC_CasTransitL4_b0" AS "sC_CasTransitL4",
+b.geom
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr";

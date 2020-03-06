@@ -1,0 +1,46 @@
+
+DROP TABLE IF EXISTS lut.mh_intensity_canada;
+
+-- create table
+CREATE TABLE lut.mh_intensity_canada(
+    PRIMARY KEY(SAUIDt),
+    Fl200 float,
+    LndSus float,
+    Fl500 float,
+    DAUIDt varchar,
+    MMI6 float,
+    MMI7 float,
+    MMI8 float,
+    Tsun_ha float,
+    Table_Names_1 varchar,
+    SAUIDt varchar,
+    Table_Names varchar,
+    Cy250 float,
+    Prname varchar,
+    Vs30 float,
+    SAUIDi integer,
+    Cy1000 float,
+    Lon float,
+    OID float,
+    PGA float,
+    DAUIDi integer,
+    Fire float,
+    Cy500 float,
+    Fl1000 float,
+    Sa2p0 float,
+    Sa0p3 float,
+    Cy100 float,
+    Sa0p1 float,
+    Sa1p0 float,
+    PGV float,
+    Lat float
+
+);
+
+-- import exposure from csv
+COPY lut.mh_intensity_canada (Fl200, LndSus, Fl500, DAUIDt, MMI6, MMI7, MMI8, Tsun_ha, Table_Names_1, SAUIDt, Table_Names, Cy250, Prname, Vs30, SAUIDi, Cy1000, Lon, OID, PGA, DAUIDi, Fire, Cy500, Fl1000, Sa2p0, Sa0p3, Cy100, Sa0p1, Sa1p0, PGV, Lat)
+
+    FROM 'C:\workspace\human-settlement-national\4_mh-intensity-canada.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
