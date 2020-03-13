@@ -1,0 +1,22 @@
+-- create physical exposure indicators
+DROP VIEW IF EXISTS results.canada_exposure_replacement_cost_agg_view;
+CREATE VIEW results.canada_exposure_replacement_cost_agg_view AS 
+
+-- 2.0 Physical Exposure
+-- 2.1 Buildings
+-- 2.1.3 Replacement Cost
+SELECT 
+a.sauid AS "Sauid",
+CAST(SUM(a.structural + a.nonstructural + a.contents) AS NUMERIC) AS "AssetCostT",
+CAST(SUM(a.structural + a.nonstructural) AS NUMERIC) AS "BldgCostT",
+CAST(SUM(a.structural) AS NUMERIC) AS "StrCostT",
+CAST(SUM(a.nonstructural) AS NUMERIC) AS "NStrCostT",
+CAST(SUM(a.contents) AS NUMERIC) AS "ContCost",
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+--LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,d.geom,d.geompoint;

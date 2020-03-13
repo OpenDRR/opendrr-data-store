@@ -1,0 +1,19 @@
+-- create scenario risk building indicators all
+DROP VIEW IF EXISTS results.canada_exposure_replacement_cost CASCADE;
+CREATE VIEW results.canada_exposure_replacement_cost AS 
+
+-- 2.0 Physical Exposure
+-- 2.1 Buildings
+-- 2.1.2 Replacement Cost
+SELECT 
+a.id AS "AssetID",
+a.structural AS "StrCost",
+a.nonstructural AS "NStrCost",
+a.contents AS "ContCost",
+a.structural + a.nonstructural + a.contents AS "AssetCost",
+a.structural + a.nonstructural AS "BldgCost",
+b."CAD_RetrofitCost_Bldg" AS "RetrofitCost",
+a.geom
+
+FROM psra.canada_exposure a
+LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";

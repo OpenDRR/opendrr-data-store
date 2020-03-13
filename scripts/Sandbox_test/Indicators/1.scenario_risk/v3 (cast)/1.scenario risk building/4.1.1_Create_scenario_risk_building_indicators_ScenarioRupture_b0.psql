@@ -1,0 +1,33 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_rupture CASCADE;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_rupture AS 
+
+-- 4.0 Earthquake Risk
+-- 4.1 Scenario Hazard
+-- 4.1.1 Scenario Rupture
+SELECT 
+a."AssetID",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+f.rake AS "Rake",
+CAST(f.lon AS NUMERIC) AS "Hypo_Lon",
+CAST(f.lat AS NUMERIC) AS "Hypo_Lat",
+CAST(f.depth AS NUMERIC) AS "Hypo_Depth",
+CAST(d."vs_lon" AS NUMERIC) AS "vs30_Lon",
+CAST(d."vs_lat" AS NUMERIC) AS "vs30_Lat",
+CAST(d.vs30 AS NUMERIC) AS "vs30",
+e.site_id AS "SiteID",
+CAST(e.lon AS NUMERIC) AS "SiteID_Lon",
+CAST(e.lat AS NUMERIC) AS "SiteID_Lat",
+a."Realization" AS "Realization",
+a."gmpe_Model" AS "gmpe_Model",
+CAST(a."Weight" AS NUMERIC) AS "Weight",
+b.geom
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr";

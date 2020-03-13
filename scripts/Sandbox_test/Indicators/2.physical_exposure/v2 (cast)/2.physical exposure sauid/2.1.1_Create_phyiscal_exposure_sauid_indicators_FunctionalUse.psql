@@ -1,0 +1,28 @@
+-- create physical exposure indicators
+DROP VIEW IF EXISTS results.canada_exposure_functional_use_agg CASCADE;
+CREATE VIEW results.canada_exposure_functional_use_agg AS 
+
+-- 2.0 Physical Exposure
+-- 2.1 Buildings
+-- 2.1.1 Functional Use
+SELECT 
+a.sauid AS "Sauid",
+c.sactype AS "SAC",
+c.landuse AS "LandUse",
+CAST(SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) AS NUMERIC) AS "RES_LD",
+CAST(SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) AS NUMERIC) AS "RES_MD",
+CAST(SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END) AS NUMERIC) AS "RES_HD",
+CAST(SUM(CASE WHEN a.genocc ='Commercial' THEN a.number ELSE 0 END) AS NUMERIC) AS "Comm",
+CAST(SUM(CASE WHEN a.genocc ='Industrial' THEN a.number ELSE 0 END) AS NUMERIC) AS "Ind",
+CAST(SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) AS NUMERIC) AS "Civic",
+CAST(SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) AS NUMERIC) AS "Agr",
+CAST(SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / c.people_du AS NUMERIC) AS "SF_Hshlds",
+CAST((SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / c.people_du AS NUMERIC) AS "MF_Hshlds",
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,c.sactype,c.landuse,c.people_du,d.geom,d.geompoint;

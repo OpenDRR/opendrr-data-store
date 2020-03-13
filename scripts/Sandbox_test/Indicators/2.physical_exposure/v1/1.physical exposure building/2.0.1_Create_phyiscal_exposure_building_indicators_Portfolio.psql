@@ -1,0 +1,18 @@
+-- create scenario risk building indicators all
+DROP VIEW IF EXISTS results.canada_exposure_portfolio CASCADE;
+CREATE VIEW results.canada_exposure_portfolio AS 
+
+-- 2.0 Physical Exposure
+-- 2.1 Buildings
+-- 2.0.1 Portfolio
+SELECT 
+a.id AS "AssetID",
+a.sauid AS "Sauid",
+a.lon AS "Asset_Lon",
+a.lat AS "Asset_Lat",
+a.number AS "BldNum",
+b."BldgArea_ft2" AS "BldgArea_ft2",
+a.geom
+
+FROM psra.canada_exposure a
+LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";

@@ -1,0 +1,27 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_functional_use_agg;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_functional_use_agg AS 
+
+-- 2.0 Physical Exposure
+-- 2.1 Buildings
+-- 2.1.1 Functional Use
+SELECT 
+a.sauid AS "Sauid",
+c.landuse AS "LandUse",
+CAST(SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) AS NUMERIC) AS "Res_LD",
+CAST(SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) AS NUMERIC) AS "Res_MD",
+CAST(SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END) AS NUMERIC) AS "Res_HD",
+CAST(SUM(CASE WHEN a.genocc ='Commercial' THEN a.number ELSE 0 END) AS NUMERIC) AS "Comm",
+CAST(SUM(CASE WHEN a.genocc ='Industrial' THEN a.number ELSE 0 END) AS NUMERIC) AS "Ind",
+CAST(SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) AS NUMERIC) AS "Civic",
+CAST(SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) AS NUMERIC) AS "Agricultural",
+CAST(SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / c.people_du AS NUMERIC) AS "SF_Hshlds",
+CAST((SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / c.people_du AS NUMERIC) AS "MF_Hshlds",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" g on a.sauid = g."SAUIDt"
+GROUP BY a.sauid,c.landuse,c.people_du,g.geom,g.geompoint;

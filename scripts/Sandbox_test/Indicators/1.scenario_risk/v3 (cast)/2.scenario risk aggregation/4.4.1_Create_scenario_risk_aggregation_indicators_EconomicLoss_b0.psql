@@ -1,0 +1,29 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_economic_loss_agg;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_economic_loss_agg AS 
+
+-- 4.0 Earthquake Risk
+-- 4.4 Economic Security
+-- 4.4.1 Economic Loss
+SELECT
+b.sauid AS "Sauid",
+CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") AS NUMERIC) AS "sL_AssetT",
+CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0") AS NUMERIC) AS "sL_BldgT",
+CAST((COALESCE((AVG(a."sL_Str_b0" + a."sL_NStr_b0"))/ NULLIF(AVG((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0")),0),0)) AS NUMERIC) AS "sL_BldgRatioA",
+CAST(SUM(a."sL_Str_b0") AS NUMERIC) AS "sL_StrT",
+CAST(AVG(a."sL_Str_stdv_b0") AS NUMERIC) AS "sL_StrA_stdv",
+CAST(SUM(a."sL_NStr_b0") AS NUMERIC) AS "sL_NStr",
+CAST(AVG(a."sL_NStr_stdv_b0") AS NUMERIC) AS "sL_NStrA_stdv",
+CAST(SUM(a."sL_Cont_b0") AS NUMERIC) AS "sL_ContT",
+CAST(AVG(a."sL_Cont_stdv_b0") AS NUMERIC) AS "sL_ContA_stdv",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+--LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+GROUP BY b.sauid, g.geom, g.geompoint;

@@ -1,0 +1,19 @@
+-- create scenario risk building indicators all
+DROP VIEW IF EXISTS results.canada_exposure_building_occupancy_agg;
+CREATE VIEW results.canada_exposure_building_occupancy_agg AS 
+
+-- 2.0 Physical Exposure
+-- 2.3 People
+-- 2.3.1 Building Occupancy
+SELECT 
+a.sauid AS "Sauid",
+c.censuspop AS "CensusPop",
+SUM(a.day) AS "DayPopT",
+SUM(a.night) AS "NightPopT",
+SUM(a.transit) AS "TransitPopT",
+a.geom
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+GROUP BY a.sauid,c.censuspop,a.geom;

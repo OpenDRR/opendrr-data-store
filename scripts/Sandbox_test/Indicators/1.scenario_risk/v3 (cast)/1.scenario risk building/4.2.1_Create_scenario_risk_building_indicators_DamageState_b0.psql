@@ -1,0 +1,32 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_damage_state CASCADE;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_damage_state AS 
+
+-- 4.0 Earthquake Risk
+-- 4.2 Building Performance
+-- 4.2.1 Damage State
+SELECT 
+a."AssetID",
+a."Rupture_Abbr",
+f.magnitude AS "Source_Mag",
+'b0' AS "Retrofit_Level",
+a."Realization" AS "RealizationID", 
+CAST(a."sD_None_b0" AS NUMERIC) AS "sD_None",
+CAST(a."sD_None_stdv_b0" AS NUMERIC) AS "sD_None_stdv",
+CAST(a."sD_Slight_b0" AS NUMERIC) AS "sD_Slight",
+CAST(a."sD_Slight_stdv_b0" AS NUMERIC) AS "sD_Slight_stdv",
+CAST(a."sD_Moderate_b0" AS NUMERIC) AS "sD_Moderate",
+CAST(a."sD_Moderate_stdv_b0" AS NUMERIC) AS "sD_Moderate_stdv",
+CAST(a."sD_Extensive_b0" AS NUMERIC) AS "sD_Extensive",
+CAST(a."sD_Extensive_stdv_b0" AS NUMERIC) AS "sD_Extensive_stdv",
+CAST(a."sD_Complete_b0" AS NUMERIC) AS "sD_Complete",
+CAST(a."sD_Complete_stdv_b0" AS NUMERIC) AS "sD_Complete_stdv",
+CAST(a."sD_Collapse_b0" AS NUMERIC) AS "sD_Collapse",
+b.geom
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr";

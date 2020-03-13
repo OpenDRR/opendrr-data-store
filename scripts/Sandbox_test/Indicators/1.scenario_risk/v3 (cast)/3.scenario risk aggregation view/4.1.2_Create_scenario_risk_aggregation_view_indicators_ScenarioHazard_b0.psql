@@ -1,0 +1,27 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_agg_view CASCADE;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.1 Scenario Hazard
+-- 4.1.2 Scenario Hazard
+SELECT 
+DISTINCT(b.sauid) AS "Sauid",
+CAST(e."gmv_pgv" AS NUMERIC) AS "PGV",
+CAST(e."gmv_pga" AS NUMERIC) AS "PGA",
+CAST(e."gmv_SA(0.2)" AS NUMERIC) AS "SA_0p2",
+CAST(e."gmv_SA(0.3)" AS NUMERIC) AS "SA_0p3",
+CAST(e."gmv_SA(0.6)" AS NUMERIC) AS "SA_0p6",
+CAST(e."gmv_SA(1.0)" AS NUMERIC) AS "SA_1p0",
+CAST(0 AS NUMERIC) AS "SA_2p0",  --"Spectral Acceleration (2.0s)" - change source to reflect 2.0 later
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN psra.bc_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+--LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt";
