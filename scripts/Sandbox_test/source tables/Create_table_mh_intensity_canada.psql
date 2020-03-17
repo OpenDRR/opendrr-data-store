@@ -44,3 +44,12 @@ COPY lut.mh_intensity_canada (Fl200, LndSus, Fl500, DAUIDt, MMI6, MMI7, MMI8, Ts
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
+
+
+-- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
+ALTER TABLE lut.mh_intensity_canada ADD COLUMN geom geometry(Point,4326);
+UPDATE lut.mh_intensity_canada SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+
+-- create spatial index
+CREATE INDEX mh_intensity_canada_idx
+ON lut.mh_intensity_canada using GIST (geom);

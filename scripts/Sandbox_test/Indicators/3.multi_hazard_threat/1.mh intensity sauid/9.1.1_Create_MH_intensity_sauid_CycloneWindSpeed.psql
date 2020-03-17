@@ -1,0 +1,22 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_intensity_cyclone_wind_speed CASCADE;
+CREATE VIEW results.mh_intensity_cyclone_wind_speed AS 
+
+-- 3.0 Natural Hazards
+-- 9.1 Cyclone Hazard
+-- 9.1.1 Cyclone Wind Speed
+SELECT 
+a.sauidt AS "Sauid",
+CAST(a.cy100 AS NUMERIC) AS "Cy100",
+COALESCE(CAST((a.cy100 - (SELECT cy100_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy100_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy100_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cy100n",
+CAST(a.cy250 AS NUMERIC) AS "Cy250",
+COALESCE(CAST((a.cy250 - (SELECT cy250_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy250_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy250_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cy250n",
+CAST(a.cy500 AS NUMERIC) AS "Cy500",
+COALESCE(CAST((a.cy500 - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cy500n",
+CAST(a.cy1000 AS NUMERIC) AS "Cy1000",
+COALESCE(CAST((a.cy1000 - (SELECT cy1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cy1000n",
+b.geom AS "geom_poly",
+b.geompoint AS "geom_point"
+
+FROM lut.mh_intensity_canada a
+LEFT JOIN boundaries."Geometry SAUID" b on a.sauidt = b."SAUIDt";

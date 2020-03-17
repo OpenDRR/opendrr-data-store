@@ -1,0 +1,39 @@
+
+-- obtain min/max values FOR mh intensity calculations
+DROP TABLE IF EXISTS lut.mh_intensity_canada_minmax CASCADE;
+
+SELECT
+MIN(pgv) AS "pgv_min",
+MAX(pgv) AS "pgv_max",
+MIN(pga) AS "pga_min",
+MAX(pga) AS "pga_max",
+MIN(mmi6) AS "mmi6_min",
+MAX(mmi6) AS "mmi6_max",
+MIN(mmi7) AS "mmi7_min",
+MAX(mmi7) AS "mmi7_max",
+MIN(mmi8) AS "mmi8_min",
+MAX(mmi8) AS "mmi8_max",
+MIN(tsun_ha) AS "tsun_min",
+MAX(tsun_ha) AS "tsun_max",
+MIN(fl200) AS "fl200_min",
+MAX(fl200) AS "fl200_max",
+MIN(fl500) AS "fl500_min",
+MAX(fl500) AS "fl500_max",
+MIN(fl1000) AS "fl1000_min",
+MAX(fl1000) AS "fl1000_max",
+MIN(lndsus) AS "lndsus_min",
+MAX(lndsus) AS "lndsus_max",
+MAX(fire) AS "fire_min",
+MAX(fire) AS "fire_max",
+MAX(cy100) AS "cy100_min",
+MAX(cy100) AS "cy100_max",
+MAX(cy250) AS "cy250_min",
+MAX(cy250) AS "cy250_max",
+MAX(cy500) AS "cy500_min",
+MAX(cy500) AS "cy500_max",
+MAX(cy1000) AS "cy1000_min",
+MAX(cy1000) AS "cy1000_max"
+
+INTO lut.mh_intensity_canada_minmax
+
+FROM lut.mh_intensity_canada;

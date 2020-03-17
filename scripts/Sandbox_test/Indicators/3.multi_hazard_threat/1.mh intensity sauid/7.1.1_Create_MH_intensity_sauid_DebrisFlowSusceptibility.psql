@@ -1,0 +1,16 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_intensity_debris_flow_susceptibility CASCADE;
+CREATE VIEW results.mh_intensity_debris_flow_susceptibility AS 
+
+-- 3.0 Natural Hazards
+-- 7.1 Landslide Hazard
+-- 6.1.1 Debris Flow Susceptibility
+SELECT 
+a.sauidt AS "Sauid",
+CAST(a.lndsus AS NUMERIC) AS "LndSus",
+COALESCE(CAST((a.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "LndSusn",
+b.geom AS "geom_poly",
+b.geompoint AS "geom_point"
+
+FROM lut.mh_intensity_canada a
+LEFT JOIN boundaries."Geometry SAUID" b on a.sauidt = b."SAUIDt";
