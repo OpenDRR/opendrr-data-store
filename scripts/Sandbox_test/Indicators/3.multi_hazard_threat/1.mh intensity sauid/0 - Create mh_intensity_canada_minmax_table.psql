@@ -37,3 +37,42 @@ MAX(cy1000) AS "cy1000_max"
 INTO lut.mh_intensity_canada_minmax
 
 FROM lut.mh_intensity_canada;
+
+
+-- calculate mh_sum variable needed for mh threat tables
+DROP TABLE IF EXISTS lut.mh_intensity_canada_mhsum;
+
+SELECT 
+a.sauidt,
+
+COALESCE((a.pgv - (SELECT pgv_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pgv_max FROM lut.mh_intensity_canada_minmax) - (SELECT pgv_min FROM lut.mh_intensity_canada_minmax),0),0) +
+COALESCE((a.tsun_ha - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM lut.mh_intensity_canada_minmax) - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax),0),0) + 
+COALESCE((a.fl500 - (SELECT fl500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl500_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl500_min FROM lut.mh_intensity_canada_minmax),0),0) +
+COALESCE((a.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0),0) +
+COALESCE((a.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0),0) +
+COALESCE((a.cy500 - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax),0),0) AS "mh_sum"
+
+INTO lut.mh_intensity_canada_mhsum
+
+FROM lut.mh_intensity_canada a;
+
+
+-- update min/max value table with mh_sum values
+DROP TABLE IF EXISTS lut.mh_intensity_canada_mhsum_temp;
+SELECT
+MIN(mh_sum) AS "mhsum_min",
+MAX(mh_sum) AS "mhsum_max"
+
+INTO lut.mh_intensity_canada_mhsum_temp
+
+FROM lut.mh_intensity_canada_mhsum;
+
+
+ALTER TABLE lut.mh_intensity_canada_minmax 
+ADD COLUMN mhsum_min float,
+ADD COLUMN mhsum_max float;
+
+UPDATE lut.mh_intensity_canada_minmax SET mhsum_min = (SELECT mhsum_min FROM lut.mh_intensity_canada_mhsum_temp);
+UPDATE lut.mh_intensity_canada_minmax SET mhsum_max = (SELECT mhsum_max FROM lut.mh_intensity_canada_mhsum_temp);
+
+DROP TABLE lut.mh_intensity_canada_mhsum_temp;
