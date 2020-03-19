@@ -1,6 +1,6 @@
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_intensity_mh_building_construction CASCADE;
-CREATE VIEW results.mh_intensity_mh_building_construction AS 
+DROP VIEW IF EXISTS results.mh_threat_mh_building_construction CASCADE;
+CREATE VIEW results.mh_threat_mh_building_construction AS 
 
 -- 3.1 Multi-Hazard
 -- 3.1.2 Multi-Hazard Threat
