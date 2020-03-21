@@ -1,0 +1,44 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_flood_hazard_threat_building_construction CASCADE;
+CREATE VIEW results.mh_threat_flood_hazard_threat_building_construction AS 
+
+-- 6.1 Flood Hazard
+-- 6.1.2 Flood Hazard Threat
+-- 6.1.2.2 Building Construction
+SELECT 
+a.sauid,
+COALESCE(CAST((c.fl1000 - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Fl1000_n",
+90 AS "Fl500t", -- 500yr Flood Hazard threshold
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(a.number) ELSE 0 END AS NUMERIC),0) AS "BldgNumT_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Wood_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Concrete_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='Precast' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "PreCast_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='RMasonry' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RMasonry_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='URMasonry' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "URMasonry_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='Steel' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Steel_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='Manufactured' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Manufactured_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='PC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "PreCode_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='LC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "LowCode_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='MC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "ModCode_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.bldggen ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "HiCode_Flt",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,c.fl500,c.fl1000,d.geom,d.geompoint;

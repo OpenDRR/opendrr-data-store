@@ -1,0 +1,31 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_flood_hazard_threat_assets CASCADE;
+CREATE VIEW results.mh_threat_flood_hazard_threat_assets AS 
+
+-- 6.1 Flood Hazard
+-- 6.1.2 Flood Hazard Threat
+-- 6.1.2.4 Assets
+SELECT 
+a.sauid,
+COALESCE(CAST((c.fl1000 - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Fl1000_n",
+90 AS "Fl500t", -- 500yr Flood Hazard threshold
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),0) AS "AssetCostT_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(a.structural + a.nonstructural) ELSE 0 END AS NUMERIC),0) AS "BldgCostT_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(a.structural) ELSE 0 END AS NUMERIC),0) AS "StrCostT_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(a.nonstructural) ELSE 0 END AS NUMERIC),0) AS "NStrCostT_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(a.contents) ELSE 0 END AS NUMERIC),0) AS "ContCostT_Flt",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
+GROUP BY a.sauid,c.fl500,c.fl1000,e.censuspop,e.people_du,d.geom,d.geompoint;
