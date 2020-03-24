@@ -1,0 +1,44 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_seismic_hazard_threat_building_construction_view CASCADE;
+CREATE VIEW results.mh_threat_seismic_hazard_threat_building_construction_view AS 
+
+-- 4.1 Seismic Hazard Threat
+-- 4.1.2 Seismic Hazard Threat
+-- 4.1.2.2 Building Construction
+SELECT 
+a.sauid,
+COALESCE(CAST((c.pga - (SELECT pga_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pga_max FROM lut.mh_intensity_canada_minmax) - (SELECT pga_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "PGAn",
+--0.115 AS "PGAt", -- Peak Ground Acceleration threshold
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(a.number) ELSE 0 END AS NUMERIC),0) AS "BldgNumT_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Wood_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Concrete_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='Precast' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "PreCast_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='RMasonry' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RMasonry_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='URMasonry' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "URMasonry_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='Steel' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Steel_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='Manufactured' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Manufactured_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='PC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "PreCode_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='LC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "LowCode_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='MC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "ModCode_Eqt",
+
+COALESCE(CAST(CASE WHEN c.pga >= 0.115 THEN SUM(CASE WHEN a.bldggen ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "HiCode_Eqt",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,b.mh_sum,c.pga,d.geom,d.geompoint;
