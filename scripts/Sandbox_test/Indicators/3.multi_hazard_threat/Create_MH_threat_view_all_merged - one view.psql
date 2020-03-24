@@ -1,0 +1,3 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_all.mh_threat_view_all CASCADE;
+CREATE VIEW results_all.mh_threat_view_all AS 

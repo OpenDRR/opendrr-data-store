@@ -1,0 +1,97 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results_all.dsra_sim6p8_cr2022_rlz_0_b0_all CASCADE;
+CREATE VIEW results_all.dsra_sim6p8_cr2022_rlz_0_b0_all AS 
+
+SELECT 
+a."AssetID",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+f.rake AS "Rake",
+CAST(f.lon AS NUMERIC) AS "Hypo_Lon",
+CAST(f.lat AS NUMERIC) AS "Hypo_Lat",
+CAST(f.depth AS NUMERIC) AS "Hypo_Depth",
+CAST(d."vs_lon" AS NUMERIC) AS "vs30_Lon",
+CAST(d."vs_lat" AS NUMERIC) AS "vs30_Lat",
+CAST(d.vs30 AS NUMERIC) AS "vs30",
+e.site_id AS "SiteID",
+CAST(e.lon AS NUMERIC) AS "SiteID_Lon",
+CAST(e.lat AS NUMERIC) AS "SiteID_Lat",
+a."Realization" AS "Realization",
+a."gmpe_Model" AS "gmpe_Model",
+CAST(a."Weight" AS NUMERIC) AS "Weight",
+
+e."event_id" AS "EventID",
+CAST(e."gmv_pgv" AS NUMERIC) AS "PGV",
+CAST(e."gmv_pga" AS NUMERIC) AS "PGA",
+CAST(e."gmv_SA(0.2)" AS NUMERIC) AS "SA_0p2",
+CAST(e."gmv_SA(0.3)" AS NUMERIC) AS "SA_0p3",
+CAST(e."gmv_SA(0.6)" AS NUMERIC) AS "SA_0p6",
+CAST(e."gmv_SA(1.0)" AS NUMERIC) AS "SA_1p0",
+CAST(0 AS NUMERIC)AS "SA_2p0",  --"Spectral Acceleration (2.0s)" - change source to reflect 2.0 later
+
+a."Rupture_Abbr",
+f.magnitude AS "Source_Mag",
+'b0' AS "Retrofit_Level",
+a."Realization" AS "RealizationID", 
+CAST(a."sD_None_b0" AS NUMERIC) AS "sD_None",
+CAST(a."sD_None_stdv_b0" AS NUMERIC) AS "sD_None_stdv",
+CAST(a."sD_Slight_b0" AS NUMERIC) AS "sD_Slight",
+CAST(a."sD_Slight_stdv_b0" AS NUMERIC) AS "sD_Slight_stdv",
+CAST(a."sD_Moderate_b0" AS NUMERIC) AS "sD_Moderate",
+CAST(a."sD_Moderate_stdv_b0" AS NUMERIC) AS "sD_Moderate_stdv",
+CAST(a."sD_Extensive_b0" AS NUMERIC) AS "sD_Extensive",
+CAST(a."sD_Extensive_stdv_b0" AS NUMERIC) AS "sD_Extensive_stdv",
+CAST(a."sD_Complete_b0" AS NUMERIC) AS "sD_Complete",
+CAST(a."sD_Complete_stdv_b0" AS NUMERIC) AS "sD_Complete_stdv",
+CAST(a."sD_Collapse_b0" AS NUMERIC) AS "sD_Collapse",
+
+CAST(a."sC_Repair_b0" AS NUMERIC) AS "sC_Repair",
+CAST(a."sC_Construxn_b0" AS NUMERIC) AS "SC_Construxn",
+CAST(a."sC_Downtime_b0" AS NUMERIC) AS "sC_Downtime",
+
+CAST(a."sC_CasDayL1_b0" AS NUMERIC) AS "sC_CasDayL1",
+CAST(a."sC_CasDayL2_b0" AS NUMERIC) AS "sC_CasDayL2",
+CAST(a."sC_CasDayL3_b0" AS NUMERIC) AS "sC_CasDayL3",
+CAST(a."sC_CasDayL4_b0" AS NUMERIC) AS "sC_CasDayL4",
+CAST(a."sC_CasNightL1_b0" AS NUMERIC) AS "sC_CasNightL1",
+CAST(a."sC_CasNightL2_b0" AS NUMERIC) AS "sC_CasNightL2",
+CAST(a."sC_CasNightL3_b0" AS NUMERIC) AS "sC_CasNightL3",
+CAST(a."sC_CasNightL4_b0" AS NUMERIC) AS "sC_CasNightL4",
+CAST(a."sC_CasTransitL1_b0" AS NUMERIC) AS "sC_CasTransitL1",
+CAST(a."sC_CasTransitL2_b0" AS NUMERIC) AS "sC_CasTransitL2",
+CAST(a."sC_CasTransitL3_b0" AS NUMERIC) AS "sC_CasTransitL3",
+CAST(a."sC_CasTransitL4_b0" AS NUMERIC) AS "sC_CasTransitL4",
+
+CAST(a."sC_DisplRes_3_b0" AS NUMERIC) AS "sC_DisplRes_3",
+CAST(a."sC_DisplRes_30_b0" AS NUMERIC) AS "sC_DisplRes_30",
+CAST(a."sC_DisplRes_90_b0" AS NUMERIC) AS "sC_DisplRes_90",
+CAST(a."sC_DisplRes_360_b0" AS NUMERIC) AS "sC_DisplRes_360",
+CAST(a."sC_DisrupEmpl_30_b0" AS NUMERIC) AS "sC_DisrupEmpl_30",
+CAST(a."sC_DisrupEmpl_90_b0" AS NUMERIC) AS "sC_DisrupEmpl_90",
+CAST(a."sC_DisrupEmpl_180_b0" AS NUMERIC) AS "sC_DisrupEmpl_180",
+CAST(a."sC_DisrupEmpl_360_b0" AS NUMERIC) AS "sC_DisrupEmpl_360",
+CAST(a."sC_DebrisBW_b0" AS NUMERIC) AS "sC_DebrisBW",
+CAST(a."sC_DebrisC_b0" AS NUMERIC) AS "sC_DebrisC",
+
+CAST(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0" AS NUMERIC) AS "sL_Asset",
+CAST(a."sL_Str_b0" + a."sL_NStr_b0" AS NUMERIC) AS "sL_Bldg",
+CAST(COALESCE((a."sL_Str_b0" + a."sL_NStr_b0") / NULLIF((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0"),0),0) AS NUMERIC) AS "sL_BldgRatio",
+CAST(a."sL_Str_b0" AS NUMERIC) AS "sL_Str",
+CAST(a."sL_Str_stdv_b0" AS NUMERIC) AS "sL_Str_stdv",
+CAST(a."sL_NStr_b0" AS NUMERIC) AS "sL_NStr",
+CAST(a."sL_NStr_stdv_b0" AS NUMERIC) AS "sL_NStr_stdv",
+CAST(a."sL_Cont_b0" AS NUMERIC) AS "sL_Cont",
+CAST(a."sL_Cont_stdv_b0" AS NUMERIC) AS "sL_Cont_stdv",
+CAST(a."sL_Fatalities_b0" AS NUMERIC) AS "sL_Fatality",
+CAST(a."sL_Fatalities_stdv_b0" AS NUMERIC) AS "sL_Fatality_stdv",
+
+b.geom
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr";
+

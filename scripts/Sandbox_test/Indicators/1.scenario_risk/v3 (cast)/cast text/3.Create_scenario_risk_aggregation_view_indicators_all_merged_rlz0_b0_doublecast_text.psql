@@ -1,6 +1,6 @@
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_tex.dsra_sim6p8_cr2022_rlz_1_b0_scenario_rupture_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_scenario_rupture_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_scenario_rupture_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_scenario_rupture_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.1 Scenario Hazard
@@ -14,7 +14,7 @@ CAST(CAST(d.vs30 AS NUMERIC) AS TEXT) AS "vs30",
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.bc_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
 LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -24,8 +24,8 @@ LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt";
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard_agg_view CASCADE;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_agg_view CASCADE;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.1 Scenario Hazard
@@ -43,7 +43,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.bc_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -53,8 +53,8 @@ LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt";
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard_threat_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard_threat_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_threat_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_threat_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.2 Building Performance
@@ -73,7 +73,7 @@ CAST(CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN (b.structural + b.nonstructural
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.bc_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -85,8 +85,8 @@ GROUP BY b.sauid, g.geom, g.geompoint,e."gmv_pga", f.source_type, f.rupture_name
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_damage_state_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_damage_state_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_damage_state_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_damage_state_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.2 Building Performance
@@ -106,7 +106,7 @@ CAST(CAST(SUM(a."sD_Complete_b0") AS NUMERIC) AS TEXT) AS "sD_Complete",
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -117,8 +117,8 @@ GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitud
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_functional_state_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_functional_state_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_functional_state_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_functional_state_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.2 Building Performance
@@ -138,7 +138,7 @@ CAST(CAST(SUM(a."sD_Collapse_b0") AS NUMERIC) AS TEXT) AS "sD_Collapse",
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -149,8 +149,8 @@ GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitud
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_recovery_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_recovery_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_recovery_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_recovery_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.2 Building Performance
@@ -176,7 +176,7 @@ CAST(CAST(SUM(a."sC_DebrisBW_b0" + a."sC_DebrisC_b0") AS NUMERIC) AS TEXT) AS "s
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -187,8 +187,8 @@ GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitud
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_casualties_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_casualties_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_casualties_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_casualties_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.3 Afected People
@@ -216,7 +216,7 @@ CAST(CAST(SUM(a."sC_CasTransitL4_b0") AS NUMERIC) AS TEXT) AS "sC_CasTrn_crit",
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -228,8 +228,8 @@ GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitud
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_social_disruption_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_social_disruption_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_social_disruption_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_social_disruption_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.3 Afected People
@@ -253,7 +253,7 @@ CAST(CAST(SUM(a."sC_DisrupEmpl_360_b0") AS NUMERIC) AS TEXT) AS "sC_DBiz_360",
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -265,8 +265,8 @@ GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitud
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_economic_loss_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_economic_loss_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_economic_loss_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_economic_loss_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.4 Economic Security
@@ -288,7 +288,7 @@ CAST(CAST(SUM(a."sL_Cont_b0") AS NUMERIC) AS TEXT) AS "sL_ContLoss",
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -299,8 +299,8 @@ GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitud
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_partial_retrofit_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_partial_retrofit_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_partial_retrofit_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_partial_retrofit_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.5 Disaster Risk Reduction
@@ -348,7 +348,7 @@ CAST(CAST(0 AS NUMERIC) AS TEXT) AS "sLR_RoI_r1",	--TBD
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -360,8 +360,8 @@ GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitud
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_full_retrofit_agg_view;
-CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_1_b0_full_retrofit_agg_view AS 
+DROP VIEW IF EXISTS results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_full_retrofit_agg_view;
+CREATE VIEW results_cast_text.dsra_sim6p8_cr2022_rlz_0_b0_full_retrofit_agg_view AS 
 
 -- 4.0 Earthquake Risk
 -- 4.5 Disaster Risk Reduction
@@ -409,7 +409,7 @@ CAST(CAST(0 AS NUMERIC) AS TEXT) AS "sLR_RoI_r2",	--TBD
 g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
