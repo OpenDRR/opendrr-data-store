@@ -9,7 +9,7 @@ SELECT
 a.id AS "AssetID",
 a.sauid AS "Sauid",
 CAST(a.lon AS NUMERIC) AS "Asset_Lon",
-CAST(a.lat AS NUMERIC)AS "Asset_Lat",
+CAST(a.lat AS NUMERIC) AS "Asset_Lat",
 CAST(a.number AS NUMERIC) AS "BldNum",
 CAST(b."BldgArea_ft2" AS NUMERIC) AS "BldgArea_ft2",
 a.geom

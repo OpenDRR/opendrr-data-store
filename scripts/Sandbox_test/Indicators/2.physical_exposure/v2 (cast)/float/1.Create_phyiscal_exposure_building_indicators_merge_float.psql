@@ -8,10 +8,10 @@ CREATE VIEW results.canada_exposure_portfolio AS
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
-CAST(a.lon AS NUMERIC) AS "Asset_Lon",
-CAST(a.lat AS NUMERIC) AS "Asset_Lat",
-CAST(a.number AS NUMERIC) AS "BldNum",
-CAST(b."BldgArea_ft2" AS NUMERIC) AS "BldgArea_ft2",
+a.lon AS "Asset_Lon",
+a.lat AS "Asset_Lat",
+a.number AS "BldNum",
+b."BldgArea_ft2" AS "BldgArea_ft2",
 a.geom
 
 FROM psra.canada_exposure a
@@ -62,12 +62,12 @@ CREATE VIEW results.canada_exposure_replacement_cost AS
 -- 2.1.2 Replacement Cost
 SELECT 
 a.id AS "AssetID",
-CAST(a.structural AS NUMERIC) AS "StrCost",
-CAST(a.nonstructural AS NUMERIC) AS "NStrCost",
-CAST(a.contents AS NUMERIC) AS "ContCost",
-CAST(a.structural + a.nonstructural + a.contents AS NUMERIC) AS "AssetCost",
-CAST(a.structural + a.nonstructural AS NUMERIC) AS "BldgCost",
-CAST(b."CAD_RetrofitCost_Bldg" AS NUMERIC) AS "RetrofitCost",
+a.structural AS "StrCost",
+a.nonstructural AS "NStrCost",
+a.contents AS "ContCost",
+a.structural + a.nonstructural + a.contents AS "AssetCost",
+a.structural + a.nonstructural AS "BldgCost",
+b."CAD_RetrofitCost_Bldg" AS "RetrofitCost",
 a.geom
 
 FROM psra.canada_exposure a
@@ -83,9 +83,9 @@ CREATE VIEW results.canada_exposure_building_occupancy AS
 -- 2.3.1 Building Occupancy
 SELECT 
 a.id AS "AssetID",
-CAST(a.day AS NUMERIC) AS "DayPop",
-CAST(a.night AS NUMERIC) AS "NightPop",
-CAST(a.transit AS NUMERIC) AS "TransitPop",
+a.day AS "DayPop",
+a.night AS "NightPop",
+a.transit AS "TransitPop",
 a.geom
 
 FROM psra.canada_exposure a;

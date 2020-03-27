@@ -1,0 +1,144 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_float.mh_intensity_multi_hazard_potential CASCADE;
+CREATE VIEW results_float.mh_intensity_multi_hazard_potential AS 
+
+-- 3.0 Natural Hazards
+-- 3.1 Multi-Hazard
+-- 3.1.1 Multi-Hazard Potential
+SELECT 
+a.sauidt AS "Sauid",
+a.lon AS "lon",
+a.lat AS "lat",
+b.geom AS "geom_poly",
+b.geompoint AS "geom_point"
+
+FROM lut.mh_intensity_canada a
+LEFT JOIN boundaries."Geometry SAUID" b on a.sauidt = b."SAUIDt";
+
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_float.mh_intensity_ground_shaking_intensity CASCADE;
+CREATE VIEW results_float.mh_intensity_ground_shaking_intensity AS 
+
+-- 3.0 Natural Hazards
+-- 4.1 Seismic Hazard
+-- 4.1.1 Ground Shaking Intensity
+SELECT 
+a.sauidt AS "Sauid",
+a.pgv AS "PGV",
+COALESCE((a.pgv - (SELECT pgv_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pgv_max FROM lut.mh_intensity_canada_minmax) - (SELECT pgv_min FROM lut.mh_intensity_canada_minmax),0),0) AS "PGVn",
+a.pga AS "PGA",
+COALESCE((a.pga - (SELECT pga_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pga_max FROM lut.mh_intensity_canada_minmax) - (SELECT pga_min FROM lut.mh_intensity_canada_minmax),0),0) AS "PGAn",
+a.mmi6 AS "MMI6",
+COALESCE((a.mmi6 - (SELECT mmi6_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mmi6_max FROM lut.mh_intensity_canada_minmax) - (SELECT mmi6_min FROM lut.mh_intensity_canada_minmax),0),0) AS "MMI6n",
+a.mmi7 AS "MMI7",
+COALESCE((a.mmi7 - (SELECT mmi7_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mmi7_max FROM lut.mh_intensity_canada_minmax) - (SELECT mmi7_min FROM lut.mh_intensity_canada_minmax),0),0) AS "MMI7n",
+a.mmi8 AS "MMI8",
+COALESCE((a.mmi8 - (SELECT mmi8_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mmi8_max FROM lut.mh_intensity_canada_minmax) - (SELECT mmi8_min FROM lut.mh_intensity_canada_minmax),0),0) AS "MMI8n",
+b.geom AS "geom_poly",
+b.geompoint AS "geom_point"
+
+FROM lut.mh_intensity_canada a
+LEFT JOIN boundaries."Geometry SAUID" b on a.sauidt = b."SAUIDt";
+
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_float.mh_intensity_tsunami_hazard_intensity CASCADE;
+CREATE VIEW results_float.mh_intensity_tsunami_hazard_intensity AS 
+
+-- 3.0 Natural Hazards
+-- 5.1 Tsunami Hazard
+-- 5.1.1 Tsunami Hazard Intensity
+SELECT 
+a.sauidt AS "Sauid",
+a.tsun_ha AS "Tsun",
+COALESCE((a.tsun_ha - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM lut.mh_intensity_canada_minmax) - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax),0),0) AS "Tsun_n",
+b.geom AS "geom_poly",
+b.geompoint AS "geom_point"
+
+FROM lut.mh_intensity_canada a
+LEFT JOIN boundaries."Geometry SAUID" b on a.sauidt = b."SAUIDt";
+
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_float.mh_intensity_flood_hazard_intensity CASCADE;
+CREATE VIEW results_float.mh_intensity_flood_hazard_intensity AS 
+
+-- 3.0 Natural Hazards
+-- 6.1 Flood Hazard
+-- 6.1.1 Flood Hazard Intensity
+SELECT 
+a.sauidt AS "Sauid",
+a.fl200 AS "Fl200",
+COALESCE((a.fl200 - (SELECT fl200_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl200_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl200_min FROM lut.mh_intensity_canada_minmax),0),0) AS "Fl200_n",
+a.fl500 AS "Fl500",
+COALESCE((a.fl500 - (SELECT fl500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl500_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl500_min FROM lut.mh_intensity_canada_minmax),0),0) AS "Fl500_n",
+a.fl1000 AS "Fl1000",
+COALESCE((a.fl1000 - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax),0),0) AS "Fl1000_n",
+b.geom AS "geom_poly",
+b.geompoint AS "geom_point"
+
+FROM lut.mh_intensity_canada a
+LEFT JOIN boundaries."Geometry SAUID" b on a.sauidt = b."SAUIDt";
+
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_float.mh_intensity_debris_flow_susceptibility CASCADE;
+CREATE VIEW results_float.mh_intensity_debris_flow_susceptibility AS 
+
+-- 3.0 Natural Hazards
+-- 7.1 Landslide Hazard
+-- 6.1.1 Debris Flow Susceptibility
+SELECT 
+a.sauidt AS "Sauid",
+a.lndsus AS "LndSus",
+COALESCE((a.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0),0) AS "LndSusn",
+b.geom AS "geom_poly",
+b.geompoint AS "geom_point"
+
+FROM lut.mh_intensity_canada a
+LEFT JOIN boundaries."Geometry SAUID" b on a.sauidt = b."SAUIDt";
+
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_float.mh_intensity_wildfire_intensity CASCADE;
+CREATE VIEW results_float.mh_intensity_wildfire_intensity AS 
+
+-- 3.0 Natural Hazards
+-- 8.1 Wildfire Hazard
+-- 8.1.1 Wildfire Intensity
+SELECT 
+a.sauidt AS "Sauid",
+a.fire AS "Fire",
+COALESCE((a.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0),0) AS "Firen",
+b.geom AS "geom_poly",
+b.geompoint AS "geom_point"
+
+FROM lut.mh_intensity_canada a
+LEFT JOIN boundaries."Geometry SAUID" b on a.sauidt = b."SAUIDt";
+
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_float.mh_intensity_cyclone_wind_speed CASCADE;
+CREATE VIEW results_float.mh_intensity_cyclone_wind_speed AS 
+
+-- 3.0 Natural Hazards
+-- 9.1 Cyclone Hazard
+-- 9.1.1 Cyclone Wind Speed
+SELECT 
+a.sauidt AS "Sauid",
+a.cy100 AS "Cy100",
+COALESCE((a.cy100 - (SELECT cy100_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy100_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy100_min FROM lut.mh_intensity_canada_minmax),0),0) AS "Cy100n",
+a.cy250 AS "Cy250",
+COALESCE((a.cy250 - (SELECT cy250_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy250_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy250_min FROM lut.mh_intensity_canada_minmax),0),0) AS "Cy250n",
+a.cy500 AS "Cy500",
+COALESCE((a.cy500 - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax),0),0) AS "Cy500n",
+a.cy1000 AS "Cy1000",
+COALESCE((a.cy1000 - (SELECT cy1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy1000_min FROM lut.mh_intensity_canada_minmax),0),0) AS "Cy1000n",
+b.geom AS "geom_poly",
+b.geompoint AS "geom_point"
+
+FROM lut.mh_intensity_canada a
+LEFT JOIN boundaries."Geometry SAUID" b on a.sauidt = b."SAUIDt";
+
+
