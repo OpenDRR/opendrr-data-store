@@ -1,0 +1,132 @@
+-- create physical exposure indicators
+DROP VIEW IF EXISTS results.canada_exposure_portfolio_agg_view CASCADE;
+CREATE VIEW results.canada_exposure_portfolio_agg_view AS 
+
+-- 2.0 Physical Exposure
+-- 2.1 Buildings
+-- 2.0.1 Portfolio
+SELECT 
+a.sauid AS "Sauid",
+CAST(CAST(ROUND(CAST(a.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Sauid_Lon",
+CAST(CAST(ROUND(CAST(a.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Sauid_Lat",
+CAST(CAST(ROUND(CAST(c."area_km2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Area_km2",
+CAST(CAST(ROUND(CAST(c.area_ha AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Area_ha",
+CAST(CAST(ROUND(CAST(SUM(a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldNumT",
+CAST(CAST(ROUND(CAST(COALESCE(c.censusbldg,0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CensusBldg",
+CAST(CAST(ROUND(CAST(c.censusdu AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CensusDU",
+CAST(CAST(ROUND(CAST(c.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) as "People_DU",
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,a.lon,a.lat,c."area_km2",c.area_ha,c.censusbldg,c.people_du,c.censusdu,d.geom,d.geompoint;
+
+
+-- create physical exposure indicators
+DROP VIEW IF EXISTS results.canada_exposure_functional_use_agg_view CASCADE;
+CREATE VIEW results.canada_exposure_functional_use_agg_view AS 
+
+-- 2.0 Physical Exposure
+-- 2.1 Buildings
+-- 2.1.1 Functional Use
+SELECT 
+a.sauid AS "Sauid",
+c.sactype AS "SAC",
+c.landuse AS "LandUse",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "RES_LD",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "RES_MD",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "RES_HD",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc ='Commercial' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Comm",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc ='Industrial' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Ind",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Civic",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Agr",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / c.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SF_Hshlds",
+CAST(CAST(ROUND(CAST((SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / c.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "MF_Hshlds",
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,c.sactype,c.landuse,c.people_du,d.geom,d.geompoint;
+
+
+-- create physical exposure indicators
+DROP VIEW IF EXISTS results.canada_exposure_construction_agg_view;
+CREATE VIEW results.canada_exposure_construction_agg_view AS 
+
+-- 2.0 Physical Exposure
+-- 2.1 Buildings
+-- 2.1.2 Construction
+SELECT 
+a.sauid AS "Sauid",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Wood",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Concrete",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.bldggen ='Precast' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "PreCast",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.bldggen ='RMasonry' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "RMasonry",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.bldggen ='URMasonry' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "URMasonry",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.bldggen ='Steel' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Steel",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.bldggen ='Manufactured' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Manufactured",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.eqdeslev ='PC' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "PreCode",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.eqdeslev ='LC' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "LowCode",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.eqdeslev ='MC' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "ModCode",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HiCode",
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+--LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,d.geom,d.geompoint;
+
+
+-- create physical exposure indicators
+DROP VIEW IF EXISTS results.canada_exposure_replacement_cost_agg_view;
+CREATE VIEW results.canada_exposure_replacement_cost_agg_view AS 
+
+-- 2.0 Physical Exposure
+-- 2.1 Buildings
+-- 2.1.3 Replacement Cost
+SELECT 
+a.sauid AS "Sauid",
+CAST(CAST(ROUND(CAST(SUM(a.structural + a.nonstructural + a.contents) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "AssetCostT",
+CAST(CAST(ROUND(CAST(SUM(a.structural + a.nonstructural) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgCostT",
+CAST(CAST(ROUND(CAST(SUM(a.structural) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "StrCostT",
+CAST(CAST(ROUND(CAST(SUM(a.nonstructural) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "NStrCostT",
+CAST(CAST(ROUND(CAST(SUM(a.contents) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "ContCost",
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+--LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,d.geom,d.geompoint;
+
+
+-- create physical exposure indicators
+DROP VIEW IF EXISTS results.canada_exposure_building_occupancy_agg_view;
+CREATE VIEW results.canada_exposure_building_occupancy_agg_view AS 
+
+-- 2.0 Physical Exposure
+-- 2.3 People
+-- 2.3.1 Building Occupancy
+SELECT 
+a.sauid AS "Sauid",
+CAST(CAST(ROUND(CAST(c.censuspop AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CensusPop",
+CAST(CAST(ROUND(CAST(SUM(a.day) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "DayPopT",
+CAST(CAST(ROUND(CAST(SUM(a.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "NightPopT",
+CAST(CAST(ROUND(CAST(SUM(a.transit) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "TransitPopT",
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM psra.canada_exposure a
+--LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,c.censuspop,d.geom,d.geompoint;

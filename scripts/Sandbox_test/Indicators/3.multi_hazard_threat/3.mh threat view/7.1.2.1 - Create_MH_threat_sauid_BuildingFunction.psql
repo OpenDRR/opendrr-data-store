@@ -1,5 +1,5 @@
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_threat_building_functio_view CASCADE;
+DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_threat_building_function_view CASCADE;
 CREATE VIEW results.mh_threat_landslide_hazard_threat_building_function_view AS 
 
 -- 7.1 Landslide Hazard
