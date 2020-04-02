@@ -56,5 +56,8 @@ UPDATE psra.canada_exposure SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 CREATE INDEX Canada_exposure_idx
 ON psra.Canada_exposure using GIST (geom);
 
+--trim leading space from bldgen (manufactured)
+UPDATE psra.canada_exposure SET bldggen = TRIM(bldggen);
+
 
 

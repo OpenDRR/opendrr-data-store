@@ -42,19 +42,19 @@ COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_can
 AS "Manufactured_mht",
 
 COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
-(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.bldggen ='PC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.eqdeslev ='PC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
 AS "PreCode_mht",
 
 COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
-(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.bldggen ='LC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.eqdeslev ='LC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
 AS "LowCode_mht",
 
 COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
-(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.bldggen ='MC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.eqdeslev ='MC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
 AS "ModCode_mht",
 
 COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
-(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.bldggen ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
 AS "HiCode_mht",
 
 c.geom AS "geom_poly",

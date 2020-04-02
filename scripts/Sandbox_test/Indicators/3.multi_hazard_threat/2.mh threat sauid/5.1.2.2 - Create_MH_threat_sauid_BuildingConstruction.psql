@@ -26,13 +26,13 @@ COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.bldggen ='Steel' TH
 
 COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.bldggen ='Manufactured' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Manufactured_Tst",
 
-COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.bldggen ='PC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "PreCode_Tst",
+COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.eqdeslev ='PC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "PreCode_Tst",
 
-COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.bldggen ='LC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "LowCode_Tst",
+COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.eqdeslev ='LC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "LowCode_Tst",
 
-COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.bldggen ='MC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "ModCode_Tst",
+COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.eqdeslev ='MC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "ModCode_Tst",
 
-COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.bldggen ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "HiCode_Tst",
+COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "HiCode_Tst",
 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"

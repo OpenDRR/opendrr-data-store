@@ -26,13 +26,13 @@ COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.bldggen ='Steel' THE
 
 COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.bldggen ='Manufactured' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Manufactured_Fit",
 
-COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.bldggen ='PC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "PreCode_Fit",
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.eqdeslev ='PC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "PreCode_Fit",
 
-COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.bldggen ='LC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "LowCode_Fit",
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.eqdeslev ='LC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "LowCode_Fit",
 
-COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.bldggen ='MC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "ModCode_Fit",
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.eqdeslev ='MC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "ModCode_Fit",
 
-COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.bldggen ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "HiCode_Fit",
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "HiCode_Fit",
 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
