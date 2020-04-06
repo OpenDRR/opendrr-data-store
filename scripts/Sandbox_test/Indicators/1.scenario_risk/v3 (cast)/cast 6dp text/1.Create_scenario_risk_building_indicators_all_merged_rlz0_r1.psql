@@ -43,6 +43,7 @@ CREATE VIEW results_text.dsra_sim6p8_cr2022_rlz_0_r1_scenario_hazard AS
 SELECT 
 a."AssetID",
 e."event_id" AS "EventID",
+e.site_id AS "SiteID",
 CAST(CAST(CAST(ROUND(CAST(e."gmv_pgv" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS TEXT) AS "PGV",
 CAST(CAST(CAST(ROUND(CAST(e."gmv_pga" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS TEXT) AS "PGA",
 CAST(CAST(CAST(ROUND(CAST(e."gmv_SA(0.2)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS TEXT) AS "SA_0p2",
