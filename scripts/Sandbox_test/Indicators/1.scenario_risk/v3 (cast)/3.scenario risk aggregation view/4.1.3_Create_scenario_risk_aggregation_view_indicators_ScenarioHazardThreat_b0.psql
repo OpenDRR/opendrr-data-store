@@ -3,8 +3,8 @@ DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_threat_a
 CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_threat_agg_view AS 
 
 -- 4.0 Earthquake Risk
--- 4.2 Building Performance
--- 4.2.1 Damage State
+-- 4.1 Scenario Hazard
+-- 4.1.3 Scenario Hazard Threat
 SELECT 
 b.sauid AS "Sauid",
 f.source_type AS "Source_Type",

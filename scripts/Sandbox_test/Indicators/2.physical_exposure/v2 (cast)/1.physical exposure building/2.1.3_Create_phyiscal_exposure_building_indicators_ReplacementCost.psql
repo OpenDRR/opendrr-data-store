@@ -4,7 +4,7 @@ CREATE VIEW results.canada_exposure_replacement_cost AS
 
 -- 2.0 Physical Exposure
 -- 2.1 Buildings
--- 2.1.2 Replacement Cost
+-- 2.1.3 Replacement Cost
 SELECT 
 a.id AS "AssetID",
 CAST(a.structural AS NUMERIC) AS "StrCost",

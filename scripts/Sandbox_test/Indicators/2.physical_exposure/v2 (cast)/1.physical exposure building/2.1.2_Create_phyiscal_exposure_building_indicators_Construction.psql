@@ -7,7 +7,7 @@ CREATE VIEW results.canada_exposure_construction AS
 -- 2.1.2 Construction
 SELECT 
 a.id AS "AssetID",
-a.landusetyp AS "LandUse",
+--a.landusetyp AS "LandUse",
 a.bldggen AS "Type_General",
 a.eqbldgtype AS "Type_Specific",
 a.eqdeslev AS "Design_Level",
