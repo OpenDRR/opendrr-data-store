@@ -7,8 +7,6 @@ CREATE VIEW results.mh_threat_mh_building_function_view AS
 -- 3.1.2.1 Building Function 
 SELECT 
 a.sauid,
-CAST(CAST(ROUND(CAST(b.mh_sum AS NUMERIC),6) AS FLOAT) AS NUMERIC),
-COALESCE(CAST(CAST(ROUND(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MH_Intensity",
 COALESCE(CAST(CAST(ROUND(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MHInt",
 0.028 AS "MHInt_t", -- Multi-Hazard Intensity threshold
 

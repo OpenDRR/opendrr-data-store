@@ -1,0 +1,44 @@
+COPY (SELECT
+a.sauid,
+a."MH_Intensity",
+a."Fire",
+a."Firen",
+a."Firet",
+c."BldgNumT_Fit",
+c."RES_LD_Fit",
+c."RES_MD_Fit",
+c."RES_HD_Fit",
+c."Comm_Fit",
+c."Ind_Fit",
+c."Civic_Fit",
+c."Agr_Fit",
+d."Wood_Fit",
+d."Concrete_Fit",
+d."PreCast_Fit",
+d."RMasonry_Fit",
+d."URMasonry_Fit",
+d."Steel_Fit",
+d."Manufactured_Fit",
+d."PreCode_Fit",
+d."LowCode_Fit",
+d."ModCode_Fit",
+d."HiCode_Fit",
+e."CensusPop_Fit",
+e."DayPopT_Fit",
+e."NightPopT_Fit",
+e."TransitPopT_Fit",
+e."SF_Hshlds_Fit",
+e."MF_Hshlds_Fit",
+f."AssetCostT_Fit",
+f."BldgCostT_Fit",
+f."StrCostT_Fit",
+f."NStrCostT_Fit",
+f."ContCostT_Fit"
+
+FROM results.mh_threat_wildfire_intensity_head_fire_intensity_view a
+INNER JOIN results.mh_threat_wildfire_threat_building_function_view c ON a.sauid = c.sauid
+INNER JOIN results.mh_threat_wildfire_threat_building_construction_view d ON a.sauid = d.sauid
+INNER JOIN results.mh_threat_wildfire_threat_people_view e on a.sauid = e.sauid
+INNER JOIN results.mh_threat_wildfire_threat_assets_view f on a.sauid = f.sauid)
+
+TO 'D:\workspace\data\v2\Indicators\csv\mh_intensity_view_wildfire_hazard.csv' DELIMITER ',' CSV HEADER;

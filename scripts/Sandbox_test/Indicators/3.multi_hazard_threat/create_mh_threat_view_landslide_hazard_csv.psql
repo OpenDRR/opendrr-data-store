@@ -1,0 +1,44 @@
+COPY (SELECT
+a.sauid,
+a."MH_Intensity",
+a."LndSus",
+a."LndSusn",
+a."LndSust",
+c."BldgNumT_Lst",
+c."RES_LD_Lst",
+c."RES_MD_Lst",
+c."RES_HD_Lst",
+c."Comm_Lst",
+c."Ind_Lst",
+c."Civic_Lst",
+c."Agr_Lst",
+d."Wood_Lst",
+d."Concrete_Lst",
+d."PreCast_Lst",
+d."RMasonry_Lst",
+d."URMasonry_Lst",
+d."Steel_Lst",
+d."Manufactured_Lst",
+d."PreCode_Lst",
+d."LowCode_Lst",
+d."ModCode_Lst",
+d."HiCode_Lst",
+e."CensusPop_Lst",
+e."DayPopT_Lst",
+e."NightPopT_Lst",
+e."TransitPopT_Lst",
+e."SF_Hshlds_Lst",
+e."MF_Hshlds_Lst",
+f."AssetCostT_Lst",
+f."BldgCostT_Lst",
+f."StrCostT_Lst",
+f."NStrCostT_Lst",
+f."ContCostT_Lst"
+
+FROM results.mh_threat_landslide_hazard_intensity_debris_flow_sucsceptibilit a
+INNER JOIN results.mh_threat_landslide_hazard_threat_building_function_view c ON a.sauid = c.sauid
+INNER JOIN results.mh_threat_landslide_hazard_threat_building_construction_view d ON a.sauid = d.sauid
+INNER JOIN results.mh_threat_landslide_hazard_threat_people_view e on a.sauid = e.sauid
+INNER JOIN results.mh_threat_landslide_hazard_threat_assets_view f on a.sauid = f.sauid)
+
+TO 'D:\workspace\data\v2\Indicators\csv\mh_intensity_view_landslide_hazard.csv' DELIMITER ',' CSV HEADER;
