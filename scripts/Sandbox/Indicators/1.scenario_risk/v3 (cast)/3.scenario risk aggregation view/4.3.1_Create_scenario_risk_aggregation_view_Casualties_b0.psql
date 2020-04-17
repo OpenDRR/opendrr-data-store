@@ -11,7 +11,7 @@ f.source_type AS "Source_Type",
 f.rupture_name AS "Rupture_Name",
 f.magnitude AS "Magnitude",
 'b0' AS "Retrofit",
-CAST(SUM(h.censuspop) AS NUMERIC) AS "CensusPop",
+CAST(h.censuspop AS NUMERIC) AS "CensusPop",
 CAST(SUM(a."sL_Fatalities_b0") AS NUMERIC) AS "sL_Fatality",
 CAST(SUM(a."sC_CasDayL1_b0") AS NUMERIC) AS "sC_CasDay_min",
 CAST(SUM(a."sC_CasDayL2_b0") AS NUMERIC) AS "sC_CasDay_mod",
@@ -36,4 +36,4 @@ LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id
 LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
 LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
 LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
-GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude;
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude,h.censuspop;

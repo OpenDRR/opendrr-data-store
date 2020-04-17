@@ -199,7 +199,7 @@ f.source_type AS "Source_Type",
 f.rupture_name AS "Rupture_Name",
 f.magnitude AS "Magnitude",
 'r1' AS "Retrofit",
-CAST(CAST(ROUND(CAST(SUM(h.censuspop) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CensusPop",
+CAST(CAST(ROUND(CAST(h.censuspop AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CensusPop",
 CAST(CAST(ROUND(CAST(SUM(a."sL_Fatalities_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Fatality",
 CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL1_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasDay_min",
 CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL2_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasDay_mod",
@@ -224,7 +224,7 @@ LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id
 LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
 LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
 LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
-GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude;
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude, h.censuspop;
 
 
 -- create scenario risk building indicators
@@ -240,7 +240,7 @@ f.source_type AS "Source_Type",
 f.rupture_name AS "Rupture_Name",
 f.magnitude AS "Magnitude",
 'r1' AS "Retrofit",
-CAST(CAST(ROUND(CAST(SUM(h.censuspop) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CensusPop",
+CAST(CAST(ROUND(CAST(h.censuspop AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CensusPop",
 CAST(CAST(ROUND(CAST(0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Shelter", -- TBD
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r1")/h.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DHshld_3",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_r1")/h.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DHshld_30",
@@ -261,7 +261,7 @@ LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id
 LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
 LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
 LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
-GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude, h.people_du;
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude, h.people_du, h.censuspop;
 
 
 -- create scenario risk building indicators
