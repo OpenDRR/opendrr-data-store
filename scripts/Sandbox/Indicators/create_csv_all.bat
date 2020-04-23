@@ -32,8 +32,8 @@
 "C:\Program Files\PostgreSQL\12\bin\psql.exe" -U postgres -d oq_sandbox -f "D:\workspace\GitHub\opendrr-data-store\scripts\Sandbox\Indicators\3.multi_hazard_threat\export csv\create_mh_threat_view_tsunami_hazard_csv.psql"
 "C:\Program Files\PostgreSQL\12\bin\psql.exe" -U postgres -d oq_sandbox -f "D:\workspace\GitHub\opendrr-data-store\scripts\Sandbox\Indicators\3.multi_hazard_threat\export csv\create_mh_threat_view_wildfire_hazard_csv.psql"
 
-"C:\Program Files\PostgreSQL\12\bin\psql.exe" -U postgres -d oq_sandbox -f "D:\workspace\GitHub\opendrr-data-store\scripts\Sandbox\Indicators\4.social_vulnuerability\export csv\Create_social_vulnerability_sauid_indicators_csv.psql"
-"C:\Program Files\PostgreSQL\12\bin\psql.exe" -U postgres -d oq_sandbox -f "D:\workspace\GitHub\opendrr-data-store\scripts\Sandbox\Indicators\4.social_vulnuerability\export csv\Create_social_vulnerability_view_indicators_csv.psql"
+"C:\Program Files\PostgreSQL\12\bin\psql.exe" -U postgres -d oq_sandbox -f "D:\workspace\GitHub\opendrr-data-store\scripts\Sandbox\Indicators\4.social_vulnuerability\v2\export csv\Create_social_vulnerability_sauid_indicators_csv.psql"
+"C:\Program Files\PostgreSQL\12\bin\psql.exe" -U postgres -d oq_sandbox -f "D:\workspace\GitHub\opendrr-data-store\scripts\Sandbox\Indicators\4.social_vulnuerability\v2\export csv\Create_social_vulnerability_view_indicators_csv.psql"
 
 
 

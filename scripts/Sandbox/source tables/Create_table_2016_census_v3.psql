@@ -99,22 +99,7 @@ Precast, RMasonry, Steel, URMasonry, Wood, Agr, Comm, Ind, Civic, Res_HD, Res_MD
 CensusAGR, Area_km2, Area_ha, Shape_Length, Shape_Area, LandUse, PRUID, ProvAbbr, People_DU, DAUID, SACTYPE, PopTotal, Pop_Dens, Pop_Ha, Bus_Ha, Pre_1975, Renter, Hshld_NSuit, Hshld_Mntn1, Hshld_MntnAge, 
 Pub_Trans, Vis_Min, Imm_LT5, Indigenous, Age_GT65, Age_LT6, Age_Median, NoSec_School, Retail_Job, Health_Job, Fam_GT5, LonePar3Kids, Live_Alone, No_EngFr, Moved_LT1, NoWrkPlace, Shltr_GT30, Inc_Indv, 
 Inc_Hshld, Inc_LowDecile, Unemployed, Work_Parttime, Work_None, Employ_Inc)
-    FROM 'C:\workspace\human-settlement-national\2_census-2016-canada.csv'
+    FROM 'D:\workspace\data\human-settlement-national\census-ref-v2p2.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
-
-
-/*
--- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE psra.canada_exposure ADD COLUMN geom geometry(Point,4326);
-UPDATE psra.canada_exposure SET geom = st_setsrid(st_makepoint(lon,lat),4326);
-
--- create spatial index
-CREATE INDEX Canada_exposure_idx
-ON psra.Canada_exposure using GIST (geom);
-
-*/
-
-
-

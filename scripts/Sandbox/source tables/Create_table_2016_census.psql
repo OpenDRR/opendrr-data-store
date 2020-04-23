@@ -61,22 +61,7 @@ CREATE TABLE lut.census_2016_canada(
 
 -- import exposure from csv
 COPY lut.census_2016_canada (OBJECTID, OID, SAUIDt, SAUIDi, Lon, Lat, Area_km2, Area_ha, DAUIDt, DAUIDi, SACCODE, SACTYPE, LandUse, BldgNum, CensusBldg, CensusPop, CensusDU, People_DU, Bldg_ha, Pop_Ha, Dwelling_ha, Bus_Ha, Pre_1975, Hshld_NSuit, Renter, Hshld_MntnAge, Live_Alone, LonePar3Kids, Fam_GT5, Moved_LT1, NoWrkPlace, Imm_LT5, No_EngFr, NoSec_School, Age_Median, Age_GT65, Age_LT6, Indigenous, Vis_Min, Pub_Trans, Shltr_GT30, Inc_LowDecile, Unemployed, Work_None, Work_Parttime, Employ_Inc, Inc_Hshld, Inc_Indv, Hshld_Mntn1, Health_Job, Retail_Job)
-    FROM 'C:\workspace\human-settlement-national\2_census-2016-canada.csv'
+    FROM 'D:\workspace\data\human-settlement-national\2_census-2016-canada.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
-
-
-/*
--- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE psra.canada_exposure ADD COLUMN geom geometry(Point,4326);
-UPDATE psra.canada_exposure SET geom = st_setsrid(st_makepoint(lon,lat),4326);
-
--- create spatial index
-CREATE INDEX Canada_exposure_idx
-ON psra.Canada_exposure using GIST (geom);
-
-*/
-
-
-
