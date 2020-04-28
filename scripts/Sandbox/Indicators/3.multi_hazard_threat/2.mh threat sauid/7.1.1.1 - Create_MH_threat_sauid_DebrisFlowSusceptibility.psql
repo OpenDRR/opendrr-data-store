@@ -10,7 +10,7 @@ a.sauid,
 COALESCE(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "MH_Intensity",
 CAST(c.lndsus AS NUMERIC) AS "LndSus",
 COALESCE(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "LndSusn",
-3 AS "LndSust", -- Landslide Susceptibility Threshold
+3.1 AS "LndSust", -- Landslide Susceptibility Threshold
 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"

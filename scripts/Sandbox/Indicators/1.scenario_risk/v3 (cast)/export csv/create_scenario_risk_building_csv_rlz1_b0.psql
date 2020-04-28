@@ -76,12 +76,12 @@ g."sL_Cont_stdv",
 g."sL_Fatality",
 g."sL_Fatality_stdv"
 
-FROM results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_rupture a
-INNER JOIN results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard b ON a."AssetID" = b."AssetID"
-INNER JOIN results.dsra_sim6p8_cr2022_rlz_0_b0_damage_state c ON a."AssetID" = c."AssetID"
-INNER JOIN results.dsra_sim6p8_cr2022_rlz_0_b0_recovery d ON a."AssetID" = d."AssetID"
-INNER JOIN results.dsra_sim6p8_cr2022_rlz_0_b0_casualties e ON a."AssetID" = e."AssetID"
-INNER JOIN results.dsra_sim6p8_cr2022_rlz_0_b0_social_disruption f ON a."AssetID" = f."AssetID"
-INNER JOIN results.dsra_sim6p8_cr2022_rlz_0_b0_economic_loss g ON a."AssetID" = g."AssetID")
+FROM results.dsra_sim6p8_cr2022_rlz_1_b0_scenario_rupture a
+INNER JOIN results.dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard b ON a."AssetID" = b."AssetID"
+INNER JOIN results.dsra_sim6p8_cr2022_rlz_1_b0_damage_state c ON a."AssetID" = c."AssetID"
+INNER JOIN results.dsra_sim6p8_cr2022_rlz_1_b0_recovery d ON a."AssetID" = d."AssetID"
+INNER JOIN results.dsra_sim6p8_cr2022_rlz_1_b0_casualties e ON a."AssetID" = e."AssetID"
+INNER JOIN results.dsra_sim6p8_cr2022_rlz_1_b0_social_disruption f ON a."AssetID" = f."AssetID"
+INNER JOIN results.dsra_sim6p8_cr2022_rlz_1_b0_economic_loss g ON a."AssetID" = g."AssetID")
 
-TO 'D:\workspace\data\v2\Indicators\csv\scenario_risk_building_rlz_0_b0.csv' DELIMITER ',' CSV HEADER;
+TO 'D:\workspace\data\v2\Indicators\csv\scenario_risk_building_rlz_1_b0.csv' DELIMITER ',' CSV HEADER;

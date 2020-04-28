@@ -10,21 +10,21 @@ a.sauid,
 COALESCE(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "LndSusn",
 -- 3 AS "LndSust", -- Landslide Susceptibility Threshold
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(a.number) ELSE 0 END AS NUMERIC),0) AS "BldgNumT_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.number) ELSE 0 END AS NUMERIC),0) AS "BldgNumT_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_LD_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_LD_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_MD_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_MD_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_HD_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_HD_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(CASE WHEN a.genocc ='Commercial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Comm_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Commercial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Comm_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(CASE WHEN a.genocc ='Industrial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Ind_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Industrial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Ind_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Civic_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Civic_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(CASE WHEN a.genocc ='Agr' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Agr_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Agr_Lst",
 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"

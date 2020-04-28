@@ -24,7 +24,7 @@ COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.genocc ='Industrial
 
 COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Civic_Tst",
 
-COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.genocc ='Agr' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Agr_Tst",
+COALESCE(CAST(CASE WHEN c.tsun_ha >= 20 THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Agr_Tst",
 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"

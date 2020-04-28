@@ -40,7 +40,7 @@ COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_can
 AS "Civic_mht",
 
 COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
-(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.genocc ='Agr' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
 AS "Agr_mht",
 
 c.geom AS "geom_poly",

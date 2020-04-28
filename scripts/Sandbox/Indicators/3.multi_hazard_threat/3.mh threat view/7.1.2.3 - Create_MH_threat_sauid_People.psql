@@ -10,17 +10,17 @@ a.sauid,
 COALESCE(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "LndSusn",
 -- 3 AS "LndSust", -- Landslide Susceptibility Threshold
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN e.censuspop ELSE 0 END AS NUMERIC),0) AS "CensusPop_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN e.censuspop ELSE 0 END AS NUMERIC),0) AS "CensusPop_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(a.day) ELSE 0 END AS NUMERIC),0) AS "DayPopT_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.day) ELSE 0 END AS NUMERIC),0) AS "DayPopT_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(a.night) ELSE 0 END AS NUMERIC),0) AS "NightPopT_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.night) ELSE 0 END AS NUMERIC),0) AS "NightPopT_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(a.transit) ELSE 0 END AS NUMERIC),0) AS "TransitPopT_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.transit) ELSE 0 END AS NUMERIC),0) AS "TransitPopT_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / e.people_du ELSE 0 END AS NUMERIC),0) AS "SF_Hshlds_Lst",
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / e.people_du ELSE 0 END AS NUMERIC),0) AS "SF_Hshlds_Lst",
 
-COALESCE(CAST(CASE WHEN c.lndsus >= 3 THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
 e.people_du ELSE 0 END AS NUMERIC),0) AS "MF_Hshlds_Lst",
 
 d.geom AS "geom_poly",
