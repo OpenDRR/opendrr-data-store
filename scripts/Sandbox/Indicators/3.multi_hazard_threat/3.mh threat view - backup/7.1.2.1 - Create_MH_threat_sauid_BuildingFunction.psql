@@ -1,0 +1,36 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_threat_building_function_view CASCADE;
+CREATE VIEW results.mh_threat_landslide_hazard_threat_building_function_view AS 
+
+-- 7.1 Landslide Hazard
+-- 7.1.2 Landslide Hazard Threat
+-- 7.1.2.1 Building Function
+SELECT 
+a.sauid,
+COALESCE(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "LndSusn",
+-- 3 AS "LndSust", -- Landslide Susceptibility Threshold
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.number) ELSE 0 END AS NUMERIC),0) AS "BldgNumT_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_LD_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_MD_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_HD_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Commercial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Comm_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Industrial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Ind_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Civic_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Agr_Lst",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,c.lndsus,d.geom,d.geompoint;

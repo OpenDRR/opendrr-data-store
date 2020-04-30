@@ -46,7 +46,7 @@ AS "Agr_mht",
 c.geom AS "geom_poly",
 c.geompoint AS "geom_point"
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN boundaries."Geometry SAUID" c on a.sauid = c."SAUIDt"
 GROUP BY a.sauid,b.mh_sum,c.geom,c.geompoint;

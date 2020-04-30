@@ -18,7 +18,7 @@ CAST(CAST(ROUND(CAST(c.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) as "People
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 --LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
@@ -48,7 +48,7 @@ CAST(CAST(ROUND(CAST((SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELS
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 --LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
@@ -78,7 +78,7 @@ CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) AS
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 --LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 --LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
@@ -102,7 +102,7 @@ CAST(CAST(ROUND(CAST(SUM(a.contents) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Co
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 --LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 --LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
@@ -125,7 +125,7 @@ CAST(CAST(ROUND(CAST(SUM(a.transit) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Tra
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 --LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"

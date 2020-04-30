@@ -18,7 +18,7 @@ CAST(c.people_du AS NUMERIC) as "People_DU",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 --LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"

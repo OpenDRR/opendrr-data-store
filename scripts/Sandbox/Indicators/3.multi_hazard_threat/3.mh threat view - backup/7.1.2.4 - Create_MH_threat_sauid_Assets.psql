@@ -1,0 +1,31 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_threat_assets_view CASCADE;
+CREATE VIEW results.mh_threat_landslide_hazard_threat_assets_view AS 
+
+-- 7.1 Landslide Hazard
+-- 7.1.2 Landslide Hazard Threat
+-- 7.1.2.4 Assets
+SELECT 
+a.sauid,
+COALESCE(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "LndSusn",
+-- 3 AS "LndSust", -- Landslide Susceptibility Threshold
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),0) AS "AssetCostT_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.structural + a.nonstructural) ELSE 0 END AS NUMERIC),0) AS "BldgCostT_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.structural) ELSE 0 END AS NUMERIC),0) AS "StrCostT_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.nonstructural) ELSE 0 END AS NUMERIC),0) AS "NStrCostT_Lst",
+
+COALESCE(CAST(CASE WHEN c.lndsus >= 3.1 THEN SUM(a.contents) ELSE 0 END AS NUMERIC),0) AS "ContCostT_Lst",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+--LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
+GROUP BY a.sauid,c.lndsus,e.censuspop,e.people_du,d.geom,d.geompoint;

@@ -15,7 +15,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.bc_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
 LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -44,7 +44,7 @@ g.geompoint AS "geom_point"
 
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.bc_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -74,7 +74,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.bc_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -107,7 +107,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -139,7 +139,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -177,7 +177,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -217,7 +217,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -255,7 +255,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -290,7 +290,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -350,7 +350,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -411,7 +411,7 @@ g.geom AS "geom_poly",
 g.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id

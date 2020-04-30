@@ -1,0 +1,22 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_tsunami_hazard_intensity_tsunami_innundation_view CASCADE;
+CREATE VIEW results.mh_threat_tsunami_hazard_intensity_tsunami_innundation_view AS 
+
+-- 5.1 Tsunami Hazard
+-- 5.1.1 Tsunami Hazard Intensity
+-- 5.1.1.1 Tsunami Innundation
+SELECT 
+a.sauid,
+COALESCE(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "MHInt",
+CAST(c.tsun_ha AS NUMERIC) AS "Tsun",
+COALESCE(CAST((c.tsun_ha - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM lut.mh_intensity_canada_minmax) - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Tsun_n",
+20 AS "Tsun_t", -- Tsunami Hazard threshold
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,b.mh_sum,c.tsun_ha,d.geom,d.geompoint;

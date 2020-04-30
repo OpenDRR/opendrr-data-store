@@ -13,4 +13,4 @@ a.eqbldgtype AS "Type_Specific",
 a.eqdeslev AS "Design_Level",
 a.geom
 
-FROM psra.canada_exposure a;
+FROM exposure.canada_exposure a;

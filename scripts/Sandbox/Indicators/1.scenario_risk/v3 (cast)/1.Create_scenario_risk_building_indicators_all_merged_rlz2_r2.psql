@@ -26,7 +26,7 @@ CAST(a."Weight" AS NUMERIC) AS "Weight",
 b.geom
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -54,7 +54,7 @@ CAST(0 AS NUMERIC)AS "SA_2p0",  --"Spectral Acceleration (2.0s)" - change source
 b.geom
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id;
@@ -88,7 +88,7 @@ CAST(a."sD_Collapse_r2" AS NUMERIC) AS "sD_Collapse",
 b.geom
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -114,7 +114,7 @@ CAST(a."sC_Downtime_r2" AS NUMERIC) AS "sC_Downtime",
 b.geom
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -149,7 +149,7 @@ CAST(a."sC_CasTransitL4_r2" AS NUMERIC) AS "sC_CasTransitL4",
 b.geom
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -182,7 +182,7 @@ CAST(a."sC_DebrisC_r2" AS NUMERIC) AS "sC_DebrisC",
 b.geom
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
@@ -216,7 +216,7 @@ CAST(a."sL_Fatalities_stdv_r2" AS NUMERIC) AS "sL_Fatality_stdv",
 b.geom
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
-LEFT JOIN psra.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 --LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 --LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 --LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id

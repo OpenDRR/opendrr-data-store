@@ -14,7 +14,7 @@ CAST(a.number AS NUMERIC) AS "BldNum",
 CAST(b."BldgArea_ft2" AS NUMERIC) AS "BldgArea_ft2",
 a.geom
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";
 
 
@@ -32,7 +32,7 @@ a.genocc AS "Occ_General",
 a.eqocctype AS "Occ_Specific",
 a.geom
 
-FROM psra.canada_exposure a;
+FROM exposure.canada_exposure a;
 
 
 -- create physical exposure indicators
@@ -50,7 +50,7 @@ a.eqbldgtype AS "Type_Specific",
 a.eqdeslev AS "Design_Level",
 a.geom
 
-FROM psra.canada_exposure a;
+FROM exposure.canada_exposure a;
 
 
 -- create physical exposure indicators
@@ -70,7 +70,7 @@ CAST(a.structural + a.nonstructural AS NUMERIC) AS "BldgCost",
 CAST(b."CAD_RetrofitCost_Bldg" AS NUMERIC) AS "RetrofitCost",
 a.geom
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";
 
 
@@ -88,4 +88,4 @@ CAST(a.night AS NUMERIC) AS "NightPop",
 CAST(a.transit AS NUMERIC) AS "TransitPop",
 a.geom
 
-FROM psra.canada_exposure a;
+FROM exposure.canada_exposure a;

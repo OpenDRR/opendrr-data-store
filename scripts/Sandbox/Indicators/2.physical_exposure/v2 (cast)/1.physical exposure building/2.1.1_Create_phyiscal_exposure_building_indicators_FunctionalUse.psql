@@ -12,4 +12,4 @@ a.genocc AS "Occ_General",
 a.eqocctype AS "Occ_Specific",
 a.geom
 
-FROM psra.canada_exposure a;
+FROM exposure.canada_exposure a;

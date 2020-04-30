@@ -12,4 +12,4 @@ CAST(a.night AS NUMERIC) AS "NightPop",
 CAST(a.transit AS NUMERIC) AS "TransitPop",
 a.geom
 
-FROM psra.canada_exposure a;
+FROM exposure.canada_exposure a;

@@ -26,7 +26,7 @@ e.people_du ELSE 0 END AS NUMERIC),0) AS "MF_Hshlds_Eqt",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 --LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"

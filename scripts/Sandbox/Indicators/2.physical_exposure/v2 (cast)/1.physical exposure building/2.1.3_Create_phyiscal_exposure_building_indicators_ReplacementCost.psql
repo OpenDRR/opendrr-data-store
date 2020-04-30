@@ -15,5 +15,5 @@ CAST(a.structural + a.nonstructural AS NUMERIC) AS "BldgCost",
 CAST(b."CAD_RetrofitCost_Bldg" AS NUMERIC) AS "RetrofitCost",
 a.geom
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";

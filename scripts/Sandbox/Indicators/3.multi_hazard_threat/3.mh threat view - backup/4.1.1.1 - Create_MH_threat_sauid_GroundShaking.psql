@@ -1,0 +1,24 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_seismic_hazard_intensity_ground_shaking_view CASCADE;
+CREATE VIEW results.mh_threat_seismic_hazard_intensity_ground_shaking_view AS 
+
+-- 4.1 Seismic Hazard
+-- 4.1.1 Seismic Hazard Intensity
+-- 4.1.1.1 Ground Shaking
+SELECT 
+a.sauid,
+COALESCE(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "MHInt",
+CAST(c.pgv AS NUMERIC) AS "PGV",
+COALESCE(CAST((c.pgv - (SELECT pgv_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pgv_max FROM lut.mh_intensity_canada_minmax) - (SELECT pgv_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "PGVn",
+CAST(c.pga AS NUMERIC) AS "PGA",
+COALESCE(CAST((c.pga - (SELECT pga_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pga_max FROM lut.mh_intensity_canada_minmax) - (SELECT pga_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "PGAn",
+0.115 AS "PGAt", -- Peak Ground Acceleration threshold
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,b.mh_sum,c.pgv,c.pga,d.geom,d.geompoint;

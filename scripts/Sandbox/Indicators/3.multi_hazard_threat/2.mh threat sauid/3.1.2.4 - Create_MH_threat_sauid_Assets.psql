@@ -33,7 +33,7 @@ AS "ContCostT_mht",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM psra.canada_exposure a
+FROM exposure.canada_exposure a
 LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 --LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
