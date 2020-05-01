@@ -1,0 +1,34 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_casualties_agg;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_casualties_agg AS 
+
+-- 4.0 Earthquake Risk
+-- 4.3 Afected People
+-- 4.3.1 Casualties
+SELECT
+b.sauid AS "Sauid",
+CAST(SUM(a."sL_Fatalities_b0") AS NUMERIC) AS "sL_FatalityT",
+CAST(AVG(a."sL_Fatalities_stdv_b0") AS NUMERIC) AS "sL_FatalityA_stdv",
+CAST(SUM(a."sC_CasDayL1_b0") AS NUMERIC) AS "sC_CasDayL1T",
+CAST(SUM(a."sC_CasDayL2_b0") AS NUMERIC) AS "sC_CasDayL2T",
+CAST(SUM(a."sC_CasDayL3_b0") AS NUMERIC) AS "sC_CasDayL3T",
+CAST(SUM(a."sC_CasDayL4_b0") AS NUMERIC) AS "sC_CasDayL4T",
+CAST(SUM(a."sC_CasNightL1_b0") AS NUMERIC) AS "sC_CasNightL1T",
+CAST(SUM(a."sC_CasNightL2_b0") AS NUMERIC) AS "sC_CasNightL2T",
+CAST(SUM(a."sC_CasNightL3_b0") AS NUMERIC) AS "sC_CasNightL3T",
+CAST(SUM(a."sC_CasNightL4_b0") AS NUMERIC) AS "sC_CasNightL4T",
+CAST(SUM(a."sC_CasTransitL1_b0") AS NUMERIC) AS "sC_CasTransitL1T",
+CAST(SUM(a."sC_CasTransitL2_b0") AS NUMERIC) AS "sC_CasTransitL2T",
+CAST(SUM(a."sC_CasTransitL3_b0") AS NUMERIC) AS "sC_CasTransitL3T",
+CAST(SUM(a."sC_CasTransitL4_b0") AS NUMERIC) AS "sC_CasTransitL4T",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+--LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+GROUP BY b.sauid, g.geom, g.geompoint;

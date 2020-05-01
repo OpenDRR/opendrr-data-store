@@ -1,0 +1,20 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_building_occupancy CASCADE;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_building_occupancy AS 
+
+-- 4.0 Earthquake Risk
+-- 4.2 Building Performance
+-- 4.2.3 Building Occupancy
+SELECT 
+a."AssetID",
+CAST(b.day AS NUMERIC) AS "DayPop",
+CAST(b.night AS NUMERIC) AS "NightPop",
+CAST(b.transit AS NUMERIC) AS "TransitPop",
+b.geom
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id;
+--LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"

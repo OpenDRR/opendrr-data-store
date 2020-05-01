@@ -1,0 +1,28 @@
+-- 4.0 Earthquake Risk
+-- 4.1 Scenario Hazard
+
+-- 4.1.1 Scenario Rupture
+SELECT 
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'b0' AS "Retrofit",
+CAST(b.lon AS NUMERIC) AS "Sauid_Lon",
+CAST(b.lat AS NUMERIC) AS "Sauid_Lat",
+CAST(h."area_km2" AS NUMERIC) AS "Area_km2",
+CAST(h.area_ha AS NUMERIC) AS "Area_ha",
+CAST(SUM(b.number) AS NUMERIC) AS "BldNumT",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
+GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,b.lon,b.lat,h."area_km2",h.area_ha,g.geom,g.geompoint;

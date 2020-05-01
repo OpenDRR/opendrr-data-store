@@ -1,0 +1,30 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_threat_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_threat_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.1 Scenario Hazard
+-- 4.1.3 Scenario Hazard Threat
+SELECT 
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'b0' AS "Retrofit",
+CAST(e."gmv_pga" AS NUMERIC) AS "Eq_Thrshld",
+CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN b.number ELSE 0 END) AS NUMERIC) AS "Eq_Bldgs",
+CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN h.censuspop ELSE 0 END) AS NUMERIC) AS "Eq_Pop",
+CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN h.censusdu ELSE 0 END) AS NUMERIC) AS "Eq_Hshlds",
+CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN (b.structural + b.nonstructural + b.contents) ELSE 0 END) AS NUMERIC) AS "Eq_Assets",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
+GROUP BY b.sauid, g.geom, g.geompoint,e."gmv_pga", f.source_type, f.rupture_name, f.magnitude;

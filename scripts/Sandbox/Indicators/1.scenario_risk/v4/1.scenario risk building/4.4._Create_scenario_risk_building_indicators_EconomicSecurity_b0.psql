@@ -32,6 +32,7 @@ CAST(a."sL_Cont_b0" AS NUMERIC) AS "sL_Cont",
 CAST(a."sL_Cont_stdv_b0" AS NUMERIC) AS "sL_Cont_stdv",
 CAST(a."sL_Fatalities_b0" AS NUMERIC) AS "sL_Fatality",
 CAST(a."sL_Fatalities_stdv_b0" AS NUMERIC) AS "sL_Fatality_stdv",
+
 b.geom
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a

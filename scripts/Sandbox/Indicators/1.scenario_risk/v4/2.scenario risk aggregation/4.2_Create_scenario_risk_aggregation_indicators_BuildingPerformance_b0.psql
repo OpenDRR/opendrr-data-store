@@ -1,0 +1,42 @@
+-- 4.0 Earthquake Risk
+-- 4.2 Building Performance
+
+-- 4.2.1 Damage State
+SELECT 
+b.sauid AS "Sauid",
+CAST(SUM(a."sD_None_b0") AS NUMERIC) AS "sD_NoneT",
+CAST(AVG(a."sD_None_stdv_b0") AS NUMERIC) AS "sD_NoneA_stdv",
+CAST(SUM(a."sD_Slight_b0") AS NUMERIC) AS "sD_SlightT",
+CAST(AVG(a."sD_Slight_stdv_b0") AS NUMERIC) AS "sD_SlightA_stdv",
+CAST(SUM(a."sD_Moderate_b0") AS NUMERIC) AS "sD_ModerateT",
+CAST(AVG(a."sD_Moderate_stdv_b0") AS NUMERIC) AS "sD_ModerateA_stdv",
+CAST(SUM(a."sD_Extensive_b0") AS NUMERIC) AS "sD_ExtensiveT",
+CAST(AVG(a."sD_Extensive_stdv_b0") AS NUMERIC) AS "sD_ExtensiveA_stdv",
+CAST(SUM(a."sD_Complete_b0") AS NUMERIC) AS "sD_CompleteT",
+CAST(AVG(a."sD_Complete_stdv_b0") AS NUMERIC) AS "sD_CompleteA_stdv",
+CAST(SUM(a."sD_Collapse_b0") AS NUMERIC) AS "sD_CollapseT",
+
+-- 4.2.1 Recovery
+CAST(SUM(a."sC_Repair_b0")/(SUM(b.number)) AS NUMERIC) AS "sC_Repair_t",
+CAST(SUM(a."sC_Construxn_b0")/(SUM(b.number)) AS NUMERIC) AS "SC_Construxn_t",
+CAST(SUM(a."sC_Downtime_b0")/(SUM(b.number)) AS NUMERIC) AS "sC_Downtime_total",
+CAST(SUM(a."sC_DebrisBW_b0") AS NUMERIC) AS "sC_Debris_bw",
+CAST(SUM(a."sC_DebrisC_b0") AS NUMERIC) AS "sC_Debris_cs",
+CAST(SUM(a."sC_DebrisBW_b0" + a."sC_DebrisC_b0") AS NUMERIC) AS "sC_Debris_total",
+CAST(h.censuspop AS NUMERIC) AS "CensusPop",
+CAST(SUM(b.day) AS NUMERIC) AS "DayPopT",
+CAST(SUM(b.night) AS NUMERIC) AS "NightPopT",
+CAST(SUM(b.transit) AS NUMERIC) AS "TransitPopT",
+
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
+GROUP BY b.sauid,h.censuspop,g.geom,g.geompoint;

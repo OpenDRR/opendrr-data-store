@@ -1,0 +1,23 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_rupture_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_rupture_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.1 Scenario Hazard
+-- 4.1.1 Scenario Rupture
+SELECT 
+DISTINCT(b.sauid) AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+CAST(d.vs30 AS NUMERIC) AS "vs30",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
+LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt";

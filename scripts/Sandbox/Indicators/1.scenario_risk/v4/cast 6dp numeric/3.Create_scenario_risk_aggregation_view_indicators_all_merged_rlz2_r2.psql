@@ -1,0 +1,299 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_scenario_rupture_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_scenario_rupture_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.1 Scenario Hazard
+-- 4.1.1 Scenario Rupture
+SELECT 
+DISTINCT(b.sauid) AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+CAST(CAST(ROUND(CAST(d.vs30 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "vs30",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
+LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt";
+
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_scenario_hazard_agg_view CASCADE;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_scenario_hazard_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.1 Scenario Hazard
+-- 4.1.2 Scenario Hazard
+SELECT 
+DISTINCT(b.sauid) AS "Sauid",
+CAST(CAST(ROUND(CAST(e."gmv_pgv" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "PGV",
+CAST(CAST(ROUND(CAST(e."gmv_pga" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "PGA",
+CAST(CAST(ROUND(CAST(e."gmv_SA(0.2)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SA_0p2",
+CAST(CAST(ROUND(CAST(e."gmv_SA(0.3)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SA_0p3",
+CAST(CAST(ROUND(CAST(e."gmv_SA(0.6)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SA_0p6",
+CAST(CAST(ROUND(CAST(e."gmv_SA(1.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SA_1p0",
+CAST(CAST(ROUND(CAST(0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SA_2p0",  --"Spectral Acceleration (2.0s)" - change source to reflect 2.0 later
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+--LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt";
+
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_scenario_hazard_threat_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_scenario_hazard_threat_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.1 Scenario Hazard
+-- 4.1.3 Scenario Hazard Threat
+SELECT 
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'r2' AS "Retrofit",
+CAST(CAST(ROUND(CAST(e."gmv_pga" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Eq_Thrshld",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN b.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Eq_Bldgs",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN h.censuspop ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Eq_Pop",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN h.censusdu ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Eq_Hshlds",
+CAST(CAST(ROUND(CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN (b.structural + b.nonstructural + b.contents) ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Eq_Assets",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c.eq_bldg_type
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
+GROUP BY b.sauid, g.geom, g.geompoint,e."gmv_pga", f.source_type, f.rupture_name, f.magnitude;
+
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_damage_state_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_damage_state_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.2 Building Performance
+-- 4.2.1 Damage State
+SELECT 
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'r2' AS "Retrofit",
+CAST(CAST(ROUND(CAST(SUM(b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgNumber",
+CAST(CAST(ROUND(CAST(SUM(a."sD_None_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_None",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Slight_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Slight",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Moderate_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Moderate",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Extensive_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Extensive",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Complete",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude;
+
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_functional_state_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_functional_state_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.2 Building Performance
+-- 4.2.2 Functional State
+SELECT 
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'r2' AS "Retrofit",
+CAST(CAST(ROUND(CAST(SUM(b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgNumber",
+CAST(CAST(ROUND(CAST(SUM(a."sD_None_r2" + (a."sD_Slight_r2"*0.2) +(a."sD_Moderate_r2"*0.05)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Operational",
+CAST(CAST(ROUND(CAST(SUM((a."sD_Slight_r2"*0.8) + (a."sD_Moderate_r2"*0.75) + (a."sD_Extensive_r2"*0.2)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Functional",
+CAST(CAST(ROUND(CAST(SUM((a."sD_Moderate_r2"*0.2) + (a."sD_Extensive_r2"*0.4)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Repairable",
+CAST(CAST(ROUND(CAST(SUM((a."sD_Extensive_r2"*0.3) + (a."sD_Complete_r2"*0.2)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Failure",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Collapse_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Collapse",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude;
+
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_recovery_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_recovery_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.2 Building Performance
+-- 4.2.3 Recovery
+SELECT 
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'r2' AS "Retrofit",
+CAST(CAST(ROUND(CAST(SUM(a."sD_None_r2" + a."sD_Slight_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_GreenTag_b",
+CAST(CAST(ROUND(CAST(SUM(a."sD_None_r2" + a."sD_Slight_r2")/5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_GreenTag_i",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Extensive_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_YellowTag_d",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Extensive_r2")/2.5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_YellowTag_i",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_RedTag_b",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_r2")/5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_RedTag_i" ,
+CAST(CAST(ROUND(CAST(SUM(a."sC_Repair_r2")/(SUM(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Repair_t",
+CAST(CAST(ROUND(CAST(SUM(a."sC_Construxn_r2")/(SUM(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SC_Construxn_t",
+CAST(CAST(ROUND(CAST(SUM(a."sC_Downtime_r2")/(SUM(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Downtime_total",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Debris_bw",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisC_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Debris_cs",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_r2" + a."sC_DebrisC_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Debris_total",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude;
+
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_casualties_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_casualties_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.3 Afected People
+-- 4.3.1 Casualties
+SELECT
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'r2' AS "Retrofit",
+CAST(CAST(ROUND(CAST(h.censuspop AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CensusPop",
+CAST(CAST(ROUND(CAST(SUM(a."sL_Fatalities_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Fatality",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL1_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasDay_min",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL2_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasDay_mod",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasDay_ser",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL4_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasDay_crit",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasNightL1_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasNit_min",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasNightL2_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasNit_mod",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasNightL3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasNit_ser",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasNightL4_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasNit_crit",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL1_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTrn_min",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL2_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTrn_mod",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTrn_ser",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL4_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTrn_crit",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude, h.censuspop;
+
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_social_disruption_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_social_disruption_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.3 Afected People
+-- 4.3.2 Social Disruption
+SELECT
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'r2' AS "Retrofit",
+CAST(CAST(ROUND(CAST(h.censuspop AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CensusPop",
+CAST(CAST(ROUND(CAST(0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Shelter", -- TBD
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r2")/h.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DHshld_3",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_r2")/h.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DHshld_30",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_r2")/h.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DHshld_90",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_180_b0")/h.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DHshld_180",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_360_b0")/h.people_du AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DHshld_360",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_30_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DBiz_30",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_90_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DBiz_90",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_180_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DBiz_180",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_360_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DBiz_360",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude, h.people_du, h.censuspop;
+
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_economic_loss_agg_view;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_economic_loss_agg_view AS 
+
+-- 4.0 Earthquake Risk
+-- 4.4 Economic Security
+-- 4.4.1 Economic Loss
+SELECT
+b.sauid AS "Sauid",
+f.source_type AS "Source_Type",
+f.rupture_name AS "Rupture_Name",
+f.magnitude AS "Magnitude",
+'r2' AS "Retrofit",
+CAST(CAST(ROUND(CAST(SUM(b.structural + b.nonstructural + b.contents) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "AssetCostT",
+CAST(CAST(ROUND(CAST(SUM(b.structural + b.nonstructural) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgCostT",
+CAST(CAST(ROUND(CAST((COALESCE((AVG(a."sL_Str_r2" + a."sL_NStr_r2"))/ NULLIF(AVG((a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_LossRatio",
+CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_AssetLoss",
+CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_BldgLoss",
+CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_StrLoss",
+CAST(CAST(ROUND(CAST(SUM(a."sL_NStr_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_NStrLoss",
+CAST(CAST(ROUND(CAST(SUM(a."sL_Cont_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_ContLoss",
+g.geom AS "geom_poly",
+g.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+--LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+--LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
+LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
+GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude;

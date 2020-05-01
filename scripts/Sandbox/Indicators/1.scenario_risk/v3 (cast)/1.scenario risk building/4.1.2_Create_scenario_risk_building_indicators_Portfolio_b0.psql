@@ -1,0 +1,23 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_portfolio CASCADE;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_portfolio AS 
+
+-- 4.0 Earthquake Risk
+-- 4.1 Scenario Hazard
+-- 4.1.3 Portfolio
+SELECT 
+a."AssetID",
+b.sauid AS "Sauid",
+CAST(b.lon AS NUMERIC) AS "Asset_Lon",
+CAST(b.lat AS NUMERIC) AS "Asset_Lat",
+CAST(b.number AS NUMERIC) AS "BldNum",
+b.taxonomy AS "Taxonomy",
+CAST(c."BldgArea_ft2" AS NUMERIC) AS "BldgArea_ft2",
+b.geom
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id;
+--LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"

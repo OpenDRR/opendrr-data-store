@@ -1,0 +1,21 @@
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_replacement_cost CASCADE;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_replacement_cost AS 
+
+-- 4.0 Earthquake Risk
+-- 4.3 Affected People
+-- 4.3.3 Replacement Cost
+SELECT 
+a."AssetID",
+CAST(a.structural AS NUMERIC) AS "StrCost",
+CAST(a.nonstructural AS NUMERIC) AS "NStrCost",
+CAST(a.contents AS NUMERIC) AS "ContCost",
+CAST(b."CAD_RetrofitCost_Bldg" AS NUMERIC) AS "RetrofitCost",
+b.geom
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+--LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id;
+--LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
