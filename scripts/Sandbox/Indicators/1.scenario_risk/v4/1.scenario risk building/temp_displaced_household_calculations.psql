@@ -1,35 +1,51 @@
--- create scenario risk building indicators
-DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_building_performance_building CASCADE;
-CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_building_performance_building AS 
-
--- 4.0 Earthquake Risk
--- 4.2 Building Performance
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_displhsld_calc CASCADE;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_displhsld_calc AS 
 
 -- 4.2.1 Damage State
 SELECT 
 a."AssetID",
-a."Rupture_Abbr",
-f.magnitude AS "Source_Mag",
-'b0' AS "Retrofit_Level",
-a."Realization" AS "RealizationID", 
-CAST(a."sD_None_b0" AS NUMERIC) AS "sD_None",
-CAST(a."sD_None_stdv_b0" AS NUMERIC) AS "sD_None_stdv",
-CAST(a."sD_Slight_b0" AS NUMERIC) AS "sD_Slight",
-CAST(a."sD_Slight_b0" / b.number AS NUMERIC) AS "sD_Slight_r",
-CAST(a."sD_Slight_stdv_b0" AS NUMERIC) AS "sD_Slight_stdv",
-CAST(a."sD_Moderate_b0" AS NUMERIC) AS "sD_Moderate",
-CAST(a."sD_Moderate_b0" / b.number AS NUMERIC) AS "sD_Moderate_r",
-CAST(a."sD_Moderate_stdv_b0" AS NUMERIC) AS "sD_Moderate_stdv",
-CAST(a."sD_Extensive_b0" AS NUMERIC) AS "sD_Extensive",
-CAST(a."sD_Extensive_b0" / b.number AS NUMERIC) AS "sD_Extensive_r",
-CAST(a."sD_Extensive_stdv_b0" AS NUMERIC) AS "sD_Extensive_stdv",
-CAST(a."sD_Complete_b0" AS NUMERIC) AS "sD_Complete",
-CAST(a."sD_Complete_b0" / b.number AS NUMERIC) AS "sD_Complete_r",
-CAST(a."sD_Complete_stdv_b0" AS NUMERIC) AS "sD_Complete_stdv",
-CAST(a."sD_Collapse_b0" AS NUMERIC) AS "sD_Collapse_r",
-CAST(a."sD_Collapse_b0" * b.number AS NUMERIC) AS "sD_Collapse",
-CAST(a."sD_Complete_stdv_b0" * g.collapse_pc AS NUMERIC) AS "sD_Collapse_stdv",
 
+--intermediate variables for calculating potential displaced households
+CAST(a."sD_Moderate_b0" AS NUMERIC) AS "sD_Moderate",
+CAST(a."sD_Extensive_b0" AS NUMERIC) AS "sD_Extensive",
+CAST(a."sD_Complete_b0" AS NUMERIC) AS "sD_Complete",
+CAST(a."sC_Downtime_b0" AS NUMERIC) AS "sC_Downtime",
+b.genocc AS "Occ_General",
+CAST(h.censusdu AS NUMERIC) AS "CensusDU",
+CAST((CASE WHEN b.genocc ='Residential-LD' OR b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' 
+	  THEN b.night/h.people_du ELSE 0 END) AS NUMERIC) AS "CensusDU_asset",
+ROUND(CAST((CASE WHEN b.genocc ='Residential-LD' OR b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' 
+	  THEN b.night/h.people_du ELSE 0 END) AS NUMERIC),0) AS "CensusDU_asset_rounded",
+	  
+--CAST((CASE WHEN b.genocc ='Residential-LD' THEN b.number ELSE 0 END) / h.people_du AS NUMERIC) AS "SF_Hshlds",
+--CAST(((CASE WHEN b.genocc ='Residential-MD' THEN b.number ELSE 0 END) + (CASE WHEN b.genocc ='Residential-HD' THEN b.number ELSE 0 END)) / h.people_du AS NUMERIC) AS "MF_Hshlds",
+CAST((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) AS NUMERIC) AS "SF_Hshlds",
+CAST((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) AS NUMERIC) AS "MF_Hshlds",
+
+CAST(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" ELSE 0 END AS NUMERIC) AS "SFM",
+CAST(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" ELSE 0 END AS NUMERIC) AS "SFE",
+CAST(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" ELSE 0 END AS NUMERIC) AS "SFC",
+
+CAST(CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_b0" ELSE 0 END AS NUMERIC) AS "MFM",
+CAST(CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_b0" ELSE 0 END AS NUMERIC) AS "MFE",
+CAST(CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_b0" ELSE 0 END AS NUMERIC) AS "MFC",
+
+0 AS "W_SFM",
+0.5 AS "W_SFE",
+1 AS "W_SFC",
+0 AS "W_MFM",
+0.9 AS "W_MFE",
+1 AS "W_MFC",
+
+-- ([W_SFM]*[SFM]) + ([W_SFE]*[SFE]) + ([W_SFC]*SFC])
+CAST((0*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" ELSE 0 END)) + (0.5*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" ELSE 0 END)) +
+(1*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" ELSE 0 END)) AS NUMERIC) AS "SF",
+
+-- ([W_MFM]*[MFM]) + ([W_MFE]*[MFE]) + ([W_MFC]*MFC])
+CAST((0*(CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_b0" ELSE 0 END)) + (0.9*(CASE WHEN b.genocc ='Residential-MD' OR 
+b.genocc ='Residential-HD' THEN a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_b0" ELSE 0 END)) AS NUMERIC) AS "MF",
+
+-- (([SF_Hshlds] * [SF]) +  ([MF_Hshlds] * [MF])) * ([CensusDU] / ([SF_Hshlds] + [MF_Hshlds])
 CAST(COALESCE(((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" ELSE 0 END)) + 
 (0.5*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" ELSE 0 END))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-MD' OR 
@@ -39,6 +55,7 @@ a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-MD' OR b
 NULLIF(((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END)) + (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN 
 b.night/h.people_du ELSE 0 END))),0)),0) AS NUMERIC) AS "DisplHsld",
 
+-- IF [sc_Downtime] > 3 THEN [DH]
 CAST((CASE WHEN a."sC_Downtime_b0" > 3 THEN (COALESCE(((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" ELSE 0 END)) + 
 (0.5*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" ELSE 0 END))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-MD' OR 
@@ -48,6 +65,7 @@ a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-MD' OR b
 NULLIF(((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END)) + (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN 
 b.night/h.people_du ELSE 0 END))),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_3T",
 
+-- IF [sc_Downtime] > 30 THEN [DH]
 CAST((CASE WHEN a."sC_Downtime_b0" > 30 THEN (COALESCE(((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" ELSE 0 END)) + 
 (0.5*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" ELSE 0 END))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-MD' OR 
@@ -57,6 +75,7 @@ a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-MD' OR b
 NULLIF(((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END)) + (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN 
 b.night/h.people_du ELSE 0 END))),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_30T",
 
+-- IF [sc_Downtime] > 90 THEN [DH]
 CAST((CASE WHEN a."sC_Downtime_b0" > 90 THEN (COALESCE(((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" ELSE 0 END)) + 
 (0.5*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" ELSE 0 END))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-MD' OR 
@@ -66,6 +85,7 @@ a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-MD' OR b
 NULLIF(((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END)) + (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN 
 b.night/h.people_du ELSE 0 END))),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_90T",
 
+-- IF [sc_Downtime] > 180 THEN [DH]
 CAST((CASE WHEN a."sC_Downtime_b0" > 180 THEN (COALESCE(((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" ELSE 0 END)) + 
 (0.5*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" ELSE 0 END))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-MD' OR 
@@ -75,6 +95,7 @@ a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-MD' OR b
 NULLIF(((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END)) + (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN 
 b.night/h.people_du ELSE 0 END))),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_180T",
 
+-- IF [sc_Downtime] > 360 THEN [DH]
 CAST((CASE WHEN a."sC_Downtime_b0" > 360 THEN (COALESCE(((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" ELSE 0 END)) + 
 (0.5*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" ELSE 0 END))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) * (0*(CASE WHEN b.genocc ='Residential-MD' OR 
@@ -83,11 +104,6 @@ a."sD_Extensive_b0" ELSE 0 END)) + (1*(CASE WHEN b.genocc ='Residential-MD' OR b
 ((CASE WHEN b.genocc ='Residential-LD' OR b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) / 
 NULLIF(((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END)) + (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN 
 b.night/h.people_du ELSE 0 END))),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_360T",
-
--- 4.2.2 Recovery
-CAST(a."sC_Repair_b0" AS NUMERIC) AS "sC_Repair",
-CAST(a."sC_Construxn_b0" AS NUMERIC) AS "SC_Construxn",
-CAST(a."sC_Downtime_b0" AS NUMERIC) AS "sC_Downtime",
 
 b.geom
 

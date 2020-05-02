@@ -13,16 +13,27 @@ CAST(b.lat AS NUMERIC) AS "Sauid_Lat",
 CAST(h."area_km2" AS NUMERIC) AS "Area_km2",
 CAST(h.area_ha AS NUMERIC) AS "Area_ha",
 CAST(SUM(b.number) AS NUMERIC) AS "BldNumT",
-g.geom AS "geom_poly",
-g.geompoint AS "geom_point"
+CAST(h.censuspop AS NUMERIC) AS "CensusPop",
+CAST(SUM(b.day) AS NUMERIC) AS "DayPopT",
+CAST(SUM(b.night) AS NUMERIC) AS "NightPopT",
+CAST(SUM(b.transit) AS NUMERIC) AS "TransitPopT",
+CAST(SUM(b.structural + b.nonstructural + b.contents) AS NUMERIC) AS "AssetCostT",
+CAST(SUM(b.structural + b.nonstructural) AS NUMERIC) AS "BldgCostT",
+CAST(SUM(b.structural) AS NUMERIC) AS "StrCostT",
+CAST(SUM(b.nonstructural) AS NUMERIC) AS "NStrCostT",
+CAST(SUM(b.contents) AS NUMERIC) AS "ContCost",
+
+i.geom AS "geom_poly",
+i.geompoint AS "geom_point"
 
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
-LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
-LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
-LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
-LEFT JOIN lut.census_2016_canada h on b.sauid = h.sauidt
-GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,b.lon,b.lat,h."area_km2",h.area_ha,g.geom,g.geompoint;
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
+LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
+LEFT JOIN lut.census_2016_canada h ON b.sauid = h.sauidt
+LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
+GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,b.lon,b.lat,h."area_km2",h.area_ha,h.censuspop,i.geom,i.geompoint;

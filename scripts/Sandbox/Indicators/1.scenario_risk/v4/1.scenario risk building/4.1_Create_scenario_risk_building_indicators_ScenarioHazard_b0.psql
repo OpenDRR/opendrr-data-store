@@ -14,6 +14,14 @@ CAST(b.lat AS NUMERIC) AS "Asset_Lat",
 CAST(b.number AS NUMERIC) AS "BldNum",
 b.taxonomy AS "Taxonomy",
 CAST(c."BldgArea_ft2" AS NUMERIC) AS "BldgArea_ft2",
+CAST(b.day AS NUMERIC) AS "DayPop",
+CAST(b.night AS NUMERIC) AS "NightPop",
+CAST(b.transit AS NUMERIC) AS "TransitPop",
+CAST(b.structural AS NUMERIC) AS "StrCost",
+CAST(b.nonstructural AS NUMERIC) AS "NStrCost",
+CAST(b.contents AS NUMERIC) AS "ContCost",
+CAST(c."CAD_RetrofitCost_Bldg" AS NUMERIC) AS "RetrofitCost",
+
 f.source_type AS "Source_Type",
 f.rupture_name AS "Rupture_Name",
 f.magnitude AS "Magnitude",
@@ -46,5 +54,5 @@ FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
-LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
-LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr";
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
+LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr";
