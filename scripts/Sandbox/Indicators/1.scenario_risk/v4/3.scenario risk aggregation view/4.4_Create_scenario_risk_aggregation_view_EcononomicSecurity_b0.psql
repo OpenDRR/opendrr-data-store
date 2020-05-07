@@ -1,9 +1,10 @@
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_economic_loss_agg_view;
-CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_economic_loss_agg_view AS 
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_economic_security_sauid;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_economic_security_sauid AS 
 
 -- 4.0 Earthquake Risk
 -- 4.4 Economic Security
+
 -- 4.4.1 Economic Loss
 SELECT
 b.sauid AS "Sauid",
@@ -19,14 +20,19 @@ CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0") AS NUMERIC) AS "sL_BldgLoss",
 CAST(SUM(a."sL_Str_b0") AS NUMERIC) AS "sL_StrLoss",
 CAST(SUM(a."sL_NStr_b0") AS NUMERIC) AS "sL_NStrLoss",
 CAST(SUM(a."sL_Cont_b0") AS NUMERIC) AS "sL_ContLoss",
-g.geom AS "geom_poly",
-g.geompoint AS "geom_point"
+
+i.geom AS "geom_poly",
+i.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
---LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
---LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
---LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e on b.id = e.id
-LEFT JOIN ruptures.rupture_table f on f.rupture_name = a."Rupture_Abbr"
-LEFT JOIN boundaries."Geometry SAUID" g on b.sauid = g."SAUIDt"
-GROUP BY b.sauid, g.geom, g.geompoint, f.source_type, f.rupture_name, f.magnitude;
+LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN lut.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
+LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
+LEFT JOIN lut.census_2016_canada h ON b.sauid = h.sauidt
+LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN lut.sovi_census_canada j ON b.sauid = j.sauidt
+LEFT JOIN lut.sovi_index_canada k ON b.sauid = k.sauidt
+GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,i.geom,i.geompoint;

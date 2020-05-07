@@ -48,7 +48,8 @@ CAST(e."gmv_SA(0.3)" AS NUMERIC) AS "SA_0p3",
 CAST(e."gmv_SA(0.6)" AS NUMERIC) AS "SA_0p6",
 CAST(e."gmv_SA(1.0)" AS NUMERIC) AS "SA_1p0",
 CAST(0 AS NUMERIC)AS "SA_2p0",  --"Spectral Acceleration (2.0s)" - change source to reflect 2.0 later
-b.geom
+
+b.geom AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
