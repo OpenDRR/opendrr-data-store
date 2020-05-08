@@ -1,0 +1,34 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_wildfire_threat_people CASCADE;
+CREATE VIEW results.mh_threat_wildfire_threat_people AS 
+
+-- 8.1 Wildfire Hazard
+-- 8.1.2 Wildfire Threat
+-- 8.1.2.3 People
+SELECT 
+a.sauid,
+COALESCE(CAST((c.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Firen",
+-- 2000 AS "Firet", -- Wildfire Intensity Threshold
+
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN e.censuspop ELSE 0 END AS NUMERIC),0) AS "CensusPop_Fit",
+
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(a.day) ELSE 0 END AS NUMERIC),0) AS "DayPopT_Fit",
+
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(a.night) ELSE 0 END AS NUMERIC),0) AS "NightPopT_Fit",
+
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(a.transit) ELSE 0 END AS NUMERIC),0) AS "TransitPopT_Fit",
+
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / e.people_du ELSE 0 END AS NUMERIC),0) AS "SF_Hshlds_Fit",
+
+COALESCE(CAST(CASE WHEN c.fire >= 2000 THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
+e.people_du ELSE 0 END AS NUMERIC),0) AS "MF_Hshlds_Fit",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+--LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
+GROUP BY a.sauid,c.fire,e.censuspop,e.people_du,d.geom,d.geompoint;

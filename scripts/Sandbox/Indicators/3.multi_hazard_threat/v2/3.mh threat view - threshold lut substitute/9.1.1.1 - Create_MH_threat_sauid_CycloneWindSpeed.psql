@@ -1,0 +1,28 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_cyclone_hazard_intensity_cyclone_wind_speed_view CASCADE;
+CREATE VIEW results.mh_threat_cyclone_hazard_intensity_cyclone_wind_speed_view AS 
+
+-- 9.1 Cyclone Hazard
+-- 9.1.1 Cyclone Hazard Intensity
+-- 9.1.1.1 Cyclond Wind Speed
+SELECT 
+a.sauid,
+COALESCE(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "MH_Intensity",
+CAST(c.cy100 AS NUMERIC) AS "Cy100",
+COALESCE(CAST((c.cy100 - (SELECT cy100_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy100_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy100_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cy100n",
+CAST(c.cy250 AS NUMERIC) AS "Cy250",
+COALESCE(CAST((c.cy250 - (SELECT cy250_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy250_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy250_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cy250n",
+CAST(c.cy500 AS NUMERIC) AS "Cy500",
+COALESCE(CAST((c.cy500 - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cy500n",
+(SELECT "Cy500t" FROM lut.mh_thresholds) AS "Cy500t", -- 500yr Cyclone Hazard Threat
+CAST(c.cy1000 AS NUMERIC) AS "Cy1000",
+COALESCE(CAST((c.cy1000 - (SELECT cy1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cy1000n",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,b.mh_sum,c.cy100,c.cy250,c.cy500,c.cy1000,d.geom,d.geompoint;

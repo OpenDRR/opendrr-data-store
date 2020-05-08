@@ -1,0 +1,31 @@
+COPY (SELECT 
+a."AssetID",
+a."Sauid",
+a."Asset_Lon",
+a."Asset_Lat",
+a."BldNum",
+a."BldgArea_ft2",
+b."LandUse",
+b."Occ_General",
+b."Occ_Specific",
+c."Type_General",
+c."Type_Specific",
+c."Design_Level",
+d."StrCost",
+d."NStrCost",
+d."ContCost",
+d."AssetCost",
+d."BldgCost",
+d."RetrofitCost",
+e."DayPop",
+e."NightPop",
+e."TransitPop"
+
+FROM
+results.canada_exposure_portfolio a
+INNER JOIN results.canada_exposure_functional_use b ON a."AssetID" = b."AssetID"
+INNER JOIN results.canada_exposure_construction c ON a."AssetID" = c."AssetID"
+INNER JOIN results.canada_exposure_replacement_cost d ON a."AssetID" = d."AssetID"
+INNER JOIN results.canada_exposure_building_occupancy e ON a."AssetID" = e."AssetID")
+
+TO 'D:\workspace\data\v2\Indicators\csv\physical_exposure.csv' DELIMITER ',' CSV HEADER;

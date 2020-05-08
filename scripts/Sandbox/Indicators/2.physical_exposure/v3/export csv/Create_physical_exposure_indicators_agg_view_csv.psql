@@ -1,0 +1,50 @@
+COPY (SELECT 
+a."Sauid",
+a."Sauid_Lon",
+a."Sauid_Lat",
+a."Area_km2",
+a."Area_ha",
+a."BldNumT",
+a."CensusBldg",
+a."CensusDU",
+a."People_DU",
+b."SAC",
+b."LandUse",
+b."RES_LD",
+b."RES_MD", 
+b."RES_HD",
+b."Comm",
+b."Ind",
+b."Civic",
+b."Agr",
+b."SF_Hshlds",
+b."MF_Hshlds",
+c."Wood",
+c."Concrete",
+c."PreCast",
+c."RMasonry",
+c."URMasonry",
+c."Steel",
+c."Manufactured",
+c."PreCode",
+c."LowCode",
+c."ModCode",
+c."HiCode",
+d."AssetCostT",
+d."BldgCostT",
+d."StrCostT",
+d."NStrCostT",
+d."ContCost",
+e."CensusPop",
+e."DayPopT",
+e."NightPopT",
+e."TransitPopT"
+
+FROM
+results.canada_exposure_portfolio_agg_view a
+INNER JOIN results.canada_exposure_functional_use_agg_view b ON a."Sauid" = b."Sauid"
+INNER JOIN results.canada_exposure_construction_agg_view c ON a."Sauid" = c."Sauid"
+INNER JOIN results.canada_exposure_replacement_cost_agg_view d ON a."Sauid" = d."Sauid"
+INNER JOIN results.canada_exposure_building_occupancy_agg_view e ON a."Sauid" = e."Sauid")
+
+TO 'D:\workspace\data\v2\Indicators\csv\physical_exposure_building_agg_view.csv' DELIMITER ',' CSV HEADER;

@@ -1,0 +1,44 @@
+COPY (SELECT
+a.sauid,
+a."MHInt",
+a."Tsun",
+a."Tsun_n",
+a."Tsun_t",
+c."BldgNumT_Tst",
+c."RES_LD_Tst",
+c."RES_MD_Tst",
+c."RES_HD_Tst",
+c."Comm_Tst",
+c."Ind_Tst",
+c."Civic_Tst",
+c."Agr_Tst",
+d."Wood_Tst",
+d."Concrete_Tst",
+d."PreCast_Tst",
+d."RMasonry_Tst",
+d."URMasonry_Tst",
+d."Steel_Tst",
+d."Manufactured_Tst",
+d."PreCode_Tst",
+d."LowCode_Tst",
+d."ModCode_Tst",
+d."HiCode_Tst",
+e."CensusPop_Tst",
+e."DayPopT_Tst",
+e."NightPopT_Tst",
+e."TransitPopT_Tst",
+e."SF_Hshlds_Tst",
+e."MF_Hshlds_Tst",
+f."AssetCostT_Tst",
+f."BldgCostT_Tst",
+f."StrCostT_Tst",
+f."NStrCostT_Tst",
+f."ContCostT_Tst"
+
+FROM results.mh_threat_tsunami_hazard_intensity_tsunami_innundation_view a
+INNER JOIN results.mh_threat_tsunami_hazard_threat_building_function_view c ON a.sauid = c.sauid
+INNER JOIN results.mh_threat_tsunami_hazard_threat_building_construction_view d ON a.sauid = d.sauid
+INNER JOIN results.mh_threat_tsunami_hazard_threat_people_view e on a.sauid = e.sauid
+INNER JOIN results.mh_threat_tsunami_hazard_threat_assets_view f on a.sauid = f.sauid)
+
+TO 'D:\workspace\data\v2\Indicators\csv\mh_intensity_view_tsunami_hazard.csv' DELIMITER ',' CSV HEADER;

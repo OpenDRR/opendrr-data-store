@@ -1,0 +1,66 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_mh_building_construction_view CASCADE;
+CREATE VIEW results.mh_threat_mh_building_construction_view AS 
+
+-- 3.1 Multi-Hazard
+-- 3.1.2 Multi-Hazard Threat
+-- 3.1.2.2 Building Construction
+SELECT 
+a.sauid,
+COALESCE(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "MHInt",
+(SELECT "MHInt_t" FROM lut.mh_thresholds) AS "MHInt_t", -- Multi-Hazard Intensity threshold
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),0) AS "BldgNumT_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "Wood_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "Concrete_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Precast' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "PreCast_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='RMasonry' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "RMasonry_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='URMasonry' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "URMasonry_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Steel' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "Steel_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Manufactured' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "Manufactured_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='PC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "PreCode_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='LC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "LowCode_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='MC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "ModCode_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) 
+AS "HiCode_mht",
+
+c.geom AS "geom_poly",
+c.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN boundaries."Geometry SAUID" c on a.sauid = c."SAUIDt"
+GROUP BY a.sauid,b.mh_sum,c.geom,c.geompoint;

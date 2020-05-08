@@ -1,0 +1,22 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_wildfire_intensity_head_fire_intensity CASCADE;
+CREATE VIEW results.mh_threat_wildfire_intensity_head_fire_intensity AS 
+
+-- 8.1 Wildfire Hazard
+-- 8.1.1 Wildfire Intensity
+-- 8.1.1.1 Head Fire Intensity
+SELECT 
+a.sauid,
+COALESCE(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "MH_Intensity",
+CAST(c.fire AS NUMERIC) AS "Fire",
+COALESCE(CAST((c.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Firen",
+2000 AS "Firet", -- Wildfire Intensity Threshold
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,b.mh_sum,c.fire,d.geom,d.geompoint;

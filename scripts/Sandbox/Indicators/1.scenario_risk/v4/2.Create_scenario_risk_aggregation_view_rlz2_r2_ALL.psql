@@ -1,6 +1,6 @@
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_sauid;
-CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_scenario_hazard_sauid AS 
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_scenario_hazard_sauid;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_scenario_hazard_sauid AS 
 
 -- 4.0 Earthquake Risk
 -- 4.1 Scenario Hazard
@@ -11,7 +11,7 @@ b.sauid AS "Sauid",
 f.source_type AS "Source_Type",
 f.rupture_name AS "Rupture_Name",
 f.magnitude AS "Magnitude",
-'b0' AS "Retrofit",
+'r2' AS "Retrofit",
 CAST(b.lon AS NUMERIC) AS "Sauid_Lon",
 CAST(b.lat AS NUMERIC) AS "Sauid_Lat",
 CAST(h."area_km2" AS NUMERIC) AS "Area_km2",
@@ -48,7 +48,7 @@ CAST(SUM(CASE WHEN e."gmv_pga" >=0.115 THEN (b.structural + b.nonstructural + b.
 i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -63,8 +63,8 @@ GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,b.lon,b.lat,e."gmv_pgv
 e."gmv_SA(1.0)",e."gmv_SA(0.3)",h."area_km2",h.area_ha,h.censuspop,h.censusbldg,i.geom,i.geompoint;
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_building_performance_sauid;
-CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_building_performance_sauid AS 
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_building_performance_sauid;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_building_performance_sauid AS 
 
 -- 4.0 Earthquake Risk
 -- 4.2 Building Performance
@@ -75,39 +75,39 @@ b.sauid AS "Sauid",
 f.source_type AS "Source_Type",
 f.rupture_name AS "Rupture_Name",
 f.magnitude AS "Magnitude",
-'b0' AS "Retrofit",
+'r2' AS "Retrofit",
 CAST(SUM(b.number) AS NUMERIC) AS "BldgNumber",
-CAST(SUM(a."sD_None_b0") AS NUMERIC) AS "sD_None",
-CAST(SUM(a."sD_Slight_b0") AS NUMERIC) AS "sD_Slight",
-CAST(SUM(a."sD_Moderate_b0") AS NUMERIC) AS "sD_Moderate",
-CAST(SUM(a."sD_Extensive_b0") AS NUMERIC) AS "sD_Extensive",
-CAST(SUM(a."sD_Complete_b0") AS NUMERIC) AS "sD_Complete",
+CAST(SUM(a."sD_None_r2") AS NUMERIC) AS "sD_None",
+CAST(SUM(a."sD_Slight_r2") AS NUMERIC) AS "sD_Slight",
+CAST(SUM(a."sD_Moderate_r2") AS NUMERIC) AS "sD_Moderate",
+CAST(SUM(a."sD_Extensive_r2") AS NUMERIC) AS "sD_Extensive",
+CAST(SUM(a."sD_Complete_r2") AS NUMERIC) AS "sD_Complete",
 
 -- 4.2.2 Functional State
-CAST(SUM(a."sD_None_b0" + (a."sD_Slight_b0"*0.2) +(a."sD_Moderate_b0"*0.05)) AS NUMERIC) AS "sD_Operational",
-CAST(SUM((a."sD_Slight_b0"*0.8) + (a."sD_Moderate_b0"*0.75) + (a."sD_Extensive_b0"*0.2)) AS NUMERIC) AS "sD_Functional",
-CAST(SUM((a."sD_Moderate_b0"*0.2) + (a."sD_Extensive_b0"*0.4)) AS NUMERIC) AS "sD_Repairable",
-CAST(SUM((a."sD_Extensive_b0"*0.3) + (a."sD_Complete_b0"*0.2)) AS NUMERIC) AS "sD_Failure",
-CAST(SUM(a."sD_Collapse_b0") AS NUMERIC) AS "sD_Collapse",
+CAST(SUM(a."sD_None_r2" + (a."sD_Slight_r2"*0.2) +(a."sD_Moderate_r2"*0.05)) AS NUMERIC) AS "sD_Operational",
+CAST(SUM((a."sD_Slight_r2"*0.8) + (a."sD_Moderate_r2"*0.75) + (a."sD_Extensive_r2"*0.2)) AS NUMERIC) AS "sD_Functional",
+CAST(SUM((a."sD_Moderate_r2"*0.2) + (a."sD_Extensive_r2"*0.4)) AS NUMERIC) AS "sD_Repairable",
+CAST(SUM((a."sD_Extensive_r2"*0.3) + (a."sD_Complete_r2"*0.2)) AS NUMERIC) AS "sD_Failure",
+CAST(SUM(a."sD_Collapse_r2") AS NUMERIC) AS "sD_Collapse",
 
 -- 4.2.3 Recovery
-CAST(SUM(a."sD_None_b0" + a."sD_Slight_b0") AS NUMERIC) AS "sD_GreenTag_b",
-CAST(SUM(a."sD_None_b0" + a."sD_Slight_b0")/5 AS NUMERIC) AS "sD_GreenTag_i",
-CAST(SUM(a."sD_Extensive_b0") AS NUMERIC) AS "sD_YellowTag_d",
-CAST(SUM(a."sD_Extensive_b0")/2.5 AS NUMERIC) AS "sD_YellowTag_i",
-CAST(SUM(a."sD_Complete_b0") AS NUMERIC) AS "sD_RedTag_b",
-CAST(SUM(a."sD_Complete_b0")/5 AS NUMERIC) AS "sD_RedTag_i" ,
-CAST(SUM(a."sC_Repair_b0")/(SUM(b.number)) AS NUMERIC) AS "sC_Repair_t",
-CAST(SUM(a."sC_Construxn_b0")/(SUM(b.number)) AS NUMERIC) AS "SC_Construxn_t",
-CAST(SUM(a."sC_Downtime_b0")/(SUM(b.number)) AS NUMERIC) AS "sC_Downtime_total",
-CAST(SUM(a."sC_DebrisBW_b0") AS NUMERIC) AS "sC_Debris_bw",
-CAST(SUM(a."sC_DebrisC_b0") AS NUMERIC) AS "sC_Debris_cs",
-CAST(SUM(a."sC_DebrisBW_b0" + a."sC_DebrisC_b0") AS NUMERIC) AS "sC_Debris_total",
+CAST(SUM(a."sD_None_r2" + a."sD_Slight_r2") AS NUMERIC) AS "sD_GreenTag_b",
+CAST(SUM(a."sD_None_r2" + a."sD_Slight_r2")/5 AS NUMERIC) AS "sD_GreenTag_i",
+CAST(SUM(a."sD_Extensive_r2") AS NUMERIC) AS "sD_YellowTag_d",
+CAST(SUM(a."sD_Extensive_r2")/2.5 AS NUMERIC) AS "sD_YellowTag_i",
+CAST(SUM(a."sD_Complete_r2") AS NUMERIC) AS "sD_RedTag_b",
+CAST(SUM(a."sD_Complete_r2")/5 AS NUMERIC) AS "sD_RedTag_i" ,
+CAST(SUM(a."sC_Repair_r2")/(SUM(b.number)) AS NUMERIC) AS "sC_Repair_t",
+CAST(SUM(a."sC_Construxn_r2")/(SUM(b.number)) AS NUMERIC) AS "SC_Construxn_t",
+CAST(SUM(a."sC_Downtime_r2")/(SUM(b.number)) AS NUMERIC) AS "sC_Downtime_total",
+CAST(SUM(a."sC_DebrisBW_r2") AS NUMERIC) AS "sC_Debris_bw",
+CAST(SUM(a."sC_DebrisC_r2") AS NUMERIC) AS "sC_Debris_cs",
+CAST(SUM(a."sC_DebrisBW_r2" + a."sC_DebrisC_r2") AS NUMERIC) AS "sC_Debris_total",
 
 i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -121,8 +121,8 @@ LEFT JOIN lut.sovi_index_canada k ON b.sauid = k.sauidt
 GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,i.geom,i.geompoint;
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_affected_people_sauid;
-CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_affected_people_sauid AS 
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_affected_people_sauid;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_affected_people_sauid AS 
 
 -- 4.0 Earthquake Risk
 -- 4.3 Afected People
@@ -133,82 +133,82 @@ b.sauid AS "Sauid",
 f.source_type AS "Source_Type",
 f.rupture_name AS "Rupture_Name",
 f.magnitude AS "Magnitude",
-'b0' AS "Retrofit",
+'r2' AS "Retrofit",
 CAST(h.censuspop AS NUMERIC) AS "CensusPop",
-CAST(SUM(a."sL_Fatalities_b0") AS NUMERIC) AS "sL_Fatality",
-CAST(SUM(a."sC_CasDayL1_b0") AS NUMERIC) AS "sC_CasDay_min",
-CAST(SUM(a."sC_CasDayL2_b0") AS NUMERIC) AS "sC_CasDay_mod",
-CAST(SUM(a."sC_CasDayL3_b0") AS NUMERIC) AS "sC_CasDay_ser",
-CAST(SUM(a."sC_CasDayL4_b0") AS NUMERIC) AS "sC_CasDay_crit",
-CAST(SUM(a."sC_CasNightL1_b0") AS NUMERIC) AS "sC_CasNit_min",
-CAST(SUM(a."sC_CasNightL2_b0") AS NUMERIC) AS "sC_CasNit_mod",
-CAST(SUM(a."sC_CasNightL3_b0") AS NUMERIC) AS "sC_CasNit_ser",
-CAST(SUM(a."sC_CasNightL4_b0") AS NUMERIC) AS "sC_CasNit_crit",
-CAST(SUM(a."sC_CasTransitL1_b0") AS NUMERIC) AS "sC_CasTrn_min",
-CAST(SUM(a."sC_CasTransitL2_b0") AS NUMERIC) AS "sC_CasTrn_mod",
-CAST(SUM(a."sC_CasTransitL3_b0") AS NUMERIC) AS "sC_CasTrn_ser",
-CAST(SUM(a."sC_CasTransitL4_b0") AS NUMERIC) AS "sC_CasTrn_crit",
+CAST(SUM(a."sL_Fatalities_r2") AS NUMERIC) AS "sL_Fatality",
+CAST(SUM(a."sC_CasDayL1_r2") AS NUMERIC) AS "sC_CasDay_min",
+CAST(SUM(a."sC_CasDayL2_r2") AS NUMERIC) AS "sC_CasDay_mod",
+CAST(SUM(a."sC_CasDayL3_r2") AS NUMERIC) AS "sC_CasDay_ser",
+CAST(SUM(a."sC_CasDayL4_r2") AS NUMERIC) AS "sC_CasDay_crit",
+CAST(SUM(a."sC_CasNightL1_r2") AS NUMERIC) AS "sC_CasNit_min",
+CAST(SUM(a."sC_CasNightL2_r2") AS NUMERIC) AS "sC_CasNit_mod",
+CAST(SUM(a."sC_CasNightL3_r2") AS NUMERIC) AS "sC_CasNit_ser",
+CAST(SUM(a."sC_CasNightL4_r2") AS NUMERIC) AS "sC_CasNit_crit",
+CAST(SUM(a."sC_CasTransitL1_r2") AS NUMERIC) AS "sC_CasTrn_min",
+CAST(SUM(a."sC_CasTransitL2_r2") AS NUMERIC) AS "sC_CasTrn_mod",
+CAST(SUM(a."sC_CasTransitL3_r2") AS NUMERIC) AS "sC_CasTrn_ser",
+CAST(SUM(a."sC_CasTransitL4_r2") AS NUMERIC) AS "sC_CasTrn_crit",
 
 -- 4.3.2 Social Disruption
-CAST(SUM(CASE WHEN a."sC_Downtime_b0" > 3 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
-((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" / b.number ELSE 0 END)))) + 
+CAST(SUM(CASE WHEN a."sC_Downtime_r2" > 3 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
+((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_r2" / b.number ELSE 0 END)))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) *
-((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_b0" / b.number ELSE 0 END))))) * 
+((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_r2" / b.number ELSE 0 END))))) * 
 (h.censusdu / NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) + 
 (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DHshld_3",
 
-CAST(SUM(CASE WHEN a."sC_Downtime_b0" > 30 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
-((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" / b.number ELSE 0 END)))) + 
+CAST(SUM(CASE WHEN a."sC_Downtime_r2" > 30 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
+((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_r2" / b.number ELSE 0 END)))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) *
-((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_b0" / b.number ELSE 0 END))))) * 
+((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_r2" / b.number ELSE 0 END))))) * 
 (h.censusdu / NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) + 
 (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DHshld_30",
 
-CAST(SUM(CASE WHEN a."sC_Downtime_b0" > 90 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
-((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" / b.number ELSE 0 END)))) + 
+CAST(SUM(CASE WHEN a."sC_Downtime_r2" > 90 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
+((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_r2" / b.number ELSE 0 END)))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) *
-((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_b0" / b.number ELSE 0 END))))) * 
+((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_r2" / b.number ELSE 0 END))))) * 
 (h.censusdu / NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) + 
 (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DHshld_90",
 
-CAST(SUM(CASE WHEN a."sC_Downtime_b0" > 180 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
-((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" / b.number ELSE 0 END)))) + 
+CAST(SUM(CASE WHEN a."sC_Downtime_r2" > 180 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
+((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_r2" / b.number ELSE 0 END)))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) *
-((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_b0" / b.number ELSE 0 END))))) * 
+((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_r2" / b.number ELSE 0 END))))) * 
 (h.censusdu / NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) + 
 (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DHshld_180",
 
-CAST(SUM(CASE WHEN a."sC_Downtime_b0" > 360 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
-((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" / b.number ELSE 0 END)))) + 
+CAST(SUM(CASE WHEN a."sC_Downtime_r2" > 360 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
+((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_r2" / b.number ELSE 0 END)))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) *
-((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_b0" / b.number ELSE 0 END))))) * 
+((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_r2" / b.number ELSE 0 END))))) * 
 (h.censusdu / NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) + 
 (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DHshld_360",
 
-CAST(SUM(a."sC_DisrupEmpl_30_b0") AS NUMERIC) AS "sC_DBiz_30",
-CAST(SUM(a."sC_DisrupEmpl_90_b0") AS NUMERIC) AS "sC_DBiz_90",
-CAST(SUM(a."sC_DisrupEmpl_180_b0") AS NUMERIC) AS "sC_DBiz_180",
-CAST(SUM(a."sC_DisrupEmpl_360_b0") AS NUMERIC) AS "sC_DBiz_360",
+CAST(SUM(a."sC_DisrupEmpl_30_r2") AS NUMERIC) AS "sC_DBiz_30",
+CAST(SUM(a."sC_DisrupEmpl_90_r2") AS NUMERIC) AS "sC_DBiz_90",
+CAST(SUM(a."sC_DisrupEmpl_180_r2") AS NUMERIC) AS "sC_DBiz_180",
+CAST(SUM(a."sC_DisrupEmpl_360_r2") AS NUMERIC) AS "sC_DBiz_360",
 
 CAST(((0.73 * COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
 COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
@@ -218,13 +218,13 @@ COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) +
 (0.27 * COALESCE(j.imm_lt5 * 0.24,0) + COALESCE(j.live_alone * 0.48,0) + COALESCE(j.no_engfr * 0.47,0) + COALESCE(j.lonepar3kids * 0.26,0) +
 COALESCE(j.indigenous * 0.26,0))) *
 (COALESCE(((SUM(COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) * 
-((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" / b.number ELSE 0 END)))) + 
+((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.5 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_r2" / b.number ELSE 0 END)))) + 
 ((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END) *
-((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_b0" / b.number ELSE 0 END))))) * 
+((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
+(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_r2" / b.number ELSE 0 END))))) * 
 (h.censusdu / NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/h.people_du ELSE 0 END) + 
 (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/h.people_du ELSE 0 END),0)),0))) * h.censuspop) / NULLIF(h.censusdu,0),0)) *
 (COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
@@ -240,7 +240,7 @@ COALESCE(j.indigenous * 0.26,0)) *
 i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -255,8 +255,8 @@ GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,h.censuspop,h.censusdu
 j.lonepar3kids,j.indigenous,j.renter,j.age_lt6,j.age_gt65,i.geom,i.geompoint;
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_0_b0_economic_security_sauid;
-CREATE VIEW results.dsra_sim6p8_cr2022_rlz_0_b0_economic_security_sauid AS 
+DROP VIEW IF EXISTS results.dsra_sim6p8_cr2022_rlz_2_r2_economic_security_sauid;
+CREATE VIEW results.dsra_sim6p8_cr2022_rlz_2_r2_economic_security_sauid AS 
 
 -- 4.0 Earthquake Risk
 -- 4.4 Economic Security
@@ -267,20 +267,20 @@ b.sauid AS "Sauid",
 f.source_type AS "Source_Type",
 f.rupture_name AS "Rupture_Name",
 f.magnitude AS "Magnitude",
-'b0' AS "Retrofit",
+'r2' AS "Retrofit",
 CAST(SUM(b.structural + b.nonstructural + b.contents) AS NUMERIC) AS "AssetCostT",
 CAST(SUM(b.structural + b.nonstructural) AS NUMERIC) AS "BldgCostT",
-CAST((COALESCE((AVG(a."sL_Str_b0" + a."sL_NStr_b0"))/ NULLIF(AVG((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0")),0),0)) AS NUMERIC) AS "sL_LossRatio",
-CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") AS NUMERIC) AS "sL_AssetLoss",
-CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0") AS NUMERIC) AS "sL_BldgLoss",
-CAST(SUM(a."sL_Str_b0") AS NUMERIC) AS "sL_StrLoss",
-CAST(SUM(a."sL_NStr_b0") AS NUMERIC) AS "sL_NStrLoss",
-CAST(SUM(a."sL_Cont_b0") AS NUMERIC) AS "sL_ContLoss",
+CAST((COALESCE((AVG(a."sL_Str_r2" + a."sL_NStr_r2"))/ NULLIF(AVG((a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")),0),0)) AS NUMERIC) AS "sL_LossRatio",
+CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2") AS NUMERIC) AS "sL_AssetLoss",
+CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2") AS NUMERIC) AS "sL_BldgLoss",
+CAST(SUM(a."sL_Str_r2") AS NUMERIC) AS "sL_StrLoss",
+CAST(SUM(a."sL_NStr_r2") AS NUMERIC) AS "sL_NStrLoss",
+CAST(SUM(a."sL_Cont_r2") AS NUMERIC) AS "sL_ContLoss",
 
 i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
-FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+FROM dsra.dsra_sim6p8_cr2022_rlz_2 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
 LEFT JOIN lut.vs30_bc_site_model_xref d ON a."AssetID" = d.id
@@ -292,4 +292,3 @@ LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN lut.sovi_census_canada j ON b.sauid = j.sauidt
 LEFT JOIN lut.sovi_index_canada k ON b.sauid = k.sauidt
 GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,i.geom,i.geompoint;
-

@@ -1,0 +1,18 @@
+-- create physical exposure indicators
+DROP VIEW IF EXISTS results.canada_exposure_people_building CASCADE;
+CREATE VIEW results.canada_exposure_people_building AS 
+
+-- 2.0 Physical Exposure
+-- 2.3 Buildings
+
+-- 2.3.1 Building Occupancy
+SELECT 
+a.id AS "AssetID",
+CAST(a.day AS NUMERIC) AS "DayPop",
+CAST(a.night AS NUMERIC) AS "NightPop",
+CAST(a.transit AS NUMERIC) AS "TransitPop",
+
+a.geom AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";

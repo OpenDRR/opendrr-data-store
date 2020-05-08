@@ -1,0 +1,36 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_flood_hazard_threat_building_function CASCADE;
+CREATE VIEW results.mh_threat_flood_hazard_threat_building_function AS 
+
+-- 6.1 Flood Hazard
+-- 6.1.2 Flood Hazard Threat
+-- 6.1.2.1 Building Function
+SELECT 
+a.sauid,
+COALESCE(CAST((c.fl1000 - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Fl1000_n",
+90 AS "Fl500t", -- 500yr Flood Hazard threshold
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(a.number) ELSE 0 END AS NUMERIC),0) AS "BldgNumT_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_LD_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_MD_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "RES_HD_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.genocc ='Commercial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Comm_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.genocc ='Industrial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Ind_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Civic_Flt",
+
+COALESCE(CAST(CASE WHEN c.fl500 >= 90 THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "Agr_Flt",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,c.fl500,c.fl1000,d.geom,d.geompoint;

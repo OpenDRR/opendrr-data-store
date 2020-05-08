@@ -1,0 +1,50 @@
+COPY (SELECT
+a.sauid,
+a."MH_Intensity",
+a."Cy100",
+a."Cy100n",
+a."Cy250",
+a."Cy250n",
+a."Cy500",
+a."Cy500n",
+a."Cy500t",
+a."Cy1000",
+a."Cy1000n",
+c."BldgNumT_Cyt",
+c."RES_LD_Cyt",
+c."RES_MD_Cyt",
+c."RES_HD_Cyt",
+c."Comm_Cyt",
+c."Ind_Cyt",
+c."Civic_Cyt",
+c."Agr_Cyt",
+d."Wood_Cyt",
+d."Concrete_Cyt",
+d."PreCast_Cyt",
+d."RMasonry_Cyt",
+d."URMasonry_Cyt",
+d."Steel_Cyt",
+d."Manufactured_Cyt",
+d."PreCode_Cyt",
+d."LowCode_Cyt",
+d."ModCode_Cyt",
+d."HiCode_Cyt",
+e."CensusPop_Cyt",
+e."DayPopT_Cyt",
+e."NightPopT_Cyt",
+e."TransitPopT_Cyt",
+e."SF_Hshlds_Cyt",
+e."MF_Hshlds_Cyt",
+f."AssetCostT_Cyt",
+f."BldgCostT_Cyt",
+f."StrCostT_Cyt",
+f."NStrCostT_Cyt",
+f."ContCostT_Cyt"
+
+FROM results.mh_threat_cyclone_hazard_intensity_cyclone_wind_speed_view a
+INNER JOIN results.mh_threat_cyclone_hazard_threat_building_function_view c ON a.sauid = c.sauid
+INNER JOIN results.mh_threat_cyclone_hazard_threat_building_construction_view d ON a.sauid = d.sauid
+INNER JOIN results.mh_threat_cyclone_hazard_threat_people_view e on a.sauid = e.sauid
+INNER JOIN results.mh_threat_cyclone_hazard_threat_assets_view f on a.sauid = f.sauid)
+
+TO 'D:\workspace\data\v2\Indicators\csv\mh_intensity_view_cyclone_hazard.csv' DELIMITER ',' CSV HEADER;

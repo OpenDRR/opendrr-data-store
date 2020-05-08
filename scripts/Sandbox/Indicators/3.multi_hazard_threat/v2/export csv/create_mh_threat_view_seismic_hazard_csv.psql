@@ -1,0 +1,54 @@
+COPY (SELECT
+a.sauid,
+a."MHInt",
+a."PGV",
+a."PGVn",
+a."PGA",
+a."PGAn",
+a."PGAt",
+b."MMI6",
+b."MMI6n",
+b."MMI7",
+b."MMI7n",
+b."MMI7t",
+b."MMI8",
+b."MMI8n",
+c."BldgNumT_Eqt",
+c."RES_LD_Eqt",
+c."RES_MD_Eqt",
+c."RES_HD_Eqt",
+c."Comm_Eqt",
+c."Ind_Eqt",
+c."Civic_Eqt",
+c."Agr_Eqt",
+d."Wood_Eqt",
+d."Concrete_Eqt",
+d."PreCast_Eqt",
+d."RMasonry_Eqt",
+d."URMasonry_Eqt",
+d."Steel_Eqt",
+d."Manufactured_Eqt",
+d."PreCode_Eqt",
+d."LowCode_Eqt",
+d."ModCode_Eqt",
+d."HiCode_Eqt",
+e."CensusPop_Eqt",
+e."DayPopT_Eqt",
+e."NightPopT_Eqt",
+e."TransitPopT_Eqt",
+e."SF_Hshlds_Eqt",
+e."MF_Hshlds_Eqt",
+f."AssetCostT_Eqt",
+f."BldgCostT_Eqt",
+f."StrCostT_Eqt",
+f."NStrCostT_Eqt",
+f."ContCostT_Eqt"
+
+FROM results.mh_threat_seismic_hazard_intensity_ground_shaking_view a
+INNER JOIN results.mh_threat_seismic_hazard_intensity_mmi_likelihood_view b ON a.sauid = b.sauid
+INNER JOIN results.mh_threat_seismic_hazard_threat_building_function_view c ON a.sauid = c.sauid
+INNER JOIN results.mh_threat_seismic_hazard_threat_building_construction_view d ON a.sauid = d.sauid
+INNER JOIN results.mh_threat_seismic_hazard_threat_people_view e on a.sauid = e.sauid
+INNER JOIN results.mh_threat_seismic_hazard_threat_assets_view f on a.sauid = f.sauid)
+
+TO 'D:\workspace\data\v2\Indicators\csv\mh_intensity_view_seismic_hazard.csv' DELIMITER ',' CSV HEADER;

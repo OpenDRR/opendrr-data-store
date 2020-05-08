@@ -1,0 +1,45 @@
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results.mh_threat_mh_people CASCADE;
+CREATE VIEW results.mh_threat_mh_people AS 
+
+-- 3.1 Multi-Hazard
+-- 3.1.2 Multi-Hazard Threat
+-- 3.1.2.3 People
+SELECT 
+a.sauid,
+COALESCE(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "MHInt",
+-- 0.028 AS "MHInt_t", -- Multi-Hazard Intensity threshold
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN c.censuspop ELSE 0 END AS NUMERIC),0) 
+AS "CensusPop_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(a.day) ELSE 0 END AS NUMERIC),0) 
+AS "DayPopT_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(a.night) ELSE 0 END AS NUMERIC),0) 
+AS "NightPopT_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(a.transit) ELSE 0 END AS NUMERIC),0) 
+AS "TransitPopT_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / c.people_du ELSE 0 END AS NUMERIC),0) 
+AS "SF_Hshlds_mht",
+
+COALESCE(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
+(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= 0.028 THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + 
+SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / c.people_du ELSE 0 END AS NUMERIC),0) 
+AS "MF_Hshlds_mht",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+GROUP BY a.sauid,b.mh_sum,c.censuspop,c.censusdu,c.people_du,d.geom,d.geompoint;
