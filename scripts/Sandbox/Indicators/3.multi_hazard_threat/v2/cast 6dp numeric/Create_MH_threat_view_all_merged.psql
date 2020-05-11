@@ -1,10 +1,11 @@
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_mh_building_function_view CASCADE;
-CREATE VIEW results.mh_threat_mh_building_function_view AS 
+DROP VIEW IF EXISTS results.mh_threat_mh_sauid CASCADE;
+CREATE VIEW results.mh_threat_mh_sauid AS 
 
 -- 3.1 Multi-Hazard
 -- 3.1.2 Multi-Hazard Threat
 -- 3.1.2.1 Building Function 
+
 SELECT 
 a.sauid,
 COALESCE(CAST(CAST(ROUND(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MHInt",
@@ -41,30 +42,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.
 (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) 
 AS "Agr_mht",
 
-c.geom AS "geom_poly",
-c.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN boundaries."Geometry SAUID" c on a.sauid = c."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.geom,c.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_mh_building_construction_view CASCADE;
-CREATE VIEW results.mh_threat_mh_building_construction_view AS 
-
--- 3.1 Multi-Hazard
--- 3.1.2 Multi-Hazard Threat
 -- 3.1.2.2 Building Construction
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MHInt",
-(SELECT "MHInt_t" FROM lut.mh_thresholds) AS "MHInt_t", -- Multi-Hazard Intensity threshold
-
-COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
-(SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_mht",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
 (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) 
 AS "Wood_mht",
@@ -109,27 +87,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.
 (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) 
 AS "HiCode_mht",
 
-c.geom AS "geom_poly",
-c.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN boundaries."Geometry SAUID" c on a.sauid = c."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.geom,c.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_mh_people_view CASCADE;
-CREATE VIEW results.mh_threat_mh_people_view AS 
-
--- 3.1 Multi-Hazard
--- 3.1.2 Multi-Hazard Threat
 -- 3.1.2.3 People
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MHInt",
-(SELECT "MHInt_t" FROM lut.mh_thresholds) AS "MHInt_t", -- Multi-Hazard Intensity threshold
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
 (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN c.censuspop ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) 
 AS "CensusPop_mht",
@@ -155,28 +113,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.
 SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / c.people_du ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) 
 AS "MF_Hshlds_mht",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.censuspop,c.censusdu,c.people_du,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_mh_assets_view CASCADE;
-CREATE VIEW results.mh_threat_mh_assets_view AS 
-
--- 3.1 Multi-Hazard
--- 3.1.2 Multi-Hazard Threat
 -- 3.1.2.4 Assets
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MHInt",
-(SELECT "MHInt_t" FROM lut.mh_thresholds) AS "MHInt_t", -- Multi-Hazard Intensity threshold
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN ((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - 
 (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0)) >= (SELECT "MHInt_t" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) 
 AS "AssetCostT_mht",
@@ -202,14 +139,13 @@ d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
 LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
---LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,d.geom,d.geompoint;
-
+GROUP BY a.sauid,b.mh_sum,c.censuspop,c.people_du,d.geom,d.geompoint;
 
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_seismic_hazard_intensity_ground_shaking_view CASCADE;
-CREATE VIEW results.mh_threat_seismic_hazard_intensity_ground_shaking_view AS 
+DROP VIEW IF EXISTS results.mh_threat_seismic_hazard_sauid CASCADE;
+CREATE VIEW results.mh_threat_seismic_hazard_sauid AS 
 
 -- 4.1 Seismic Hazard
 -- 4.1.1 Seismic Hazard Intensity
@@ -223,27 +159,7 @@ CAST(CAST(ROUND(CAST(c.pga AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "PGA",
 COALESCE(CAST(CAST(ROUND(CAST((c.pga - (SELECT pga_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pga_max FROM lut.mh_intensity_canada_minmax) - (SELECT pga_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "PGAn",
 (SELECT "PGAt" FROM lut.mh_thresholds) AS "PGAt", -- Peak Ground Acceleration threshold
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.pgv,c.pga,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_seismic_hazard_intensity_mmi_likelihood_view CASCADE;
-CREATE VIEW results.mh_threat_seismic_hazard_intensity_mmi_likelihood_view AS 
-
--- 4.1 Seismic Hazard
--- 4.1.1 Seismic Hazard Intensity
 -- 4.1.1.2 MMI Likelihood (50yr)
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.pga - (SELECT pga_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pga_max FROM lut.mh_intensity_canada_minmax) - (SELECT pga_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "PGAn",
-
 CAST(CAST(ROUND(CAST(c.mmi6 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "MMI6",
 COALESCE(CAST(CAST(ROUND(CAST((c.mmi6 - (SELECT mmi6_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mmi6_max FROM lut.mh_intensity_canada_minmax) - (SELECT mmi6_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MMI6n",
 
@@ -254,27 +170,7 @@ COALESCE(CAST(CAST(ROUND(CAST((c.mmi7 - (SELECT mmi7_min FROM lut.mh_intensity_c
 CAST(CAST(ROUND(CAST(c.mmi8 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "MMI8",
 COALESCE(CAST(CAST(ROUND(CAST((c.mmi8 - (SELECT mmi8_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mmi8_max FROM lut.mh_intensity_canada_minmax) - (SELECT mmi8_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MMI8n",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.pga,c.mmi6,c.mmi7,c.mmi8,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_seismic_hazard_threat_building_function_view CASCADE;
-CREATE VIEW results.mh_threat_seismic_hazard_threat_building_function_view AS 
-
--- 4.1 Seismic Hazard
--- 4.1.2 Seismic Hazard Threat
 -- 4.1.2.1 Building Function
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.pga - (SELECT pga_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pga_max FROM lut.mh_intensity_canada_minmax) - (SELECT pga_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "PGAn",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Eqt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "RES_LD_Eqt",
@@ -291,29 +187,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thre
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Agr_Eqt",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.pga,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_seismic_hazard_threat_building_construction_view CASCADE;
-CREATE VIEW results.mh_threat_seismic_hazard_threat_building_construction_view AS 
-
--- 4.1 Seismic Hazard Threat
--- 4.1.2 Seismic Hazard Threat
 -- 4.1.2.2 Building Construction
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.pga - (SELECT pga_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pga_max FROM lut.mh_intensity_canada_minmax) - (SELECT pga_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "PGAn",
-
-COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Eqt",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Wood_Eqt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Concrete_Eqt",
@@ -336,27 +210,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thre
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "HiCode_Eqt",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.pga,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_seismic_hazard_threat_people_view CASCADE;
-CREATE VIEW results.mh_threat_seismic_hazard_threat_people_view AS 
-
--- 4.1 Seismic Hazard Threat
--- 4.1.2 Seismic Hazard Threat
 -- 4.1.2.3 People
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.pga - (SELECT pga_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pga_max FROM lut.mh_intensity_canada_minmax) - (SELECT pga_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "PGAn",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN e.censuspop ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "CensusPop_Eqt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(a.day) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "DayPopT_Eqt",
@@ -370,28 +224,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thre
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
 e.people_du ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MF_Hshlds_Eqt",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.pga,e.censuspop,e.people_du,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_seismic_hazard_threat_assets_view CASCADE;
-CREATE VIEW results.mh_threat_seismic_hazard_threat_assets_view AS 
-
--- 4.1 Seismic Hazard Threat
--- 4.1.2 Seismic Hazard Threat
 -- 4.1.2.4 Assets
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.pga - (SELECT pga_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pga_max FROM lut.mh_intensity_canada_minmax) - (SELECT pga_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "PGAn",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "AssetCostT_Eqt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.pga >= (SELECT "PGAt" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgCostT_Eqt",
@@ -406,15 +239,15 @@ d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.pga,d.geom,d.geompoint;
-
+LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
+GROUP BY a.sauid,b.mh_sum,c.pgv,c.pga,C.mmi6,c.mmi7,c.mmi8,e.censuspop,e.people_du,d.geom,d.geompoint;
 
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_tsunami_hazard_intensity_tsunami_innundation_view CASCADE;
-CREATE VIEW results.mh_threat_tsunami_hazard_intensity_tsunami_innundation_view AS 
+DROP VIEW IF EXISTS results.mh_threat_tsunami_hazard_sauid CASCADE;
+CREATE VIEW results.mh_threat_tsunami_hazard_sauid AS 
 
 -- 5.1 Tsunami Hazard
 -- 5.1.1 Tsunami Hazard Intensity
@@ -426,27 +259,7 @@ CAST(CAST(ROUND(CAST(c.tsun_ha AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Tsun",
 COALESCE(CAST(CAST(ROUND(CAST((c.tsun_ha - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM lut.mh_intensity_canada_minmax) - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Tsun_n",
 (SELECT "Tsun_t" FROM lut.mh_thresholds) AS "Tsun_t", -- Tsunami Hazard threshold
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.tsun_ha,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_tsunami_hazard_threat_building_function_view CASCADE;
-CREATE VIEW results.mh_threat_tsunami_hazard_threat_building_function_view AS 
-
--- 5.1 Tsunami Hazard
--- 5.1.2 Tsunami Hazard Threat
 -- 5.1.2.1 Building Function
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.tsun_ha - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM lut.mh_intensity_canada_minmax) - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Tsun_n",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Tst",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "RES_LD_Tst",
@@ -463,29 +276,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.m
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Agr_Tst",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.tsun_ha,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_tsunami_hazard_threat_building_construction_view CASCADE;
-CREATE VIEW results.mh_threat_tsunami_hazard_threat_building_construction_view AS 
-
--- 5.1 Tsunami Hazard
--- 5.1.2 Tsunami Hazard Threat
 -- 5.1.2.2 Building Construction
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.tsun_ha - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM lut.mh_intensity_canada_minmax) - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Tsun_n",
-
-COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Tst",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Wood_Tst",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Concrete_Tst",
@@ -508,27 +299,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.m
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "HiCode_Tst",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.tsun_ha,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_tsunami_hazard_threat_people_view CASCADE;
-CREATE VIEW results.mh_threat_tsunami_hazard_threat_people_view AS 
-
--- 5.1 Tsunami Hazard
--- 5.1.2 Tsunami Hazard Threat
 -- 5.1.2.3 People
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.tsun_ha - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM lut.mh_intensity_canada_minmax) - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Tsun_n",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN e.censuspop ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "CensusPop_Tst",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(a.day) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "DayPopT_Tst",
@@ -542,28 +313,8 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.m
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
 e.people_du ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MF_Hshlds_Tst",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
 
-FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.tsun_ha,e.censuspop,e.people_du,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_tsunami_hazard_threat_assets_view CASCADE;
-CREATE VIEW results.mh_threat_tsunami_hazard_threat_assets_view AS 
-
--- 5.1 Tsunami Hazard
--- 5.1.2 Tsunami Hazard Threat
 -- 5.1.2.4 Assets
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.tsun_ha - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM lut.mh_intensity_canada_minmax) - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Tsun_n",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "AssetCostT_Tst",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.tsun_ha >= (SELECT "Tsun_t" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgCostT_Tst",
@@ -578,15 +329,15 @@ d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.tsun_ha,d.geom,d.geompoint;
-
+LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
+GROUP BY a.sauid,b.mh_sum,c.tsun_ha,e.censuspop,e.people_du,d.geom,d.geompoint;
 
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_flood_hazard_intensity_riverine_flood_depth_view CASCADE;
-CREATE VIEW results.mh_threat_flood_hazard_intensity_riverine_flood_depth_view AS 
+DROP VIEW IF EXISTS results.mh_threat_flood_hazard_sauid CASCADE;
+CREATE VIEW results.mh_threat_flood_hazard_sauid AS 
 
 -- 6.1 Flood Hazard
 -- 6.1.1 Flood Hazard Intensity
@@ -602,28 +353,7 @@ COALESCE(CAST(CAST(ROUND(CAST((c.fl500 - (SELECT fl500_min FROM lut.mh_intensity
 CAST(CAST(ROUND(CAST(c.fl1000 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Fl1000",
 COALESCE(CAST(CAST(ROUND(CAST((c.fl1000 - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Fl1000_n",
 
-
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.fl200,c.fl500,c.fl1000,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_flood_hazard_threat_building_function_view CASCADE;
-CREATE VIEW results.mh_threat_flood_hazard_threat_building_function_view AS 
-
--- 6.1 Flood Hazard
--- 6.1.2 Flood Hazard Threat
 -- 6.1.2.1 Building Function
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.fl1000 - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Fl1000_n",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Flt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "RES_LD_Flt",
@@ -640,29 +370,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Agr_Flt",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.fl500,c.fl1000,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_flood_hazard_threat_building_construction_view CASCADE;
-CREATE VIEW results.mh_threat_flood_hazard_threat_building_construction_view AS 
-
--- 6.1 Flood Hazard
--- 6.1.2 Flood Hazard Threat
 -- 6.1.2.2 Building Construction
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.fl1000 - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Fl1000_n",
-
-COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Flt",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Wood_Flt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Concrete_Flt",
@@ -685,27 +393,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "HiCode_Flt",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.fl500,c.fl1000,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_flood_hazard_threat_people_view CASCADE;
-CREATE VIEW results.mh_threat_flood_hazard_threat_people_view AS 
-
--- 6.1 Flood Hazard
--- 6.1.2 Flood Hazard Threat
 -- 6.1.2.3 People
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.fl1000 - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Fl1000_n",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN e.censuspop ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "CensusPop_Flt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(a.day) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "DayPopT_Flt",
@@ -719,28 +407,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
 e.people_du ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MF_Hshlds_Flt",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.fl500,c.fl1000,e.censuspop,e.people_du,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_flood_hazard_threat_assets_view CASCADE;
-CREATE VIEW results.mh_threat_flood_hazard_threat_assets_view AS 
-
--- 6.1 Flood Hazard
--- 6.1.2 Flood Hazard Threat
 -- 6.1.2.4 Assets
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.fl1000 - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Fl1000_n",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "AssetCostT_Flt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fl500 >= (SELECT "Fl500t" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgCostT_Flt",
@@ -755,16 +422,15 @@ d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
 LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.fl500,c.fl1000,e.censuspop,e.people_du,d.geom,d.geompoint;
-
+GROUP BY a.sauid,b.mh_sum,c.fl200,c.fl500,c.fl1000,e.censuspop,e.people_du,d.geom,d.geompoint;
 
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_intensity_debris_flow_sucsceptibility_view CASCADE;
-CREATE VIEW results.mh_threat_landslide_hazard_intensity_debris_flow_sucsceptibility_view AS 
+DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_sauid CASCADE;
+CREATE VIEW results.mh_threat_landslide_hazard_sauid AS 
 
 -- 7.1 Landslide Hazard
 -- 7.1.1 Landslide Hazard Intensity
@@ -776,27 +442,7 @@ CAST(CAST(ROUND(CAST(c.lndsus AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "LndSus",
 COALESCE(CAST(CAST(ROUND(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "LndSusn",
 (SELECT "LndSust" FROM lut.mh_thresholds) AS "LndSust", -- Landslide Susceptibility Threshold
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.lndsus,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_threat_building_function_view CASCADE;
-CREATE VIEW results.mh_threat_landslide_hazard_threat_building_function_view AS 
-
--- 7.1 Landslide Hazard
--- 7.1.2 Landslide Hazard Threat
 -- 7.1.2.1 Building Function
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "LndSusn",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Lst",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "RES_LD_Lst",
@@ -813,29 +459,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.m
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Agr_Lst",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.lndsus,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_threat_building_construction_view CASCADE;
-CREATE VIEW results.mh_threat_landslide_hazard_threat_building_construction_view AS 
-
--- 7.1 Landslide Hazard
--- 7.1.2 Landslide Hazard Threat
 -- 7.1.2.2 Building Construction
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "LndSusn",
-
-COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Lst",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Wood_Lst",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Concrete_Lst",
@@ -858,27 +482,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.m
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "HiCode_Lst",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.lndsus,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_threat_people_view CASCADE;
-CREATE VIEW results.mh_threat_landslide_hazard_threat_people_view AS 
-
--- 7.1 Landslide Hazard
--- 7.1.2 Landslide Hazard Threat
 -- 7.1.2.3 People
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "LndSusn",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN e.censuspop ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "CensusPop_Lst",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(a.day) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "DayPopT_Lst",
@@ -892,28 +496,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.m
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
 e.people_du ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MF_Hshlds_Lst",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.lndsus,e.censuspop,e.people_du,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_landslide_hazard_threat_assets_view CASCADE;
-CREATE VIEW results.mh_threat_landslide_hazard_threat_assets_view AS 
-
--- 7.1 Landslide Hazard
--- 7.1.2 Landslide Hazard Threat
 -- 7.1.2.4 Assets
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "LndSusn",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "AssetCostT_Lst",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.lndsus >= (SELECT "LndSust" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgCostT_Lst",
@@ -928,16 +511,15 @@ d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
 LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.lndsus,e.censuspop,e.people_du,d.geom,d.geompoint;
-
+GROUP BY a.sauid,b.mh_sum,c.lndsus,e.censuspop,e.people_du,d.geom,d.geompoint;
 
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_wildfire_intensity_head_fire_intensity_view CASCADE;
-CREATE VIEW results.mh_threat_wildfire_intensity_head_fire_intensity_view AS 
+DROP VIEW IF EXISTS results.mh_threat_wildfire_hazard_sauid CASCADE;
+CREATE VIEW results.mh_threat_wildfire_hazard_sauid AS 
 
 -- 8.1 Wildfire Hazard
 -- 8.1.1 Wildfire Intensity
@@ -947,29 +529,9 @@ a.sauid,
 COALESCE(CAST(CAST(ROUND(CAST((b.mh_sum - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM lut.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MH_Intensity",
 CAST(CAST(ROUND(CAST(c.fire AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Fire",
 COALESCE(CAST(CAST(ROUND(CAST((c.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Firen",
-2000 AS "Firet", -- Wildfire Intensity Threshold
+(SELECT "Firet" FROM lut.mh_thresholds) AS "Firet", -- Wildfire Intensity Threshold
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.fire,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_wildfire_threat_building_function_view CASCADE;
-CREATE VIEW results.mh_threat_wildfire_threat_building_function_view AS 
-
--- 8.1 Wildfire Hazard
--- 8.1.2 Wildfire Threat
 -- 8.1.2.1 Building Function
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Firen",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Fit",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "RES_LD_Fit",
@@ -986,29 +548,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_th
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Agr_Fit",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.fire,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_wildfire_threat_building_construction_view CASCADE;
-CREATE VIEW results.mh_threat_wildfire_threat_building_construction_view AS 
-
--- 8.1 Wildfire Hazard
--- 8.1.2 Wildfire Threat
 -- 8.1.2.2 Building Construction
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Firen",
-
-COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Fit",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Wood_Fit",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Concrete_Fit",
@@ -1031,27 +571,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_th
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "HiCode_Fit",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.fire,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_wildfire_threat_people_view CASCADE;
-CREATE VIEW results.mh_threat_wildfire_threat_people_view AS 
-
--- 8.1 Wildfire Hazard
--- 8.1.2 Wildfire Threat
 -- 8.1.2.3 People
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Firen",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN e.censuspop ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "CensusPop_Fit",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(a.day) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "DayPopT_Fit",
@@ -1065,28 +585,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_th
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
 e.people_du ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MF_Hshlds_Fit",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.fire,e.censuspop,e.people_du,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_wildfire_threat_assets_view CASCADE;
-CREATE VIEW results.mh_threat_wildfire_threat_assets_view AS 
-
--- 8.1 Wildfire Hazard
--- 8.1.2 Wildfire Threat
 -- 8.1.2.4 Assets
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Firen",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "AssetCostT_Fit",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgCostT_Fit",
@@ -1097,20 +596,20 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_th
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.fire >= (SELECT "Firet" FROM lut.mh_thresholds) THEN SUM(a.contents) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "ContCostT_Fit",
 
+
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
 LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.fire,e.censuspop,e.people_du,d.geom,d.geompoint;
-
+GROUP BY a.sauid,b.mh_sum,c.fire,e.censuspop,e.people_du,d.geom,d.geompoint;
 
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_cyclone_hazard_intensity_cyclone_wind_speed_view CASCADE;
-CREATE VIEW results.mh_threat_cyclone_hazard_intensity_cyclone_wind_speed_view AS 
+DROP VIEW IF EXISTS results.mh_threat_cyclone_hazard_sauid CASCADE;
+CREATE VIEW results.mh_threat_cyclone_hazard_sauid AS 
 
 -- 9.1 Cyclone Hazard
 -- 9.1.1 Cyclone Hazard Intensity
@@ -1128,27 +627,7 @@ COALESCE(CAST(CAST(ROUND(CAST((c.cy500 - (SELECT cy500_min FROM lut.mh_intensity
 CAST(CAST(ROUND(CAST(c.cy1000 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Cy1000",
 COALESCE(CAST(CAST(ROUND(CAST((c.cy1000 - (SELECT cy1000_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy1000_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy1000_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Cy1000n",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,b.mh_sum,c.cy100,c.cy250,c.cy500,c.cy1000,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_cyclone_hazard_threat_building_function_view CASCADE;
-CREATE VIEW results.mh_threat_cyclone_hazard_threat_building_function_view AS 
-
--- 9.1 Cyclone Hazard
--- 9.1.2 Cyclone Hazard Threat
 -- 9.1.2.1 Building Function
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.cy500 - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Cy500n",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Cyt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "RES_LD_Cyt",
@@ -1165,29 +644,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Agr_Cyt",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.cy500,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_cyclone_hazard_threat_building_construction_view CASCADE;
-CREATE VIEW results.mh_threat_cyclone_hazard_threat_building_construction_view AS 
-
--- 9.1 Cyclone Hazard
--- 9.1.2 Cyclone Hazard Threat
 -- 9.1.2.2 Building Construction
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.cy500 - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Cy500n",
-
-COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgNumT_Cyt",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Wood_Cyt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Concrete_Cyt",
@@ -1210,27 +667,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "HiCode_Cyt",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
-LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.cy500,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_cyclone_hazard_threat_people_view CASCADE;
-CREATE VIEW results.mh_threat_cyclone_hazard_threat_people_view AS 
-
--- 9.1 Cyclone Hazard
--- 9.1.2 Cyclone Hazard Threat
 -- 9.1.2.3 People
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.cy500 - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Cy500n",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN e.censuspop ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "CensusPop_Cyt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(a.day) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "DayPopT_Cyt",
@@ -1244,28 +681,7 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
 e.people_du ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MF_Hshlds_Cyt",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
-LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
-LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.cy500,e.censuspop,e.people_du,d.geom,d.geompoint;
-
-
--- create multi hazard indicators
-DROP VIEW IF EXISTS results.mh_threat_cyclone_hazard_threat_assets_view CASCADE;
-CREATE VIEW results.mh_threat_cyclone_hazard_threat_assets_view AS 
-
--- 9.1 Cyclone Hazard
--- 9.1.2 Cyclone Hazard Threat
 -- 9.1.2.4 Assets
-SELECT 
-a.sauid,
-COALESCE(CAST(CAST(ROUND(CAST((c.cy500 - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "Cy500n",
-
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "AssetCostT_Cyt",
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN c.cy500 >= (SELECT "Cy500t" FROM lut.mh_thresholds) THEN SUM(a.structural + a.nonstructural) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "BldgCostT_Cyt",
@@ -1280,8 +696,8 @@ d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
---LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN lut.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN lut.mh_intensity_canada c on a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
 LEFT JOIN lut.census_2016_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,c.cy500,e.censuspop,e.people_du,d.geom,d.geompoint;
+GROUP BY a.sauid,b.mh_sum,c.cy100,c.cy250,c.cy500,c.cy1000,e.censuspop,e.people_du,d.geom,d.geompoint;
