@@ -1,15 +1,7 @@
-
--- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE lut.vs30_bc_site_model ADD COLUMN geom geometry(Point,4326);
-UPDATE lut.vs30_bc_site_model SET geom = st_setsrid(st_makepoint(lon,lat),4326);
-
--- create spatial index
-CREATE INDEX vs30_bc_site_model_idx
-ON lut.vs30_bc_site_model using GIST (geom);
-
+DROP TABLE IF EXISTS vs30.vs30_bc_site_model_xref;
 
 -- attach vs30 value to assetid based on closest location
-CREATE TABLE lut.vs30_bc_site_model_xref AS
+CREATE TABLE vs30.vs30_bc_site_model_xref AS
 SELECT
 a.id,
 a.lon AS "asset_lon",
@@ -19,20 +11,14 @@ b.lon AS "vs_lon",
 b.lat AS "vs_lat",
 ST_Distance(a.geom,b.geom) AS "distance"
 
-FROM psra.bc_exposure a
+FROM exposure.canada_exposure a
 CROSS JOIN LATERAL 
 (
 SELECT vs30,
 	geom,
 	lon,
 	lat
-FROM lut.vs30_bc_site_model
+FROM vs30.vs30_bc_site_model
 ORDER BY a.geom <-> geom
 LIMIT 1
 ) AS b;
-
-
-
-
-  
-

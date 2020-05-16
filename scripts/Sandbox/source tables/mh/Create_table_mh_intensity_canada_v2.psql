@@ -1,10 +1,10 @@
 
 -- version 2 replaces old version with updated references, old column names are retained from v1 to keep scripts running correctly.
 
-DROP TABLE IF EXISTS lut.mh_intensity_canada;
+DROP TABLE IF EXISTS mh.mh_intensity_canada;
 
 -- create table
-CREATE TABLE lut.mh_intensity_canada(
+CREATE TABLE mh.mh_intensity_canada(
     PRIMARY KEY(SAUIDt),
     OBJECTID float,
     SAUIDt varchar,
@@ -44,7 +44,7 @@ CREATE TABLE lut.mh_intensity_canada(
 );
 
 -- import exposure from csv
-COPY lut.mh_intensity_canada (OBJECTID, SAUIDt, lon, lat, PGV, PGA, Sa0p1, Sa0p3, Sa1p0, Sa2p0, Vs30, MMI6, MMI7, MMI8, Tsun_ha, Fl200, Fl500, Fl1000, Fire, Lndsus, Cy100, Cy250, Cy500, Cy1000, PGVn, MMI7n, Tsun_n, Fl500n, Firen, Lndn, Cy500n, MHn_TPGV, MHn_TMMI7, MHIn_PGV, MHIn_MMI7)
+COPY mh.mh_intensity_canada (OBJECTID, SAUIDt, lon, lat, PGV, PGA, Sa0p1, Sa0p3, Sa1p0, Sa2p0, Vs30, MMI6, MMI7, MMI8, Tsun_ha, Fl200, Fl500, Fl1000, Fire, Lndsus, Cy100, Cy250, Cy500, Cy1000, PGVn, MMI7n, Tsun_n, Fl500n, Firen, Lndn, Cy500n, MHn_TPGV, MHn_TMMI7, MHIn_PGV, MHIn_MMI7)
 
     FROM 'D:\workspace\data\human-settlement-national\mh_intensity_canada_04202020.csv'
         WITH 
@@ -52,30 +52,30 @@ COPY lut.mh_intensity_canada (OBJECTID, SAUIDt, lon, lat, PGV, PGA, Sa0p1, Sa0p3
           CSV HEADER ;
 
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE lut.mh_intensity_canada ADD COLUMN geom geometry(Point,4326);
-UPDATE lut.mh_intensity_canada SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+ALTER TABLE mh.mh_intensity_canada ADD COLUMN geom geometry(Point,4326);
+UPDATE mh.mh_intensity_canada SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 
 -- create spatial index
 CREATE INDEX mh_intensity_canada_idx
-ON lut.mh_intensity_canada using GIST (geom);
+ON mh.mh_intensity_canada using GIST (geom);
 
 
 
 -- this table contains 460170 rows.  Reduce the empty sauid to 359129 by using physical exposure table.
 SELECT sauid
-INTO lut.valid_sauid_temp
-FROM psra.canada_exposure
+INTO mh.valid_sauid_temp
+FROM exposure.canada_exposure
 GROUP BY sauid;
 
 
 -- update table by deleting empty sauid values
 
-DELETE FROM lut.mh_intensity_canada 
-WHERE NOT EXISTS (SELECT NULL from lut.valid_sauid_temp a WHERE a.sauid = sauidt);
+DELETE FROM mh.mh_intensity_canada 
+WHERE NOT EXISTS (SELECT NULL from mh.valid_sauid_temp a WHERE a.sauid = sauidt);
 
 
 -- obtain min/max values FOR mh intensity calculations
-DROP TABLE IF EXISTS lut.mh_intensity_canada_minmax CASCADE;
+DROP TABLE IF EXISTS mh.mh_intensity_canada_minmax CASCADE;
 
 SELECT
 MIN(pgv) AS "pgv_min",
@@ -109,45 +109,45 @@ MAX(cy500) AS "cy500_max",
 MIN(cy1000) AS "cy1000_min",
 MAX(cy1000) AS "cy1000_max"
 
-INTO lut.mh_intensity_canada_minmax
+INTO mh.mh_intensity_canada_minmax
 
-FROM lut.mh_intensity_canada;
+FROM mh.mh_intensity_canada;
 
 
 -- calculate mh_sum variable needed for mh threat tables
-DROP TABLE IF EXISTS lut.mh_intensity_canada_mhsum;
+DROP TABLE IF EXISTS mh.mh_intensity_canada_mhsum;
 
 SELECT 
 a.sauidt,
 
-COALESCE((a.pgv - (SELECT pgv_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT pgv_max FROM lut.mh_intensity_canada_minmax) - (SELECT pgv_min FROM lut.mh_intensity_canada_minmax),0),0) +
-COALESCE((a.tsun_ha - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM lut.mh_intensity_canada_minmax) - (SELECT tsun_min FROM lut.mh_intensity_canada_minmax),0),0) + 
-COALESCE((a.fl500 - (SELECT fl500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fl500_max FROM lut.mh_intensity_canada_minmax) - (SELECT fl500_min FROM lut.mh_intensity_canada_minmax),0),0) +
-COALESCE((a.fire - (SELECT fire_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM lut.mh_intensity_canada_minmax) - (SELECT fire_min FROM lut.mh_intensity_canada_minmax),0),0) +
-COALESCE((a.lndsus - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM lut.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM lut.mh_intensity_canada_minmax),0),0) +
-COALESCE((a.cy500 - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM lut.mh_intensity_canada_minmax) - (SELECT cy500_min FROM lut.mh_intensity_canada_minmax),0),0) AS "mh_sum"
+COALESCE((a.pgv - (SELECT pgv_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT pgv_max FROM mh.mh_intensity_canada_minmax) - (SELECT pgv_min FROM mh.mh_intensity_canada_minmax),0),0) +
+COALESCE((a.tsun_ha - (SELECT tsun_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT tsun_max FROM mh.mh_intensity_canada_minmax) - (SELECT tsun_min FROM mh.mh_intensity_canada_minmax),0),0) + 
+COALESCE((a.fl500 - (SELECT fl500_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT fl500_max FROM mh.mh_intensity_canada_minmax) - (SELECT fl500_min FROM mh.mh_intensity_canada_minmax),0),0) +
+COALESCE((a.fire - (SELECT fire_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM mh.mh_intensity_canada_minmax) - (SELECT fire_min FROM mh.mh_intensity_canada_minmax),0),0) +
+COALESCE((a.lndsus - (SELECT lndsus_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT lndsus_max FROM mh.mh_intensity_canada_minmax) - (SELECT lndsus_min FROM mh.mh_intensity_canada_minmax),0),0) +
+COALESCE((a.cy500 - (SELECT cy500_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM mh.mh_intensity_canada_minmax) - (SELECT cy500_min FROM mh.mh_intensity_canada_minmax),0),0) AS "mh_sum"
 
-INTO lut.mh_intensity_canada_mhsum
+INTO mh.mh_intensity_canada_mhsum
 
-FROM lut.mh_intensity_canada a;
+FROM mh.mh_intensity_canada a;
 
 
 -- update min/max value table with mh_sum values
-DROP TABLE IF EXISTS lut.mh_intensity_canada_mhsum_temp;
+DROP TABLE IF EXISTS mh.mh_intensity_canada_mhsum_temp;
 SELECT
 MIN(mh_sum) AS "mhsum_min",
 MAX(mh_sum) AS "mhsum_max"
 
-INTO lut.mh_intensity_canada_mhsum_temp
+INTO mh.mh_intensity_canada_mhsum_temp
 
-FROM lut.mh_intensity_canada_mhsum;
+FROM mh.mh_intensity_canada_mhsum;
 
 
-ALTER TABLE lut.mh_intensity_canada_minmax 
+ALTER TABLE mh.mh_intensity_canada_minmax 
 ADD COLUMN mhsum_min float,
 ADD COLUMN mhsum_max float;
 
-UPDATE lut.mh_intensity_canada_minmax SET mhsum_min = (SELECT mhsum_min FROM lut.mh_intensity_canada_mhsum_temp);
-UPDATE lut.mh_intensity_canada_minmax SET mhsum_max = (SELECT mhsum_max FROM lut.mh_intensity_canada_mhsum_temp);
+UPDATE mh.mh_intensity_canada_minmax SET mhsum_min = (SELECT mhsum_min FROM mh.mh_intensity_canada_mhsum_temp);
+UPDATE mh.mh_intensity_canada_minmax SET mhsum_max = (SELECT mhsum_max FROM mh.mh_intensity_canada_mhsum_temp);
 
-DROP TABLE IF EXISTS lut.mh_intensity_canada_mhsum_temp, lut.valid_sauid_temp;
+DROP TABLE IF EXISTS mh.mh_intensity_canada_mhsum_temp, mh.valid_sauid_temp;

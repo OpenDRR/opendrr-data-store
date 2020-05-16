@@ -1,6 +1,9 @@
+-- create schema for new scenario
+CREATE SCHEMA IF NOT EXISTS results_canada_exposure;
+
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results.canada_exposure_buildings_building CASCADE;
-CREATE VIEW results.canada_exposure_buildings_building AS 
+DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_buildings_building CASCADE;
+CREATE VIEW results_canada_exposure.canada_exposure_buildings_building AS 
 
 -- 2.0 Physical Exposure
 -- 2.1 Buildings
@@ -38,8 +41,8 @@ FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results.canada_exposure_people_building CASCADE;
-CREATE VIEW results.canada_exposure_people_building AS 
+DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_people_building CASCADE;
+CREATE VIEW results_canada_exposure.canada_exposure_people_building AS 
 
 -- 2.0 Physical Exposure
 -- 2.3 Buildings

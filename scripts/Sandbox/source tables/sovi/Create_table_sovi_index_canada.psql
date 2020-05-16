@@ -1,8 +1,8 @@
 
-DROP TABLE IF EXISTS lut.sovi_index_canada;
+DROP TABLE IF EXISTS sovi.sovi_index_canada;
 
 -- create table
-CREATE TABLE lut.sovi_index_canada(
+CREATE TABLE sovi.sovi_index_canada(
     PRIMARY KEY(SAUIDt),
     SAUIDi integer,
     SAUIDt varchar,
@@ -57,7 +57,7 @@ CREATE TABLE lut.sovi_index_canada(
 );
 
 -- import exposure from csv
-COPY lut.sovi_index_canada (SAUIDi, SAUIDt, Lon, Lat, Area_km2, Area_ha, DAUIDt, DAUIDi, SACCODE, SACTYPE, BldgNum, CensusBldg, CensusPop, CensusDU, People_DU, Inc_Hshld, Imm_LT5, Indigenous, Work_None, Pub_Trans, No_EngFr, Inc_Indv, Hshld_NSuit, Unemployed, Pre_1975, Age_GT65, Age_Median, Bldg_ha, Retail_Job, Work_Parttime, Inc_LowDecile, Bus_Ha, NoSec_School, LandUse, Moved_LT1, Dwelling_ha, Shltr_GT30, Health_Job, Live_Alone, NoWrkPlace, LonePar3Kids, Pop_Ha, Hshld_Mntn1, Vis_Min, Renter, Hshld_MntnAge, Fam_GT5, Age_LT6, Employ_Inc)
+COPY sovi.sovi_index_canada (SAUIDi, SAUIDt, Lon, Lat, Area_km2, Area_ha, DAUIDt, DAUIDi, SACCODE, SACTYPE, BldgNum, CensusBldg, CensusPop, CensusDU, People_DU, Inc_Hshld, Imm_LT5, Indigenous, Work_None, Pub_Trans, No_EngFr, Inc_Indv, Hshld_NSuit, Unemployed, Pre_1975, Age_GT65, Age_Median, Bldg_ha, Retail_Job, Work_Parttime, Inc_LowDecile, Bus_Ha, NoSec_School, LandUse, Moved_LT1, Dwelling_ha, Shltr_GT30, Health_Job, Live_Alone, NoWrkPlace, LonePar3Kids, Pop_Ha, Hshld_Mntn1, Vis_Min, Renter, Hshld_MntnAge, Fam_GT5, Age_LT6, Employ_Inc)
 
     FROM 'C:\workspace\human-settlement-national\3_sovi-index-canada.csv'
         WITH 

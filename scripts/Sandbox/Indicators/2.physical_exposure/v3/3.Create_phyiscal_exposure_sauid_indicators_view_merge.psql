@@ -1,6 +1,6 @@
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results.canada_exposure_buildings_sauid CASCADE;
-CREATE VIEW results.canada_exposure_buildings_sauid AS 
+DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_buildings_sauid CASCADE;
+CREATE VIEW results_canada_exposure.canada_exposure_buildings_sauid AS 
 
 -- 2.0 Physical Exposure
 -- 2.1 Buildings
@@ -54,13 +54,13 @@ d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
-LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,a.lon,a.lat,c."area_km2",c.area_ha,c.censusbldg,c.people_du,c.censusdu,c.sactype,c.landuse,d.geom,d.geompoint;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results.canada_exposure_people_sauid;
-CREATE VIEW results.canada_exposure_people_sauid AS 
+DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_people_sauid;
+CREATE VIEW results_canada_exposure.canada_exposure_people_sauid AS 
 
 -- 2.0 Physical Exposure
 -- 2.3 People
@@ -78,6 +78,6 @@ d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
-LEFT JOIN lut.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,c.censuspop,d.geom,d.geompoint;

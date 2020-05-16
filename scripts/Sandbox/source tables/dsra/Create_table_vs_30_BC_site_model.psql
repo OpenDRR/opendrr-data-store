@@ -1,10 +1,10 @@
 -- script to generate Canada exposure table
 
-DROP TABLE IF EXISTS lut.vs30_bc_site_model;
+DROP TABLE IF EXISTS vs30.vs30_bc_site_model;
 
 
 -- create table
-CREATE TABLE lut.vs30_bc_site_model(
+CREATE TABLE vs30.vs30_bc_site_model(
     lon float,
     lat float,
     vs30 float
@@ -12,21 +12,17 @@ CREATE TABLE lut.vs30_bc_site_model(
 );
 
 -- import exposure from csv
-COPY lut.vs30_bc_site_model (lon, lat, vs30)
-    FROM 'C:\GitHub\opendrr-data-store\sample-datasets\vs30_BC_site_model.csv'
+COPY vs30.vs30_bc_site_model (lon, lat, vs30)
+    FROM 'D:\workspace\GitHub\opendrr-data-store\sample-datasets\scenario-risk\model-inputs\\vs30_BC_site_model.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
 
 
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE lut.vs30_bc_site_model ADD COLUMN geom geometry(Point,4326);
-UPDATE lut.vs30_bc_site_model SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+ALTER TABLE vs30.vs30_bc_site_model ADD COLUMN geom geometry(Point,4326);
+UPDATE vs30.vs30_bc_site_model SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 
 -- create spatial index
 CREATE INDEX vs30_bc_site_model_idx
-ON lut.vs30_bc_site_model using GIST (geom);
-
-
-
-
+ON vs30.vs30_bc_site_model using GIST (geom);

@@ -1,5 +1,5 @@
 -- create lookup table for multi hazard thresholds value to be used
-DROP TABLE IF EXISTS lut.mh_thresholds;
+DROP TABLE IF EXISTS mh.mh_thresholds;
 
 SELECT
 0.028 AS "MHInt_t",
@@ -11,4 +11,4 @@ SELECT
 2000 AS "Firet",
 177 AS "Cy500t"
 
-INTO lut.mh_thresholds;
+INTO mh.mh_thresholds;
