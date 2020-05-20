@@ -1,0 +1,39 @@
+-- script to agg losses mean
+DROP TABLE IF EXISTS psra.avg_losses_mean_696;
+
+-- create table
+CREATE TABLE psra.avg_losses_mean_696(
+PRIMARY KEY(asset_id),
+BldgGen varchar,
+EqBldgType varchar,
+EqDesLev varchar,
+GenOcc varchar,
+SAC varchar,
+adauid varchar,
+cdname varchar,
+csdname varchar,
+dauid varchar,
+eqOccType varchar,
+ername varchar,
+fsauid varchar,
+hzOccType varchar,
+hzTaxon varchar,
+asset_id varchar,
+landusetyp varchar,
+prname varchar,
+sauid varchar,
+taxonomy varchar,
+lon float,
+lat float,
+contents float,
+nonstructural float,
+occupants float,
+structural float
+);
+
+-- import exposure from csv
+COPY psra.avg_losses_mean_696(BldgGen,EqBldgType,EqDesLev,GenOcc,SAC,adauid,cdname,csdname,dauid,eqOccType,ername,fsauid,hzOccType,hzTaxon,asset_id,landusetyp,prname,sauid,taxonomy,lon,lat,contents,nonstructural,occupants,structural)
+    FROM 'D:\workspace\data\psra-sample-datasets\3_ebRisk\r1\losses\avg_losses-mean_696.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;

@@ -1,0 +1,37 @@
+-- create psra indicators
+
+SELECT 
+a.id AS "AssetID",
+
+--intermediate variables for calculating potential displaced households
+e.structural_moderate_mean AS "sD_Moderate",
+e.structural_extensive_mean AS "sD_Extensive",
+e.structural_complete_mean AS "sD_Complete",
+g.mean_recovery_time AS "sC_Downtime",
+
+a.genocc AS "Occ_General",
+i.censusdu AS "CensusDU",
+
+CAST((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) AS NUMERIC) AS "SF_Hshlds",
+CAST((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) AS NUMERIC) AS "MF_Hshlds",
+
+-- IF Occ_General = 'Residential-MD' OR Occ_General = 'Residential-HD' THEN ([sD_Moderate]/BldNum)
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END) AS "MFM",
+
+-- IF Occ_General = 'Residential-MD' OR Occ_General = 'Residential-HD' THEN ([sD_Extensive]//BldNum)
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END) AS "MFE",
+
+-- IF Occ_General = 'Residential-MD' OR Occ_General = 'Residential-HD' THEN ([sD_Complete]//BldNum)
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END) AS "MFC",
+
+a.geom AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
+LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
+LEFT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
+LEFT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
+LEFT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
+LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt;

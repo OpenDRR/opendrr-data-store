@@ -1,0 +1,140 @@
+-- create psra indicators
+--DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_b0_seismic_risk_building CASCADE;
+--CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_b0_seismic_risk_building AS 
+
+-- 2.0 Physical Exposure
+SELECT 
+a.id AS "AssetID",
+a.sauid AS "Sauid",
+CAST(a.lon AS NUMERIC) AS "Asset_Lon",
+CAST(a.lat AS NUMERIC) AS "Asset_Lat",
+CAST(a.number AS NUMERIC) AS "BldNum",
+a.taxonomy AS "Taxonomy",
+CAST(b."BldgArea_ft2" AS NUMERIC) AS "BldgArea_ft2",
+a.landusetyp AS "LandUse",
+a.genocc AS "Occ_General",
+a.eqocctype AS "Occ_Specific",
+a.bldggen AS "Type_General",
+a.eqbldgtype AS "Type_Specific",
+a.eqdeslev AS "Design_Level",
+CAST(a.day AS NUMERIC) AS "DayPop",
+CAST(a.night AS NUMERIC) AS "NightPop",
+CAST(a.transit AS NUMERIC) AS "TransitPop",
+CAST(a.structural AS NUMERIC) AS "StrCost",
+CAST(a.nonstructural AS NUMERIC) AS "NStrCost",
+CAST(a.contents AS NUMERIC) AS "ContCost",
+CAST(a.structural + a.nonstructural + a.contents AS NUMERIC) AS "AssetCost",
+CAST(a.structural + a.nonstructural AS NUMERIC) AS "BldgCost",
+CAST(b."CAD_RetrofitCost_Bldg"/a.number AS NUMERIC) AS "RetrofitCost_b",
+
+-- 5.0 Seismic Risk (PSRA)
+-- 5.1 Probabilistic Seismic Hazard (PSHA)
+-- 5.1.1 Classical Seismic Hazard
+d.lon AS "IMT_Lon",
+d.lat AS "IMT_Lat",
+d."PGA_0.02" AS "PGA_500yr",
+d."PGA_0.1" AS "PGA_2475yr",
+d."PGV_0.02" AS "PGV_500yr",
+d."PGV_0.1" AS "PGV_2475yr",
+d."SA(0.1)_0.02" AS "SA0p1_500yr",
+d."SA(0.1)_0.1" AS "SA0p1_2475yr",
+d."SA(0.2)_0.02" AS "SA0p2_500yr",
+d."SA(0.2)_0.1" AS "SA0p2_2475yr",
+d."SA(0.3)_0.02" AS "SA0p3_500yr",
+d."SA(0.3)_0.1" AS "SA0p3_2475yr",
+d."SA(0.5)_0.02" AS "SA0p5_500yr",
+d."SA(0.5)_0.1" AS "SA0p5_2475yr",
+d."SA(0.6)_0.02" AS "SA0p6_500yr",
+d."SA(0.6)_0.1" AS "SA0p6_2475yr",
+d."SA(1.0)_0.02" AS "SA1p0_500yr",
+d."SA(1.0)_0.1" AS "SA1p0_2475yr",
+d."SA(2.0)_0.02" AS "SA2p0_500yr",
+d."SA(2.0)_0.1" AS "SA2p0_2475yr",
+d."SA(5.0)_0.02" AS "SA5p0_500yr",
+d."SA(5.0)_0.1" AS "SA5p0_2475yr",
+d."SA(10.0)_0.02" AS "SA10p0_500yr",
+d."SA(10.0)_0.1" AS "SA10p0_2475yr",
+
+-- 5.2.1 Damage State
+-- 5.2.1.1 Classical Damage
+e.structural_no_damage AS "eD_None",
+e.structural_no_damage_stdv AS "eD_None_std",
+(e.structural_no_damage/a.number) AS "eD_None_r",
+
+e.structural_slight_mean AS "eD_Slight",
+e.structural_slight_stdv AS "eD_Slight_std",
+(e.structural_slight_mean/a.number) AS "eD_Slight_r",
+
+e.structural_moderate_mean AS "eD_Moderate",
+e.structural_moderate_stdv AS "eD_Moderate_std",
+(e.structural_moderate_mean/a.number) AS "eD_Moderate_r",
+
+e.structural_extensive_mean AS "eD_Extensive",
+e.structural_extensive_stdv AS "eD_Extensive_std",
+(e.structural_extensive_mean/a.number) AS "eD_Extensive_r",
+
+e.structural_complete_mean AS "eD_Complete",
+e.structural_complete_stdv AS "eD_Complete_std",
+(e.structural_complete_mean/a.number) AS "eD_Complete_r",
+
+f.collapse_pc AS "collapse_rate",
+e.structural_complete_mean * f.collapse_pc AS "eD_Collapse",
+e.structural_complete_stdv * f.collapse_pc AS "eD_Collapse_std",
+(e.structural_complete_mean/a.number) * f.collapse_pc AS "eD_Collapse_r",
+
+-- 5.3 Affected People
+-- 5.3.1 Casualties
+g.casualties_day_severity_1 AS "eC_CasDayL1",
+g.casualties_day_severity_2 AS "eC_CasDayL2",
+g.casualties_day_severity_3 AS "eC_CasDayL3",
+g.casualties_day_severity_4 AS "eC_CasDayL4",
+
+g.casualties_night_severity_1 AS "eC_CasNightL1",
+g.casualties_night_severity_2 AS "eC_CasNightL2",
+g.casualties_night_severity_3 AS "eC_CasNightL3",
+g.casualties_night_severity_4 AS "eC_CasNightL4",
+
+g.casualties_transit_severity_1 AS "eC_CasTransitL1",
+g.casualties_transit_severity_2 AS "eC_CasTransitL2",
+g.casualties_transit_severity_3 AS "eC_CasTransitL3",
+g.casualties_transit_severity_4 AS "eC_CasTransitL4",
+
+h.occupants AS "AAL_Occ",
+COALESCE(h.occupants/NULLIF(a.night,0),0) AS "AAL_Occ_r",
+
+-- 5.3.2 Social Disruption
+g.sc_displ3 AS "eC_DisplRes_3",
+g.sc_displ30 AS "eC_DisplRes_30",
+g.sc_displ90 AS "eC_DisplRes_90",
+g.sc_displ180 AS "eC_DisplRes_180",
+g.sc_displ360 AS "eC_DisplRes_360",
+
+--intermediate variables for calculating potential displaced households
+e.structural_moderate_mean AS "sD_Moderate",
+e.structural_extensive_mean AS "sD_Extensive",
+e.structural_complete_mean AS "sD_Complete",
+g.mean_recovery_time AS "sC_Downtime"
+
+
+
+
+a.geom AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
+LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
+LEFT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
+LEFT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
+LEFT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
+
+/*
+b0 using hazard map 677
+1_cHazard\hazard_map-mean_677
+2_cDamage\bo\damages-structural-mean_678
+3_ebRisk\b0\losses\agg_curves-stats_679
+3_ebRisk\b0\losses\avg_losses-mean_679
+3_ebRisk\b0\damage consequences\b0\consequences-rlz-000_680
+3_ebRisk\b0\damage consequences\b0\damages-rlz-000_680
+*/

@@ -1,0 +1,40 @@
+-- script to generate structural mean
+DROP TABLE IF EXISTS psra.damages_structural_mean_683;
+
+-- create table
+CREATE TABLE psra.damages_structural_mean_683(
+PRIMARY KEY (asset_id),
+BldgGen varchar, 
+EqBldgType varchar, 
+EqDesLev varchar, 
+GenOcc varchar, 
+SAC varchar, 
+adauid varchar, 
+cdname varchar, 
+csdname varchar, 
+dauid varchar, 
+eqOccType varchar, 
+ername varchar, 
+fsauid varchar, 
+hzOccType varchar, 
+hzTaxon varchar, 
+asset_id varchar, 
+landusetyp varchar, 
+prname varchar, 
+sauid varchar, 
+taxonomy varchar, 
+lon float, 
+lat float, 
+no_damage float, 
+slight float, 
+moderate float, 
+extensive float, 
+complete float
+);
+
+-- import exposure from csv
+COPY psra.damages_structural_mean_683(BldgGen,EqBldgType,EqDesLev,GenOcc,SAC,adauid,cdname,csdname,dauid,eqOccType,ername,fsauid,hzOccType,hzTaxon,asset_id,landusetyp,prname,sauid,taxonomy,lon,lat,no_damage,slight,moderate,extensive,complete)
+    FROM 'D:\workspace\data\psra-sample-datasets\2_cDamage\r2\damages-structural-mean_683.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
