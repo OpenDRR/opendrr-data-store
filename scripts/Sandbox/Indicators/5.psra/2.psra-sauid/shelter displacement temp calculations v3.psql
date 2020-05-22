@@ -1,0 +1,145 @@
+-- 2.0 Physical Exposure
+SELECT 
+a.sauid AS "Sauid",
+
+-- temp calculation for shelter
+CAST(i.censuspop AS NUMERIC) AS "CensusPop",
+CAST(i.censusdu AS NUMERIC) AS "CensusDU",
+COALESCE(CAST(i.people_du AS NUMERIC),0) AS "People_DU",
+COALESCE(CAST(j.inc_hshld AS NUMERIC),0) AS "Inc_Hshld",
+
+-- IF [Inc_Hshld] =< $15,000, THEN 0.62
+COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) AS "IM1",
+
+-- IF [Inc_Hshld] > $15,000 AND [Inc_Hshld] =<, $20,000 THEN 0.42
+COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) AS "IM2",
+
+-- IF [Inc_Hshld] > $20,000 AND [Inc_Hshld] =<, $35,000 THEN 0.29
+COALESCE((CASE WHEN j.inc_hshld > 20000 AND j.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) AS "IM3",
+
+-- IF [Inc_Hshld] > $35,000 AND [Inc_Hshld] =<, $50,000 THEN  0.22
+COALESCE((CASE WHEN j.inc_hshld > 35000 AND j.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) AS "IM4",
+
+-- IF [Inc_Hshld] > $50,000 THEN 0.13
+COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0) AS "IM5",
+
+-- ([IM1]+[IM2]+[IM3]+[IM4]+[IM5])
+(COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 20000 AND j.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 35000 AND j.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) AS "IM_sum",
+
+-- [Imm_LT5] * 0.24
+COALESCE(j.imm_lt5 * 0.24,0) AS "EM1",
+
+-- [Live_Alone] * 0.48
+COALESCE(j.live_alone * 0.48,0) AS "EM2",
+
+-- [No_EngFr] * 0.47
+COALESCE(j.no_engfr * 0.47,0) AS "EM3",
+
+-- [LonePar3Kids] * 0.26
+COALESCE(j.lonepar3kids * 0.26,0) AS "EM4",
+
+-- [Indigenous] * 0.26
+COALESCE(j.indigenous * 0.26,0) AS "EM5",
+
+-- ([EM1]+[EM2]+[EM3]+[EM4]+[EM5])
+(COALESCE(j.imm_lt5 * 0.24,0) + COALESCE(j.live_alone * 0.48,0) + COALESCE(j.no_engfr * 0.47,0) + COALESCE(j.lonepar3kids * 0.26,0) +
+COALESCE(j.indigenous * 0.26,0)) AS "EM_sum",
+
+-- [Renter] * 0.40
+COALESCE(j.renter * 0.40,0) AS "OM1",
+
+-- (([CensusDU] * People_DU]) - [Renter] ) * 0.40
+COALESCE(((i.censusdu * i.people_du) - j.renter) * 0.40,0) AS "OM2",
+
+-- ([OM1]+[OM2])
+(COALESCE(j.renter * 0.40,0) + COALESCE(((i.censusdu * i.people_du) - j.renter) * 0.40,0)) AS "OM_sum",
+
+-- [Age_GT65] * 0.40
+COALESCE(j.age_gt65 * 0.40,0) AS "AM1",
+
+-- [Age_LT6] * 0.40
+COALESCE(j.age_lt6 * 0.40,0) AS "AM2",
+
+-- ([AM1]+[AM2])
+(COALESCE(j.age_gt65 * 0.40,0) + COALESCE(j.age_lt6 * 0.40,0)) AS "AM_sum",
+
+-- (0.73* ([IM1]+[IM2]+[IM3]+[IM4]+[IM5])) + (0.27*([EM1]+[EM2]+[EM3]+[EM4]+[EM5])) 
+((0.73 * COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 20000 AND j.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 35000 AND j.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) + 
+(0.27 * COALESCE(j.imm_lt5 * 0.24,0) + COALESCE(j.live_alone * 0.48,0) + COALESCE(j.no_engfr * 0.47,0) + COALESCE(j.lonepar3kids * 0.26,0) +
+COALESCE(j.indigenous * 0.26,0))) AS "sigma",
+
+(SUM(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END),0)),0))) AS "DisplHshld",
+
+(COALESCE(((SUM(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END),0)),0))) * i.censuspop) / NULLIF(i.censusdu,0),0)) AS "displ_x_cpop_d_cdu",
+
+-- [sigma] * (([DisplHshld] * [CensusPop]) / CensusDU) * ([IM1]+[IM2]+[IM3]+[IM4]+[IM5]) * ([EM1]+[EM2]+[EM3]+[EM4]+[EM5]) * ([OM1]+[OM2]) * ([AM1]+[AM2])
+CAST(((0.73 * COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 20000 AND j.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 35000 AND j.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) + 
+(0.27 * COALESCE(j.imm_lt5 * 0.24,0) + COALESCE(j.live_alone * 0.48,0) + COALESCE(j.no_engfr * 0.47,0) + COALESCE(j.lonepar3kids * 0.26,0) +
+COALESCE(j.indigenous * 0.26,0))) *
+(COALESCE(((SUM(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END),0)),0))) * i.censuspop) / NULLIF(i.censusdu,0),0)) *
+(COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 20000 AND j.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 35000 AND j.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) * 
+(COALESCE(j.imm_lt5 * 0.24,0) + COALESCE(j.live_alone * 0.48,0) + COALESCE(j.no_engfr * 0.47,0) + COALESCE(j.lonepar3kids * 0.26,0) +
+COALESCE(j.indigenous * 0.26,0)) * 
+(COALESCE(j.renter * 0.40,0) + COALESCE(((i.censusdu * i.people_du) - j.renter) * 0.40,0)) * 
+(COALESCE(j.age_gt65 * 0.40,0) + COALESCE(j.age_lt6 * 0.40,0)) AS NUMERIC) AS "sC_Shelter"
+
+
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
+LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
+LEFT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
+LEFT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
+LEFT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
+LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt
+LEFT JOIN sovi.sovi_census_canada J on a.sauid = j.sauidt
+GROUP BY a.sauid,a.lon,a.lat,i.area_km2,i.area_ha,i.censuspop,d.lon,d.lat,d."PGA_0.02",d."PGA_0.1",d."PGV_0.02",d."PGV_0.1",d."SA(0.1)_0.02",d."SA(0.1)_0.1",
+d."SA(0.2)_0.02",d."SA(0.2)_0.1",d."SA(0.3)_0.02",d."SA(0.3)_0.1",d."SA(0.5)_0.02",d."SA(0.5)_0.1",d."SA(0.6)_0.02",d."SA(0.6)_0.1",d."SA(1.0)_0.02",d."SA(1.0)_0.1",
+d."SA(2.0)_0.02",d."SA(2.0)_0.1",d."SA(5.0)_0.02",d."SA(5.0)_0.1",d."SA(10.0)_0.02",d."SA(10.0)_0.1",i.censuspop,i.censusdu,i.people_du,j.inc_hshld,j.imm_lt5,j.live_alone,j.no_engfr,j.lonepar3kids,j.indigenous,
+j.renter,j.age_gt65,j.age_lt6 LIMIT 10;
+

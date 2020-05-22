@@ -1,7 +1,7 @@
-CREATE SCHEMA IF NOT EXISTS results_psra_hazard_map_mean_677;
+CREATE SCHEMA IF NOT EXISTS results_psra_hazard_map_mean_688;
 
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_r2_seismic_risk_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_r2_seismic_risk_sauid AS 
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_688.psra_hazard_map_mean_688_r2_seismic_risk_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_688.psra_hazard_map_mean_688_r2_seismic_risk_sauid AS 
 
 -- 2.0 Physical Exposure
 SELECT 
@@ -230,12 +230,12 @@ l.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
-RIGHT JOIN psra.damages_structural_mean_683 c ON a.id = c.asset_id
-LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
-LEFT JOIN psra.damages_rlz_000_687 e ON a.id = e.asset_refid
+RIGHT JOIN psra.damages_structural_mean_693 c ON a.id = c.asset_id
+LEFT JOIN psra.hazard_map_mean_688_xref d ON a.id = d.id
+LEFT JOIN psra.damages_rlz_000_700 e ON a.id = e.asset_refid
 LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
-LEFT JOIN psra.consequences_rlz_000_687 g ON a.id = g.asset_ref
-LEFT JOIN psra.avg_losses_mean_685 h ON a.id = h.asset_id
+LEFT JOIN psra.consequences_rlz_000_700 g ON a.id = g.asset_ref
+LEFT JOIN psra.avg_losses_mean_698 h ON a.id = h.asset_id
 LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt
 LEFT JOIN sovi.sovi_census_canada J on a.sauid = j.sauidt
 LEFT JOIN boundaries."Geometry SAUID" l ON a.sauid = l."SAUIDt"
@@ -247,8 +247,8 @@ j.renter,j.age_gt65,j.age_lt6,l.geom,l.geompoint;
 
 -- generate PML view
 -- 5.4.1.1 Probable Maximum Loss
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_r2_pml_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_r2_pml_sauid AS
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_688.psra_hazard_map_mean_688_r2_pml_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_688.psra_hazard_map_mean_688_r2_pml_sauid AS
 
 SELECT
 sauid,
@@ -260,4 +260,4 @@ annual_frequency_of_exceedence AS "Probability",
 genocc AS "Occ_General",
 eqbldgtype AS "Bldg_Type"
 
-FROM psra.agg_curves_stats_685;
+FROM psra.agg_curves_stats_698;
