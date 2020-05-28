@@ -1,0 +1,49 @@
+-- create schema for new scenario
+CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS rresults_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_economic_loss_sauid;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_economic_loss_sauid AS 
+
+-- 3.0 Earthquake Scenario Risk (DSRA)
+-- 3.4 Economic Security
+SELECT
+b.sauid AS "Sauid",
+
+-- 3.4.1 Economic Loss - b0
+CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") AS NUMERIC) AS "sLt_Asset_b0",
+CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0") AS NUMERIC) AS "sLt_Bldg_b0",
+CAST((COALESCE((AVG(a."sL_Str_b0" + a."sL_NStr_b0"))/ NULLIF(AVG((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0")),0),0)) AS NUMERIC) AS "sLmr_Bldg_b0",
+CAST(SUM(a."sL_Str_b0") AS NUMERIC) AS "sLt_Str_b0",
+CAST(SUM(a."sL_Str_stdv_b0") AS NUMERIC) AS "sLmsd_Str_b0",
+CAST(SUM(a."sL_NStr_b0") AS NUMERIC) AS "sLt_NStr_b0",
+CAST(SUM(a."sL_NStr_stdv_b0") AS NUMERIC) AS "sLmsd_NStr_b0",
+CAST(SUM(a."sL_Cont_b0") AS NUMERIC) AS "sLt_Cont_b0",
+CAST(SUM(a."sL_Cont_stdv_b0") AS NUMERIC) AS "sLmsd_Cont_b0",
+
+-- 3.4.1 Economic Loss - r2
+CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2") AS NUMERIC) AS "sLt_Asset_r2",
+CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2") AS NUMERIC) AS "sLt_Bldg_r2",
+CAST((COALESCE((AVG(a."sL_Str_r2" + a."sL_NStr_r2"))/ NULLIF(AVG((a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")),0),0)) AS NUMERIC) AS "sLmr_Bldg_r2",
+CAST(SUM(a."sL_Str_r2") AS NUMERIC) AS "sLt_Str_r2",
+CAST(SUM(a."sL_Str_stdv_r2") AS NUMERIC) AS "sLmsd_Str_r2",
+CAST(SUM(a."sL_NStr_r2") AS NUMERIC) AS "sLt_NStr_r2",
+CAST(SUM(a."sL_NStr_stdv_r2") AS NUMERIC) AS "sLmsd_NStr_r2",
+CAST(SUM(a."sL_Cont_r2") AS NUMERIC) AS "sLt_Cont_r2",
+CAST(SUM(a."sL_Cont_stdv_r2") AS NUMERIC) AS "sLmsd_Cont_r2",
+
+i.geom AS "geom_poly",
+i.geompoint AS "geom_point"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
+LEFT JOIN vs30.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
+LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
+LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
+LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
+LEFT JOIN sovi.sovi_index_canada k ON b.sauid = k.sauidt
+GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,i.geom,i.geompoint;
