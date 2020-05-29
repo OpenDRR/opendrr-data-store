@@ -2,7 +2,7 @@
 CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS rresults_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_economic_loss_sauid;
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_economic_loss_sauid;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_economic_loss_sauid AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
@@ -31,6 +31,12 @@ CAST(SUM(a."sL_NStr_r2") AS NUMERIC) AS "sLt_NStr_r2",
 CAST(SUM(a."sL_NStr_stdv_r2") AS NUMERIC) AS "sLmsd_NStr_r2",
 CAST(SUM(a."sL_Cont_r2") AS NUMERIC) AS "sLt_Cont_r2",
 CAST(SUM(a."sL_Cont_stdv_r2") AS NUMERIC) AS "sLmsd_Cont_r2",
+
+CAST(CASE WHEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2"))/(c."CAD_RetrofitCost_Bldg"))) > 0
+THEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2"))/(c."CAD_RetrofitCost_Bldg"))) ELSE 1 END AS NUMERIC) AS "sLmr2_BCR" ,
+
+CAST(CASE WHEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")) * ((EXP(-0.03*100)/0.03)/(c."CAD_RetrofitCost_Bldg")))) > 0
+THEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")) * ((EXP(-0.03*100)/0.03)/(c."CAD_RetrofitCost_Bldg")))) ELSE 1 END AS NUMERIC) AS "sLmr2_RoI",
 
 i.geom AS "geom_poly",
 i.geompoint AS "geom_point"

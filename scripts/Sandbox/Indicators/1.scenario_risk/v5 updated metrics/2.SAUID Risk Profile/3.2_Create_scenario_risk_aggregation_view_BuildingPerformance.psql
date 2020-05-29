@@ -87,20 +87,41 @@ SELECT
 b.sauid AS "Sauid",
 
 -- 3.2.1 Recovery Time - b0
-CAST(SUM(a."sC_Repair_b0")/(SUM(b.number)) AS NUMERIC) AS "sCt_Repair_b0",
-CAST(SUM(a."sC_Construxn_b0")/(SUM(b.number)) AS NUMERIC) AS "SCt_Construxn_b0",
-CAST(SUM(a."sC_Downtime_b0")/(SUM(b.number)) AS NUMERIC) AS "sCt_Downtime_b0",
+CAST(SUM(a."sD_None_b0" + a."sD_Slight_b0") AS NUMERIC) AS "sDt_GreenTag_b_b0",
+CAST(SUM(a."sD_None_b0" + a."sD_Slight_b0")/5 AS NUMERIC) AS "sDt_GreenTag_i_b0",
+CAST(SUM(a."sD_Extensive_b0") AS NUMERIC) AS "sDt_YellowTag_d_b0",
+CAST(SUM(a."sD_Extensive_b0")/2.5 AS NUMERIC) AS "sDt_YellowTag_i_b0",
+CAST(SUM(a."sD_Complete_b0") AS NUMERIC) AS "sDt_RedTag_b_b0",
+CAST(SUM(a."sD_Complete_b0")/5 AS NUMERIC) AS "sDt_RedTag_i_b0" ,
+CAST(SUM(a."sD_None_b0" + (a."sD_Slight_b0"*0.2) +(a."sD_Moderate_b0"*0.05)) AS NUMERIC) AS "sDt_Operational_b0",
+CAST(SUM((a."sD_Slight_b0"*0.8) + (a."sD_Moderate_b0"*0.75) + (a."sD_Extensive_b0"*0.2)) AS NUMERIC) AS "sDt_Functional_b0",
+CAST(SUM((a."sD_Moderate_b0"*0.2) + (a."sD_Extensive_b0"*0.4)) AS NUMERIC) AS "sDt_Repairable_b0",
+CAST(SUM((a."sD_Extensive_b0"*0.3) + (a."sD_Complete_b0"*0.2)) AS NUMERIC) AS "sDt_Failure_b0",
+CAST(AVG(a."sC_Repair_b0")/(AVG(b.number)) AS NUMERIC) AS "sCm_Repair_b0",
+CAST(AVG(a."sC_Construxn_b0")/(AVG(b.number)) AS NUMERIC) AS "SCm_Construxn_b0",
+CAST(AVG(a."sC_Downtime_b0")/(AVG(b.number)) AS NUMERIC) AS "sCm_Downtime_b0",
 CAST(SUM(a."sC_DebrisBW_b0" + a."sC_DebrisC_b0") AS NUMERIC) AS "sCt_DebrisTotal_b0",
 CAST(SUM(a."sC_DebrisBW_b0") AS NUMERIC) AS "sCt_DebrisBW_b0",
 CAST(SUM(a."sC_DebrisC_b0") AS NUMERIC) AS "sCt_DebrisCS_b0",
 
 -- 3.2.1 Recovery Time - r2
-CAST(SUM(a."sC_Repair_r2")/(SUM(b.number)) AS NUMERIC) AS "sCt_Repair_r2",
-CAST(SUM(a."sC_Construxn_r2")/(SUM(b.number)) AS NUMERIC) AS "SCt_Construxn_r2",
-CAST(SUM(a."sC_Downtime_r2")/(SUM(b.number)) AS NUMERIC) AS "sCt_Downtime_r2",
+CAST(SUM(a."sD_None_r2" + a."sD_Slight_r2") AS NUMERIC) AS "sDt_GreenTag_b_r2",
+CAST(SUM(a."sD_None_r2" + a."sD_Slight_r2")/5 AS NUMERIC) AS "sDt_GreenTag_i_r2",
+CAST(SUM(a."sD_Extensive_r2") AS NUMERIC) AS "sDt_YellowTag_d_r2",
+CAST(SUM(a."sD_Extensive_r2")/2.5 AS NUMERIC) AS "sDt_YellowTag_i_r2",
+CAST(SUM(a."sD_Complete_r2") AS NUMERIC) AS "sDt_RedTag_b_r2",
+CAST(SUM(a."sD_Complete_r2")/5 AS NUMERIC) AS "sDt_RedTag_i_r2" ,
+CAST(SUM(a."sD_None_r2" + (a."sD_Slight_r2"*0.2) +(a."sD_Moderate_r2"*0.05)) AS NUMERIC) AS "sDt_Operational_r2",
+CAST(SUM((a."sD_Slight_r2"*0.8) + (a."sD_Moderate_r2"*0.75) + (a."sD_Extensive_r2"*0.2)) AS NUMERIC) AS "sDt_Functional_r2",
+CAST(SUM((a."sD_Moderate_r2"*0.2) + (a."sD_Extensive_r2"*0.4)) AS NUMERIC) AS "sDt_Repairable_r2",
+CAST(SUM((a."sD_Extensive_r2"*0.3) + (a."sD_Complete_r2"*0.2)) AS NUMERIC) AS "sDt_Failure_r2",
+CAST(AVG(a."sC_Repair_r2")/(AVG(b.number)) AS NUMERIC) AS "sCm_Repair_r2",
+CAST(AVG(a."sC_Construxn_r2")/(AVG(b.number)) AS NUMERIC) AS "SCm_Construxn_r2",
+CAST(AVG(a."sC_Downtime_r2")/(AVG(b.number)) AS NUMERIC) AS "sCm_Downtime_r2",
 CAST(SUM(a."sC_DebrisBW_r2" + a."sC_DebrisC_r2") AS NUMERIC) AS "sCt_DebrisTotal_r2",
 CAST(SUM(a."sC_DebrisBW_r2") AS NUMERIC) AS "sCt_DebrisBW_r2",
 CAST(SUM(a."sC_DebrisC_r2") AS NUMERIC) AS "sCt_DebrisCS_r2",
+
 
 i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
@@ -117,52 +138,3 @@ LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
 LEFT JOIN sovi.sovi_index_canada k ON b.sauid = k.sauidt
 GROUP BY b.sauid,i.geom,i.geompoint;
-
-
-/*
--- 4.2.2 Functional State - b0
-CAST(SUM(a."sD_None_b0" + (a."sD_Slight_b0"*0.2) +(a."sD_Moderate_b0"*0.05)) AS NUMERIC) AS "sDt_Operational_b0",
-CAST(SUM((a."sD_Slight_b0"*0.8) + (a."sD_Moderate_b0"*0.75) + (a."sD_Extensive_b0"*0.2)) AS NUMERIC) AS "sDt_Functional_b0",
-CAST(SUM((a."sD_Moderate_b0"*0.2) + (a."sD_Extensive_b0"*0.4)) AS NUMERIC) AS "sDt_Repairable_b0",
-CAST(SUM((a."sD_Extensive_b0"*0.3) + (a."sD_Complete_b0"*0.2)) AS NUMERIC) AS "sDt_Failure_b0",
-
--- 4.2.3 Recovery - b0
-CAST(SUM(a."sD_None_b0" + a."sD_Slight_b0") AS NUMERIC) AS "sD_GreenTag_b_b0",
-CAST(SUM(a."sD_None_b0" + a."sD_Slight_b0")/5 AS NUMERIC) AS "sD_GreenTag_i_b0",
-CAST(SUM(a."sD_Extensive_b0") AS NUMERIC) AS "sD_YellowTag_d_b0",
-CAST(SUM(a."sD_Extensive_b0")/2.5 AS NUMERIC) AS "sD_YellowTag_i_b0",
-CAST(SUM(a."sD_Complete_b0") AS NUMERIC) AS "sD_RedTag_b_b0",
-CAST(SUM(a."sD_Complete_b0")/5 AS NUMERIC) AS "sD_RedTag_i_b0" ,
-
-
--- 4.2.2 Functional State - r2
-CAST(SUM(a."sD_None_r2" + (a."sD_Slight_r2"*0.2) +(a."sD_Moderate_r2"*0.05)) AS NUMERIC) AS "sDt_Operational_r2",
-CAST(SUM((a."sD_Slight_r2"*0.8) + (a."sD_Moderate_r2"*0.75) + (a."sD_Extensive_r2"*0.2)) AS NUMERIC) AS "sDt_Functional_r2",
-CAST(SUM((a."sD_Moderate_r2"*0.2) + (a."sD_Extensive_r2"*0.4)) AS NUMERIC) AS "sDt_Repairable_r2",
-CAST(SUM((a."sD_Extensive_r2"*0.3) + (a."sD_Complete_r2"*0.2)) AS NUMERIC) AS "sDt_Failure_r2",
-W
--- 4.2.3 Recovery - r2
-CAST(SUM(a."sD_None_r2" + a."sD_Slight_r2") AS NUMERIC) AS "sD_GreenTag_b_r2",
-CAST(SUM(a."sD_None_r2" + a."sD_Slight_r2")/5 AS NUMERIC) AS "sD_GreenTag_i_r2",
-CAST(SUM(a."sD_Extensive_r2") AS NUMERIC) AS "sD_YellowTag_d_r2",
-CAST(SUM(a."sD_Extensive_r2")/2.5 AS NUMERIC) AS "sD_YellowTag_i_r2",
-CAST(SUM(a."sD_Complete_r2") AS NUMERIC) AS "sD_RedTag_b_r2",
-CAST(SUM(a."sD_Complete_r2")/5 AS NUMERIC) AS "sD_RedTag_i_r2" ,
-
-i.geom AS "geom_poly",
-i.geompoint AS "geom_point"
-
-FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
-LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
-LEFT JOIN lut.retrofit_costs c ON b.eqbldgtype = c."Eq_BldgType"
-LEFT JOIN vs30.vs30_bc_site_model_xref d ON a."AssetID" = d.id
-LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
-LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
-LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
-LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
-LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
-LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
-LEFT JOIN sovi.sovi_index_canada k ON b.sauid = k.sauidt
-GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,i.geom,i.geompoint;
-
-*/
