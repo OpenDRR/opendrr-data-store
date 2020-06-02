@@ -1,0 +1,106 @@
+-- create psra indicators
+
+SELECT 
+a.id AS "AssetID",
+
+--intermediate variables for calculating potential displaced households
+e.structural_moderate_mean AS "sD_Moderate",
+e.structural_extensive_mean AS "sD_Extensive",
+e.structural_complete_mean AS "sD_Complete",
+g.mean_recovery_time AS "sC_Downtime",
+
+a.genocc AS "Occ_General",
+i.censusdu AS "CensusDU",
+
+-- (([SF_Hshlds] * [SF]) +  ([MF_Hshlds] * [MF])) * ([CensusDU] / ([SF_Hshlds] + [MF_Hshlds])
+CAST(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean  / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean  / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+(i.censusdu / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END),0)),0) AS NUMERIC) AS "DisplHshld",
+
+-- IF [sc_Downtime] > 3 THEN [DH]
+CAST((CASE WHEN g.mean_recovery_time > 3 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_3T",
+
+
+-- IF [sc_Downtime] > 30 THEN [DH]
+CAST((CASE WHEN g.mean_recovery_time > 30 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_30T",
+
+-- IF [sc_Downtime] > 90 THEN [DH]
+CAST((CASE WHEN g.mean_recovery_time > 90 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_90T",
+
+
+-- IF [sc_Downtime] > 180 THEN [DH]
+CAST((CASE WHEN g.mean_recovery_time > 180 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_180T",
+
+-- IF [sc_Downtime] > 360 THEN [DH]
+CAST((CASE WHEN g.mean_recovery_time > 360 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/i.people_du ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/i.people_du ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "sC_DisplHshld_360T",
+
+
+
+a.geom AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
+LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
+LEFT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
+LEFT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
+LEFT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
+LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt;
