@@ -1,0 +1,89 @@
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_economic_loss_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_economic_loss_sauid AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.4.1 Economic Loss - b0
+CAST(SUM(h.structural + h.nonstructural + h.contents) AS NUMERIC) AS "eAALt_Asset_b0",
+CAST(AVG((h.structural + h.nonstructural + h.contents)/a.number) AS NUMERIC) AS "eAALmr_Asset_b0",
+CAST(SUM(h.structural + h.nonstructural) AS NUMERIC) AS "eAALt_Bldg_b0",
+CAST(AVG((h.structural + h.nonstructural)/a.number) AS NUMERIC) AS "eAALmr_Bldg_b0",
+CAST(SUM(h.structural) AS NUMERIC) AS "eAALt_Str_b0",
+CAST(SUM(h.nonstructural) AS NUMERIC) AS "eAALt_NStr_b0",
+CAST(SUM(h.contents) AS NUMERIC) AS "eAALt_Cont_b0",
+
+-- 2.4.1 Economic Loss - r1
+CAST(SUM(i.structural + i.nonstructural + i.contents) AS NUMERIC) AS "eAALt_Asset_r1",
+CAST(AVG((i.structural + i.nonstructural + i.contents)/a.number) AS NUMERIC) AS "eAALmr_Asset_r1",
+CAST(SUM(i.structural + i.nonstructural) AS NUMERIC) AS "eAALt_Bldg_r1",
+CAST(AVG((i.structural + i.nonstructural)/a.number) AS NUMERIC) AS "eAALmr_Bldg_r1",
+CAST(SUM(i.structural) AS NUMERIC) AS "eAALt_Str_r1",
+CAST(SUM(i.nonstructural) AS NUMERIC) AS "eAALt_NStr_r1",
+CAST(SUM(i.contents) AS NUMERIC) AS "eAALt_Cont_r1",
+
+-- 2.4.1 Economic Loss - r2
+CAST(SUM(j.structural + j.nonstructural + j.contents) AS NUMERIC) AS "eAALt_Asset_r2",
+CAST(AVG((j.structural + j.nonstructural + j.contents)/a.number) AS NUMERIC) AS "eAALmr_Asset_r2",
+CAST(SUM(j.structural + j.nonstructural) AS NUMERIC) AS "eAALt_Bldg_r2",
+CAST(AVG((j.structural + j.nonstructural)/a.number) AS NUMERIC) AS "eAALmr_Bldg_r2",
+CAST(SUM(j.structural) AS NUMERIC) AS "eAALt_Str_r2",
+CAST(SUM(j.nonstructural) AS NUMERIC) AS "eAALt_NStr_r2",
+CAST(SUM(j.contents) AS NUMERIC) AS "eAALt_Cont_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
+LEFT JOIN psra.avg_losses_mean_684 i ON a.id = i.asset_id
+LEFT JOIN psra.avg_losses_mean_685 j ON a.id = j.asset_id
+LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,z.geom,z.geompoint;
+
+
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_sauid AS
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT
+a.sauid,
+
+-- 2.4.2 Probable Maximum Loss - b0
+a.loss_value AS "ePML_b0",
+a.loss_ratio AS "ePMLr_b0",
+a.loss_type AS "ePML_type_b0",
+a.return_period AS "ePML_Period_b0",
+a.annual_frequency_of_exceedence AS "ePML_Probability_b0",
+a.genocc AS "ePML_OccGen_b0",
+a.eqbldgtype AS "ePML_BldgType_b0",
+
+-- 2.4.2 Probable Maximum Loss - r1
+b.loss_value AS "ePML_r1",
+b.loss_ratio AS "ePMLr_r1",
+b.loss_type AS "ePML_type_r1",
+b.return_period AS "ePML_Period_r1",
+b.annual_frequency_of_exceedence AS "ePML_Probability_r1",
+b.genocc AS "ePML_OccGen_r1",
+b.eqbldgtype AS "ePML_BldgType_r1",
+
+-- 2.4.2 Probable Maximum Loss - r2
+c.loss_value AS "ePML_r2",
+c.loss_ratio AS "ePMLr_r2",
+c.loss_type AS "ePML_type_r2",
+c.return_period AS "ePML_Period_r2",
+c.annual_frequency_of_exceedence AS "ePML_Probability_r2",
+c.genocc AS "ePML_OccGen_r2",
+c.eqbldgtype AS "ePML_BldgType_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM psra.agg_curves_stats_679 a
+INNER JOIN psra.agg_curves_stats_684 b ON a.sauid = b.sauid
+INNER JOIN psra.agg_curves_stats_685 c ON a.sauid = c.sauid
+LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt";

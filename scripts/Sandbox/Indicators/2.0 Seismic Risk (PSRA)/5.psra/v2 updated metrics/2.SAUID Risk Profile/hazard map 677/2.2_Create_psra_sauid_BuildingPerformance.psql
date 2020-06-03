@@ -1,0 +1,268 @@
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_classical_damage_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_classical_damage_sauid AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.2 Building Performance
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.2.1 Classical Damage - b0
+CAST(SUM(c.no_damage) AS NUMERIC) AS "cDt_None_b0",
+CAST(AVG(c.no_damage/a.number) AS NUMERIC) AS "cDmr_None_b0",
+
+CAST(SUM(c.slight) AS NUMERIC) AS "cDt_Slight_b0",
+CAST(AVG(c.slight/a.number) AS NUMERIC) AS "cDmr_Slight_b0",
+
+CAST(SUM(c.moderate) AS NUMERIC) AS "cDt_Moderate_b0",
+CAST(AVG(c.moderate/a.number) AS NUMERIC) AS "cDmr_Moderate_b0",
+
+CAST(SUM(c.extensive) AS NUMERIC) AS "cDt_Extensive_b0",
+CAST(AVG(c.extensive/a.number) AS NUMERIC) AS "cDmr_Extensive_b0",
+
+CAST(SUM(c.complete) AS NUMERIC) AS "cDt_Complete_b0",
+CAST(AVG(c.complete/a.number) AS NUMERIC) AS "cDmr_Complete_b0",
+
+CAST(f.collapse_pc AS NUMERIC) AS "CDr_Collapse_b0",
+CAST(SUM(c.complete * f.collapse_pc) AS NUMERIC) AS "cDt_Collapse_b0",
+CAST(AVG(c.complete/a.number) * f.collapse_pc AS NUMERIC) AS "cDtp_Collapse_b0",
+
+-- 2.2.1 Classical Damage - r1
+CAST(SUM(d.no_damage) AS NUMERIC) AS "cDt_None_r1",
+CAST(AVG(d.no_damage/a.number) AS NUMERIC) AS "cDmr_None_r1",
+
+CAST(SUM(d.slight) AS NUMERIC) AS "cDt_Slight_r1",
+CAST(AVG(d.slight/a.number) AS NUMERIC) AS "cDmr_Slight_r1",
+
+CAST(SUM(d.moderate) AS NUMERIC) AS "cDt_Moderate_r1",
+CAST(AVG(d.moderate/a.number) AS NUMERIC) AS "cDmr_Moderate_r1",
+
+CAST(SUM(d.extensive) AS NUMERIC) AS "cDt_Extensive_r1",
+CAST(AVG(d.extensive/a.number) AS NUMERIC) AS "cDmr_Extensive_r1",
+
+CAST(SUM(d.complete) AS NUMERIC) AS "cDt_Complete_r1",
+CAST(AVG(d.complete/a.number) AS NUMERIC) AS "cDmr_Complete_r1",
+
+CAST(f.collapse_pc AS NUMERIC) AS "CDr_Collapse_r1",
+CAST(SUM(d.complete * f.collapse_pc) AS NUMERIC) AS "cDt_Collapse_r1",
+CAST(AVG(d.complete/a.number) * f.collapse_pc AS NUMERIC) AS "cDtp_Collapse_r1",
+
+-- 2.2.1 Classical Damage - r2
+CAST(SUM(e.no_damage) AS NUMERIC) AS "cDt_None_r2",
+CAST(AVG(e.no_damage/a.number) AS NUMERIC) AS "cDmr_None_r2",
+
+CAST(SUM(e.slight) AS NUMERIC) AS "cDt_Slight_r2",
+CAST(AVG(e.slight/a.number) AS NUMERIC) AS "cDmr_Slight_r2",
+
+CAST(SUM(e.moderate) AS NUMERIC) AS "cDt_Moderate_r2",
+CAST(AVG(e.moderate/a.number) AS NUMERIC) AS "cDmr_Moderate_r2",
+
+CAST(SUM(e.extensive) AS NUMERIC) AS "cDt_Extensive_r2",
+CAST(AVG(e.extensive/a.number) AS NUMERIC) AS "cDmr_Extensive_r2",
+
+CAST(SUM(e.complete) AS NUMERIC) AS "cDt_Complete_r2",
+CAST(AVG(e.complete/a.number) AS NUMERIC) AS "cDmr_Complete_r2",
+
+CAST(f.collapse_pc AS NUMERIC) AS "CDr_Collapse_r2",
+CAST(SUM(e.complete * f.collapse_pc) AS NUMERIC) AS "cDt_Collapse_r2",
+CAST(AVG(e.complete/a.number) * f.collapse_pc AS NUMERIC) AS "cDtp_Collapse_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
+LEFT JOIN psra.damages_structural_mean_682 d ON a.id = d.asset_id
+LEFT JOIN psra.damages_structural_mean_683 e ON a.id = e.asset_id
+LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
+LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,f.collapse_pc,z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_event_based_damage_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_event_based_damage_sauid AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.2 Building Performance
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.2.2 Event-Based Damage - b0
+CAST(SUM(e.structural_no_damage) AS NUMERIC) AS "eDt_None_b0",
+CAST(AVG(e.structural_no_damage_stdv) AS NUMERIC) AS "eDmsd_None_b0",
+CAST(AVG(e.structural_no_damage/a.number) AS NUMERIC) AS "eDmr_None_b0",
+
+CAST(SUM(e.structural_slight_mean) AS NUMERIC) AS "eDt_Slight_b0",
+CAST(AVG(e.structural_slight_stdv) AS NUMERIC) AS "eDmsd_Slight_b0",
+CAST(AVG(e.structural_slight_mean/a.number) AS NUMERIC) AS "eDmr_Slight_b0",
+
+CAST(SUM(e.structural_moderate_mean) AS NUMERIC) AS "eDt_Moderate_b0",
+CAST(AVG(e.structural_moderate_stdv) AS NUMERIC) AS "eDmsd_Moderate_b0",
+CAST(AVG(e.structural_moderate_mean/a.number) AS NUMERIC) AS "eDmr_Moderate_b0",
+
+CAST(SUM(e.structural_extensive_mean) AS NUMERIC) AS "eDt_Extensive_b0",
+CAST(AVG(e.structural_extensive_stdv) AS NUMERIC) AS "eDmsd_Extensive_b0",
+CAST(AVG(e.structural_extensive_mean/a.number) AS NUMERIC) AS "eDmr_Extensive_b0",
+
+CAST(SUM(e.structural_complete_mean) AS NUMERIC) AS "eDt_Complete_b0",
+CAST(AVG(e.structural_complete_stdv) AS NUMERIC) AS "eDmsd_Complete_b0",
+CAST(AVG(e.structural_complete_mean/a.number) AS NUMERIC) AS "eDmr_Complete_b0",
+
+CAST(SUM(e.structural_complete_mean * f.collapse_pc) AS NUMERIC) AS "eDt_Collapse_b0",
+CAST(AVG(e.structural_complete_stdv * f.collapse_pc) AS NUMERIC) AS "eDmsd_Collapse_b0",
+CAST(AVG((e.structural_complete_mean/a.number) * f.collapse_pc) AS NUMERIC) AS "eDmr_Collapse_b0",
+
+-- 2.2.2 Event-Based Damage - r1
+CAST(SUM(g.structural_no_damage) AS NUMERIC) AS "eDt_None_r1",
+CAST(AVG(g.structural_no_damage_stdv) AS NUMERIC) AS "eDmsd_None_r1",
+CAST(AVG(g.structural_no_damage/a.number) AS NUMERIC) AS "eDmr_None_r1",
+
+CAST(SUM(g.structural_slight_mean) AS NUMERIC) AS "eDt_Slight_r1",
+CAST(AVG(g.structural_slight_stdv) AS NUMERIC) AS "eDmsd_Slight_r1",
+CAST(AVG(g.structural_slight_mean/a.number) AS NUMERIC) AS "eDmr_Slight_r1",
+
+CAST(SUM(g.structural_moderate_mean) AS NUMERIC) AS "eDt_Moderate_r1",
+CAST(AVG(g.structural_moderate_stdv) AS NUMERIC) AS "eDmsd_Moderate_r1",
+CAST(AVG(g.structural_moderate_mean/a.number) AS NUMERIC) AS "eDmr_Moderate_r1",
+
+CAST(SUM(g.structural_extensive_mean) AS NUMERIC) AS "eDt_Extensive_r1",
+CAST(AVG(g.structural_extensive_stdv) AS NUMERIC) AS "eDmsd_Extensive_r1",
+CAST(AVG(g.structural_extensive_mean/a.number) AS NUMERIC) AS "eDmr_Extensive_r1",
+
+CAST(SUM(g.structural_complete_mean) AS NUMERIC) AS "eDt_Complete_r1",
+CAST(AVG(g.structural_complete_stdv) AS NUMERIC) AS "eDmsd_Complete_r1",
+CAST(AVG(g.structural_complete_mean/a.number) AS NUMERIC) AS "eDmr_Complete_r1",
+
+CAST(SUM(g.structural_complete_mean * f.collapse_pc) AS NUMERIC) AS "eDt_Collapse_r1",
+CAST(AVG(g.structural_complete_stdv * f.collapse_pc) AS NUMERIC) AS "eDmsd_Collapse_r1",
+CAST(AVG((g.structural_complete_mean/a.number) * f.collapse_pc) AS NUMERIC) AS "eDmr_Collapse_r1",
+
+-- 2.2.2 Event-Based Damage - r2
+CAST(SUM(h.structural_no_damage) AS NUMERIC) AS "eDt_None_r2",
+CAST(AVG(h.structural_no_damage_stdv) AS NUMERIC) AS "eDmsd_None_r2",
+CAST(AVG(h.structural_no_damage/a.number) AS NUMERIC) AS "eDmr_None_r2",
+
+CAST(SUM(h.structural_slight_mean) AS NUMERIC) AS "eDt_Slight_r2",
+CAST(AVG(h.structural_slight_stdv) AS NUMERIC) AS "eDmsd_Slight_r2",
+CAST(AVG(h.structural_slight_mean/a.number) AS NUMERIC) AS "eDmr_Slight_r2",
+
+CAST(SUM(h.structural_moderate_mean) AS NUMERIC) AS "eDt_Moderate_r2",
+CAST(AVG(h.structural_moderate_stdv) AS NUMERIC) AS "eDmsd_Moderate_r2",
+CAST(AVG(h.structural_moderate_mean/a.number) AS NUMERIC) AS "eDmr_Moderate_r2",
+
+CAST(SUM(h.structural_extensive_mean) AS NUMERIC) AS "eDt_Extensive_r2",
+CAST(AVG(h.structural_extensive_stdv) AS NUMERIC) AS "eDmsd_Extensive_r2",
+CAST(AVG(h.structural_extensive_mean/a.number) AS NUMERIC) AS "eDmr_Extensive_r2",
+
+CAST(SUM(h.structural_complete_mean) AS NUMERIC) AS "eDt_Complete_r2",
+CAST(AVG(h.structural_complete_stdv) AS NUMERIC) AS "eDmsd_Complete_r2",
+CAST(AVG(h.structural_complete_mean/a.number) AS NUMERIC) AS "eDmr_Complete_r2",
+
+CAST(SUM(h.structural_complete_mean * f.collapse_pc) AS NUMERIC) AS "eDt_Collapse_r2",
+CAST(AVG(h.structural_complete_stdv * f.collapse_pc) AS NUMERIC) AS "eDmsd_Collapse_r2",
+CAST(AVG((h.structural_complete_mean/a.number) * f.collapse_pc) AS NUMERIC) AS "eDmr_Collapse_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+LEFT JOIN psra.damages_rlz_000_686 g ON a.id = g.asset_refid
+LEFT JOIN psra.damages_rlz_000_687 h ON a.id = h.asset_refid
+LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
+LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,z.geom,z.geompoint;
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_recovery_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_recovery_sauid AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.2 Building Performance
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.2.3 Recovery - b0
+CAST(SUM(e.structural_slight_mean + e.structural_moderate_mean) AS NUMERIC) AS "eDt_GreenTag_b_b0",
+CAST(SUM(e.structural_slight_mean + e.structural_moderate_mean)/5 AS NUMERIC) AS "eDt_GreenTag_i_b0",
+
+CAST(SUM(e.structural_extensive_mean) AS NUMERIC) AS "eDt_YellowTag_b_b0",
+CAST(SUM(e.structural_extensive_mean)/2.5 AS NUMERIC) AS "eDt_YellowTag_i_b0",
+
+CAST(SUM(e.structural_complete_mean) AS NUMERIC) AS "eDt_RedTag_b_b0",
+CAST(SUM(e.structural_complete_mean)/5 AS NUMERIC) AS "eDt_RedTag_i_b0",
+
+CAST(SUM(e.structural_no_damage + (e.structural_slight_mean * 0.20) + (e.structural_moderate_mean * 0.05)) AS NUMERIC) AS "eDt_Operational_b0",
+CAST(SUM((e.structural_slight_mean * 0.80) + (e.structural_moderate_mean * 0.05 * 0.75) + (e.structural_extensive_mean * 0.20)) AS NUMERIC) AS "eDt_Functional_b0",
+CAST(SUM((e.structural_moderate_mean * 0.20) + (e.structural_extensive_mean * 0.40)) AS NUMERIC) AS "eDt_Repairable_b0",
+CAST(SUM((e.structural_extensive_mean * 0.30) + (e.structural_complete_mean * 0.20)) AS NUMERIC) AS "eDt_Failure_b0",
+
+CAST(AVG(g.mean_repair_time) AS NUMERIC) AS "eCm_Repair_b0",
+CAST(AVG(g.mean_interruption_time) AS NUMERIC) AS "eC_Construxn_b0",
+CAST(AVG(g.mean_recovery_time) AS NUMERIC) AS "eCm_Downtime_b0",
+CAST(SUM(g.debris_brick_wood_tons + g.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisT_b0",
+CAST(SUM(g.debris_brick_wood_tons) AS NUMERIC) AS "eCt_DebrisBW_b0",
+CAST(SUM(g.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisC_b0",
+
+-- 2.2.3 Recovery - r1
+CAST(SUM(f.structural_slight_mean + f.structural_moderate_mean) AS NUMERIC) AS "eDt_GreenTag_b_r1",
+CAST(SUM(f.structural_slight_mean + f.structural_moderate_mean)/5 AS NUMERIC) AS "eDt_GreenTag_i_r1",
+
+CAST(SUM(f.structural_extensive_mean) AS NUMERIC) AS "eDt_YellowTag_b_r1",
+CAST(SUM(f.structural_extensive_mean)/2.5 AS NUMERIC) AS "eDt_YellowTag_i_r1",
+
+CAST(SUM(f.structural_complete_mean) AS NUMERIC) AS "eDt_RedTag_b_r1",
+CAST(SUM(f.structural_complete_mean)/5 AS NUMERIC) AS "eDt_RedTag_i_r1",
+
+CAST(SUM(f.structural_no_damage + (f.structural_slight_mean * 0.20) + (f.structural_moderate_mean * 0.05)) AS NUMERIC) AS "eDt_Operational_r1",
+CAST(SUM((f.structural_slight_mean * 0.80) + (f.structural_moderate_mean * 0.05 * 0.75) + (f.structural_extensive_mean * 0.20)) AS NUMERIC) AS "eDt_Functional_r1",
+CAST(SUM((f.structural_moderate_mean * 0.20) + (f.structural_extensive_mean * 0.40)) AS NUMERIC) AS "eDt_Repairable_r1",
+CAST(SUM((f.structural_extensive_mean * 0.30) + (f.structural_complete_mean * 0.20)) AS NUMERIC) AS "eDt_Failure_r1",
+
+CAST(AVG(h.mean_repair_time) AS NUMERIC) AS "eCm_Repair_r1",
+CAST(AVG(h.mean_interruption_time) AS NUMERIC) AS "eC_Construxn_r1",
+CAST(AVG(h.mean_recovery_time) AS NUMERIC) AS "eCm_Downtime_r1",
+CAST(SUM(h.debris_brick_wood_tons + h.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisT_r1",
+CAST(SUM(h.debris_brick_wood_tons) AS NUMERIC) AS "eCt_DebrisBW_r1",
+CAST(SUM(h.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisC_r1",
+
+-- 2.2.3 Recovery - r2
+CAST(SUM(j.structural_slight_mean + j.structural_moderate_mean) AS NUMERIC) AS "eDt_GreenTag_b_r2",
+CAST(SUM(j.structural_slight_mean + j.structural_moderate_mean)/5 AS NUMERIC) AS "eDt_GreenTag_i_r2",
+
+CAST(SUM(j.structural_extensive_mean) AS NUMERIC) AS "eDt_YellowTag_b_r2",
+CAST(SUM(j.structural_extensive_mean)/2.5 AS NUMERIC) AS "eDt_YellowTag_i_r2",
+
+CAST(SUM(j.structural_complete_mean) AS NUMERIC) AS "eDt_RedTag_b_r2",
+CAST(SUM(j.structural_complete_mean)/5 AS NUMERIC) AS "eDt_RedTag_i_r2",
+
+CAST(SUM(j.structural_no_damage + (j.structural_slight_mean * 0.20) + (j.structural_moderate_mean * 0.05)) AS NUMERIC) AS "eDt_Operational_r2",
+CAST(SUM((j.structural_slight_mean * 0.80) + (j.structural_moderate_mean * 0.05 * 0.75) + (j.structural_extensive_mean * 0.20)) AS NUMERIC) AS "eDt_Functional_r2",
+CAST(SUM((j.structural_moderate_mean * 0.20) + (j.structural_extensive_mean * 0.40)) AS NUMERIC) AS "eDt_Repairable_r2",
+CAST(SUM((j.structural_extensive_mean * 0.30) + (j.structural_complete_mean * 0.20)) AS NUMERIC) AS "eDt_Failure_r2",
+
+CAST(AVG(i.mean_repair_time) AS NUMERIC) AS "eCm_Repair_r2",
+CAST(AVG(i.mean_interruption_time) AS NUMERIC) AS "eC_Construxn_r2",
+CAST(AVG(i.mean_recovery_time) AS NUMERIC) AS "eCm_Downtime_r2",
+CAST(SUM(i.debris_brick_wood_tons + i.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisT_r2",
+CAST(SUM(i.debris_brick_wood_tons) AS NUMERIC) AS "eCt_DebrisBW_r2",
+CAST(SUM(i.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisC_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+LEFT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
+
+LEFT JOIN psra.damages_rlz_000_686 f ON a.id = f.asset_refid
+LEFT JOIN psra.consequences_rlz_000_686 h ON a.id = h.asset_ref
+
+LEFT JOIN psra.damages_rlz_000_687 j ON a.id = j.asset_refid
+LEFT JOIN psra.consequences_rlz_000_687 i ON a.id = i.asset_ref
+
+LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,z.geom,z.geompoint;
