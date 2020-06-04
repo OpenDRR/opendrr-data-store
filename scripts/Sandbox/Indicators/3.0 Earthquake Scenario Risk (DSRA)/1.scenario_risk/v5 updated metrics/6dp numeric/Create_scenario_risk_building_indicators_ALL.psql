@@ -12,22 +12,6 @@ SELECT
 a."AssetID",
 b.sauid AS "Sauid",
 
-/*
--- physical exposure indicators
-CAST(CAST(ROUND(CAST(b.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Asset_Lon",
-CAST(CAST(ROUND(CAST(b.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Asset_Lat",
-CAST(CAST(ROUND(CAST(b.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldNum",
-b.taxonomy AS "E_BldgTaxom",
-CAST(CAST(ROUND(CAST(c."BldgArea_ft2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgArea",
-CAST(CAST(ROUND(CAST(b.day AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_PopDay",
-CAST(CAST(ROUND(CAST(b.night AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_PopNight",
-CAST(CAST(ROUND(CAST(b.transit AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_PopTransit",
-CAST(CAST(ROUND(CAST(b.structural AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_StrValue",
-CAST(CAST(ROUND(CAST(b.nonstructural AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_NStrValue",
-CAST(CAST(ROUND(CAST(b.contents AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_ContValue",
-CAST(CAST(ROUND(CAST(c."CAD_RetrofitCost_Bldg" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_RetrofitCost",
-*/
-
 -- 3.1.1 Scenario Shakemap Intensity
 f.rupture_name AS "sH_RupName",
 a."Rupture_Abbr" AS "sH_RupAbbr",
