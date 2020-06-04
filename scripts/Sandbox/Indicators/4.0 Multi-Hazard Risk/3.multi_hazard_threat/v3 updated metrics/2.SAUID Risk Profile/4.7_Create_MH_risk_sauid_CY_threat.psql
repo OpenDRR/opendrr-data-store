@@ -1,0 +1,148 @@
+-- create schema for new scenario
+CREATE SCHEMA IF NOT EXISTS results_mh;
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_mh.cy_threat_cy_wind_hazard_sauid CASCADE;
+CREATE VIEW results_mh.cy_threat_cy_wind_hazard_sauid AS 
+
+-- 4.0 Multi-Hazard Risk
+-- 4.7 Cyclone Threat
+-- 4.7.1 Cyclone Wind Hazard
+SELECT 
+a.sauid AS "Sauid",
+
+CAST(e.cy100 AS NUMERIC) AS "CYi_100",
+COALESCE(CAST((e.cy100 - (SELECT cy100_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT cy100_max FROM mh.mh_intensity_canada_minmax) - (SELECT cy100_min FROM mh.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "CYn_100",
+CAST(e.cy250 AS NUMERIC) AS "CYi_250",
+COALESCE(CAST((e.cy250 - (SELECT cy250_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT cy250_max FROM mh.mh_intensity_canada_minmax) - (SELECT cy250_min FROM mh.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cyn_250",
+CAST(e.cy500 AS NUMERIC) AS "CYi_500",
+COALESCE(CAST((e.cy500 - (SELECT cy500_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT cy500_max FROM mh.mh_intensity_canada_minmax) - (SELECT cy500_min FROM mh.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "Cyn_500",
+(SELECT "Cy500t" FROM mh.mh_thresholds) AS "CYt_500", -- 500yr Cyclone Hazard Threat
+CAST(e.cy1000 AS NUMERIC) AS "CYi_1000",
+COALESCE(CAST((e.cy1000 - (SELECT cy1000_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT cy1000_max FROM mh.mh_intensity_canada_minmax) - (SELECT cy1000_min FROM mh.mh_intensity_canada_minmax),0) AS NUMERIC),0) AS "CYn_1000",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d ON a.sauid = d."SAUIDt"
+LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
+GROUP BY a.sauid,e.cy100,e.cy250,e.cy500,e.cy1000,d.geom,d.geompoint;
+
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_mh.cy_threat_threat_to_buildings_sauid CASCADE;
+CREATE VIEW results_mh.cy_threat_threat_to_buildings_sauid AS 
+
+-- 4.0 Multi-Hazard Risk
+-- 4.7 Cyclone Threat
+-- 4.7.2 Threat to Buildings
+SELECT 
+a.sauid AS "Sauid",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.number) ELSE 0 END AS NUMERIC),0) AS "CYt_Bldgs",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_ResLD",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_ResMD",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_ResHD",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Commercial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_Comm",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Industrial' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_Ind",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_Civic",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_Agr",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_Wood",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_Concrete",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Precast' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_PreCast",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='RMasonry' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_RMasonry",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='URMasonry' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_URMasonry",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Steel' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_Steel",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.bldggen ='Manufactured' THEN a.number ELSE 0 END) ELSE 0 END AS NUMERIC),0) AS "CYt_Manufactured",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d ON a.sauid = d."SAUIDt"
+LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
+GROUP BY a.sauid,e.cy500,d.geom,d.geompoint;
+
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_mh.cy_threat_threat_to_people_sauid CASCADE;
+CREATE VIEW results_mh.cy_threat_threat_to_people_sauid AS 
+
+-- 4.0 Multi-Hazard Risk
+-- 4.7 Cyclone Threat
+-- 4.7.3 Threat to People
+SELECT 
+a.sauid AS "Sauid",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN c.censuspop ELSE 0 END AS NUMERIC),0) AS "CYtPop",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.day) ELSE 0 END AS NUMERIC),0) AS "CYt_DayPop",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.night) ELSE 0 END AS NUMERIC),0) AS "CYt_NightPop",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.transit) ELSE 0 END AS NUMERIC),0) AS "CYt_TransitPop",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / c.people_du ELSE 0 END AS NUMERIC),0) AS "CYt_SFHshlds",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN (SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / 
+c.people_du ELSE 0 END AS NUMERIC),0) AS "CYt_MFHshlds",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d ON a.sauid = d."SAUIDt"
+LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
+GROUP BY a.sauid,c.censuspop,c.people_du,e.cy500,d.geom,d.geompoint;
+
+
+-- create multi hazard indicators
+DROP VIEW IF EXISTS results_mh.cy_threat_threat_to_assets_sauid CASCADE;
+CREATE VIEW results_mh.cy_threat_threat_to_assets_sauid AS 
+
+-- 4.0 Multi-Hazard Risk
+-- 4.7 Cyclone Threat
+-- 4.7.4 Threat to Assets
+SELECT 
+a.sauid AS "Sauid",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.structural + a.nonstructural + a.contents) ELSE 0 END AS NUMERIC),0) AS "CYt_AssetCost",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.structural + a.nonstructural) ELSE 0 END AS NUMERIC),0) AS "CYt_BldgCost",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.structural) ELSE 0 END AS NUMERIC),0) AS "CYt_StrCost",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.nonstructural) ELSE 0 END AS NUMERIC),0) AS "CYt_NStrCost",
+
+COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.contents) ELSE 0 END AS NUMERIC),0) AS "CYt_ContCost",
+
+d.geom AS "geom_poly",
+d.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
+LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
+LEFT JOIN boundaries."Geometry SAUID" d ON a.sauid = d."SAUIDt"
+LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
+GROUP BY a.sauid,e.cy500,d.geom,d.geompoint;
