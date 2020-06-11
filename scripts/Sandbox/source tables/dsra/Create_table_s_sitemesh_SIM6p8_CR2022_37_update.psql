@@ -12,17 +12,18 @@ a."gmv_SA(0.2)",
 a."gmv_SA(0.3)",
 a."gmv_SA(0.6)",
 a."gmv_SA(1.0)",
+a."gmv_SA(2.0)",
 b.lon,
 b.lat
 
 INTO gmf.gmfdata_sitemesh_sim6p8_cr2022_37
 
 FROM gmf.s_gmfdata_sim6p8_cr2022_37 a
-INNER JOIN gmf.s_sitemesh_sim6p8_cr2022_37 b on a.site_id = b.site_id;
+INNER JOIN sitemesh.s_sitemesh_sim6p8_cr2022_37 b on a.site_id = b.site_id;
 
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
 ALTER TABLE gmf.gmfdata_sitemesh_sim6p8_cr2022_37 ADD COLUMN geom geometry(Point,4326);
-UPDATE sitemesh.gmfdata_sitemesh_sim6p8_cr2022_37 SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+UPDATE gmf.gmfdata_sitemesh_sim6p8_cr2022_37 SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 
 
 -- create spatial index
@@ -44,6 +45,7 @@ b."gmv_SA(0.2)",
 b."gmv_SA(0.3)",
 b."gmv_SA(0.6)",
 b."gmv_SA(1.0)",
+b."gmv_SA(2.0)",
 b.lon,
 b.lat,
 a.lon AS "asset_lon",
@@ -62,6 +64,7 @@ SELECT event_id,
 	"gmv_SA(0.3)",
 	"gmv_SA(0.6)",
 	"gmv_SA(1.0)",
+	"gmv_SA(2.0)",
 	lon,
 	lat,
 	geom

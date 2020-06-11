@@ -7,6 +7,8 @@ a.id,
 a.lon AS "asset_lon",
 a.lat AS "asset_lat",
 b.vs30,
+b.z1pt0,
+b.z2pt5,
 b.lon AS "vs_lon",
 b.lat AS "vs_lat",
 ST_Distance(a.geom,b.geom) AS "distance"
@@ -15,6 +17,8 @@ FROM exposure.canada_exposure a
 CROSS JOIN LATERAL 
 (
 SELECT vs30,
+	z1pt0,
+	z2pt5,
 	geom,
 	lon,
 	lat
