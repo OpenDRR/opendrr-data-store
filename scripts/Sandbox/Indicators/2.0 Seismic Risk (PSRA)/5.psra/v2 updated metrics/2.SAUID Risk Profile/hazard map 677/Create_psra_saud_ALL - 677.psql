@@ -846,8 +846,9 @@ LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_sauid AS
+
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_b0_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_b0_sauid AS
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security
@@ -855,36 +856,51 @@ SELECT
 a.sauid,
 
 -- 2.4.2 Probable Maximum Loss - b0
-a.loss_value AS "ePML_b0",
-a.loss_ratio AS "ePMLr_b0",
-a.loss_type AS "ePML_type_b0",
-a.return_period AS "ePML_Period_b0",
-a.annual_frequency_of_exceedence AS "ePML_Probability_b0",
-a.genocc AS "ePML_OccGen_b0",
-a.eqbldgtype AS "ePML_BldgType_b0",
+a.loss_value AS "ePML",
+a.loss_ratio AS "ePMLr",
+a.loss_type AS "ePML_type",
+a.return_period AS "ePML_Period",
+a.annual_frequency_of_exceedence AS "ePML_Probability",
+a.genocc AS "ePML_OccGen",
+a.eqbldgtype AS "ePML_BldgType"
+
+FROM psra.agg_curves_stats_679 a;
+
+
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r1_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r1_sauid AS
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT
+a.sauid,
 
 -- 2.4.2 Probable Maximum Loss - r1
-b.loss_value AS "ePML_r1",
-b.loss_ratio AS "ePMLr_r1",
-b.loss_type AS "ePML_type_r1",
-b.return_period AS "ePML_Period_r1",
-b.annual_frequency_of_exceedence AS "ePML_Probability_r1",
-b.genocc AS "ePML_OccGen_r1",
-b.eqbldgtype AS "ePML_BldgType_r1",
+a.loss_value AS "ePML",
+a.loss_ratio AS "ePMLr",
+a.loss_type AS "ePML_type",
+a.return_period AS "ePML_Period",
+a.annual_frequency_of_exceedence AS "ePML_Probability",
+a.genocc AS "ePML_OccGen",
+a.eqbldgtype AS "ePML_BldgType"
+
+FROM psra.agg_curves_stats_684 a;
+
+DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r2_sauid CASCADE;
+CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r2_sauid AS
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT
+a.sauid,
 
 -- 2.4.2 Probable Maximum Loss - r2
-c.loss_value AS "ePML_r2",
-c.loss_ratio AS "ePMLr_r2",
-c.loss_type AS "ePML_type_r2",
-c.return_period AS "ePML_Period_r2",
-c.annual_frequency_of_exceedence AS "ePML_Probability_r2",
-c.genocc AS "ePML_OccGen_r2",
-c.eqbldgtype AS "ePML_BldgType_r2",
+a.loss_value AS "ePML",
+a.loss_ratio AS "ePMLr",
+a.loss_type AS "ePML_type",
+a.return_period AS "ePML_Period",
+a.annual_frequency_of_exceedence AS "ePML_Probability",
+a.genocc AS "ePML_OccGen",
+a.eqbldgtype AS "ePML_BldgType"
 
-z.geom AS "geom_poly",
-z.geompoint AS "geom_point"
-
-FROM psra.agg_curves_stats_679 a
-INNER JOIN psra.agg_curves_stats_684 b ON a.sauid = b.sauid
-INNER JOIN psra.agg_curves_stats_685 c ON a.sauid = c.sauid
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt";
+FROM psra.agg_curves_stats_685 a;

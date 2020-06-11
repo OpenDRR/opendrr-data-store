@@ -2,8 +2,8 @@
 CREATE SCHEMA IF NOT EXISTS results_psra_hazard_map_mean_677;
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_500yr_hazard_intensity_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_500yr_hazard_intensity_sauid AS 
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_500yr_hazard_intensity_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_500yr_hazard_intensity_sauid_t AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.1 Probabilistic Seismic Hazard
@@ -35,8 +35,8 @@ GROUP BY a.sauid,d."PGA_0.02",d."PGV_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."
 
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_2500yr_hazard_intensity_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_2500yr_hazard_intensity_sauid AS 
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_2500yr_hazard_intensity_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_2500yr_hazard_intensity_sauid_t AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.1 Probabilistic Seismic Hazard
@@ -67,8 +67,8 @@ GROUP BY a.sauid,d."PGA_0.1",d."PGV_0.1",d."SA(0.1)_0.1",d."SA(0.2)_0.1",d."SA(0
 
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_site_amplification_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_site_amplification_sauid AS 
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_site_amplification_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_site_amplification_sauid_t AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.1 Probabilistic Seismic Hazard
@@ -91,8 +91,8 @@ LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,d.vs_lon,d.vs_lat,d.vs30,z.geom,z.geompoint;
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_classical_damage_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_classical_damage_sauid AS 
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_classical_damage_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_classical_damage_sauid_t AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.2 Building Performance
@@ -173,8 +173,8 @@ GROUP BY a.sauid,f.collapse_pc,z.geom,z.geompoint;
 
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_event_based_damage_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_event_based_damage_sauid AS 
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_event_based_damage_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_event_based_damage_sauid_t AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.2 Building Performance
@@ -269,8 +269,8 @@ GROUP BY a.sauid,z.geom,z.geompoint;
 
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_recovery_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_recovery_sauid AS 
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_recovery_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_recovery_sauid_t AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.2 Building Performance
@@ -360,8 +360,8 @@ LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_casualties_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_casualties_sauid AS 
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_casualties_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_casualties_sauid_t AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.3 Affected People
@@ -443,8 +443,8 @@ GROUP BY a.sauid,z.geom,z.geompoint;
 
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_social_disruption_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_social_disruption_sauid AS 
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_social_disruption_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_social_disruption_sauid_t AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.3 Affected People
@@ -800,8 +800,8 @@ LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,i.censuspop,i.censusdu,i.people_du,n.age_gt65,n.age_lt6,n.renter,n.inc_hshld,n.imm_lt5,n.live_alone,n.no_engfr,n.lonepar3kids,n.indigenous,z.geom,z.geompoint;
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_economic_loss_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_economic_loss_sauid AS 
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_economic_loss_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_economic_loss_sauid_t AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security
@@ -846,8 +846,8 @@ LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_b0_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_b0_sauid AS
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_b0_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_b0_sauid_t AS
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security
@@ -866,8 +866,8 @@ a.eqbldgtype AS "ePML_BldgType"
 FROM psra.agg_curves_stats_679 a;
 
 
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r1_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r1_sauid AS
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r1_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r1_sauid_t AS
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security
@@ -885,8 +885,8 @@ a.eqbldgtype AS "ePML_BldgType"
 
 FROM psra.agg_curves_stats_684 a;
 
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r2_sauid CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r2_sauid AS
+DROP TABLE IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r2_sauid_t CASCADE;
+CREATE TABLE results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_pml_r2_sauid_t AS
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security
