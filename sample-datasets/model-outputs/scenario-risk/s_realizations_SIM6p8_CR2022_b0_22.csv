@@ -1,4 +1,3 @@
-ordinal,branch_path,weight
-0,"[NBCC2015_AA13_inslab50_low]",2.0000000e-01
-1,"[NBCC2015_AA13_inslab50_central]",5.0000000e-01
-2,"[NBCC2015_AA13_inslab50_high]",3.0000001e-01
+version https://git-lfs.github.com/spec/v1
+oid sha256:37fbf8ea8284d486eb73d4494a1524af4b91d90a0c4887dc44eec4ec83a06143
+size 173
