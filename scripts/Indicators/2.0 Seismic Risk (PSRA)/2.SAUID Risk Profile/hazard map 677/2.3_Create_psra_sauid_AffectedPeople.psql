@@ -77,7 +77,7 @@ LEFT JOIN psra.avg_losses_mean_684 j ON a.id = j.asset_id
 LEFT JOIN psra.consequences_rlz_000_687 k ON a.id = k.asset_ref
 LEFT JOIN psra.avg_losses_mean_685 l ON a.id = l.asset_id
 
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 
@@ -435,5 +435,5 @@ LEFT JOIN psra.damages_rlz_000_687 m ON a.id = m.asset_refid
 
 LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt
 LEFT JOIN sovi.sovi_census_canada n on a.sauid = n.sauidt
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,i.censuspop,i.censusdu,i.people_du,n.age_gt65,n.age_lt6,n.renter,n.inc_hshld,n.imm_lt5,n.live_alone,n.no_engfr,n.lonepar3kids,n.indigenous,z.geom,z.geompoint;

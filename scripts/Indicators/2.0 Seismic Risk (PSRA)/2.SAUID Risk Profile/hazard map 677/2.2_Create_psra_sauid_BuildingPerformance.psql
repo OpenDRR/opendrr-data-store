@@ -75,7 +75,7 @@ RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
 LEFT JOIN psra.damages_structural_mean_682 d ON a.id = d.asset_id
 LEFT JOIN psra.damages_structural_mean_683 e ON a.id = e.asset_id
 LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,f.collapse_pc,z.geom,z.geompoint;
 
 
@@ -172,7 +172,7 @@ RIGHT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
 LEFT JOIN psra.damages_rlz_000_686 g ON a.id = g.asset_refid
 LEFT JOIN psra.damages_rlz_000_687 h ON a.id = h.asset_refid
 LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 
@@ -264,5 +264,5 @@ LEFT JOIN psra.consequences_rlz_000_686 h ON a.id = h.asset_ref
 LEFT JOIN psra.damages_rlz_000_687 j ON a.id = j.asset_refid
 LEFT JOIN psra.consequences_rlz_000_687 i ON a.id = i.asset_ref
 
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;

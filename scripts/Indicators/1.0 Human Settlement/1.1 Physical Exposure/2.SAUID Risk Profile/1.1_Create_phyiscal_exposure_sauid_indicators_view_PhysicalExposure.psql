@@ -29,7 +29,7 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,a.lon,a.lat,a.landusetyp,c."area_km2",c.censuspop,c.area_ha,c.censusbldg,c.people_du,c.censusdu,c.sactype,c.landuse,d.geom,d.geompoint;
 
 -- create physical exposure indicators
@@ -62,7 +62,7 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,c.people_du,d.geom,d.geompoint;
 
 -- create physical exposure indicators
@@ -92,7 +92,7 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 -- create physical exposure indicators
@@ -114,7 +114,7 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 
@@ -137,7 +137,7 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 -- create physical exposure indicators
@@ -161,5 +161,5 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d on a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;

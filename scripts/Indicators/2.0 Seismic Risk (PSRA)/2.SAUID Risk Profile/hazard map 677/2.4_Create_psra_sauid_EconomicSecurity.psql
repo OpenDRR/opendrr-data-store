@@ -41,7 +41,7 @@ FROM exposure.canada_exposure a
 RIGHT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
 LEFT JOIN psra.avg_losses_mean_684 i ON a.id = i.asset_id
 LEFT JOIN psra.avg_losses_mean_685 j ON a.id = j.asset_id
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 

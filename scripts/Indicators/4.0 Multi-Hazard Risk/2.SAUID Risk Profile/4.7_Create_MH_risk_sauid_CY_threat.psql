@@ -27,7 +27,7 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d ON a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.cy100,e.cy250,e.cy500,e.cy1000,d.geom,d.geompoint;
 
@@ -78,7 +78,7 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d ON a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.cy500,d.geom,d.geompoint;
 
@@ -112,7 +112,7 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d ON a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,c.censuspop,c.people_du,e.cy500,d.geom,d.geompoint;
 
@@ -143,6 +143,6 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry SAUID" d ON a.sauid = d."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.cy500,d.geom,d.geompoint;

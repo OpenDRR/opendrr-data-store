@@ -47,7 +47,7 @@ LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
 LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
 LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
-LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
 LEFT JOIN sovi.sovi_index_canada k ON b.sauid = k.sauidt
 GROUP BY a."Rupture_Abbr",a."gmpe_Model",a."Weight",a."Realization",b.sauid,d.vs30,d.z1pt0,d.z2pt5,d.vs_lon,d.vs_lat,e.site_id,e.lon,e.lat,f.source_type,
@@ -127,7 +127,7 @@ LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
 LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
 LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
-LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
 LEFT JOIN sovi.sovi_index_canada k ON b.sauid = k.sauidt
 GROUP BY b.sauid,i.geom,i.geompoint;
@@ -190,7 +190,7 @@ LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
 LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
 LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
-LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
 LEFT JOIN sovi.sovi_index_canada k ON b.sauid = k.sauidt
 GROUP BY b.sauid,i.geom,i.geompoint;
@@ -250,7 +250,7 @@ LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
 LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
 LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
-LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
 LEFT JOIN sovi.sovi_index_canada k ON b.sauid = k.sauidt
 GROUP BY b.sauid,i.geom,i.geompoint;
@@ -486,7 +486,7 @@ LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
 LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
 LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
-LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
 LEFT JOIN sovi.sovi_index_canada k ON b.sauid = k.sauidt
 GROUP BY b.sauid,h.censuspop,h.censusdu,h.people_du,j.inc_hshld,j.imm_lt5,j.live_alone,j.no_engfr,j.lonepar3kids,j.indigenous,j.renter,j.age_lt6,j.age_gt65,i.geom,i.geompoint;
@@ -542,7 +542,7 @@ LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
 LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype
 LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
-LEFT JOIN boundaries."Geometry SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
 LEFT JOIN sovi.sovi_index_canada k ON b.sauid = k.sauidt
 GROUP BY b.sauid,f.source_type,f.rupture_name,f.magnitude,i.geom,i.geompoint;

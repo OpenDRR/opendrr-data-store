@@ -30,7 +30,7 @@ z.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN psra.hazard_map_mean_688_xref d ON a.id = d.id
 RIGHT JOIN psra.damages_structural_mean_690 c ON a.id = c.asset_id
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,d."PGA_0.02",d."PGV_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."SA(0.3)_0.02",d."SA(0.5)_0.02",d."SA(0.6)_0.02",d."SA(1.0)_0.02",d."SA(2.0)_0.02",d."SA(5.0)_0.02",d."SA(10.0)_0.02",z.geom,z.geompoint;
 
 
@@ -62,7 +62,7 @@ z.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN psra.hazard_map_mean_688_xref d ON a.id = d.id
 RIGHT JOIN psra.damages_structural_mean_690 c ON a.id = c.asset_id
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,d."PGA_0.1",d."PGV_0.1",d."SA(0.1)_0.1",d."SA(0.2)_0.1",d."SA(0.3)_0.1",d."SA(0.5)_0.1",d."SA(0.6)_0.1",d."SA(1.0)_0.1",d."SA(2.0)_0.1",d."SA(5.0)_0.1",d."SA(10.0)_0.1",z.geom,z.geompoint;
 
 
@@ -87,7 +87,7 @@ z.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN vs30.vs30_bc_site_model_xref d ON a.id = d.id
 RIGHT JOIN psra.damages_structural_mean_690 c ON a.id = c.asset_id
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,d.vs_lon,d.vs_lat,d.vs30,z.geom,z.geompoint;
 
 -- create psra indicators
@@ -167,7 +167,7 @@ RIGHT JOIN psra.damages_structural_mean_690 c ON a.id = c.asset_id
 LEFT JOIN psra.damages_structural_mean_692 d ON a.id = d.asset_id
 LEFT JOIN psra.damages_structural_mean_693 e ON a.id = e.asset_id
 LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,f.collapse_pc,z.geom,z.geompoint;
 
 
@@ -264,7 +264,7 @@ RIGHT JOIN psra.damages_rlz_000_695 e ON a.id = e.asset_refid
 LEFT JOIN psra.damages_rlz_000_697 g ON a.id = g.asset_refid
 LEFT JOIN psra.damages_rlz_000_700 h ON a.id = h.asset_refid
 LEFT JOIN lut.collapse_probability f ON a.eqbldgtype = f.eqbldgtype
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 
@@ -356,7 +356,7 @@ LEFT JOIN psra.consequences_rlz_000_697 h ON a.id = h.asset_ref
 LEFT JOIN psra.damages_rlz_000_700 j ON a.id = j.asset_refid
 LEFT JOIN psra.consequences_rlz_000_700 i ON a.id = i.asset_ref
 
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 -- create psra indicators
@@ -438,7 +438,7 @@ LEFT JOIN psra.avg_losses_mean_696 j ON a.id = j.asset_id
 LEFT JOIN psra.consequences_rlz_000_700 k ON a.id = k.asset_ref
 LEFT JOIN psra.avg_losses_mean_698 l ON a.id = l.asset_id
 
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 
@@ -796,7 +796,7 @@ LEFT JOIN psra.damages_rlz_000_700 m ON a.id = m.asset_refid
 
 LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt
 LEFT JOIN sovi.sovi_census_canada n on a.sauid = n.sauidt
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,i.censuspop,i.censusdu,i.people_du,n.age_gt65,n.age_lt6,n.renter,n.inc_hshld,n.imm_lt5,n.live_alone,n.no_engfr,n.lonepar3kids,n.indigenous,z.geom,z.geompoint;
 
 -- create psra indicators
@@ -842,7 +842,7 @@ FROM exposure.canada_exposure a
 RIGHT JOIN psra.avg_losses_mean_694 h ON a.id = h.asset_id
 LEFT JOIN psra.avg_losses_mean_696 i ON a.id = i.asset_id
 LEFT JOIN psra.avg_losses_mean_698 j ON a.id = j.asset_id
-LEFT JOIN boundaries."Geometry SAUID" z ON a.sauid = z."SAUIDt"
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
 
 

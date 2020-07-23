@@ -38,7 +38,7 @@ CAST(e."gmv_SA(0.2)" AS NUMERIC) AS "sH_Sa0p2",
 CAST(e."gmv_SA(0.3)" AS NUMERIC) AS "sH_Sa0p3",
 CAST(e."gmv_SA(0.6)" AS NUMERIC) AS "sH_Sa0p6",
 CAST(e."gmv_SA(1.0)" AS NUMERIC) AS "sH_Sa1p0",
-CAST(e."gmv_SA(2.0)" AS NUMERIC)AS "sH_Sa2p0",
+CAST(e."gmv_SA(2.0)" AS NUMERIC)AS "sH_Sa2p0"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
