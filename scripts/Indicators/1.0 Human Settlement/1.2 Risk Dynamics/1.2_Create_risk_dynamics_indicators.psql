@@ -38,8 +38,8 @@ geom AS "geom_point"
 FROM ghsl.ghsl_hazthreat_may2020_v1p2;
 
 -- create risk dynamic indicators
-DROP VIEW IF EXISTS results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_land_use_change CASCADE;
-CREATE VIEW results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_land_use_change AS 
+DROP VIEW IF EXISTS results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_hazard_susceptibility CASCADE;
+CREATE VIEW results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_hazard_susceptibility AS 
 
 -- 1.2 Risk Dynamics
 -- 1.2.2 Land Use Change
