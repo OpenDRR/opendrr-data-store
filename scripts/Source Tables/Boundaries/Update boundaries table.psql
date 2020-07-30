@@ -1,0 +1,11 @@
+-- add additional geometries field to enable PostGIS point (WGS1984 SRID = 4326)
+ALTER TABLE boundaries."Geometry_SAUID" ADD COLUMN geompoint geometry(Point,4326);
+UPDATE boundaries."Geometry_SAUID" SET geompoint = st_setsrid(st_makepoint("Lon","Lat"),4326);
+
+-- fix error geometries in Geometry_SAUID
+UPDATE boundaries."Geometry_SAUID"
+SET geom = ST_MakeValid(geom);
+
+-- change new PK 
+ALTER TABLE boundaries."Geometry_SAUID" DROP CONSTRAINT IF EXISTS "Geometry_SAUID_pkey";
+ALTER TABLE boundaries."Geometry_SAUID" ADD PRIMARY KEY ("SAUIDt");
