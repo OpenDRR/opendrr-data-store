@@ -60,7 +60,6 @@ ON ghsl.ghsl_hazthreat_may2020_v1p2 using GIST (geom);
 -- some issue with the original source dataset, nulll values are present in ghslid. erase all null ghslid. 
 DELETE FROM ghsl.ghsl_hazthreat_may2020_v1p2 WHERE ghslid IS NULL;
 
--- add primary key
 -- add pkey
 ALTER TABLE ghsl.ghsl_hazthreat_may2020_v1p2 DROP CONSTRAINT IF EXISTS ghsl_hazthreat_may2020_v1p2_pkey;
 ALTER TABLE ghsl.ghsl_hazthreat_may2020_v1p2 ADD PRIMARY KEY(ghslID);
