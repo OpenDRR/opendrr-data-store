@@ -73,3 +73,10 @@ FROM gmf.gmfdata_sitemesh_sim6p8_cr2022_37
 ORDER BY a.geom <-> geom
 LIMIT 1
 ) AS b;
+
+-- add pkey
+ALTER TABLE gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref DROP CONSTRAINT IF EXISTS gmfdata_sitemesh_sim6p8_cr2022_37_xref_pkey;
+ALTER TABLE gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref ADD PRIMARY KEY("id");
+
+-- create index
+CREATE INDEX gmfdata_sitemesh_sim6p8_cr2022_37_xref_idx ON gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref (id);
