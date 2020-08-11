@@ -1,9 +1,9 @@
 -- create schema for new scenario
-CREATE SCHEMA IF NOT EXISTS results_canada_exposure;
+CREATE SCHEMA IF NOT EXISTS results_bldgexp_ca_v2p5p3_master;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_settled_area_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_settled_area_sauid AS 
+DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid CASCADE;
+CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid AS 
 
 
 -- 1.0 Human Settlement
@@ -11,10 +11,10 @@ CREATE VIEW results_canada_exposure.canada_exposure_settled_area_sauid AS
 -- 1.1.1 Settled Area
 SELECT 
 a.sauid AS "Sauid",
-CAST(a.lon AS NUMERIC) AS "SauidLon",
-CAST(a.lat AS NUMERIC) AS "SauidLat",
+CAST(a.sauidlon AS NUMERIC) AS "SauidLon",
+CAST(a.sauidlat AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
-a.landusetyp AS "E_LandUse",
+a.landuse AS "E_LandUse",
 CAST(c."area_km2" AS NUMERIC) AS "E_AreaKm2",
 CAST(c.area_ha AS NUMERIC) AS "E_AreaHa",
 CAST(SUM(a.number) AS NUMERIC) AS "Et_BldgNum",
@@ -26,15 +26,15 @@ CAST(c.people_du AS NUMERIC) as "E_People_DU",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.canada_exposure a
-LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+FROM exposure.bldgexp_ca_v2p5p3_master a
+LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,a.lon,a.lat,a.landusetyp,c."area_km2",c.censuspop,c.area_ha,c.censusbldg,c.people_du,c.censusdu,c.sactype,c.landuse,d.geom,d.geompoint;
+GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,c."area_km2",c.censuspop,c.area_ha,c.censusbldg,c.people_du,c.censusdu,c.sactype,c.landuse,d.geom,d.geompoint;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_building_function_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_building_function_sauid AS 
+DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid CASCADE;
+CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -59,28 +59,28 @@ CAST((SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(C
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.canada_exposure a
-LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+FROM exposure.bldgexp_ca_v2p5p3_master a
+LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,c.people_du,d.geom,d.geompoint;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_building_type_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_building_type_sauid AS 
+DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid CASCADE;
+CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
 -- 1.1.3 Building Type
 SELECT 
 a.sauid AS "Sauid",
-CAST(SUM(CASE WHEN a.bldggen ='Wood' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Wood",
-CAST(SUM(CASE WHEN a.bldggen ='Concrete' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Concrete",
-CAST(SUM(CASE WHEN a.bldggen ='Precast' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_PreCast",
-CAST(SUM(CASE WHEN a.bldggen ='RMasonry' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_RMasonry",
-CAST(SUM(CASE WHEN a.bldggen ='URMasonry' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_URMasonry",
-CAST(SUM(CASE WHEN a.bldggen ='Steel' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Steel",
-CAST(SUM(CASE WHEN a.bldggen ='Manufactured' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Manufactured",
+CAST(SUM(CASE WHEN a.gentype ='Wood' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Wood",
+CAST(SUM(CASE WHEN a.gentype ='Concrete' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Concrete",
+CAST(SUM(CASE WHEN a.gentype ='Precast' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_PreCast",
+CAST(SUM(CASE WHEN a.gentype ='RMasonry' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_RMasonry",
+CAST(SUM(CASE WHEN a.gentype ='URMasonry' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_URMasonry",
+CAST(SUM(CASE WHEN a.gentype ='Steel' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Steel",
+CAST(SUM(CASE WHEN a.gentype ='Manufactured' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Manufactured",
 CAST(SUM(CASE WHEN a.eqdeslev ='PC' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_PreCode",
 CAST(SUM(CASE WHEN a.eqdeslev ='LC' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_LowCode",
 CAST(SUM(CASE WHEN a.eqdeslev ='MC' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_ModCode",
@@ -89,15 +89,15 @@ CAST(SUM(CASE WHEN a.eqdeslev ='HC' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.canada_exposure a
-LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+FROM exposure.bldgexp_ca_v2p5p3_master a
+LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_people_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_people_sauid AS 
+DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid CASCADE;
+CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -111,16 +111,16 @@ CAST(SUM(a.transit) AS NUMERIC) AS "Et_PopTransit",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.canada_exposure a
-LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+FROM exposure.bldgexp_ca_v2p5p3_master a
+LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_people_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_people_sauid AS 
+DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid CASCADE;
+CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -134,15 +134,15 @@ CAST(SUM(a.transit) AS NUMERIC) AS "Et_PopTransit",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.canada_exposure a
-LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+FROM exposure.bldgexp_ca_v2p5p3_master a
+LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_assets_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_assets_sauid AS 
+DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid CASCADE;
+CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -158,8 +158,8 @@ CAST(SUM(a.contents) AS NUMERIC) AS "Et_ContValue",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.canada_exposure a
-LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType"
+FROM exposure.bldgexp_ca_v2p5p3_master a
+LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;

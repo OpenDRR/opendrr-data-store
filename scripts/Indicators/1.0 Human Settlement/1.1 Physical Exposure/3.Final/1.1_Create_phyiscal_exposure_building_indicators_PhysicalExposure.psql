@@ -5,21 +5,19 @@ CREATE SCHEMA IF NOT EXISTS results_bldgexp_ca_v2p5p3_master;
 DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_buildings_building CASCADE;
 CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_buildings_building AS 
 
--- 1.0 Human Settlement
--- 1.1 Physical Exposure
--- 1.1.1 Buildings
 SELECT 
 a.id AS "BldgID",
 a.sauid AS "Sauid",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLat",
 CAST(CAST(ROUND(CAST(a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgNum",
-CAST(CAST(ROUND(CAST(b."BldgArea_ft2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "EBldgArea",
-CAST(CAST(ROUND(CAST(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN b."BldgArea_ft2" * a.number ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaRes",
-CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Commercial' THEN b."BldgArea_ft2" * a.number ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaComm",
-CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Industrial' THEN b."BldgArea_ft2" * a.number ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaInd",
-CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Civic' THEN b."BldgArea_ft2" * a.number ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaCivic",
-CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Agricultural' THEN b."BldgArea_ft2" * a.number ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaAgr",
+CAST(CAST(ROUND(CAST(a.bldg_ft2 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "EBldgArea",
+
+CAST(CAST(ROUND(CAST(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaRes",
+CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaComm",
+CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Industrial' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaInd",
+CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Civic' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaCivic",
+CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Agricultural' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaAgr",
 
 a.landuse AS "E_LandUse",
 a.genocc AS "E_BldgOccG",
@@ -31,8 +29,8 @@ a.eqdeslev AS "E_BldgDesLev",
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
-LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType";
+FROM exposure.bldgexp_ca_v2p5p3_master a;
+
 
 -- create physical exposure indicators
 DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_building CASCADE;
@@ -50,8 +48,7 @@ CAST(CAST(ROUND(CAST(a.transit AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_PopTra
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
-LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType";
+FROM exposure.bldgexp_ca_v2p5p3_master a;
 
 
 -- create physical exposure indicators
@@ -69,9 +66,8 @@ CAST(CAST(ROUND(CAST(a.structural + a.nonstructural AS NUMERIC),6) AS FLOAT) AS 
 CAST(CAST(ROUND(CAST(a.structural AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_StrValue",
 CAST(CAST(ROUND(CAST(a.nonstructural AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_NStrValue",
 CAST(CAST(ROUND(CAST(a.contents AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_ContValue",
-CAST(CAST(ROUND(CAST(b."CAD_RetrofitCost_Bldg" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_RetrofitCost",
+CAST(CAST(ROUND(CAST(a.retrofitting AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_RetrofitCost",
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
-LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType";
+FROM exposure.bldgexp_ca_v2p5p3_master a;
