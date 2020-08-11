@@ -1,29 +1,44 @@
 -- script to generate Canada exposure table
 
-DROP TABLE IF EXISTS exposure.canada_exposure;
+DROP TABLE IF EXISTS exposure.bldgexp_ca_v2p5p3_master;
 
 -- create table
-CREATE TABLE exposure.canada_exposure(
+CREATE TABLE exposure.bldgexp_ca_v2p5p3_master(
     PRIMARY KEY (id),
-    OID varchar,
+    OBJECTID varchar,
     id varchar,
-    lon float,
-    lat float,
+    SiteID varchar,
+    SiteLon float,
+    SiteLat float,
+    SauidID varchar,
+    SauidLat float,
+    SauidLon float,
+    Sauid_km2 float,
+    Sauid_ha float,
+    LandUse varchar,
     taxonomy varchar,
     number float,
     structural float,
     nonstructural float,
     contents float,
+    business float,
+    "limit" float,
+    deductible float,
+    retrofitting float,
     day float,
     night float,
     transit float,
-    landusetyp varchar,
     GenOcc varchar,
-    hzOccType varchar,
-    eqOccType varchar,
-    BldgGen varchar,
-    hzTaxon varchar,
-    EqBldgType varchar,
+    OccClass1 varchar,
+    OccClass2 varchar,
+    PopDU float,
+    GenType varchar,
+    BldgType varchar,
+    NumFloors float,
+    Bldg_ft2 float,
+    BldYear float,
+    BldEpoch varchar,
+    SSC_Zone varchar,
     EqDesLev varchar,
     sauid varchar,
     dauid varchar,
@@ -34,29 +49,31 @@ CREATE TABLE exposure.canada_exposure(
     cduid varchar,
     cdname varchar,
     SAC varchar,
+    eruid varchar,
+    ername varchar,
     pruid varchar,
     prname varchar,
-    ername varchar
+    ObjID varchar
 
 );
 
 -- import exposure from csv
-COPY exposure.canada_exposure (OID,id, lon, lat, taxonomy, number, structural, nonstructural, contents, day, night, transit, landusetyp, GenOcc, hzOccType, eqOccType, BldgGen, hzTaxon, EqBldgType, EqDesLev, sauid, dauid, adauid, fsauid, csduid, csdname, cduid, cdname, SAC, pruid, prname, ername)
-    FROM 'D:\workspace\data\human-settlement-national\1_building-exposure-canada.csv'
+COPY exposure.bldgexp_ca_v2p5p3_master (OBJECTID,id,SiteID,SiteLon,SiteLat,SauidID,SauidLat,SauidLon,Sauid_km2,Sauid_ha,LandUse,taxonomy,number,structural,nonstructural,contents,business,"limit",deductible,retrofitting,day,night,transit,GenOcc,OccClass1,OccClass2,PopDU,GenType,BldgType,NumFloors,Bldg_ft2,BldYear,BldEpoch,SSC_Zone,EqDesLev,sauid,dauid,adauid,fsauid,csduid,csdname,cduid,cdname,SAC,eruid,ername,pruid,prname,ObjID)
+    FROM 'D:\workspace\data\source datasets\exposure\bldgexp_ca_v2p5p3_master.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
 
 
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE exposure.canada_exposure ADD COLUMN geom geometry(Point,4326);
-UPDATE exposure.canada_exposure SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD COLUMN geom geometry(Point,4326);
+UPDATE exposure.bldgexp_ca_v2p5p3_master SET geom = st_setsrid(st_makepoint(SauidLon,SauidLat),4326);
 
 -- create spatial index
-CREATE INDEX Canada_exposure_idx
-ON exposure.canada_exposure using GIST (geom);
+CREATE INDEX bldgexp_ca_v2p5p3_master_idx
+ON exposure.bldgexp_ca_v2p5p3_master using GIST (geom);
 
---remove trailing space from 'manufactured ' in bldggen
-UPDATE exposure.bldgexp_canada 
-SET bldggen = REPLACE(bldggen,'Manufactured ','Manufactured')
-WHERE bldggen = 'Manufactured '
+--remove trailing space from 'manufactured ' in gentype
+UPDATE exposure.bldgexp_ca_v2p5p3_master 
+SET gentype = REPLACE(gentype,'Manufactured ','Manufactured')
+WHERE gentype = 'Manufactured '
