@@ -51,8 +51,8 @@ CREATE TABLE psra.hazard_map_mean_688_xref AS
 SELECT
 a.id,
 a.sauid,
-a.lon AS "asset_lon",
-a.lat AS "asset_lat",
+a.sauidlon AS "asset_lon",
+a.sauidlat AS "asset_lat",
 b.lon,
 b.lat,
 ST_Distance(a.geom,b.geom) AS "distance",
@@ -79,7 +79,7 @@ b."SA(2.0)_0.1",
 b."SA(5.0)_0.02",
 b."SA(5.0)_0.1"
 
-FROM exposure.canada_exposure a
+FROM exposure.bldgexp_ca_v2p5p3_master a
 CROSS JOIN LATERAL 
 (
 SELECT 
