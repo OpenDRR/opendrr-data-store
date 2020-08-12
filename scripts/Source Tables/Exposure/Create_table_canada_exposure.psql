@@ -57,6 +57,6 @@ CREATE INDEX Canada_exposure_idx
 ON exposure.canada_exposure using GIST (geom);
 
 --remove trailing space from 'manufactured ' in bldggen
-UPDATE exposure.bldgexp_canada 
+UPDATE exposure.canada_exposure 
 SET bldggen = REPLACE(bldggen,'Manufactured ','Manufactured')
 WHERE bldggen = 'Manufactured '
