@@ -33,6 +33,7 @@ a.geom AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";
 
+
 -- create physical exposure indicators
 DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_people_building CASCADE;
 CREATE VIEW results_canada_exposure.canada_exposure_people_building AS 
@@ -49,8 +50,7 @@ CAST(CAST(ROUND(CAST(a.transit AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_PopTra
 
 a.geom AS "geom_point"
 
-FROM exposure.canada_exposure a
-LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";
+FROM exposure.canada_exposure a;
 
 
 -- create physical exposure indicators
