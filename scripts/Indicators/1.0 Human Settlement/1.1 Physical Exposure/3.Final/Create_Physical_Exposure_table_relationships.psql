@@ -1,122 +1,113 @@
--- script to generate relationships other source tables and exposure table
+-- script to generate relationships on sample physical exposure tables generated from the views
 
 -- building level
--- results_canada_exposure.canada_exposure_buildings_building_t
+-- results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_buildings_building_t
 -- add pkey
-ALTER TABLE results_canada_exposure.canada_exposure_buildings_building_t DROP CONSTRAINT IF EXISTS canada_exposure_buildings_building_t_pkey;
-ALTER TABLE results_canada_exposure.canada_exposure_buildings_building_t ADD PRIMARY KEY("BldgID");
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_buildings_building_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_buildings_building_t_pkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_buildings_building_t ADD PRIMARY KEY("BldgID");
 
--- exposure.canada_exposure
-ALTER TABLE results_canada_exposure.canada_exposure_buildings_building_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_buildings_building_t_bldgid_canada_exposure;
-ALTER TABLE results_canada_exposure.canada_exposure_buildings_building_t ADD CONSTRAINT fk_canada_exposure_buildings_building_t_bldgid_canada_exposure FOREIGN KEY ("BldgID") REFERENCES exposure.canada_exposure(id);
-
--- lut.retrofit_costs
-ALTER TABLE results_canada_exposure.canada_exposure_buildings_building_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_buildings_building_t_e_bldgtypes_retrofit_costs;
-ALTER TABLE results_canada_exposure.canada_exposure_buildings_building_t ADD CONSTRAINT fk_canada_exposure_buildings_building_t_e_bldgtypes_retrofit_costs FOREIGN KEY ("E_BldgTypeS") REFERENCES lut.retrofit_costs("Eq_BldgType");
+-- add fkey from exposure.bldgexp_ca_v2p5p3_master
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_buildings_building_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_buildings_building_t_fkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_buildings_building_t ADD CONSTRAINT bldgexp_ca_v2p5p3_master_buildings_building_t_fkey FOREIGN KEY ("BldgID") REFERENCES exposure.bldgexp_ca_v2p5p3_master(id);
 
 
 
--- results_canada_exposure.canada_exposure_people_building_t
+-- results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_building_t
 -- add pkey
-ALTER TABLE results_canada_exposure.canada_exposure_people_building_t DROP CONSTRAINT IF EXISTS canada_exposure_people_building_t_pkey;
-ALTER TABLE results_canada_exposure.canada_exposure_people_building_t ADD PRIMARY KEY("BldgID");
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_building_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_people_building_t_pkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_building_t ADD PRIMARY KEY("BldgID");
 
--- exposure.canada_exposure
-ALTER TABLE results_canada_exposure.canada_exposure_people_building_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_people_building_t_bldgid_canada_exposure;
-ALTER TABLE results_canada_exposure.canada_exposure_people_building_t ADD CONSTRAINT fk_canada_exposure_people_building_t_bldgid_canada_exposure FOREIGN KEY ("BldgID") REFERENCES exposure.canada_exposure(id);
+-- add fkey from exposure.bldgexp_ca_v2p5p3_master
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_building_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_people_building_t_fkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_building_t ADD CONSTRAINT bldgexp_ca_v2p5p3_master_people_building_t_fkey FOREIGN KEY ("BldgID") REFERENCES exposure.bldgexp_ca_v2p5p3_master(id);
 
 
 
--- results_canada_exposure.canada_exposure_assets_building_t
+-- results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_building_t
 -- add pkey
-ALTER TABLE results_canada_exposure.canada_exposure_assets_building_t DROP CONSTRAINT IF EXISTS canada_exposure_assets_building_t_pkey;
-ALTER TABLE results_canada_exposure.canada_exposure_assets_building_t ADD PRIMARY KEY("BldgID");
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_building_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_assets_building_t_pkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_building_t ADD PRIMARY KEY("BldgID");
 
--- exposure.canada_exposure
-ALTER TABLE results_canada_exposure.canada_exposure_assets_building_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_assets_building_t_bldgid_canada_exposure;
-ALTER TABLE results_canada_exposure.canada_exposure_assets_building_t ADD CONSTRAINT fk_canada_exposure_assets_building_t_bldgid_canada_exposure FOREIGN KEY ("BldgID") REFERENCES exposure.canada_exposure(id);
+-- add fkey from exposure.bldgexp_ca_v2p5p3_master
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_building_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_assets_building_t_fkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_building_t ADD CONSTRAINT bldgexp_ca_v2p5p3_master_assets_building_t_fkey FOREIGN KEY ("BldgID") REFERENCES exposure.bldgexp_ca_v2p5p3_master(id);
 
 
 
 -- sauid
--- results_canada_exposure.canada_exposure_settled_area_sauid_t
- -- add pkey
-ALTER TABLE results_canada_exposure.canada_exposure_settled_area_sauid_t DROP CONSTRAINT IF EXISTS canada_exposure_settled_area_sauid_t_pkey;
-ALTER TABLE results_canada_exposure.canada_exposure_settled_area_sauid_t ADD PRIMARY KEY("Sauid");
-
--- exposure.canada_exposure
-ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS fk_canada_exposure_sauid_canada_exposure_settled_area_sauid_t;
-ALTER TABLE exposure.canada_exposure ADD CONSTRAINT fk_canada_exposure_sauid_canada_exposure_assets_sauid_t FOREIGN KEY (sauid) REFERENCES results_canada_exposure.canada_exposure_settled_area_sauid_t("Sauid");
-
--- census.census_2016_canada
-ALTER TABLE results_canada_exposure.canada_exposure_settled_area_sauid_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_settled_area_sauid_t_sauid_census_2016_canada;
-ALTER TABLE results_canada_exposure.canada_exposure_settled_area_sauid_t ADD CONSTRAINT fk_canada_exposure_settled_area_sauid_t_census_2016_canada FOREIGN KEY ("Sauid") REFERENCES census.census_2016_canada(sauidt);
-
--- boundaries."Geometry_SAUID"
-ALTER TABLE results_canada_exposure.canada_exposure_settled_area_sauid_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_settled_area_sauid_t_sauid_geometry_sauid;
-ALTER TABLE results_canada_exposure.canada_exposure_settled_area_sauid_t ADD CONSTRAINT fk_canada_exposure_settled_area_sauid_t_sauid_geometry_sauid FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
-
-
-
--- results_canada_exposure.canada_exposure_building_function_sauid_t
+-- results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid_t
 -- add pkey
-ALTER TABLE results_canada_exposure.canada_exposure_building_function_sauid_t DROP CONSTRAINT IF EXISTS canada_exposure_building_function_sauid_t_pkey;
-ALTER TABLE results_canada_exposure.canada_exposure_building_function_sauid_t ADD PRIMARY KEY("Sauid");
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_settled_area_sauid_t_pkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid_t ADD PRIMARY KEY("Sauid");
 
--- exposure.canada_exposure
-ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS fk_canada_exposure_sauid_canada_exposure_building_function_sauid_t;
-ALTER TABLE exposure.canada_exposure ADD CONSTRAINT fk_canada_exposure_sauid_canada_exposure_building_function_sauid_t FOREIGN KEY (sauid) REFERENCES results_canada_exposure.canada_exposure_building_function_sauid_t("Sauid");
+-- add fkey to exposure.bldgexp_ca_v2p5p3_master
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey;
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey FOREIGN KEY (sauid) REFERENCES results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid_t("Sauid");
 
--- census.census_2016_canada
-ALTER TABLE results_canada_exposure.canada_exposure_building_function_sauid_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_building_function_sauid_t_sauid_census_2016_canada;
-ALTER TABLE results_canada_exposure.canada_exposure_building_function_sauid_t ADD CONSTRAINT fk_canada_exposure_building_function_sauid_t_sauid_census_2016_canada FOREIGN KEY ("Sauid") REFERENCES census.census_2016_canada(sauidt);
+-- add fkey from census.census_2016_canada
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_settled_area_sauid_t_fkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid_t ADD CONSTRAINT bldgexp_ca_v2p5p3_master_settled_area_sauid_t_fkey FOREIGN KEY ("Sauid") REFERENCES census.census_2016_canada(sauidt);
 
--- boundaries."Geometry_SAUID"
-ALTER TABLE results_canada_exposure.canada_exposure_building_function_sauid_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_building_function_sauid_t_sauid_geometry_sauid;
-ALTER TABLE results_canada_exposure.canada_exposure_building_function_sauid_t ADD CONSTRAINT fk_canada_exposure_assets_sauid_t_sauid_geometry_sauid FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
+-- add fkey from boundaries."Geometry_SAUID"
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_settled_area_sauid_t_fkey2;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid_t ADD CONSTRAINT bldgexp_ca_v2p5p3_master_settled_area_sauid_t_fkey2 FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
 
 
 
--- results_canada_exposure.canada_exposure_building_type_sauid_t
+-- results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid_t
 -- add pkey
-ALTER TABLE results_canada_exposure.canada_exposure_building_type_sauid_t DROP CONSTRAINT IF EXISTS canada_exposure_building_type_sauid_t_pkey;
-ALTER TABLE results_canada_exposure.canada_exposure_building_type_sauid_t ADD PRIMARY KEY("Sauid");
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_building_function_sauid_t_pkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid_t ADD PRIMARY KEY("Sauid");
 
--- exposure.canada_exposure
-ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS fk_canada_exposure_sauid_canada_exposure_building_type_sauid_t;
-ALTER TABLE exposure.canada_exposure ADD CONSTRAINT fk_canada_exposure_sauid_canada_exposure_building_type_sauid_t FOREIGN KEY (sauid) REFERENCES results_canada_exposure.canada_exposure_building_type_sauid_t("Sauid");
+-- add fkey to exposure.bldgexp_ca_v2p5p3_master
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey2;
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey2 FOREIGN KEY (sauid) REFERENCES results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid_t("Sauid");
 
--- boundaries."Geometry_SAUID"
-ALTER TABLE results_canada_exposure.canada_exposure_building_type_sauid_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_building_type_sauid_t_sauid_geometry_sauid;
-ALTER TABLE results_canada_exposure.canada_exposure_building_type_sauid_t ADD CONSTRAINT fk_canada_exposure_building_type_sauid_t_sauid_geometry_sauid FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
+-- add fkey from boundaries."Geometry_SAUID"
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_building_function_sauid_t_fkey2;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid_t ADD CONSTRAINT bldgexp_ca_v2p5p3_master_building_function_sauid_t_fkey2 FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
 
 
 
--- results_canada_exposure.canada_exposure_people_sauid_t
+-- results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid_t
 -- add pkey
-ALTER TABLE results_canada_exposure.canada_exposure_people_sauid_t DROP CONSTRAINT IF EXISTS canada_exposure_people_sauid_t_pkey;
-ALTER TABLE results_canada_exposure.canada_exposure_people_sauid_t ADD PRIMARY KEY("Sauid");
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_building_type_sauid_t_pkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid_t ADD PRIMARY KEY("Sauid");
 
--- exposure.canada_exposure
-ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS fk_canada_exposure_sauid_canada_exposure_people_sauid_t;
-ALTER TABLE exposure.canada_exposure ADD CONSTRAINT fk_canada_exposure_sauid_canada_exposure_people_sauid_t FOREIGN KEY (sauid) REFERENCES results_canada_exposure.canada_exposure_people_sauid_t("Sauid");
+-- add fkey on exposure.bldgexp_ca_v2p5p3_master
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey3;
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey3 FOREIGN KEY (sauid) REFERENCES results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid_t("Sauid");
 
--- boundaries."Geometry_SAUID"
-ALTER TABLE results_canada_exposure.canada_exposure_people_sauid_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_people_sauid_t_sauid_geometry_sauid;
-ALTER TABLE results_canada_exposure.canada_exposure_people_sauid_t ADD CONSTRAINT fk_canada_exposure_people_sauid_t_sauid_geometry_sauid FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
+-- add fkey from boundaries."Geometry_SAUID"
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_building_type_sauid_t_fkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid_t ADD CONSTRAINT bldgexp_ca_v2p5p3_master_building_type_sauid_t_fkey FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
 
 
 
--- results_canada_exposure.canada_exposure_assets_sauid_t
--- results_canada_exposure.canada_exposure_assets_sauid_t
+-- results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid_t
 -- add pkey
-ALTER TABLE results_canada_exposure.canada_exposure_assets_sauid_t DROP CONSTRAINT IF EXISTS canada_exposure_assets_sauid_t_pkey;
-ALTER TABLE results_canada_exposure.canada_exposure_assets_sauid_t ADD PRIMARY KEY("Sauid");
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_people_sauid_t_pkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid_t ADD PRIMARY KEY("Sauid");
 
--- exposure.canada_exposure
-ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS fk_canada_exposure_sauid_canada_exposure_assets_sauid_t;
-ALTER TABLE exposure.canada_exposure ADD CONSTRAINT fk_canada_exposure_sauid_canada_exposure_assets_sauid_t FOREIGN KEY (sauid) REFERENCES results_canada_exposure.canada_exposure_assets_sauid_t("Sauid");
+-- add fkey on exposure.bldgexp_ca_v2p5p3_master
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey4;
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey4 FOREIGN KEY (sauid) REFERENCES results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid_t("Sauid");
 
--- boundaries."Geometry_SAUID"
-ALTER TABLE results_canada_exposure.canada_exposure_assets_sauid_t DROP CONSTRAINT IF EXISTS fk_canada_exposure_assets_sauid_t_sauid_geometry_sauid;
-ALTER TABLE results_canada_exposure.canada_exposure_assets_sauid_t ADD CONSTRAINT fk_canada_exposure_assets_sauid_t_sauid_geometry_sauid FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
+-- add fkey from boundaries."Geometry_SAUID"
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_people_sauid_t_fkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid_t ADD CONSTRAINT bldgexp_ca_v2p5p3_master_people_sauid_t_fkey FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
+
+
+
+-- results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid_t
+-- add pkey
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_assets_sauid_t_pkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid_t ADD PRIMARY KEY("Sauid");
+
+-- add fkey on exposure.bldgexp_ca_v2p5p3_master
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey5;
+ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey5 FOREIGN KEY (sauid) REFERENCES results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid_t("Sauid");
+
+-- add fkey from boundaries."Geometry_SAUID"
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid_t DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_assets_sauid_t_fkey;
+ALTER TABLE results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid_t ADD CONSTRAINT bldgexp_ca_v2p5p3_master_assets_sauid_t_fkey FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");

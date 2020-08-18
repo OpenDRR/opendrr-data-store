@@ -105,5 +105,9 @@ Inc_Hshld, Inc_LowDecile, Unemployed, Work_Parttime, Work_None, Employ_Inc)
           CSV HEADER ;
 
 
+-- add missing sauid that is new in exposure model but missing in census
+INSERT INTO census.census_2016_canada(sauidt)
+VALUES(62000215)
+
 -- create index
 CREATE INDEX census_2016_canada_idx ON census.census_2016_canada (sauidt);
