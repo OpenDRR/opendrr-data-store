@@ -1,9 +1,9 @@
 -- create schema for new scenario
-CREATE SCHEMA IF NOT EXISTS results_canada_exposure;
+CREATE SCHEMA IF NOT EXISTS results_nhsl_physical_exposure;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_settled_area_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_settled_area_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -32,8 +32,8 @@ GROUP BY a.sauid,a.lon,a.lat,a.landusetyp,c."area_km2",c.censuspop,c.area_ha,c.c
 
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_building_function_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_building_function_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -66,8 +66,8 @@ GROUP BY a.sauid,c.people_du,d.geom,d.geompoint;
 
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_building_type_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_building_type_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -95,8 +95,8 @@ GROUP BY a.sauid,d.geom,d.geompoint;
 
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_people_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_people_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_people_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -116,8 +116,8 @@ GROUP BY a.sauid,d.geom,d.geompoint;
 
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_canada_exposure.canada_exposure_assets_sauid CASCADE;
-CREATE VIEW results_canada_exposure.canada_exposure_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
