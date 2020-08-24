@@ -194,8 +194,8 @@ FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
 
 
-DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affeted_people_social_disruption_b CASCADE;
-CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affeted_people_social_disruption_b AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_social_disruption_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_social_disruption_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.3 Affected People

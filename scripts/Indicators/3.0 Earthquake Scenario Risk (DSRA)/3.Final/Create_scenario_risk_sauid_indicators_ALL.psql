@@ -121,8 +121,8 @@ GROUP BY b.sauid,i.geom,i.geompoint;
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damnage_recovery_s;
-CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damnage_recovery_s AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_recovery_s;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_recovery_s AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.2 Building Damage
