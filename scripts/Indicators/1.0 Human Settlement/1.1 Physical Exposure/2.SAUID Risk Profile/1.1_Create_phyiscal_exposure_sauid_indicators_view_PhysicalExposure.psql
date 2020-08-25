@@ -1,10 +1,9 @@
 -- create schema for new scenario
-CREATE SCHEMA IF NOT EXISTS results_bldgexp_ca_v2p5p3_master;
+CREATE SCHEMA IF NOT EXISTS results_nhsl_physical_exposure;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid AS 
-
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -15,37 +14,38 @@ CAST(a.sauidlon AS NUMERIC) AS "SauidLon",
 CAST(a.sauidlat AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
 a.landuse AS "E_LandUse",
-CAST(c."area_km2" AS NUMERIC) AS "E_AreaKm2",
-CAST(c.area_ha AS NUMERIC) AS "E_AreaHa",
+CAST(a.sauid_km2 AS NUMERIC) AS "E_AreaKm2",
+CAST(a.sauid_ha AS NUMERIC) AS "E_AreaHa",
 CAST(SUM(a.number) AS NUMERIC) AS "Et_BldgNum",
 CAST(COALESCE(c.censusbldg,0) AS NUMERIC) AS "E_CensusBldg",
 CAST(c.censuspop AS NUMERIC) AS "E_CensusPop",
 CAST(c.censusdu AS NUMERIC) AS "E_CensusDU",
-CAST(c.people_du AS NUMERIC) as "E_People_DU",
+CAST(AVG(a.popdu) AS NUMERIC) as "E_People_DU",
 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.bldgexp_ca_v2p5p3_master a
-LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,c."area_km2",c.censuspop,c.area_ha,c.censusbldg,c.people_du,c.censusdu,c.sactype,c.landuse,d.geom,d.geompoint;
+GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d.geom,d.geompoint;
+
+
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
 -- 1.1.2 Building Function
 SELECT 
 a.sauid AS "Sauid",
-CAST(SUM(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN b."BldgArea_ft2" * a.number ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaRes",
-CAST(SUM(CASE WHEN a.genocc = 'Commercial' THEN b."BldgArea_ft2" * a.number ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaComm",
-CAST(SUM(CASE WHEN a.genocc = 'Industrial' THEN b."BldgArea_ft2" * a.number ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaInd",
-CAST(SUM(CASE WHEN a.genocc = 'Civic' THEN b."BldgArea_ft2" * a.number ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaCivic",
-CAST(SUM(CASE WHEN a.genocc = 'Agricultural' THEN b."BldgArea_ft2" * a.number ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaAgr",
+CAST(SUM(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaRes",
+CAST(SUM(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaComm",
+CAST(SUM(CASE WHEN a.genocc = 'Industrial' THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaInd",
+CAST(SUM(CASE WHEN a.genocc = 'Civic' THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaCivic",
+CAST(SUM(CASE WHEN a.genocc = 'Agricultural' THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC) AS "Et_BldgAreaAgr",
 CAST(SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_ResLD",
 CAST(SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_ResMD",
 CAST(SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_RESHD",
@@ -53,21 +53,21 @@ CAST(SUM(CASE WHEN a.genocc ='Commercial' THEN a.number ELSE 0 END) AS NUMERIC) 
 CAST(SUM(CASE WHEN a.genocc ='Industrial' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Ind",
 CAST(SUM(CASE WHEN a.genocc ='Civic' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Civic",
 CAST(SUM(CASE WHEN a.genocc ='Agricultural' THEN a.number ELSE 0 END) AS NUMERIC) AS "Et_Agr",
-CAST(SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / c.people_du AS NUMERIC) AS "Et_SFHshlds",
-CAST((SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / c.people_du AS NUMERIC) AS "ET_MFHshlds",
+CAST(SUM(CASE WHEN a.genocc ='Residential-LD' THEN a.number ELSE 0 END) / AVG(a.popdu) AS NUMERIC) AS "Et_SFHshlds",
+CAST((SUM(CASE WHEN a.genocc ='Residential-MD' THEN a.number ELSE 0 END) + SUM(CASE WHEN a.genocc ='Residential-HD' THEN a.number ELSE 0 END)) / AVG(a.popdu) AS NUMERIC) AS "ET_MFHshlds",
 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.bldgexp_ca_v2p5p3_master a
-LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
-LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,c.people_du,d.geom,d.geompoint;
+GROUP BY a.sauid,d.geom,d.geompoint;
+
+
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -90,37 +90,14 @@ d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.bldgexp_ca_v2p5p3_master a
-LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
-LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,d.geom,d.geompoint;
-
--- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid AS 
-
--- 1.0 Human Settlement
--- 1.1 Physical Exposure
--- 1.1.3 Building Type
-SELECT 
-a.sauid AS "Sauid",
-CAST(SUM(a.day) AS NUMERIC) AS "Et_PopDay",
-CAST(SUM(a.night) AS NUMERIC) AS "Et_PopNight",
-CAST(SUM(a.transit) AS NUMERIC) AS "Et_PopTransit",
-
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
-
-FROM exposure.bldgexp_ca_v2p5p3_master a
-LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
-LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 
+
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_people_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_people_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -135,14 +112,14 @@ d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.bldgexp_ca_v2p5p3_master a
-LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
-LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
+
+
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -159,7 +136,5 @@ d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
 FROM exposure.bldgexp_ca_v2p5p3_master a
-LEFT JOIN lut.retrofit_costs b ON a.bldgtype = b."Eq_BldgType"
-LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;

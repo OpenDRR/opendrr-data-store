@@ -1,9 +1,11 @@
 -- create schema for new scenario
-CREATE SCHEMA IF NOT EXISTS results_mh;
+CREATE SCHEMA IF NOT EXISTS results_nhsl_hazard_threat;
+
+
 
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.mh_threat_mh_intensity_sauid CASCADE;
-CREATE VIEW results_mh.mh_threat_mh_intensity_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_mh_mh_intensity_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_mh_mh_intensity_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.1 Multi-Hazard Threat
@@ -23,9 +25,10 @@ LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 GROUP BY a.sauid,b.mh_sum,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.mh_threat_threat_to_buildings_sauid CASCADE;
-CREATE VIEW results_mh.mh_threat_threat_to_buildings_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_mh_threat_to_buildings_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_mh_threat_to_buildings_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.1 Multi-Hazard Threat
@@ -101,9 +104,10 @@ LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 GROUP BY a.sauid,b.mh_sum,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.mh_threat_threat_to_people_sauid CASCADE;
-CREATE VIEW results_mh.mh_threat_threat_to_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_mh_threat_to_people_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_mh_threat_to_people_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.1 Multi-Hazard Threat
@@ -146,9 +150,10 @@ LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 GROUP BY a.sauid,b.mh_sum,c.censuspop,a.popdu,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.mh_threat_threat_to_assets_sauid CASCADE;
-CREATE VIEW results_mh.mh_threat_threat_to_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_mh_threat_to_assets_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_mh_threat_to_assets_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.1 Multi-Hazard Threat
@@ -185,9 +190,10 @@ LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 GROUP BY a.sauid,b.mh_sum,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.eq_threat_seismic_hazard_intensity_sauid CASCADE;
-CREATE VIEW results_mh.eq_threat_seismic_hazard_intensity_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_eq_seismic_hazard_intensity_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_eq_seismic_hazard_intensity_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.2 Earthquake Threat
@@ -208,9 +214,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.pgv,e.pga,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.eq_threat_threat_to_buildings_sauid CASCADE;
-CREATE VIEW results_mh.eq_threat_threat_to_buildings_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_eq_threat_to_buildings_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_eq_threat_to_buildings_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.2 Earthquake Threat
@@ -257,9 +264,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.pga,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.eq_threat_threat_to_people_sauid CASCADE;
-CREATE VIEW results_mh.eq_threat_threat_to_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_eq_threat_to_people_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_eq_threat_to_people_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.2 Earthquake Threat
@@ -289,9 +297,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,c.censuspop,a.popdu,e.pga,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.eq_threat_threat_to_assets_sauid CASCADE;
-CREATE VIEW results_mh.eq_threat_threat_to_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_eq_threat_to_assets_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_eq_threat_to_assets_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.2 Earthquake Threat
@@ -318,9 +327,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.pga,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.ts_threat_ts_inundation_hazard_sauid CASCADE;
-CREATE VIEW results_mh.ts_threat_ts_inundation_hazard_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_ts_threat_ts_inundation_hazard_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_ts_threat_ts_inundation_hazard_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.3 Tsunami Threat
@@ -341,9 +351,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.tsun_ha,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.ts_threat_threat_to_buildings_sauid CASCADE;
-CREATE VIEW results_mh.ts_threat_threat_to_buildings_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_ts_threat_to_buildings_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_ts_threat_to_buildings_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.3 Tsunami Threat
@@ -390,9 +401,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.tsun_ha,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.ts_threat_threat_to_people_sauid CASCADE;
-CREATE VIEW results_mh.ts_threat_threat_to_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_ts_threat_to_people_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_ts_threat_to_people_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.3 Tsunami Threat
@@ -423,9 +435,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,c.censuspop,a.popdu,e.tsun_ha,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.ts_threat_threat_to_assets_sauid CASCADE;
-CREATE VIEW results_mh.ts_threat_threat_to_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_ts_threat_to_assets_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_ts_threat_to_assets_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.3 Tsunami Threat
@@ -452,9 +465,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.tsun_ha,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.fl_threat_fl_inundation_hazard_sauid CASCADE;
-CREATE VIEW results_mh.fl_threat_fl_inundation_hazard_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_fl_threat_fl_inundation_hazard_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_fl_threat_fl_inundation_hazard_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.4 Flood Threat
@@ -479,9 +493,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fl200,e.fl500,e.fl1000,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.fl_threat_threat_to_buildings_sauid CASCADE;
-CREATE VIEW results_mh.fl_threat_threat_to_buildings_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_fl_threat_to_buildings_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_fl_threat_to_buildings_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.4 Flood Threat
@@ -528,9 +543,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fl500,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.fl_threat_threat_to_people_sauid CASCADE;
-CREATE VIEW results_mh.fl_threat_threat_to_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_fl_threat_to_people_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_fl_threat_to_people_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.4 Flood Threat
@@ -561,9 +577,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,c.censuspop,a.popdu,e.fl500,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.fl_threat_threat_to_assets_sauid CASCADE;
-CREATE VIEW results_mh.fl_threat_threat_to_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_fl_threat_to_assets_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_fl_threat_to_assets_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.4 Flood Threat
@@ -590,9 +607,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fl500,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.wf_threat_wf_hazard_sauid CASCADE;
-CREATE VIEW results_mh.wf_threat_wf_hazard_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_wf_threat_wf_hazard_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_wf_threat_wf_hazard_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.5 Wildfire Threat
@@ -604,7 +622,6 @@ CAST(CAST(ROUND(CAST(e.fire AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "WFi",
 COALESCE(CAST(CAST(ROUND(CAST((e.fire - (SELECT fire_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT fire_max FROM mh.mh_intensity_canada_minmax) - (SELECT fire_min FROM mh.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "WFn",
 (SELECT "Firet" FROM mh.mh_thresholds) AS "WFt", -- Wildfire Intensity Threshold
 
-
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
@@ -614,9 +631,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fire,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.wf_threat_threat_to_buildings_sauid CASCADE;
-CREATE VIEW results_mh.wf_threat_threat_to_buildings_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_wf_threat_to_buildings_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_wf_threat_to_buildings_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.5 Wildfire Threat
@@ -663,9 +681,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fire,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.wf_threat_threat_to_people_sauid CASCADE;
-CREATE VIEW results_mh.wf_threat_threat_to_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_wf_threat_to_people_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_wf_threat_to_people_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.5 Wildfire Threat
@@ -696,9 +715,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,c.censuspop,a.popdu,e.fire,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.wf_threat_threat_to_assets_sauid CASCADE;
-CREATE VIEW results_mh.wf_threat_threat_to_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_wf_threat_to_assets_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_wf_threat_to_assets_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.5 Wildfire Threat
@@ -725,9 +745,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fire,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.ls_threat_debris_flow_hazard_sauid CASCADE;
-CREATE VIEW results_mh.ls_threat_debris_flow_hazard_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_ls_threat_debris_flow_hazard_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_ls_threat_debris_flow_hazard_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.6 Landslide Threat
@@ -748,9 +769,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.lndsus,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.ls_threat_threat_to_buildings_sauid CASCADE;
-CREATE VIEW results_mh.ls_threat_threat_to_buildings_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_ls_threat_to_buildings_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_ls_threat_to_buildings_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.6 Landslide Threat
@@ -797,9 +819,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.lndsus,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.ls_threat_threat_to_people_sauid CASCADE;
-CREATE VIEW results_mh.ls_threat_threat_to_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_ls_threat_to_people_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_ls_threat_to_people_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.6 Landslide Threat
@@ -830,9 +853,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,c.censuspop,a.popdu,e.lndsus,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.ls_threat_threat_to_assets_sauid CASCADE;
-CREATE VIEW results_mh.ls_threat_threat_to_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_ls_threat_to_assets_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_ls_threat_to_assets_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.6 Landslide Threat
@@ -859,9 +883,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.lndsus,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.cy_threat_cy_wind_hazard_sauid CASCADE;
-CREATE VIEW results_mh.cy_threat_cy_wind_hazard_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_cy_threat_cy_wind_hazard_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_cy_threat_cy_wind_hazard_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.7 Cyclone Threat
@@ -888,9 +913,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.cy100,e.cy250,e.cy500,e.cy1000,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.cy_threat_threat_to_buildings_sauid CASCADE;
-CREATE VIEW results_mh.cy_threat_threat_to_buildings_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_cy_threat_to_buildings_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_cy_threat_to_buildings_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.7 Cyclone Threat
@@ -937,9 +963,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.cy500,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.cy_threat_threat_to_people_sauid CASCADE;
-CREATE VIEW results_mh.cy_threat_threat_to_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_cy_threat_to_people_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_cy_threat_to_people_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.7 Cyclone Threat
@@ -970,9 +997,10 @@ LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,c.censuspop,a.popdu,e.cy500,d.geom,d.geompoint;
 
 
+
 -- create multi hazard indicators
-DROP VIEW IF EXISTS results_mh.cy_threat_threat_to_assets_sauid CASCADE;
-CREATE VIEW results_mh.cy_threat_threat_to_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_cy_threat_to_assets_s CASCADE;
+CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_cy_threat_to_assets_s AS 
 
 -- 4.0 Multi-Hazard Risk
 -- 4.7 Cyclone Threat

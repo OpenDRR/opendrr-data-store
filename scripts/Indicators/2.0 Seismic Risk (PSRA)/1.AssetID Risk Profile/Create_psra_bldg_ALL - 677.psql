@@ -1,9 +1,10 @@
-
 CREATE SCHEMA IF NOT EXISTS results_psra_hazard_map_mean_677;
 
+
+
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_500yr_hazard_intensity_building CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_500yr_hazard_intensity_building AS 
+DROP VIEW IF EXISTS results_psra_677.psra_677_seismic_hazard_500yr_hazard_intensity_b CASCADE;
+CREATE VIEW results_psra_677.psra_677_seismic_hazard_500yr_hazard_intensity_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.1 Probabilistic Seismic Hazard
@@ -32,9 +33,10 @@ LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
 RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id;
 
 
+
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_2500yr_hazard_intensity_building CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_2500yr_hazard_intensity_building AS 
+DROP VIEW IF EXISTS results_psra_677.psra_677_seismic_hazard_2500yr_hazard_intensity_b CASCADE;
+CREATE VIEW results_psra_677.psra_677_seismic_hazard_2500yr_hazard_intensity_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.1 Probabilistic Seismic Hazard
@@ -62,9 +64,10 @@ LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
 RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id;
 
 
+
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_site_amplification_building CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_site_amplification_building AS 
+DROP VIEW IF EXISTS results_psra_677.psra677_seismic_hazard_site_amplification_b CASCADE;
+CREATE VIEW results_psra_677.psra677_seismic_hazard_site_amplification_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.1 Probabilistic Seismic Hazard
@@ -84,12 +87,14 @@ FROM exposure.bldgexp_ca_v2p5p3_master a
 LEFT JOIN vs30.vs30_bc_site_model_xref d ON a.id = d.id
 RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id;
 
+
+
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_classical_damage_building CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_classical_damage_building AS 
+DROP VIEW IF EXISTS results_psra_677.psra_677_building_damage_classical_damage_b CASCADE;
+CREATE VIEW results_psra_677.psra_677_building_damage_classical_damage_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
--- 2.2 Building Performance
+-- 2.2 Building Damage
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
@@ -163,12 +168,13 @@ LEFT JOIN psra.damages_structural_mean_683 e ON a.id = e.asset_id
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype;
 
 
+
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_event_based_damage_building CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_event_based_damage_building AS 
+DROP VIEW IF EXISTS results_psra_677.psra_677_building_damage_event_based_damage_b CASCADE;
+CREATE VIEW results_psra_677.psra_677_building_damage_event_based_damage_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
--- 2.2 Building Performance
+-- 2.2 Building Damage
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
@@ -257,17 +263,18 @@ LEFT JOIN psra.damages_rlz_000_687 h ON a.id = h.asset_refid
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype;
 
 
+
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_recovery_time_building CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_recovery_time_building AS 
+DROP VIEW IF EXISTS results_psra_677.psra_677_building_damage_recovery_b CASCADE;
+CREATE VIEW results_psra_677.psra_677_building_damage_recovery_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
--- 2.2 Building Performance
+-- 2.2 Building Damage
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
 
--- 2.2.3 Recovery Time - b0
+-- 2.2.3 Recovery  - b0
 CAST(g.mean_repair_time AS NUMERIC) AS "eC_Repair_b0",
 CAST(g.mean_interruption_time AS NUMERIC) AS "eC_Construxn_b0",
 CAST(g.mean_recovery_time AS NUMERIC) AS "eC_Downtime_b0",
@@ -275,7 +282,7 @@ CAST((g.debris_brick_wood_tons + g.debris_concrete_steel_tons) AS NUMERIC) AS "e
 CAST(g.debris_brick_wood_tons AS NUMERIC) AS "eC_DebrisBW_b0",
 CAST(g.debris_concrete_steel_tons AS NUMERIC) AS "eC_DebrisC_b0",
 
--- 2.2.3 Recovery Time - r1
+-- 2.2.3 Recovery - r1
 CAST(h.mean_repair_time AS NUMERIC) AS "eC_Repair_r1",
 CAST(h.mean_interruption_time AS NUMERIC) AS "eC_Construxn_r1",
 CAST(h.mean_recovery_time AS NUMERIC) AS "eC_Downtime_r1",
@@ -283,7 +290,7 @@ CAST((h.debris_brick_wood_tons + h.debris_concrete_steel_tons) AS NUMERIC) AS "e
 CAST(h.debris_brick_wood_tons AS NUMERIC) AS "eC_DebrisBW_r1",
 CAST(h.debris_concrete_steel_tons AS NUMERIC) AS "eC_DebrisC_r1",
 
--- 2.2.3 Recovery Time - r2
+-- 2.2.3 Recovery - r2
 CAST(i.mean_repair_time AS NUMERIC) AS "eC_Repair_r2",
 CAST(i.mean_interruption_time AS NUMERIC) AS "eC_Construxn_r2",
 CAST(i.mean_recovery_time AS NUMERIC) AS "eC_Downtime_r2",
@@ -298,9 +305,11 @@ RIGHT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
 LEFT JOIN psra.consequences_rlz_000_686 h ON a.id = h.asset_ref
 LEFT JOIN psra.consequences_rlz_000_687 i ON a.id = i.asset_ref;
 
+
+
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_casualties_building CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_casualties_building AS 
+DROP VIEW IF EXISTS results_psra_677.psra_677_affected_people_casualties_b CASCADE;
+CREATE VIEW results_psra_677.psra_677_affected_people_casualties_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.3 Affected People
@@ -378,9 +387,10 @@ LEFT JOIN psra.consequences_rlz_000_687 k ON a.id = k.asset_ref
 LEFT JOIN psra.avg_losses_mean_685 l ON a.id = l.asset_id;
 
 
+
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_social_disruption_building CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_social_disruption_building AS 
+DROP VIEW IF EXISTS results_psra_677.psra_677_affected_people_social_disruption_b CASCADE;
+CREATE VIEW results_psra_677.psra_677_affected_people_social_disruption_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.3 Affected People
@@ -651,9 +661,11 @@ LEFT JOIN psra.damages_rlz_000_687 m ON a.id = m.asset_refid
 
 LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt;
 
+
+
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_economic_loss_building CASCADE;
-CREATE VIEW results_psra_hazard_map_mean_677.psra_hazard_map_mean_677_economic_loss_building AS 
+DROP VIEW IF EXISTS results_psra_677.psra_677_economic_security_economic_loss_b CASCADE;
+CREATE VIEW results_psra_677.psra_677_economic_security_economic_loss_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security

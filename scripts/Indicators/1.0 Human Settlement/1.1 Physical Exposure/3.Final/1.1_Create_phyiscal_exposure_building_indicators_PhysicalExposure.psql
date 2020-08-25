@@ -1,10 +1,13 @@
 -- create schema for new scenario
-CREATE SCHEMA IF NOT EXISTS results_bldgexp_ca_v2p5p3_master;
+CREATE SCHEMA IF NOT EXISTS results_nhsl_physical_exposure;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_buildings_building CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_buildings_building AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b AS 
 
+-- 1.0 Human Settlement
+-- 1.1 Physical Exposure
+-- 1.1.1 Buildings
 SELECT 
 a.id AS "BldgID",
 a.sauid AS "Sauid",
@@ -12,7 +15,6 @@ CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLon
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLat",
 CAST(CAST(ROUND(CAST(a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgNum",
 CAST(CAST(ROUND(CAST(a.bldg_ft2 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "EBldgArea",
-
 CAST(CAST(ROUND(CAST(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaRes",
 CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaComm",
 CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Industrial' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaInd",
@@ -32,9 +34,10 @@ a.geom AS "geom_point"
 FROM exposure.bldgexp_ca_v2p5p3_master a;
 
 
+
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_building CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_building AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_people_b CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_people_b AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -51,9 +54,10 @@ a.geom AS "geom_point"
 FROM exposure.bldgexp_ca_v2p5p3_master a;
 
 
+
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_building CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_building AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.physical_exposure_assets_b CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.physical_exposure_assets_b AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure

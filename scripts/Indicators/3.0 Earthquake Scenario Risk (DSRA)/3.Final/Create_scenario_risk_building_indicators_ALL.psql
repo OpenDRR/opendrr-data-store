@@ -1,11 +1,12 @@
 -- create schema for new scenario
 CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
 
+
+
 -- create scenario risk building indicators
 
-DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_scenario_shakemap_intensity_building CASCADE;
-CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_scenario_shakemap_intensity_building AS 
-
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.1 Earthquake Hazard
@@ -13,7 +14,7 @@ SELECT
 a."AssetID",
 b.sauid AS "Sauid",
 
--- 3.1.1 Scenario Shakemap Intensity
+-- 3.1.1 Shakemap Intensity
 f.rupture_name AS "sH_RupName",
 a."Rupture_Abbr" AS "sH_RupAbbr",
 f.source_type AS "sH_Source",
@@ -48,12 +49,13 @@ LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr";
 
 
+
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_damage_state_building CASCADE;
-CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_damage_state_building AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_damage_state_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_damage_state_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
--- 3.2 Building Performance
+-- 3.2 Building Damage
 SELECT 
 b.sauid AS "Sauid",
 
@@ -117,12 +119,13 @@ LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 GROUP BY b.sauid,i.geom,i.geompoint;
 
 
+
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_recovery_time_building CASCADE;
-CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_recovery_time_building AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_recovery_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_recovery_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
--- 3.2 Building Performance
+-- 3.2 Building Damage
 SELECT 
 a."AssetID",
 b.sauid AS "Sauid",
@@ -147,9 +150,10 @@ FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
 LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id;
 
 
+
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_casualties_building CASCADE;
-CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_casualties_building AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_casualties_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_casualties_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.3 Affected People
@@ -195,9 +199,10 @@ FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
 LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id;
 
 
+
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_social_disruption_building CASCADE;
-CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_social_disruption_building AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_social_disruption_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_social_disruption_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.3 Affected People
@@ -380,9 +385,10 @@ FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
 LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id;
 
 
+
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_economic_loss_building CASCADE;
-CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rlz_1_economic_loss_building AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_economic_security_economic_loss_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_economic_security_economic_loss_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.4 Economic Security

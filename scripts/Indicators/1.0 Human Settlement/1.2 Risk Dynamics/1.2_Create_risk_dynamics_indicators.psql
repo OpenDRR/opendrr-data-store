@@ -1,9 +1,9 @@
 -- create schema for new scenario
-CREATE SCHEMA IF NOT EXISTS results_ghsl_hazthreat_may2020_v1p2;
+CREATE SCHEMA IF NOT EXISTS results_nhsl_risk_dynamics;
 
 -- create risk dynamic indicators
-DROP VIEW IF EXISTS results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_population_growth CASCADE;
-CREATE VIEW results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_population_growth AS 
+DROP VIEW IF EXISTS results_nhsl_risk_dynamics.nhsl_risk_dynamics_population_growth_s CASCADE;
+CREATE VIEW results_nhsl_risk_dynamics.nhsl_risk_dynamics_population_growth_s AS 
 
 -- 1.2 Risk Dynamics
 -- 1.2.1 Population Growth
@@ -21,9 +21,11 @@ geom AS "geom_point"
 
 FROM ghsl.ghsl_hazthreat_may2020_v1p2;
 
+
+
 -- create risk dynamic indicators
-DROP VIEW IF EXISTS results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_land_use_change CASCADE;
-CREATE VIEW results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_land_use_change AS 
+DROP VIEW IF EXISTS results_nhsl_risk_dynamics.nhsl_risk_dynamics_land_use_change_s CASCADE;
+CREATE VIEW results_nhsl_risk_dynamics.nhsl_risk_dynamics_land_use_change_s AS 
 
 -- 1.2 Risk Dynamics
 -- 1.2.2 Land Use Change
@@ -37,9 +39,11 @@ geom AS "geom_point"
 
 FROM ghsl.ghsl_hazthreat_may2020_v1p2;
 
+
+
 -- create risk dynamic indicators
-DROP VIEW IF EXISTS results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_hazard_susceptibility CASCADE;
-CREATE VIEW results_ghsl_hazthreat_may2020_v1p2.risk_dynamics_hazard_susceptibility AS 
+DROP VIEW IF EXISTS results_nhsl_risk_dynamics.nhsl_risk_dynamics_hazard_susceptibility_s CASCADE;
+CREATE VIEW results_nhsl_risk_dynamics.nhsl_risk_dynamics_hazard_susceptibility_s AS 
 
 -- 1.2 Risk Dynamics
 -- 1.2.2 Land Use Change

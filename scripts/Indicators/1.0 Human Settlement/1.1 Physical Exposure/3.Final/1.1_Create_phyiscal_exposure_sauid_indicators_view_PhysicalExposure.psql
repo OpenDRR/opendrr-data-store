@@ -1,9 +1,9 @@
 -- create schema for new scenario
-CREATE SCHEMA IF NOT EXISTS results_bldgexp_ca_v2p5p3_master;
+CREATE SCHEMA IF NOT EXISTS results_nhsl_physical_exposure;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_settled_area_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -31,9 +31,10 @@ LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d.geom,d.geompoint;
 
 
+
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_function_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -63,9 +64,10 @@ LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 
+
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_building_type_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -92,9 +94,10 @@ LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 
+
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_people_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_people_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_people_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -113,9 +116,10 @@ LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 
+
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid CASCADE;
-CREATE VIEW results_bldgexp_ca_v2p5p3_master.bldgexp_ca_v2p5p3_master_assets_sauid AS 
+DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s CASCADE;
+CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
