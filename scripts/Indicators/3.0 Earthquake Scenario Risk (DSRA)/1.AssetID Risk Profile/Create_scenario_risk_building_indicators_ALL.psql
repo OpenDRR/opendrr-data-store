@@ -9,7 +9,7 @@ DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazar
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
--- 3.1 Earthquake Hazard
+-- 3.1 Scenario Hazard
 SELECT 
 a."AssetID",
 b.sauid AS "Sauid",
@@ -56,7 +56,8 @@ CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_damage
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.2 Building Damage
-SELECT 
+SELECT
+a."AssetID",
 b.sauid AS "Sauid",
 
 -- 3.2.1 Damage State - b0
@@ -109,14 +110,9 @@ CAST(SUM(a."sD_Collapse_r2" * b.number) AS NUMERIC) AS "sD_Collapse_r2",
 CAST(AVG(a."sD_Collapse_r2") AS NUMERIC) AS "sDtr_Collapse_r2",
 --CAST(AVG(a."sD_Complete_stdv_r2" * g.collapse_pc) AS NUMERIC) AS "sDtsd_Collapse_r2",
 
-i.geom AS "geom_poly",
-i.geompoint AS "geom_point"
-
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
-LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id 
-LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype
-LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
-GROUP BY b.sauid,i.geom,i.geompoint;
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype;
 
 
 
