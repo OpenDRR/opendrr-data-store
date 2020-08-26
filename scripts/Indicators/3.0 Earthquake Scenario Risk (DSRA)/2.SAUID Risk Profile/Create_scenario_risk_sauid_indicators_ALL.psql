@@ -1,6 +1,9 @@
 -- create schema for new scenario
 CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
 
+
+
+
 -- create scenario risk sauid indicators
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_s;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_s AS 
@@ -54,7 +57,7 @@ DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damag
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_damage_state_s AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
--- 3.2 Building Performance
+-- 3.2 Building Damage
 SELECT 
 b.sauid AS "Sauid",
 

@@ -4,7 +4,6 @@ CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
 
 
 -- create scenario risk building indicators
-
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b CASCADE;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b AS 
 
@@ -107,8 +106,10 @@ CAST(CAST(ROUND(CAST(a."sD_Complete_r2" / b.number AS NUMERIC),6) AS FLOAT) AS N
 --CAST(CAST(ROUND(CAST(a."sD_Complete_stdv_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDsd_Complete_r2",
 
 CAST(CAST(ROUND(CAST(a."sD_Collapse_r2" * b.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Collapse_r2",
-CAST(CAST(ROUND(CAST(a."sD_Collapse_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDr_Collapse_r2"
+CAST(CAST(ROUND(CAST(a."sD_Collapse_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDr_Collapse_r2",
 --CAST(CAST(ROUND(CAST(a."sD_Complete_stdv_r2" * g.collapse_pc AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDsd_Collapse_r2",
+
+b.geom AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
 LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id 
@@ -126,14 +127,14 @@ SELECT
 a."AssetID",
 b.sauid AS "Sauid",
 
--- 3.2.1 Recovery Time - b0
+-- 3.2.1 Recovery - b0
 CAST(CAST(ROUND(CAST(a."sC_Repair_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Repair_b0",
 CAST(CAST(ROUND(CAST(a."sC_Construxn_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Construxn_b0",
 CAST(CAST(ROUND(CAST(a."sC_Downtime_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Downtime_b0",
 CAST(CAST(ROUND(CAST(a."sC_DebrisBW_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisBW_b0",
 CAST(CAST(ROUND(CAST(a."sC_DebrisC_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisCS_b0",
 
--- 3.2.1 Recovery Time - r2
+-- 3.2.1 Recovery - r2
 CAST(CAST(ROUND(CAST(a."sC_Repair_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Repair_r2",
 CAST(CAST(ROUND(CAST(a."sC_Construxn_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Construxn_r2",
 CAST(CAST(ROUND(CAST(a."sC_Downtime_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Downtime_r2",
