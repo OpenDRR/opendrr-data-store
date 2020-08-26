@@ -2,7 +2,6 @@ CREATE SCHEMA IF NOT EXISTS results_psra_677;
 
 
 
-
 -- create psra indicators
 DROP VIEW IF EXISTS results_psra_677.psra_677_seismic_hazard_500yr_hazard_intensity_s CASCADE;
 CREATE VIEW results_psra_677.psra_677_seismic_hazard_500yr_hazard_intensity_s AS 
@@ -859,6 +858,7 @@ GROUP BY a.sauid,z.geom,z.geompoint;
 
 
 
+-- create psra indicators
 DROP VIEW IF EXISTS results_psra_677.psra_677_economic_security_pml_b0_s CASCADE;
 CREATE VIEW results_psra_677.psra_677_economic_security_pml_b0_s AS
 
@@ -880,6 +880,7 @@ FROM psra.agg_curves_stats_679 a;
 
 
 
+-- create psra indicators
 DROP VIEW IF EXISTS results_psra_677.psra_677_economic_security_pml_r1_s CASCADE;
 CREATE VIEW results_psra_677.psra_677_economic_security_pml_r1_s AS
 
@@ -901,7 +902,7 @@ FROM psra.agg_curves_stats_684 a;
 
 
 
-
+-- create psra indicators
 DROP VIEW IF EXISTS results_psra_677.psra_677_economic_security_pml_r2_s CASCADE;
 CREATE VIEW results_psra_677.psra_677_economic_security_pml_r2_s AS
 

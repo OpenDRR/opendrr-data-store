@@ -1,6 +1,8 @@
 -- create schema for new scenario
 CREATE SCHEMA IF NOT EXISTS results_nhsl_physical_exposure;
 
+
+
 -- create physical exposure indicators
 DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b CASCADE;
 CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b AS 
@@ -34,6 +36,7 @@ FROM exposure.canada_exposure a
 LEFT JOIN lut.retrofit_costs b ON a.eqbldgtype = b."Eq_BldgType";
 
 
+
 -- create physical exposure indicators
 DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_people_b CASCADE;
 CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_people_b AS 
@@ -51,6 +54,7 @@ CAST(a.transit AS NUMERIC) AS "E_PopTransit",
 a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a;
+
 
 
 -- create physical exposure indicators

@@ -1,6 +1,8 @@
 -- create schema for new scenario
 CREATE SCHEMA IF NOT EXISTS results_nhsl_physical_exposure;
 
+
+
 -- create physical exposure indicators
 DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s CASCADE;
 CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s AS 
@@ -29,6 +31,7 @@ FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,a.lon,a.lat,a.landusetyp,c."area_km2",c.censuspop,c.area_ha,c.censusbldg,c.people_du,c.censusdu,c.sactype,c.landuse,d.geom,d.geompoint;
+
 
 
 -- create physical exposure indicators
@@ -65,6 +68,7 @@ LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,c.people_du,d.geom,d.geompoint;
 
 
+
 -- create physical exposure indicators
 DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s CASCADE;
 CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s AS 
@@ -94,6 +98,7 @@ LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
 
 
+
 -- create physical exposure indicators
 DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_people_s CASCADE;
 CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_people_s AS 
@@ -113,6 +118,7 @@ d.geompoint AS "geom_point"
 FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,d.geom,d.geompoint;
+
 
 
 -- create physical exposure indicators

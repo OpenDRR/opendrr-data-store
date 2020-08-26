@@ -1,8 +1,9 @@
 -- create schema for new scenario
 CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
 
--- create scenario risk building indicators
 
+
+-- create scenario risk building indicators
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b CASCADE;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b AS 
 
@@ -47,6 +48,7 @@ LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id
 LEFT JOIN vs30.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr";
+
 
 
 -- create scenario risk building indicators
@@ -116,6 +118,7 @@ LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id
 LEFT JOIN lut.collapse_probability g ON b.eqbldgtype = g.eqbldgtype;
 
 
+
 -- create scenario risk building indicators
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_recovery_b CASCADE;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_recovery_b AS 
@@ -144,6 +147,7 @@ b.geom AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id; 
+
 
 
 -- create scenario risk building indicators
@@ -194,6 +198,8 @@ FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
 
 
+
+-- create scenario risk building indicators
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_social_disruption_b CASCADE;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_social_disruption_b AS 
 
@@ -377,6 +383,7 @@ b.geom AS "geom_point"
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id
 LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt;
+
 
 
 -- create scenario risk building indicators
