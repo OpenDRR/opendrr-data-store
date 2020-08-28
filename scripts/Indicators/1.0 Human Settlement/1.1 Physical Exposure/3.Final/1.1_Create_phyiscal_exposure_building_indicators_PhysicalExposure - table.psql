@@ -56,8 +56,8 @@ FROM exposure.bldgexp_ca_v2p5p3_master a;
 
 
 -- create physical exposure indicators
-DROP TABLE IF EXISTS results_nhsl_physical_exposure.physical_exposure_assets_b_tbl CASCADE;
-CREATE TABLE results_nhsl_physical_exposure.physical_exposure_assets_b_tbl AS 
+DROP TABLE IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_assets_b_tbl CASCADE;
+CREATE TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_assets_b_tbl AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
