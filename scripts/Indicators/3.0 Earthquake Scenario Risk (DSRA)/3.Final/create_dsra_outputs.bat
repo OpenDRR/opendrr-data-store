@@ -1,4 +1,4 @@
-REM Export physical exposure views to geojson, and geopackage files. Replace exposure name {bldgexp_canada} to target exposure if different to run.  Change ogr2ogr path, location paths, db information if needed.
+REM Export views to geojson, and geopackage files. Replace exposure name {bldgexp_canada} to target exposure if different to run.  Change ogr2ogr path, location paths, db information if needed.
 
 REM Geojson export
 FOR %%x IN (dsra_sim6p8_cr2022_affected_people_casualties_b,dsra_sim6p8_cr2022_affected_people_casualties_s,dsra_sim6p8_cr2022_affected_people_social_disruption_b,dsra_sim6p8_cr2022_affected_people_social_disruption_s,dsra_sim6p8_cr2022_building_damage_damage_state_b,
