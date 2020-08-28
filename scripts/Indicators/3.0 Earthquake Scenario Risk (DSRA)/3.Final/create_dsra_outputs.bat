@@ -1,14 +1,14 @@
-REM Export physical exposure views to geojson, and geopackage files. Replace exposure name {bldgexp_canada} to target exposure if different to run.  Change ogr2ogr path, location paths, db information if needed.
+REM Export views to geojson, and geopackage files. Replace exposure name {bldgexp_canada} to target exposure if different to run.  Change ogr2ogr path, location paths, db information if needed.
 
 REM Geojson export
 FOR %%x IN (dsra_sim6p8_cr2022_affected_people_casualties_b,dsra_sim6p8_cr2022_affected_people_casualties_s,dsra_sim6p8_cr2022_affected_people_social_disruption_b,dsra_sim6p8_cr2022_affected_people_social_disruption_s,dsra_sim6p8_cr2022_building_damage_damage_state_b,
 dsra_sim6p8_cr2022_building_damage_damage_state_s,dsra_sim6p8_cr2022_building_damage_recovery_b,dsra_sim6p8_cr2022_building_damage_recovery_s,dsra_sim6p8_cr2022_economic_security_economic_loss_b,dsra_sim6p8_cr2022_economic_security_economic_loss_s,
-dsra_sim6p8_cr2022_rlz_1_scenario_shakemap_intensity_building,dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b,dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_s) DO "C:\OSGeo4W64\bin\ogr2ogr.exe" -f "GeoJSON" D:\workspace\data\view_outputs\%%x.geojson PG:"host=localhost user=postgres dbname=oq_sandbox password=password" results_dsra_sim6p8_cr2022.%%x
+dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b,dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_s) DO "C:\OSGeo4W64\bin\ogr2ogr.exe" -f "GeoJSON" D:\workspace\data\view_outputs\%%x.geojson PG:"host=localhost user=postgres dbname=oq_sandbox password=password" results_dsra_sim6p8_cr2022.%%x
 
 REM Geopackage export
 FOR %%x IN (dsra_sim6p8_cr2022_affected_people_casualties_b,dsra_sim6p8_cr2022_affected_people_casualties_s,dsra_sim6p8_cr2022_affected_people_social_disruption_b,dsra_sim6p8_cr2022_affected_people_social_disruption_s,dsra_sim6p8_cr2022_building_damage_damage_state_b,
 dsra_sim6p8_cr2022_building_damage_damage_state_s,dsra_sim6p8_cr2022_building_damage_recovery_b,dsra_sim6p8_cr2022_building_damage_recovery_s,dsra_sim6p8_cr2022_economic_security_economic_loss_b,dsra_sim6p8_cr2022_economic_security_economic_loss_s,
-dsra_sim6p8_cr2022_rlz_1_scenario_shakemap_intensity_building,dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b,dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_s) DO "C:\OSGeo4W64\bin\ogr2ogr.exe" -f "gpkg" D:\workspace\data\view_outputs\%%x.gpkg PG:"host=localhost user=postgres dbname=oq_sandbox password=password" results_dsra_sim6p8_cr2022.%%x
+dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b,dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_s) DO "C:\OSGeo4W64\bin\ogr2ogr.exe" -f "gpkg" D:\workspace\data\view_outputs\%%x.gpkg PG:"host=localhost user=postgres dbname=oq_sandbox password=password" results_dsra_sim6p8_cr2022.%%x
 
 PAUSE
 
