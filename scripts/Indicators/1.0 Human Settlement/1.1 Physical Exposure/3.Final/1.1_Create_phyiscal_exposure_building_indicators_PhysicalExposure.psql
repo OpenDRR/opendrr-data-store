@@ -31,7 +31,7 @@ a.eqdeslev AS "E_BldgDesLev",
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a;
+FROM exposure.canada_exposure a;
 
 
 
@@ -51,7 +51,7 @@ CAST(CAST(ROUND(CAST(a.transit AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_PopTra
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a;
+FROM exposure.canada_exposure a;
 
 
 
@@ -74,4 +74,4 @@ CAST(CAST(ROUND(CAST(a.retrofitting AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_R
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a;
+FROM exposure.canada_exposure a;

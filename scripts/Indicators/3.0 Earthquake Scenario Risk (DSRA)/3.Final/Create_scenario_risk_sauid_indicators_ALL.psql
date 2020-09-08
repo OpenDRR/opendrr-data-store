@@ -41,7 +41,7 @@ i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
-LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN vs30.vs30_bc_site_model_xref d ON a."AssetID" = d.id
 LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
@@ -115,7 +115,7 @@ i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
-LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype
 LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 GROUP BY b.sauid,i.geom,i.geompoint;
@@ -172,7 +172,7 @@ i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
-LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 GROUP BY b.sauid,i.geom,i.geompoint;
 
@@ -223,7 +223,7 @@ i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
-LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 GROUP BY b.sauid,i.geom,i.geompoint;
 
@@ -452,7 +452,7 @@ i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
-LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
@@ -501,6 +501,6 @@ i.geom AS "geom_poly",
 i.geompoint AS "geom_point"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
-LEFT JOIN exposure.bldgexp_ca_v2p5p3_master b ON a."AssetID" = b.id 
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 GROUP BY b.sauid,i.geom,i.geompoint;

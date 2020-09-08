@@ -6,9 +6,9 @@
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_buildings_b_tbl_pkey;
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b_tbl ADD PRIMARY KEY("BldgID");
 
--- add fkey from exposure.bldgexp_ca_v2p5p3_master
+-- add fkey from exposure.canada_exposure
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_buildings_b_tbl_fkey;
-ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b_tbl ADD CONSTRAINT nhsl_physical_exposure_buildings_b_tbl_fkey FOREIGN KEY ("BldgID") REFERENCES exposure.bldgexp_ca_v2p5p3_master(id);
+ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b_tbl ADD CONSTRAINT nhsl_physical_exposure_buildings_b_tbl_fkey FOREIGN KEY ("BldgID") REFERENCES exposure.canada_exposure(id);
 
 
 
@@ -17,9 +17,9 @@ ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_buildings_b_tb
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_b_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_people_b_tbl_pkey;
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_b_tbl ADD PRIMARY KEY("BldgID");
 
--- add fkey from exposure.bldgexp_ca_v2p5p3_master
+-- add fkey from exposure.canada_exposure
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_b_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_people_b_tbl_fkey;
-ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_b_tbl ADD CONSTRAINT nhsl_physical_exposure_people_b_tbl_fkey FOREIGN KEY ("BldgID") REFERENCES exposure.bldgexp_ca_v2p5p3_master(id);
+ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_b_tbl ADD CONSTRAINT nhsl_physical_exposure_people_b_tbl_fkey FOREIGN KEY ("BldgID") REFERENCES exposure.canada_exposure(id);
 
 
 
@@ -28,9 +28,9 @@ ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_b_tbl A
 ALTER TABLE results_nhsl_physical_exposure.physical_exposure_assets_b_tbl DROP CONSTRAINT IF EXISTS physical_exposure_assets_b_tbl_pkey;
 ALTER TABLE results_nhsl_physical_exposure.physical_exposure_assets_b_tbl ADD PRIMARY KEY("BldgID");
 
--- add fkey from exposure.bldgexp_ca_v2p5p3_master
+-- add fkey from exposure.canada_exposure
 ALTER TABLE results_nhsl_physical_exposure.physical_exposure_assets_b_tbl DROP CONSTRAINT IF EXISTS physical_exposure_assets_b_tbl_fkey;
-ALTER TABLE results_nhsl_physical_exposure.physical_exposure_assets_b_tbl ADD CONSTRAINT physical_exposure_assets_b_tbl_fkey FOREIGN KEY ("BldgID") REFERENCES exposure.bldgexp_ca_v2p5p3_master(id);
+ALTER TABLE results_nhsl_physical_exposure.physical_exposure_assets_b_tbl ADD CONSTRAINT physical_exposure_assets_b_tbl_fkey FOREIGN KEY ("BldgID") REFERENCES exposure.canada_exposure(id);
 
 
 
@@ -40,9 +40,9 @@ ALTER TABLE results_nhsl_physical_exposure.physical_exposure_assets_b_tbl ADD CO
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_settled_area_s_tbl_pkey;
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s_tbl ADD PRIMARY KEY("Sauid");
 
--- add fkey to exposure.bldgexp_ca_v2p5p3_master
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey;
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s_tbl("Sauid");
+-- add fkey to exposure.canada_exposure
+ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey;
+ALTER TABLE exposure.canada_exposure ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s_tbl("Sauid");
 
 -- add fkey from census.census_2016_canada
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_settled_area_s_tbl_fkey;
@@ -59,9 +59,9 @@ ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_settled_area_s
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_building_function_s_tbl_pkey;
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s_tbl ADD PRIMARY KEY("Sauid");
 
--- add fkey to exposure.bldgexp_ca_v2p5p3_master
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey2;
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey2 FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s_tbl("Sauid");
+-- add fkey to exposure.canada_exposure
+ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey2;
+ALTER TABLE exposure.canada_exposure ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey2 FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s_tbl("Sauid");
 
 -- add fkey from boundaries."Geometry_SAUID"
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_building_function_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_building_function_s_tbl_fkey2;
@@ -74,9 +74,9 @@ ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_building_funct
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_building_type_s_tbl_pkey;
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s_tbl ADD PRIMARY KEY("Sauid");
 
--- add fkey on exposure.bldgexp_ca_v2p5p3_master
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey3;
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey3 FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s_tbl("Sauid");
+-- add fkey on exposure.canada_exposure
+ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey3;
+ALTER TABLE exposure.canada_exposure ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey3 FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s_tbl("Sauid");
 
 -- add fkey from boundaries."Geometry_SAUID"
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_building_type_s_tbl_fkey;
@@ -89,9 +89,9 @@ ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_building_type_
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_people_s_tbl_pkey;
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_s_tbl ADD PRIMARY KEY("Sauid");
 
--- add fkey on exposure.bldgexp_ca_v2p5p3_master
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey4;
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey4 FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_people_s_tbl("Sauid");
+-- add fkey on exposure.canada_exposure
+ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey4;
+ALTER TABLE exposure.canada_exposure ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey4 FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_people_s_tbl("Sauid");
 
 -- add fkey from boundaries."Geometry_SAUID"
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_people_s_tbl_fkey;
@@ -104,9 +104,9 @@ ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_people_s_tbl A
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_assets_s_tbl_pkey;
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s_tbl ADD PRIMARY KEY("Sauid");
 
--- add fkey on exposure.bldgexp_ca_v2p5p3_master
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey5;
-ALTER TABLE exposure.bldgexp_ca_v2p5p3_master ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey5 FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s_tbl("Sauid");
+-- add fkey on exposure.canada_exposure
+ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS bldgexp_ca_v2p5p3_master_exposure_fkey5;
+ALTER TABLE exposure.canada_exposure ADD CONSTRAINT bldgexp_ca_v2p5p3_master_exposure_fkey5 FOREIGN KEY (sauid) REFERENCES results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s_tbl("Sauid");
 
 -- add fkey from boundaries."Geometry_SAUID"
 ALTER TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_assets_s_tbl DROP CONSTRAINT IF EXISTS nhsl_physical_exposure_assets_s_tbl_fkey;

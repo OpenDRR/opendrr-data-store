@@ -28,7 +28,7 @@ CAST(CAST(ROUND(CAST(d."SA(10.0)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
 RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id;
 
@@ -59,7 +59,7 @@ CAST(CAST(ROUND(CAST(d."SA(10.0)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "p
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
 RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id;
 
@@ -83,7 +83,7 @@ CAST(CAST(ROUND(CAST(0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_V2p5", -- add
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN vs30.vs30_bc_site_model_xref d ON a.id = d.id
 RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id;
 
@@ -161,7 +161,7 @@ CAST(CAST(ROUND(CAST((e.complete/a.number) * f.collapse_pc AS NUMERIC),6) AS FLO
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
 LEFT JOIN psra.damages_structural_mean_682 d ON a.id = d.asset_id
 LEFT JOIN psra.damages_structural_mean_683 e ON a.id = e.asset_id
@@ -256,7 +256,7 @@ CAST(CAST(ROUND(CAST((h.structural_complete_mean/a.number) * f.collapse_pc AS NU
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 RIGHT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
 LEFT JOIN psra.damages_rlz_000_686 g ON a.id = g.asset_refid
 LEFT JOIN psra.damages_rlz_000_687 h ON a.id = h.asset_refid
@@ -300,7 +300,7 @@ CAST(CAST(ROUND(CAST(i.debris_concrete_steel_tons AS NUMERIC),6) AS FLOAT) AS NU
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 RIGHT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
 LEFT JOIN psra.consequences_rlz_000_686 h ON a.id = h.asset_ref
 LEFT JOIN psra.consequences_rlz_000_687 i ON a.id = i.asset_ref;
@@ -376,7 +376,7 @@ CAST(CAST(ROUND(CAST(k.casualties_transit_severity_4 AS NUMERIC),6) AS FLOAT) AS
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 RIGHT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
 LEFT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
 
@@ -649,7 +649,7 @@ CAST(CAST(ROUND(CAST(l.sc_busdispl360 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "e
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 RIGHT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
 LEFT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
 
@@ -702,7 +702,7 @@ CAST(CAST(ROUND(CAST(j.contents AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAAL_Co
 
 a.geom AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 RIGHT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
 LEFT JOIN psra.avg_losses_mean_684 i ON a.id = i.asset_id
 LEFT JOIN psra.avg_losses_mean_685 j ON a.id = j.asset_id;

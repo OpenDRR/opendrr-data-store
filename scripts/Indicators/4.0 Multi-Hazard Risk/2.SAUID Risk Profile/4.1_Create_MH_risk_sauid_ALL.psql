@@ -17,7 +17,7 @@ COALESCE(CAST((b.mh_sum - (SELECT mhsum_min FROM mh.mh_intensity_canada_minmax))
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 GROUP BY a.sauid,b.mh_sum,d.geom,d.geompoint;
@@ -95,7 +95,7 @@ AS "MHt_Manufactured",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 GROUP BY a.sauid,b.mh_sum,d.geom,d.geompoint;
@@ -139,7 +139,7 @@ AS "Mht_MFHshlds",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
@@ -179,7 +179,7 @@ AS "Mht_ContCost",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 GROUP BY a.sauid,b.mh_sum,d.geom,d.geompoint;
@@ -202,7 +202,7 @@ COALESCE(CAST((e.pga - (SELECT pga_min FROM mh.mh_intensity_canada_minmax))/NULL
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.pgv,e.pga,d.geom,d.geompoint;
@@ -251,7 +251,7 @@ COALESCE(CAST(CASE WHEN e.pga >= (SELECT "PGAt" FROM mh.mh_thresholds) THEN SUM(
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.pga,d.geom,d.geompoint;
@@ -282,7 +282,7 @@ a.popdu ELSE 0 END AS NUMERIC),0) AS "EQt_MFHshlds",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
@@ -312,7 +312,7 @@ COALESCE(CAST(CASE WHEN e.pga >= (SELECT "PGAt" FROM mh.mh_thresholds) THEN SUM(
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.pga,d.geom,d.geompoint;
@@ -335,7 +335,7 @@ COALESCE(CAST((e.tsun_ha - (SELECT tsun_min FROM mh.mh_intensity_canada_minmax))
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.tsun_ha,d.geom,d.geompoint;
@@ -384,7 +384,7 @@ COALESCE(CAST(CASE WHEN e.tsun_ha >= (SELECT "Tsun_t" FROM mh.mh_thresholds) THE
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.tsun_ha,d.geom,d.geompoint;
@@ -416,7 +416,7 @@ a.popdu ELSE 0 END AS NUMERIC),0) AS "Tst_MFHshlds",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
@@ -446,7 +446,7 @@ COALESCE(CAST(CASE WHEN e.tsun_ha >= (SELECT "Tsun_t" FROM mh.mh_thresholds) THE
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.tsun_ha,d.geom,d.geompoint;
@@ -473,7 +473,7 @@ COALESCE(CAST((e.fl1000 - (SELECT fl1000_min FROM mh.mh_intensity_canada_minmax)
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fl200,e.fl500,e.fl1000,d.geom,d.geompoint;
@@ -522,7 +522,7 @@ COALESCE(CAST(CASE WHEN e.fl500 >= (SELECT "Fl500t" FROM mh.mh_thresholds) THEN 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fl500,d.geom,d.geompoint;
@@ -554,7 +554,7 @@ a.popdu ELSE 0 END AS NUMERIC),0) AS "FLt_MFHshlds",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
@@ -584,7 +584,7 @@ COALESCE(CAST(CASE WHEN e.fl500 >= (SELECT "Fl500t" FROM mh.mh_thresholds) THEN 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fl500,d.geom,d.geompoint;
@@ -608,7 +608,7 @@ COALESCE(CAST((e.fire - (SELECT fire_min FROM mh.mh_intensity_canada_minmax))/NU
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fire,d.geom,d.geompoint;
@@ -657,7 +657,7 @@ COALESCE(CAST(CASE WHEN e.fire >= (SELECT "Firet" FROM mh.mh_thresholds) THEN SU
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fire,d.geom,d.geompoint;
@@ -689,7 +689,7 @@ a.popdu ELSE 0 END AS NUMERIC),0) AS "WFt_MFHshlds",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
@@ -719,7 +719,7 @@ COALESCE(CAST(CASE WHEN e.fire >= (SELECT "Firet" FROM mh.mh_thresholds) THEN SU
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.fire,d.geom,d.geompoint;
@@ -742,7 +742,7 @@ COALESCE(CAST((e.lndsus - (SELECT lndsus_min FROM mh.mh_intensity_canada_minmax)
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.lndsus,d.geom,d.geompoint;
@@ -791,7 +791,7 @@ COALESCE(CAST(CASE WHEN e.lndsus >= (SELECT "LndSust" FROM mh.mh_thresholds) THE
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.lndsus,d.geom,d.geompoint;
@@ -823,7 +823,7 @@ a.popdu ELSE 0 END AS NUMERIC),0) AS "LSt_MFHshlds",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
@@ -853,7 +853,7 @@ COALESCE(CAST(CASE WHEN e.lndsus >= (SELECT "LndSust" FROM mh.mh_thresholds) THE
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.lndsus,d.geom,d.geompoint;
@@ -882,7 +882,7 @@ COALESCE(CAST((e.cy1000 - (SELECT cy1000_min FROM mh.mh_intensity_canada_minmax)
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.cy100,e.cy250,e.cy500,e.cy1000,d.geom,d.geompoint;
@@ -931,7 +931,7 @@ COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.cy500,d.geom,d.geompoint;
@@ -963,7 +963,7 @@ a.popdu ELSE 0 END AS NUMERIC),0) AS "CYt_MFHshlds",
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
@@ -993,7 +993,7 @@ COALESCE(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN 
 d.geom AS "geom_poly",
 d.geompoint AS "geom_point"
 
-FROM exposure.bldgexp_ca_v2p5p3_master a
+FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
 GROUP BY a.sauid,e.cy500,d.geom,d.geompoint;
