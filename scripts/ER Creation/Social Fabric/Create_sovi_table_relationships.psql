@@ -1,0 +1,79 @@
+-- script to generate relationships for sovi
+
+-- results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl
+-- add pkey
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_housing_conditions_s_tbl_pkey;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl ADD PRIMARY KEY("Sauid");
+
+-- add fkey from sovi.sovi_census_canada
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_housing_conditions_s_tbl_fkey;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl ADD CONSTRAINT nhsl_social_fabric_housing_conditions_s_tbl_fkey FOREIGN KEY ("Sauid") REFERENCES sovi.sovi_census_canada(sauidt);
+
+-- add fkey from sovi.sovi_index_canada
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_housing_conditions_s_tbl_fkey2;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl ADD CONSTRAINT nhsl_social_fabric_housing_conditions_s_tbl_fkey2 FOREIGN KEY ("Sauid") REFERENCES sovi.sovi_index_canada(sauidt);
+
+-- add fkey from boundaries."Geometry_SAUID"
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_housing_conditions_s_tbl_fkey3;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl ADD CONSTRAINT nhsl_social_fabric_housing_conditions_s_tbl_fkey3 FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
+
+
+
+-- results_nhsl_social_fabric.nhsl_social_fabric_financial_agency_s_tbl
+-- add pkey
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_financial_agency_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_financial_agency_s_tbl_pkey;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_financial_agency_s_tbl ADD PRIMARY KEY("Sauid");
+
+-- add fkey from sovi.sovi_census_canada
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_financial_agency_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_financial_agency_s_tbl_fkey;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_financial_agency_s_tbl ADD CONSTRAINT nhsl_social_fabric_financial_agency_s_tbl_fkey FOREIGN KEY ("Sauid") REFERENCES sovi.sovi_census_canada(sauidt);
+
+-- add fkey from sovi.sovi_index_canada
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_financial_agency_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_financial_agency_s_tbl_fkey2;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_financial_agency_s_tbl ADD CONSTRAINT nhsl_social_fabric_financial_agency_s_tbl_fkey2 FOREIGN KEY ("Sauid") REFERENCES sovi.sovi_index_canada(sauidt);
+
+-- add fkey from boundaries."Geometry_SAUID"
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_financial_agency_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_financial_agency_s_tbl_fkey3;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_financial_agency_s_tbl ADD CONSTRAINT nhsl_social_fabric_financial_agency_s_tbl_fkey3 FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
+
+
+
+-- results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl
+-- add pkey
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_housing_conditions_s_tbl_pkey;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl ADD PRIMARY KEY("Sauid");
+
+-- add fkey from sovi.sovi_census_canada
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_housing_conditions_s_tbl_fkey;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl ADD CONSTRAINT nhsl_social_fabric_housing_conditions_s_tbl_fkey FOREIGN KEY ("Sauid") REFERENCES sovi.sovi_census_canada(sauidt);
+
+-- add fkey from sovi.sovi_index_canada
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_housing_conditions_s_tbl_fkey2;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl ADD CONSTRAINT nhsl_social_fabric_housing_conditions_s_tbl_fkey2 FOREIGN KEY ("Sauid") REFERENCES sovi.sovi_index_canada(sauidt);
+
+-- add fkey from boundaries."Geometry_SAUID"
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_housing_conditions_s_tbl_fkey3;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_housing_conditions_s_tbl ADD CONSTRAINT nhsl_social_fabric_housing_conditions_s_tbl_fkey3 FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
+
+
+
+-- results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl
+-- add pkey
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_individual_autonomy_s_tbl_pkey;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl ADD PRIMARY KEY("Sauid");
+
+-- add fkey to exposure.canada_exposure
+ALTER TABLE exposure.canada_exposure DROP CONSTRAINT IF EXISTS canada_exposure_sovi_fkey4;
+ALTER TABLE exposure.canada_exposure ADD CONSTRAINT canada_exposure_sovi_fkey4 FOREIGN KEY (sauid) REFERENCES results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl("Sauid");
+
+-- add fkey from sovi.sovi_census_canada
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_individual_autonomy_s_tbl_fkey;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl ADD CONSTRAINT nhsl_social_fabric_individual_autonomy_s_tbl_fkey FOREIGN KEY ("Sauid") REFERENCES sovi.sovi_census_canada(sauidt);
+
+-- add fkey from sovi.sovi_index_canada
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_individual_autonomy_s_tbl_fkey2;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl ADD CONSTRAINT nhsl_social_fabric_individual_autonomy_s_tbl_fkey2 FOREIGN KEY ("Sauid") REFERENCES sovi.sovi_index_canada(sauidt);
+
+-- add fkey from boundaries."Geometry_SAUID"
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl DROP CONSTRAINT IF EXISTS nhsl_social_fabric_individual_autonomy_s_tbl_fkey3;
+ALTER TABLE results_nhsl_social_fabric.nhsl_social_fabric_individual_autonomy_s_tbl ADD CONSTRAINT nhsl_social_fabric_individual_autonomy_s_tbl_fkey3 FOREIGN KEY ("Sauid") REFERENCES boundaries."Geometry_SAUID"("SAUIDt");
