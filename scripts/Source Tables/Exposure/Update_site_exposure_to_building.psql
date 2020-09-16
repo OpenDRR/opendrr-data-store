@@ -1,0 +1,58 @@
+-- script to generate Canada site level exposure table
+
+DROP TABLE IF EXISTS exposure.canada_site_exposure_agg;
+
+CREATE TABLE AS (
+SELECT sauid,
+sauidid,
+sauidlat,
+sauidlon,
+sauid_km2,
+sauid_ha,
+landuse,
+taxonomy,
+SUM(number) AS "number",
+SUM(structural) AS "structural",
+SUM(nonstructural) AS "nonstructural",
+SUM(contents) AS "contents",
+business,
+"limit",
+deductible,
+AVG(retrofitting) AS "retrofitting",
+SUM(day) AS "day",
+SUM(night) AS "night",
+SUM(transit) AS "transit",
+genocc,
+occclass1,
+occclass2,
+SUM(popdu) AS "popdu",
+gentype,
+bldgtype,
+ROUND(AVG(numfloors)) AS "numfloors",
+SUM(bldg_ft2) AS "bldg_ft2",
+ROUND(AVG(bldyear)) AS "bldgyear",
+bldepoch,
+ssc_zone,
+eqdeslev,
+dauid,
+adauid,
+fsauid,
+csduid,
+csdname,
+cduid,
+cdname,
+sac,
+eruid,
+ername,
+pruid,
+prname
+
+FROM exposure.canada_site_exposure
+GROUP BY sauid,sauidid,sauidlat,sauidlon,sauid_km2,sauid_ha,landuse,taxonomy,business,"limit",deductible,genocc,occclass1,occclass2,gentype,bldgtype,bldepoch,ssc_zone,
+eqdeslev,dauid,adauid,fsauid,csduid,csdname,cduid,cdname,sac,eruid,ername,pruid,prname
+ORDER BY sauid,taxonomy;
+)
+
+-- create spatial index
+CREATE INDEX canada_site_exposure_agg_idx
+ON exposure.canada_site_exposure_agg using GIST (geom);
