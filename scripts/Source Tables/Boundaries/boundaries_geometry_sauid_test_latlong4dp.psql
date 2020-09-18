@@ -1,0 +1,51 @@
+DROP TABLE IF EXISTS boundaries."Geometry_SAUID_test4dp";
+
+CREATE TABLE boundaries."Geometry_SAUID_test4dp" AS 
+(SELECT
+fid,
+"OBJECTID",
+"SAUIDt",
+"SAUIDi",
+"Lon",
+"Lat",
+CAST(CAST(ROUND(CAST("Lon" AS NUMERIC),4) AS FLOAT) AS NUMERIC) AS "Lon4dp",
+CAST(CAST(ROUND(CAST("Lat" AS NUMERIC),4) AS FLOAT) AS NUMERIC) AS "Lat4dp",
+CAST(CAST(ROUND(CAST("Lon" AS NUMERIC),4) AS FLOAT) AS NUMERIC) AS "Lon5dp",
+CAST(CAST(ROUND(CAST("Lat" AS NUMERIC),4) AS FLOAT) AS NUMERIC) AS "Lat5dp",
+"Area_km2",
+"Area_ha",
+"DAUIDt",
+"DAUIDi",
+"ADAUID",
+"CFSAUID",
+"PRUID",
+"PRNAME",
+"CSDUID",
+"CSDNAME",
+"CSDTYPE",
+"CDUID",
+"CDNAME",
+"CDTYPE",
+"CCSUID",
+"CCSNAME",
+"ERUID",
+"ERNAME",
+"SACCODE",
+"SACTYPE",
+"CMAUID",
+"CMAPUID",
+"CMANAME",
+"CMATYPE",
+"Shape_Length",
+"Shape_Area",
+geompoint,
+geom
+FROM boundaries."Geometry_SAUID");
+
+-- add additional geometries field to enable PostGIS point (WGS1984 SRID = 4326)
+ALTER TABLE boundaries."Geometry_SAUID_test4dp" ADD COLUMN geompoint4dp geometry(Point,4326);
+UPDATE boundaries."Geometry_SAUID_test4dp" SET geompoint4dp = st_setsrid(st_makepoint("Lon4dp","Lat4dp"),4326);
+
+-- add additional geometries field to enable PostGIS point (WGS1984 SRID = 4326)
+ALTER TABLE boundaries."Geometry_SAUID_test4dp" ADD COLUMN geompoint5dp geometry(Point,4326);
+UPDATE boundaries."Geometry_SAUID_test4dp" SET geompoint5dp = st_setsrid(st_makepoint("Lon5dp","Lat5dp"),4326);
