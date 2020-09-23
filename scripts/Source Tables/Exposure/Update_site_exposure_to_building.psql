@@ -110,11 +110,6 @@ SET id = rowid||'-'||taxonomy;
 ALTER TABLE exposure.canada_site_exposure_agg ADD PRIMARY KEY(id);
 
 
--- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE exposure.canada_site_exposure_agg ADD COLUMN geom geometry(Point,4326);
-UPDATE exposure.canada_site_exposure_agg SET geom = st_setsrid(st_makepoint(sauidlon,sauidlat),4326);
-
-
 -- erase building level exposure rows with the same sauid from site level aggregation
 DELETE FROM exposure.canada_exposure
 WHERE sauid IN (SELECT DISTINCT(sauid) FROM exposure.canada_site_exposure_agg);
@@ -170,5 +165,5 @@ ername,
 pruid,
 prname,
 rowid,
-geom
+geom_site
 FROM exposure.canada_site_exposure_agg;
