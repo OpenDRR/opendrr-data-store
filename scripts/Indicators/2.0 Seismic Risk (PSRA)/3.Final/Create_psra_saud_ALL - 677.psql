@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS results_psra_hazard_map_mean_677;
+CREATE SCHEMA IF NOT EXISTS results_psra_677;
 
 
 
