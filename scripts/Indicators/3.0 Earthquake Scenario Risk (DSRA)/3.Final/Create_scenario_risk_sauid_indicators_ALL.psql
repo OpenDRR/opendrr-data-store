@@ -2,8 +2,6 @@
 CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
 
 
-
-
 -- create scenario risk sauid indicators
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_s;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_s AS 
@@ -49,7 +47,6 @@ LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 GROUP BY a."Rupture_Abbr",a."gmpe_Model",a."Weight",a."Realization",b.sauid,d.vs30,d.z1pt0,d.z2pt5,d.vs_lon,d.vs_lat,e.site_id,e.lon,e.lat,f.source_type,
 f.rupture_name,f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pgv",e."gmv_pga",e."gmv_SA(0.2)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(0.3)",e."gmv_SA(2.0)",
 i.geom,i.geompoint;
-
 
 
 -- create scenario risk sauid indicators

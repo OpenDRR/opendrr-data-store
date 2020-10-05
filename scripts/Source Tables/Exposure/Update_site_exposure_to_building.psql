@@ -94,18 +94,6 @@ UPDATE exposure.canada_site_exposure_agg
 SET id = rowid||'-'||id;
 
 
-/* auto increment over entire data 
--- add missing column id and rowid (auto-increment)
-ALTER TABLE exposure.canada_site_exposure_agg
-ADD COLUMN id VARCHAR,
-ADD COLUMN rowid SERIAL;
-
-
--- create new id from rowid / taxonomy
-UPDATE exposure.canada_site_exposure_agg
-SET id = rowid||'-'||taxonomy;
-*/
-
 -- add PK
 ALTER TABLE exposure.canada_site_exposure_agg ADD PRIMARY KEY(id);
 
@@ -167,3 +155,5 @@ prname,
 rowid,
 geom_site
 FROM exposure.canada_site_exposure_agg;
+
+DROP TABLE IF EXISTS exposure.canada_site_exposure_agg;
