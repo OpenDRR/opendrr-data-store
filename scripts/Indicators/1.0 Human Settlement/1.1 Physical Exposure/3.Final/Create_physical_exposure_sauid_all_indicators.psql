@@ -71,10 +71,10 @@ CAST(CAST(ROUND(CAST(SUM(a.structural) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "
 CAST(CAST(ROUND(CAST(SUM(a.nonstructural) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_NStrValue",
 CAST(CAST(ROUND(CAST(SUM(a.contents) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_ContValue",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
+d.geom AS "geom_poly"
+--d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d.geom,d.geompoint;
+GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d.geom;

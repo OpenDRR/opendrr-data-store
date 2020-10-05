@@ -1,8 +1,6 @@
 -- create schema for new scenario
 CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
 
-
-
 -- create scenario risk building indicators
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b CASCADE;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b AS 
@@ -159,7 +157,7 @@ a."AssetID",
 b.sauid AS "Sauid",
 
 -- 3.3.1 Casualties - b0
-CAST(a."sL_Fatalities_b0" AS NUMERIC) AS "sL_Fatality_b0",
+--CAST(a."sL_Fatalities_b0" AS NUMERIC) AS "sL_Fatality_b0",
 --CAST(a."sL_Fatalities_stdv_b0" AS NUMERIC) AS "sLsd_Fatality_b0",
 CAST(a."sC_CasDayL1_b0" AS NUMERIC) AS "sC_CasDayL1_b0",
 CAST(a."sC_CasDayL2_b0" AS NUMERIC) AS "sC_CasDayL2_b0",
@@ -175,7 +173,7 @@ CAST(a."sC_CasTransitL3_b0" AS NUMERIC) AS "sC_CasTransitL3_b0",
 CAST(a."sC_CasTransitL4_b0" AS NUMERIC) AS "sC_CasTransitL4_b0",
 
 -- 3.3.1 Casualties - r2
-CAST(a."sL_Fatalities_r2" AS NUMERIC) AS "sL_Fatality_r2",
+--CAST(a."sL_Fatalities_r2" AS NUMERIC) AS "sL_Fatality_r2",
 --CAST(a."sL_Fatalities_stdv_r2" AS NUMERIC) AS "sLsd_Fatality_r2",
 CAST(a."sC_CasDayL1_r2" AS NUMERIC) AS "sC_CasDayL1_r2",
 CAST(a."sC_CasDayL2_r2" AS NUMERIC) AS "sC_CasDayL2_r2",

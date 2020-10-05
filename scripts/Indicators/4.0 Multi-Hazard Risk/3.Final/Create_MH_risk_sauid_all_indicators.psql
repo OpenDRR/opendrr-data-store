@@ -553,12 +553,12 @@ COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_t
 
 COALESCE(CAST(CAST(ROUND(CAST(CASE WHEN e.cy500 >= (SELECT "Cy500t" FROM mh.mh_thresholds) THEN SUM(a.contents) ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "CYt_ContCost",
 
-d.geom AS "geom_poly",
-d.geompoint AS "geom_point"
+d.geom AS "geom_poly"
+--d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
 LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,b.mh_sum,c.censuspop,a.popdu,e.pgv,e.pga,e.tsun_ha,e.fl200,e.fl500,e.fl1000,e.fire,e.lndsus,e.cy100,e.cy250,e.cy500,e.cy1000,d.geom,d.geompoint;
+GROUP BY a.sauid,b.mh_sum,c.censuspop,a.popdu,e.pgv,e.pga,e.tsun_ha,e.fl200,e.fl500,e.fl1000,e.fire,e.lndsus,e.cy100,e.cy250,e.cy500,e.cy1000,d.geom;
