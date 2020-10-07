@@ -58,7 +58,7 @@ CREATE TABLE exposure.canada_site_exposure(
 
 -- import exposure from csv
 COPY exposure.canada_site_exposure (id,SiteID,SiteLon,SiteLat,SauidID,SauidLat,SauidLon,Sauid_km2,Sauid_ha,LandUse,taxonomy,number,structural,nonstructural,contents,business,"limit",deductible,retrofitting,day,night,transit,GenOcc,OccClass1,OccClass2,PopDU,GenType,BldgType,NumFloors,Bldg_ft2,BldYear,BldEpoch,SSC_Zone,EqDesLev,sauid,dauid,adauid,fsauid,csduid,csdname,cduid,cdname,SAC,eruid,ername,pruid,prname,ObjID)
-    FROM 'D:\workspace\data\source datasets\exposure\SiteExp_MetroVan_v2p5p3_master.csv'
+    FROM 'D:\workspace\data\source datasets\exposure\PhysExpRef_MetroVan_v4.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;

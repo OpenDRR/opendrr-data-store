@@ -1,0 +1,46 @@
+select a.id,
+b.id AS "id_agg",
+a.sauid,
+a.landuse,
+a.taxonomy,
+--a.business,
+--a."limit",
+--a.deductable
+a.genocc,
+a.occclass1,
+a.occclass2,
+a.gentype,
+a.bldgtype,
+a.bldepoch,
+a.ssc_zone,
+a.eqdeslev
+from exposure.canada_site_exposure a
+LEFT JOIN exposure.canada_site_exposure_agg b ON a.sauid = b.sauid 
+AND a.sauidid = b.sauidid 
+AND a.sauidlat = b.sauidlat 
+AND a.sauidlon = b.sauidlon
+AND a.sauid_km2 = b.sauid_km2 
+AND a.sauid_ha = b.sauid_ha 
+AND a.landuse = b.landuse 
+AND a.taxonomy = b.taxonomy 
+--AND a.business = b.business 
+--AND a."limit" = b."limit"
+--AND a.deductible = b.deductible 
+AND a.genocc = b.genocc 
+AND a.occclass1 = b.occclass1
+AND a.occclass2 = b.occclass2
+AND a.gentype = b.gentype
+AND a.bldgtype = b.bldgtype
+AND a.bldepoch = b.bldepoch
+AND a.ssc_zone = b.ssc_zone
+AND a.eqdeslev = b.eqdeslev
+AND a.dauid = b.dauid
+AND a.adauid = b.adauid
+AND a.fsauid = b.fsauid
+and a.csduid = b.csduid
+and a.cduid = b.cduid
+and a.sac = b.sac
+and a.eruid = b.eruid
+and a.pruid = b.pruid
+
+order by a.sauid asc;
