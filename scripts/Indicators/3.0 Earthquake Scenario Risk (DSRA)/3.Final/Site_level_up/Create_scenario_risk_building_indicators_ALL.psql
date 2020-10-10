@@ -1,11 +1,9 @@
 -- create schema for new scenario
-CREATE SCHEMA IF NOT EXISTS results_dsra_idm6p8_jdfpathways;
-
-
+CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_scenario_hazard_shakemap_intensity_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_scenario_hazard_shakemap_intensity_ste AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_scenario_hazard_shakemap_intensity_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.1 Scenario Hazard
@@ -39,19 +37,19 @@ CAST(CAST(ROUND(CAST(e."gmv_SA(0.6)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH
 CAST(CAST(ROUND(CAST(e."gmv_SA(1.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa1p0",
 CAST(CAST(ROUND(CAST(e."gmv_SA(2.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC)AS "sH_Sa2p0",
 
-b.geom_site AS "geom_point"
+b.geom AS "geom_point"
 
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id 
+FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN vs30.vs30_bc_site_model_xref d ON a."AssetID" = d.id
-LEFT JOIN gmf.gmfdata_sitemesh_idm6p8_jdfpathways_xref e ON b.id = e.id
+LEFT JOIN gmf.gmfdata_sitemesh_sim6p8_cr2022_37_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr";
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_damage_state_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_damage_state_ste AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_damage_state_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_damage_state_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.2 Building Damage
@@ -109,17 +107,17 @@ CAST(CAST(ROUND(CAST(a."sD_Collapse_r2" * b.number AS NUMERIC),6) AS FLOAT) AS N
 CAST(CAST(ROUND(CAST(a."sD_Collapse_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDr_Collapse_r2",
 --CAST(CAST(ROUND(CAST(a."sD_Complete_stdv_r2" * g.collapse_pc AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDsd_Collapse_r2",
 
-b.geom_site AS "geom_point"
+b.geom AS "geom_point"
 
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id 
+FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype;
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_recovery_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_recovery_ste AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_recovery_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_building_damage_recovery_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.2 Building Damage
@@ -141,16 +139,16 @@ CAST(CAST(ROUND(CAST(a."sC_Downtime_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS 
 CAST(CAST(ROUND(CAST(a."sC_DebrisBW_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisBW_r2",
 CAST(CAST(ROUND(CAST(a."sC_DebrisC_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisCS_r2",
 
-b.geom_site AS "geom_point"
+b.geom AS "geom_point"
 
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id;
+FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_casualties_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_casualties_ste AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_casualties_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_casualties_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.3 Affected People
@@ -190,16 +188,16 @@ CAST(CAST(ROUND(CAST(a."sC_CasTransitL2_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC)
 CAST(CAST(ROUND(CAST(a."sC_CasTransitL3_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTransitL3_r2",
 CAST(CAST(ROUND(CAST(a."sC_CasTransitL4_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTransitL4_r2",
 
-b.geom_site AS "geom_point"
+b.geom AS "geom_point"
 
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id;
+FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_social_disruption_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_social_disruption_ste AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_social_disruption_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_affected_people_social_disruption_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.3 Affected People
@@ -376,16 +374,16 @@ CAST(CAST(ROUND(CAST(a."sC_DisrupEmpl_90_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC
 CAST(CAST(ROUND(CAST(a."sC_DisrupEmpl_180_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisrupEmpl_180_r2",
 CAST(CAST(ROUND(CAST(a."sC_DisrupEmpl_360_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisrupEmpl_360_r2",
 
-b.geom_site AS "geom_point"
+b.geom AS "geom_point"
 
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id;
+FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_economic_security_economic_loss_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_economic_security_economic_loss_ste AS 
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_economic_security_economic_loss_b CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_economic_security_economic_loss_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.4 Economic Security
@@ -423,7 +421,7 @@ CAST(CAST(ROUND(CAST(a."sL_NStr_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_
 CAST(CAST(ROUND(CAST(a."sL_Cont_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Cont_r2",
 --CAST(CAST(ROUND(CAST(a."sL_Cont_stdv_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLsd_Cont_r2",
 
-b.geom_site AS "geom_point"
+b.geom AS "geom_point"
 
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id;
+FROM dsra.dsra_sim6p8_cr2022_rlz_1 a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
