@@ -1,5 +1,5 @@
 -- script to generate building level exposure from site level
-DROP TABLE IF EXISTS exposure.metrovan_building_exposure,exposure.metrovan_site_exposure_id_building,exposure.metrovan_building_exposure_temp;
+DROP TABLE IF EXISTS exposure.metrovan_building_exposure,exposure.metrovan_site_exposure_id_building,exposure.metrovan_building_exposure_temp,exposure.metrovan_sauid_exposure;
 
 
 CREATE TABLE exposure.metrovan_building_exposure AS (
@@ -30,7 +30,7 @@ gentype,
 bldgtype,
 ROUND(AVG(numfloors)) AS "numfloors",
 SUM(bldg_ft2) AS "bldg_ft2",
-ROUND(AVG(bldyear)) AS "bldgyear",
+ROUND(AVG(bldyear)) AS "bldyear",
 bldepoch,
 ssc_zone,
 eqdeslev,
@@ -172,3 +172,26 @@ FROM exposure.metrovan_site_exposure_id_building t2
 WHERE t1.id = t2.id;
 
 DROP TABLE IF EXISTS exposure.metrovan_site_exposure_id_building;
+
+
+-- aggregate exposure to sauid level
+CREATE TABLE exposure.metrovan_sauid_exposure AS (
+SELECT sauid,
+sauidlat,
+sauidlon,
+SUM(number) AS "number",
+SUM(structural) AS "structural",
+SUM(nonstructural) AS "nonstructural",
+SUM(contents) AS "contents",
+AVG(retrofitting) AS "retrofitting",
+SUM(day) AS "day",
+SUM(night) AS "night",
+SUM(transit) AS "transit",
+AVG(popdu) AS "popdu",
+ROUND(AVG(numfloors)) AS "numfloors",
+SUM(bldg_ft2) AS "bldg_ft2",
+ROUND(AVG(bldyear)) AS "bldyear",
+st_centroid(st_union(geom_site)) AS "geom_site"
+
+FROM exposure.metrovan_building_exposure
+GROUP BY sauid,sauidlat,sauidlon);
