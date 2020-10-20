@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS vs30.vs30_bc_site_model_metrovan_site_exposure_xref,vs30.vs30_bc_site_model_metrovan_building_exposure_xref,vs30.vs30_bc_site_model_metrovan_sauid_exposure_xref;
+DROP TABLE IF EXISTS vs30.vs30_bc_site_model_metrovan_site_exposure_xref,vs30.vs30_bc_site_model_metrovan_building_exposure_xref,vs30.vs30_bc_site_model_metrovan_sauid_exposure_xref CASCADE;
 
 -- attach vs30 value to assetid based on closest location site level exposure
 CREATE TABLE vs30.vs30_bc_site_model_metrovan_site_exposure_xref AS

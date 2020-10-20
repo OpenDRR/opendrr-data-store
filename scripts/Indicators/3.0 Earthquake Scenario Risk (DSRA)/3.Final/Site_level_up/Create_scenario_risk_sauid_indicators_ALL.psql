@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS results_dsra_idm6p8_jdfpathways;
 
 
 -- create scenario risk sauid indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_scenario_hazard_shakemap_intensity_s;
+DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_scenario_hazard_shakemap_intensity_s CASCADE;
 CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_scenario_hazard_shakemap_intensity_s AS 
 
 SELECT
@@ -51,7 +51,7 @@ i.geom;
 
 
 -- create scenario risk sauid indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_damage_state_s;
+DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_damage_state_s CASCADE;
 CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_damage_state_s AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
@@ -121,7 +121,7 @@ GROUP BY b.sauid,i.geom;
 
 
 -- create scenario risk sauid indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_recovery_s;
+DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_recovery_s CASCADE;
 CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_recovery_s AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
@@ -228,7 +228,7 @@ GROUP BY b.sauid,i.geom;
 
 
 -- create scenario risk sauid indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_social_disruption_s;
+DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_social_disruption_s CASCADE;
 CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_social_disruption_s AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
@@ -459,7 +459,7 @@ GROUP BY b.sauid,j.inc_hshld,j.imm_lt5,j.live_alone,j.no_engfr,j.lonepar3kids,j.
 
 
 -- create scenario risk sauid indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_economic_security_economic_loss_s;
+DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_economic_security_economic_loss_s CASCADE;
 CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_economic_security_economic_loss_s AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)

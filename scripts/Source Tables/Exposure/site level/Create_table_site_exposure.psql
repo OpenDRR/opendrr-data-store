@@ -1,6 +1,6 @@
 -- script to generate Canada  site level exposure table
 
-DROP TABLE IF EXISTS exposure.metrovan_site_exposure;
+DROP TABLE IF EXISTS exposure.metrovan_site_exposure CASCADE;
 
 -- create table
 CREATE TABLE exposure.metrovan_site_exposure(
