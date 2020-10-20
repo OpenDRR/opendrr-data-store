@@ -1,0 +1,46 @@
+-- create schema for new scenario
+CREATE SCHEMA IF NOT EXISTS results_dsra_sim6p8_cr2022;
+
+
+-- Entrapments by DA (sC_CasDayL3)
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_entrapments_dauid CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_entrapments_dauid AS 
+
+SELECT
+j."DAUID" AS "Dauid",
+
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_CasDay_ser_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_CasDay_ser_r2",
+
+j.geom AS "geom_poly"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure_old b ON a."AssetID" = b.id 
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_DAUID" j ON j."DAUID" = i."DAUIDt"
+GROUP BY j."DAUID",j.geom;
+
+
+
+-- Hospital demand by neighbourhood (sC_CasDayL3 + sC_CasDayL2)
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_hsptl_dmnd_adauid CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_hsptl_dmnd_adauid AS 
+
+SELECT
+j."ADAUID" AS "Adauid",
+
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL2_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_CasDay_mod_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_CasDay_ser_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL2_b0" + a."sC_CasDayL3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_CasDay_total_b0",
+
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_CasDay_ser_r2",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL2_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_CasDay_mod_r2",
+CAST(CAST(ROUND(CAST(SUM(a."sC_CasDayL2_r2" + a."sC_CasDayL3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_CasDay_total_r2",
+
+j.geom AS "geom_poly"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure_old b ON a."AssetID" = b.id 
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_ADAUID" j ON j."ADAUID" = i."ADAUID"
+GROUP BY j."ADAUID",j.geom;
