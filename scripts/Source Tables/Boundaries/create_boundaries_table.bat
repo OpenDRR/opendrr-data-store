@@ -18,4 +18,6 @@ REM create boundaries schema geometry tables from default geopackages.  Change o
 
 "C:\OSGeo4W64\bin\ogr2ogr.exe" -f "PostgreSQL" PG:"host=localhost user=postgres dbname=oq_sandbox_new_exposure password=password" "D:\workspace\GitHub\boundaries\Geometry_DAUID.gpkg" -t_srs "EPSG:4326" -nln boundaries."Geometry_DAUID" -lco LAUNDER=NO 
 
+"C:\OSGeo4W64\bin\ogr2ogr.exe" -f "PostgreSQL" PG:"host=localhost user=postgres dbname=oq_sandbox_new_exposure password=password" "D:\workspace\GitHub\boundaries\Geometry_PRUID.gpkg" -t_srs "EPSG:4326" -nln boundaries."Geometry_PRUID" -lco LAUNDER=NO 
+
 pause
