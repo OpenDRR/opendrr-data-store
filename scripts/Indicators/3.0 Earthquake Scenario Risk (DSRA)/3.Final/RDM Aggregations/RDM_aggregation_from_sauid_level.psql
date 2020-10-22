@@ -44,3 +44,61 @@ LEFT JOIN exposure.canada_exposure_old b ON a."AssetID" = b.id
 LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN boundaries."Geometry_ADAUID" j ON j."ADAUID" = i."ADAUID"
 GROUP BY j."ADAUID",j.geom;
+
+
+-- Road-blocking debris by DA (sCt_DebrisTotal)
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_rd_blckng_dbrs_dauid CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_rd_blckng_dbrs_dauid AS 
+
+SELECT
+j."DAUID" AS "Dauid",
+
+CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_b0" + a."sC_DebrisC_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DebrisTotal_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_r2" + a."sC_DebrisC_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DebrisTotal_r2",
+
+j.geom AS "geom_poly"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure_old b ON a."AssetID" = b.id 
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_DAUID" j ON j."DAUID" = i."DAUIDt"
+GROUP BY j."DAUID",j.geom;
+
+
+
+-- Mass care by neighbourhood (sC_DisplRes3)
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_mss_cre_dbrs_adauid CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_mss_cre_adauid AS 
+
+SELECT
+j."ADAUID" AS "Adauid",
+
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_r2",
+
+j.geom AS "geom_poly"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure_old b ON a."AssetID" = b.id 
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_ADAUID" j ON j."ADAUID" = i."ADAUID"
+GROUP BY j."ADAUID",j.geom;
+
+
+-- Mass care by municipality (sC_DisplRes3)
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_mss_cre_dbrs_csdname CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_mss_cre_csdname AS 
+
+SELECT
+j."CSDNAME" AS "Csdname",
+
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_r2",
+
+j.geom AS "geom_poly"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure_old b ON a."AssetID" = b.id 
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_CSDUID" j ON j."CSDUID" = i."CSDUID"
+GROUP BY j."CSDNAME",j.geom;
