@@ -66,15 +66,15 @@ GROUP BY j."DAUID",j.geom;
 
 
 
--- Mass care by neighbourhood (sC_DisplRes3)
+-- Mass care by neighbourhood (sC_DisplRes90)
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_mss_cre_dbrs_ada CASCADE;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_mss_cre_dbrs_ada AS 
 
 SELECT
 j."ADAUID" AS "Adauid",
 
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_b0",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_r2",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_r2",
 
 j.geom AS "geom_poly"
 
@@ -85,15 +85,15 @@ LEFT JOIN boundaries."Geometry_ADAUID" j ON j."ADAUID" = i."ADAUID"
 GROUP BY j."ADAUID",j.geom;
 
 
--- Mass care by municipality (sC_DisplRes3)
+-- Mass care by municipality (sC_DisplRes90)
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_mss_cre_dbrs_csd CASCADE;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_mss_cre_dbrs_csd AS 
 
 SELECT
 j."CSDNAME" AS "Csdname",
 
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_b0",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_r2",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_r2",
 
 j.geom AS "geom_poly"
 
@@ -124,9 +124,9 @@ LEFT JOIN boundaries."Geometry_CSDUID" j ON j."CSDUID" = i."CSDUID"
 GROUP BY j."CSDNAME",j.geom;
 
 
-
+/*
 -- Total economic impact at provincial level (sL_Asset)
-/* current issue takes too long to aggregate the provicinal geometry */
+--current issue takes too long to aggregate the provicinal geometry
 DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr CASCADE;
 CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr AS 
 
@@ -134,15 +134,17 @@ SELECT
 j."PRNAME" AS "Prname",
 
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Asset_b0",
-CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Asset_r2"
+CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Asset_r2",
 
---j.geom AS "geom_poly"
+j.geom AS "geom_poly"
 
 FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
 LEFT JOIN exposure.canada_exposure_old b ON a."AssetID" = b.id 
 LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN boundaries."Geometry_PRUID" j ON j."PRUID" = i."PRUID"
 GROUP BY j."PRNAME",j.geom;
+*/
+
 
 
 -- create temp table for aggregation to provincial level as a temporarily workaround, attach PR geom point to temp table.  
@@ -178,3 +180,44 @@ LEFT JOIN boundaries."Geometry_PRUID" b ON a."Prname" = b."PRNAME"
 );
 
 DROP TABLE IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr_temp_tbl;
+
+
+
+-- create temp table for aggregation to provincial level as a temporarily workaround, attach PR geom point to temp table.  
+DROP TABLE IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr_temp_tbl CASCADE;
+CREATE TABLE results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr_temp_tbl AS 
+(
+SELECT
+j."PRNAME" AS "Prname",
+
+CAST(CAST(ROUND(CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Asset_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Asset_r2"
+
+--j.geom AS "geom_poly"
+
+FROM dsra.dsra_sim6p8_cr2022_rlz_0 a
+LEFT JOIN exposure.canada_exposure_old b ON a."AssetID" = b.id 
+LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
+LEFT JOIN boundaries."Geometry_PRUID" j ON j."PRUID" = i."PRUID"
+GROUP BY j."PRNAME"
+);
+
+DROP TABLE IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr_tbl CASCADE;
+CREATE TABLE results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr_tbl AS 
+(
+SELECT 
+a."Prname",
+a."sLt_Asset_b0",
+a."sLt_Asset_r2",
+b.geom AS "geom_poly"
+
+FROM results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr_temp_tbl a
+LEFT JOIN boundaries."Geometry_PRUID" b ON a."Prname" = b."PRNAME"
+);
+
+-- create view from table to overcome aggregation by province issue
+DROP VIEW IF EXISTS results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr CASCADE;
+CREATE VIEW results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr AS 
+(
+SELECT * FROM results_dsra_sim6p8_cr2022.dsra_sim6p8_cr2022_rdm_ecnmc_impct_pr_tbl
+);
