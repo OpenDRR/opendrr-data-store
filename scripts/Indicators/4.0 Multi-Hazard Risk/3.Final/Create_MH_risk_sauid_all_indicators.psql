@@ -12,6 +12,14 @@ CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_all_indicators_s AS
 -- 4.1.1 Multi-Hazard Intensity
 SELECT 
 a.sauid AS "Sauid",
+d."PRUID" AS "pruid",
+d."PRNAME" AS "prname",
+d."ERUID" AS "eruid",
+d."ERNAME" AS "ername",
+d."CDUID" AS "cduid",
+d."CDNAME" AS "cdname",
+d."CSDUID" AS "csduid",
+d."CSDNAME" AS "csdname",
 
 COALESCE(CAST(CAST(ROUND(CAST((b.mh_sum - (SELECT mhsum_min FROM mh.mh_intensity_canada_minmax))/NULLIF((SELECT mhsum_max FROM mh.mh_intensity_canada_minmax) - (SELECT mhsum_min FROM mh.mh_intensity_canada_minmax),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC),0) AS "MHn_Intensity",
 (SELECT "MHInt_t" FROM mh.mh_thresholds) AS "MHt_Intensity", -- Multi-Hazard Intensity threshold
@@ -561,4 +569,5 @@ LEFT JOIN mh.mh_intensity_canada_mhsum b ON a.sauid = b.sauidt
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d ON a.sauid = d."SAUIDt"
 LEFT JOIN mh.mh_intensity_canada e ON a.sauid = e.sauidt
-GROUP BY a.sauid,b.mh_sum,c.censuspop,a.popdu,e.pgv,e.pga,e.tsun_ha,e.fl200,e.fl500,e.fl1000,e.fire,e.lndsus,e.cy100,e.cy250,e.cy500,e.cy1000,d.geom;
+GROUP BY a.sauid,b.mh_sum,c.censuspop,a.popdu,e.pgv,e.pga,e.tsun_ha,e.fl200,e.fl500,e.fl1000,e.fire,e.lndsus,e.cy100,e.cy250,e.cy500,e.cy1000,d."PRUID",
+d."PRNAME",d."ERUID",d."ERNAME",d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;

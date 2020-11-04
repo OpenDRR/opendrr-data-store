@@ -2,8 +2,8 @@
 CREATE SCHEMA IF NOT EXISTS results_nhsl_risk_dynamics;
 
 -- create risk dynamic indicators
-DROP VIEW IF EXISTS results_nhsl_risk_dynamics.nhsl_risk_dynamics_all_indicators_s CASCADE;
-CREATE VIEW results_nhsl_risk_dynamics.nhsl_risk_dynamics_all_indicators_s AS 
+DROP VIEW IF EXISTS results_nhsl_risk_dynamics.nhsl_risk_dynamics_all_indicators CASCADE;
+CREATE VIEW results_nhsl_risk_dynamics.nhsl_risk_dynamics_all_indicators AS 
 
 -- 1.2 Risk Dynamics
 -- 1.2.1 Population Growth
@@ -36,21 +36,21 @@ fld500 AS "ghs_Fld500",
 wildfire AS "ghs_Wildfire",
 lndsus AS "ghs_LndSus",
 cy500 AS "ghs_Cy500",
-csduid AS "CSDUID",
-csdname AS "CSDNAME",
-csdtype AS "CSDTYPE",
-pruid AS "PRUID",
-prname AS "PRNAME",
-cduid AS "CDUID",
-cdname AS "CDNAME",
-cdtype AS "CDTYPE",
-ccsuid AS "CCSUID",
-ccsname AS "CCSNAME",
-eruid AS "ERUID",
-ername AS "ERNAME",
+csduid,
+csdname,
+csdtype, 
+pruid,
+prname,
+cduid,
+cdname,
+cdtype,
+ccsuid,
+ccsname,
+eruid,
+ername,
 saccode AS "SACCODE",
 sactype AS "SACTYPE",
 
 geom AS "geom_point"
 
-FROM ghsl.ghsl_hazthreat_may2020_v1p2;
+FROM ghsl.ghsl_mh_intensity_ghsl;

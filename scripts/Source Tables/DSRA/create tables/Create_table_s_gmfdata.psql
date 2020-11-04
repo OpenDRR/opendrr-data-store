@@ -21,7 +21,3 @@ COPY gmf.s_gmfdata_SIM6p8_CR2022_37 (event_id, site_id, gmv_pga, gmv_pgv, "gmv_S
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
-
-
--- add missing columns that does not exist in source sample data but should be included in future datasets.
-ALTER TABLE gmf.s_gmfdata_SIM6p8_CR2022_37 ADD COLUMN IF NOT EXISTS "gmv_SA(2.0)" float DEFAULT 'NaN';
