@@ -1,16 +1,16 @@
 -- add columns to s_gmfdata if missing
-ALTER TABLE gmf.s_gmfdata_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_pga" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_pgv" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.1)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.2)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.3)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.5)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.6)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(1.0)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(2.0)" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_sim6p8_cr2022 ADD COLUMN IF NOT EXISTS "gmv_pga" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_sim6p8_cr2022 ADD COLUMN IF NOT EXISTS "gmv_pgv" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_sim6p8_cr2022 ADD COLUMN IF NOT EXISTS "gmv_SA(0.1)" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_sim6p8_cr2022 ADD COLUMN IF NOT EXISTS "gmv_SA(0.2)" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_sim6p8_cr2022 ADD COLUMN IF NOT EXISTS "gmv_SA(0.3)" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_sim6p8_cr2022 ADD COLUMN IF NOT EXISTS "gmv_SA(0.5)" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_sim6p8_cr2022 ADD COLUMN IF NOT EXISTS "gmv_SA(0.6)" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_sim6p8_cr2022 ADD COLUMN IF NOT EXISTS "gmv_SA(1.0)" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_sim6p8_cr2022 ADD COLUMN IF NOT EXISTS "gmv_SA(2.0)" float DEFAULT 'NaN';
 
 -- update gmf data and sitemesh data into 1 table incorporating assetID
-DROP TABLE IF EXISTS gmf.gmfdata_sitemesh_acm7p2_lrdmf, gmf.gmfdata_sitemesh_acm7p2_lrdmf_xref CASCADE;
+DROP TABLE IF EXISTS gmf.gmfdata_sitemesh_sim6p8_cr2022, gmf.gmfdata_sitemesh_sim6p8_cr2022_xref CASCADE;
 
 SELECT 
 a."site_id",
@@ -26,23 +26,23 @@ a."gmv_SA(2.0)",
 b.lon,
 b.lat
 
-INTO gmf.gmfdata_sitemesh_acm7p2_lrdmf
+INTO gmf.gmfdata_sitemesh_sim6p8_cr2022
 
-FROM gmf.s_gmfdata_acm7p2_lrdmf a
-INNER JOIN sitemesh.s_sitemesh_acm7p2_lrdmf b on a.site_id = b.site_id;
+FROM gmf.s_gmfdata_sim6p8_cr2022 a
+INNER JOIN sitemesh.s_sitemesh_sim6p8_cr2022 b on a.site_id = b.site_id;
 
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE gmf.gmfdata_sitemesh_acm7p2_lrdmf ADD COLUMN geom geometry(Point,4326);
-UPDATE gmf.gmfdata_sitemesh_acm7p2_lrdmf SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+ALTER TABLE gmf.gmfdata_sitemesh_sim6p8_cr2022 ADD COLUMN geom geometry(Point,4326);
+UPDATE gmf.gmfdata_sitemesh_sim6p8_cr2022 SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 
 
 -- create spatial index
-CREATE INDEX gmfdata_sitemesh_acm7p2_lrdmf_idx
-ON gmf.gmfdata_sitemesh_acm7p2_lrdmf using GIST (geom);
+CREATE INDEX gmfdata_sitemesh_sim6p8_cr2022_idx
+ON gmf.gmfdata_sitemesh_sim6p8_cr2022 using GIST (geom);
 
 
 -- attach assetID to gmfdata_sitemesh based on closest location -event 0
-CREATE TABLE gmf.gmfdata_sitemesh_acm7p2_lrdmf_xref AS
+CREATE TABLE gmf.gmfdata_sitemesh_sim6p8_cr2022_xref AS
 
 SELECT
 a."id",
@@ -80,14 +80,14 @@ SELECT
 	lat,
 	geom
 	
-FROM gmf.gmfdata_sitemesh_acm7p2_lrdmf
+FROM gmf.gmfdata_sitemesh_sim6p8_cr2022
 ORDER BY a.geom <-> geom
 LIMIT 1
 ) AS b;
 
 -- add pkey
-ALTER TABLE gmf.gmfdata_sitemesh_acm7p2_lrdmf_xref DROP CONSTRAINT IF EXISTS gmfdata_sitemesh_acm7p2_lrdmf_xref_pkey;
-ALTER TABLE gmf.gmfdata_sitemesh_acm7p2_lrdmf_xref ADD PRIMARY KEY("id");
+ALTER TABLE gmf.gmfdata_sitemesh_sim6p8_cr2022_xref DROP CONSTRAINT IF EXISTS gmfdata_sitemesh_sim6p8_cr2022_xref_pkey;
+ALTER TABLE gmf.gmfdata_sitemesh_sim6p8_cr2022_xref ADD PRIMARY KEY("id");
 
 -- create index
-CREATE INDEX gmfdata_sitemesh_acm7p2_lrdmf_xref_idx ON gmf.gmfdata_sitemesh_acm7p2_lrdmf_xref (id);
+CREATE INDEX gmfdata_sitemesh_sim6p8_cr2022_xref_idx ON gmf.gmfdata_sitemesh_sim6p8_cr2022_xref (id);
