@@ -1,0 +1,86 @@
+-- script to agg losses stats
+DROP TABLE IF EXISTS psra.psra_bc5920a1_avg_losses_stats_b0, psra.psra_bc5920a1_avg_losses_stats_r2 CASCADE;
+
+-- create table
+CREATE TABLE psra.psra_bc5920a1_avg_losses_stats_b0(
+PRIMARY KEY(asset_id),
+asset_id varchar,
+"BldEpoch" varchar,
+"BldgType" varchar,
+"EqDesLev" varchar,
+"GenOcc" varchar,
+"GenType" varchar,
+"LandUse" varchar,
+"OccClass" varchar,
+"SAC" varchar,
+"SSC_Zone" varchar,
+"SauidID" varchar,
+adauid varchar,
+cdname varchar,
+cduid varchar,
+csdname varchar,
+csduid varchar,
+dauid varchar,
+ername varchar,
+eruid varchar,
+fsauid varchar,
+prname varchar,
+pruid varchar,
+sauid varchar,
+taxonomy varchar,
+lon float,
+lat float,
+contents float,
+nonstructural float,
+structural float
+);
+
+-- import exposure from csv
+COPY psra.psra_bc5920a1_avg_losses_stats_b0(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,pruid,sauid,taxonomy,lon,lat,contents,nonstructural,structural)
+    FROM 'D:\workspace\data\psra_new_datasets\3_ebRisk\ebR_BC5920A1_avg_losses-stats_b0.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;
+
+
+
+-- create table
+CREATE TABLE psra.psra_bc5920a1_avg_losses_stats_r2(
+PRIMARY KEY(asset_id),
+asset_id varchar,
+"BldEpoch" varchar,
+"BldgType" varchar,
+"EqDesLev" varchar,
+"GenOcc" varchar,
+"GenType" varchar,
+"LandUse" varchar,
+"OccClass" varchar,
+"SAC" varchar,
+"SSC_Zone" varchar,
+"SauidID" varchar,
+adauid varchar,
+cdname varchar,
+cduid varchar,
+csdname varchar,
+csduid varchar,
+dauid varchar,
+ername varchar,
+eruid varchar,
+fsauid varchar,
+prname varchar,
+pruid varchar,
+sauid varchar,
+taxonomy varchar,
+lon float,
+lat float,
+contents float,
+nonstructural float,
+structural float
+);
+
+-- import exposure from csv
+COPY psra.psra_bc5920a1_avg_losses_stats_r2(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,pruid,sauid,taxonomy,lon,lat,contents,nonstructural,structural)
+    FROM 'D:\workspace\data\psra_new_datasets\3_ebRisk\ebR_BC5920A1_avg_losses-stats_r2.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV HEADER ;

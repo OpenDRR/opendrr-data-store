@@ -43,7 +43,7 @@ debris_concrete_steel_tons float
 
 -- import exposure from csv
 COPY psra.consequences_rlz_000_687(asset_ref,number_of_buildings,value_structural,value_nonstructural,value_contents,occupants_day,occupants_night,occupants_transit,collapse_ratio,mean_repair_time,mean_recovery_time,mean_interruption_time,casualties_day_severity_1,casualties_day_severity_2,casualties_day_severity_3,casualties_day_severity_4,casualties_night_severity_1,casualties_night_severity_2,casualties_night_severity_3,casualties_night_severity_4,casualties_transit_severity_1,casualties_transit_severity_2,casualties_transit_severity_3,casualties_transit_severity_4,sc_Displ3,sc_Displ30,sc_Displ90,sc_Displ180,sc_Displ360,sc_BusDispl30,sc_BusDispl90,sc_BusDispl180,sc_BusDispl360,debris_brick_wood_tons,debris_concrete_steel_tons)
-    FROM 'D:\workspace\data\psra-sample-datasets\3_ebRisk\r1\damage consequences\consequences-rlz-000_687.csv'
+    FROM 'D:\workspace\data\psra-sample-datasets\3_ebRisk\r2\damage consequences\consequences-rlz-000_687.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
