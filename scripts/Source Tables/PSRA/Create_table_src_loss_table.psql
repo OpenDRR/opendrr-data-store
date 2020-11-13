@@ -6,7 +6,7 @@ CREATE TABLE psra.psra_bc5920a1_src_loss_b0(
 source varchar,
 loss_type varchar,
 loss_value float,
-trt float
+trt varchar
 );
 
 -- import exposure from csv
@@ -23,7 +23,7 @@ CREATE TABLE psra.psra_bc5920a1_src_loss_r2(
 source varchar,
 loss_type varchar,
 loss_value float,
-trt float
+trt varchar
 );
 
 -- import exposure from csv

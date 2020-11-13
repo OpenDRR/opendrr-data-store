@@ -1,4 +1,4 @@
--- script to generate cd structural mean - b0, r2
+-- script to generate cd/ed structural mean - b0, r2
 DROP TABLE IF EXISTS psra.psra_bc5920a_cd_dmg_mean_b0, psra.psra_bc5920a_cd_dmg_mean_r2, psra.psra_bc5920a_cd_dmg_mean, psra.psra_bc5920a_ed_dmg_mean_b0, psra.psra_bc5920a_ed_dmg_mean_r2,
 psra.psra_bc5920a_ed_dmg_mean CASCADE;
 
@@ -31,16 +31,16 @@ sauid varchar,
 taxonomy varchar, 
 lon float, 
 lat float, 
-structural_no_damage_b0 float, 
-structural_slight_b0 float, 
-structural_moderate_b0 float, 
-structural_extensive_b0 float, 
-structural_complete_b0 float
+structural_no_damage float, 
+structural_slight float, 
+structural_moderate float, 
+structural_extensive float, 
+structural_complete float
 );
 
 -- import exposure from csv
 COPY psra.psra_bc5920a_cd_dmg_mean_b0(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
-pruid,sauid,taxonomy,lon,lat,structural_no_damage_b0,structural_slight_b0,structural_moderate_b0,structural_extensive_b0,structural_complete_b0)
+pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_moderate,structural_extensive,structural_complete)
     FROM 'D:\workspace\data\psra_new_datasets\2_cDamage\cD_BC5920A_dmg-mean_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -76,16 +76,16 @@ sauid varchar,
 taxonomy varchar, 
 lon float, 
 lat float, 
-structural_no_damage_r2 float, 
-structural_slight_r2 float, 
-structural_moderate_r2 float, 
-structural_extensive_r2 float, 
-structural_complete_r2 float
+structural_no_damage float, 
+structural_slight float, 
+structural_moderate float, 
+structural_extensive float, 
+structural_complete float
 );
 
 -- import exposure from csv
 COPY psra.psra_bc5920a_cd_dmg_mean_r2(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
-pruid,sauid,taxonomy,lon,lat,structural_no_damage_r2,structural_slight_r2,structural_moderate_r2,structural_extensive_r2,structural_complete_r2)
+pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_moderate,structural_extensive,structural_complete)
     FROM 'D:\workspace\data\psra_new_datasets\2_cDamage\cD_BC5920A_dmg-mean_r2.csv'
         WITH 
           DELIMITER AS ','
@@ -121,16 +121,16 @@ a.sauid,
 a.taxonomy,
 a.lon,
 a.lat,
-a.structural_no_damage_b0,
-a.structural_slight_b0,
-a.structural_moderate_b0,
-a.structural_extensive_b0,
-a.structural_complete_b0,
-b.structural_no_damage_r2,
-b.structural_slight_r2,
-b.structural_moderate_r2,
-b.structural_extensive_r2,
-b.structural_complete_r2
+a.structural_no_damage AS "structural_no_damage_b0",
+a.structural_slight AS "structural_slight_b0",
+a.structural_moderate AS "structural_moderate_b0",
+a.structural_extensive AS "structural_extensive_b0",
+a.structural_complete AS "structural_complete_b0",
+b.structural_no_damage AS "structural_no_damage_r2",
+b.structural_slight AS "structural_slight_r2",
+b.structural_moderate AS "structural_moderate_r2",
+b.structural_extensive AS "structural_extensive_r2",
+b.structural_complete AS "structural_complete_r2"
 
 FROM psra.psra_bc5920a_cd_dmg_mean_b0 a
 INNER JOIN psra.psra_bc5920a_cd_dmg_mean_r2 b ON a.asset_id = b.asset_id
@@ -168,16 +168,16 @@ sauid varchar,
 taxonomy varchar, 
 lon float, 
 lat float, 
-structural_no_damage_b0 float, 
-structural_slight_b0 float, 
-structural_moderate_b0 float, 
-structural_extensive_b0 float, 
-structural_complete_b0 float
+structural_no_damage float, 
+structural_slight float, 
+structural_moderate float, 
+structural_extensive float, 
+structural_complete float
 );
 
 -- import exposure from csv
 COPY psra.psra_bc5920a_ed_dmg_mean_b0(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
-pruid,sauid,taxonomy,lon,lat,structural_no_damage_b0,structural_slight_b0,structural_moderate_b0,structural_extensive_b0,structural_complete_b0)
+pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_moderate,structural_extensive,structural_complete)
     FROM 'D:\workspace\data\psra_new_datasets\4_eDamage\eD_BC5920A_damages-mean_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -213,16 +213,16 @@ sauid varchar,
 taxonomy varchar, 
 lon float, 
 lat float, 
-structural_no_damage_r2 float, 
-structural_slight_r2 float, 
-structural_moderate_r2 float, 
-structural_extensive_r2 float, 
-structural_complete_r2 float
+structural_no_damage float, 
+structural_slight float, 
+structural_moderate float, 
+structural_extensive float, 
+structural_complete float
 );
 
 -- import exposure from csv
 COPY psra.psra_bc5920a_ed_dmg_mean_r2(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
-pruid,sauid,taxonomy,lon,lat,structural_no_damage_r2,structural_slight_r2,structural_moderate_r2,structural_extensive_r2,structural_complete_r2)
+pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_moderate,structural_extensive,structural_complete)
     FROM 'D:\workspace\data\psra_new_datasets\4_eDamage\eD_BC5920A_damages-mean_r2.csv'
         WITH 
           DELIMITER AS ','
@@ -258,16 +258,16 @@ a.sauid,
 a.taxonomy,
 a.lon,
 a.lat,
-a.structural_no_damage_b0,
-a.structural_slight_b0,
-a.structural_moderate_b0,
-a.structural_extensive_b0,
-a.structural_complete_b0,
-b.structural_no_damage_r2,
-b.structural_slight_r2,
-b.structural_moderate_r2,
-b.structural_extensive_r2,
-b.structural_complete_r2
+a.structural_no_damage AS "structural_no_damage_b0",
+a.structural_slight AS "structural_slight_b0",
+a.structural_moderate AS "structural_moderate_b0",
+a.structural_extensive AS "structural_extensive_b0",
+a.structural_complete AS "structural_complete_b0",
+b.structural_no_damage AS "structural_no_damage_r2",
+b.structural_slight AS "structural_slight_r2",
+b.structural_moderate AS "structural_moderate_r2",
+b.structural_extensive AS "structural_extensive_r2",
+b.structural_complete AS "structural_complete_r2"
 
 FROM psra.psra_bc5920a_ed_dmg_mean_b0 a
 INNER JOIN psra.psra_bc5920a_ed_dmg_mean_r2 b ON a.asset_id = b.asset_id

@@ -1,5 +1,5 @@
 -- script to agg losses stats
-DROP TABLE IF EXISTS psra.psra_bc5920a1_avg_losses_stats_b0, psra.psra_bc5920a1_avg_losses_stats_r2 CASCADE;
+DROP TABLE IF EXISTS psra.psra_bc5920a1_avg_losses_stats_b0, psra.psra_bc5920a1_avg_losses_stats_r2, psra.psra_bc5920a1_avg_losses_stats CASCADE;
 
 -- create table
 CREATE TABLE psra.psra_bc5920a1_avg_losses_stats_b0(
@@ -84,3 +84,43 @@ COPY psra.psra_bc5920a1_avg_losses_stats_r2(asset_id,"BldEpoch","BldgType","EqDe
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
+
+
+-- combine b0 and r2 table
+CREATE TABLE psra.psra_bc5920a1_avg_losses_stats AS
+(SELECT
+a.asset_id,
+a."BldEpoch",
+a."BldgType",
+a."EqDesLev",
+a."GenOcc",
+a."GenType",
+a."LandUse",
+a."OccClass",
+a."SAC",
+a."SSC_Zone",
+a."SauidID",
+a.adauid,
+a.cdname,
+a.cduid,
+a.csdname,
+a.csduid,
+a.dauid,
+a.ername,
+a.eruid,
+a.fsauid,
+a.prname,
+a.pruid,
+a.sauid,
+a.taxonomy,
+a.lon,
+a.lat,
+a.contents AS "contents_b0",
+a.nonstructural AS "nonstructural_b0",
+a.structural AS "structural_b0",
+b.contents AS "contents_r2",
+b.nonstructural AS "nonstructural_r2",
+b.structural AS "structural_r2"
+
+FROM psra.psra_bc5920a1_avg_losses_stats_b0 a
+INNER JOIN psra.psra_bc5920a1_avg_losses_stats_r2 b ON a.asset_id = b.asset_id);
