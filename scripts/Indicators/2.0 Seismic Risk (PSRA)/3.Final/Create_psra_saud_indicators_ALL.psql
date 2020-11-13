@@ -249,7 +249,6 @@ GROUP BY a.sauid,z.geom;
 
 
 /*
-
 -- create psra indicators
 DROP VIEW IF EXISTS results_psra_bc.psra_677_building_damage_recovery_s CASCADE;
 CREATE VIEW results_psra_bc.psra_677_building_damage_recovery_s AS 
@@ -783,16 +782,18 @@ LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt
 LEFT JOIN sovi.sovi_census_canada n on a.sauid = n.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,i.censuspop,i.censusdu,a.popdu,n.age_gt65,n.age_lt6,n.renter,n.inc_hshld,n.imm_lt5,n.live_alone,n.no_engfr,n.lonepar3kids,n.indigenous,z.geom,z.geompoint;
+*/
+
 
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_bc.psra_677_economic_security_pml_b0_s CASCADE;
-CREATE VIEW results_psra_bc.psra_677_economic_security_pml_b0_s AS
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_economic_security_pml_b0_s CASCADE;
+CREATE VIEW results_psra_bc.psra_bc5920a1_economic_security_pml_b0_s AS
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security
 SELECT
-a.sauid,
+a.fsauid,
 
 -- 2.4.2 Probable Maximum Loss - b0
 a.loss_value AS "ePML",
@@ -800,76 +801,59 @@ a.loss_ratio AS "ePMLr",
 a.loss_type AS "ePML_type",
 a.return_period AS "ePML_Period",
 a.annual_frequency_of_exceedence AS "ePML_Probability",
-a.genocc AS "ePML_OccGen",
-a.eqbldgtype AS "ePML_BldgType"
+a."GenOcc" AS "ePML_OccGen",
+a."GenType" AS "ePML_BldgType"
 
-FROM psra.agg_curves_stats_679 a;
-
-
+FROM psra.psra_bc5920a1_agg_curves_stats_b0 a;
 
 
-select
-a.return_period,
-a.stat,
-a.loss_type,
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_economic_security_pml_r2_s CASCADE;
+CREATE VIEW results_psra_bc.psra_bc5920a1_economic_security_pml_r2_s AS
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT
 a.fsauid,
-a."GenOcc",
-a."GenType",
-a.loss_value AS "loss_value_b0",
-a.loss_ratio AS "loss_ratio_b0",
-a.annual_frequency_of_exceedence AS "annual_frequency_of_exceedence_b0",
-b.loss_value AS "loss_value_r2",
-b.loss_ratio AS "loss_ratio_r2",
-b.annual_frequency_of_exceedence AS "annual_frequency_of_exceedence_r2"
 
-FROM psra.psra_bc5920a1_agg_curves_stats_b0 a
-INNER JOIN psra.psra_bc5920a1_agg_curves_stats_r2 b ON a.return_period = b.return_period AND a.stat = b.stat AND
-a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" and a."GenType" = b."GenType";
-
-
-
-
-
--- create psra indicators
-DROP VIEW IF EXISTS results_psra_bc.psra_677_economic_security_pml_r1_s CASCADE;
-CREATE VIEW results_psra_bc.psra_677_economic_security_pml_r1_s AS
-
--- 2.0 Seismic Risk (PSRA)
--- 2.4 Economic Security
-SELECT
-a.sauid,
-
--- 2.4.2 Probable Maximum Loss - r1
+-- 2.4.2 Probable Maximum Loss - b0
 a.loss_value AS "ePML",
 a.loss_ratio AS "ePMLr",
 a.loss_type AS "ePML_type",
 a.return_period AS "ePML_Period",
 a.annual_frequency_of_exceedence AS "ePML_Probability",
-a.genocc AS "ePML_OccGen",
-a.eqbldgtype AS "ePML_BldgType"
+a."GenOcc" AS "ePML_OccGen",
+a."GenType" AS "ePML_BldgType"
 
-FROM psra.agg_curves_stats_684 a;
+FROM psra.psra_bc5920a1_agg_curves_stats_r2 a;
 
 
+/*
+--src table aggregation samples
+-- sum of total loss value for all
+SELECT SUM(loss_value) AS "total_loss_value"
+FROM psra.psra_bc5920a1_src_loss_b0;
 
--- create psra indicators
-DROP VIEW IF EXISTS results_psra_bc.psra_677_economic_security_pml_r2_s CASCADE;
-CREATE VIEW results_psra_bc.psra_677_economic_security_pml_r2_s AS
+-- total loss value by source
+SELECT 
+source,
+SUM(loss_value) AS "total_loss_source"
+FROM psra.psra_bc5920a1_src_loss_b0
+GROUP BY source;
 
--- 2.0 Seismic Risk (PSRA)
--- 2.4 Economic Security
-SELECT
-a.sauid,
+-- total loss value by source, loss type
+SELECT 
+source,
+loss_type,
+SUM(loss_value) AS "total_loss_source"
+FROM psra.psra_bc5920a1_src_loss_b0
+GROUP BY source,loss_type;
 
--- 2.4.2 Probable Maximum Loss - r2
-a.loss_value AS "ePML",
-a.loss_ratio AS "ePMLr",
-a.loss_type AS "ePML_type",
-a.return_period AS "ePML_Period",
-a.annual_frequency_of_exceedence AS "ePML_Probability",
-a.genocc AS "ePML_OccGen",
-a.eqbldgtype AS "ePML_BldgType"
-
-FROM psra.agg_curves_stats_685 a;
-
-*/
+-- total loss value by source, loss type, trt
+SELECT 
+source,
+loss_type,
+trt,
+SUM(loss_value) AS "total_loss_source"
+FROM psra.psra_bc5920a1_src_loss_b0
+GROUP BY source,loss_type,trt;
