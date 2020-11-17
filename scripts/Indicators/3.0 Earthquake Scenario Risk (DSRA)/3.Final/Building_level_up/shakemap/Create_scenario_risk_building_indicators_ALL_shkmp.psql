@@ -41,7 +41,7 @@ b.geom AS "geom_point"
 
 FROM dsra.dsra_acm7p2_lrdmf a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
-LEFT JOIN vs30.vs30_bc_site_model_xref d ON a."AssetID" = d.id
+LEFT JOIN vs30.vs30_can_site_model_xref d ON a."AssetID" = d.id
 LEFT JOIN gmf.shakemap_acm7p2_lrdmf_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr";
 

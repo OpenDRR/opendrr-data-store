@@ -1,28 +1,43 @@
 -- update shakemap table to add geometry and spatial index
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN geom geometry(Point,4326);
-UPDATE gmf.shakemap_acm7p2_lrdmf SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN geom geometry(Point,4326);
+UPDATE gmf.shakemap_sim9p0_cszlockedtrans SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 
 -- create spatial index
-CREATE INDEX shakemap_acm7p2_lrdmf_idx
-ON gmf.shakemap_acm7p2_lrdmf using GIST (geom);
+CREATE INDEX shakemap_sim9p0_cszlockedtrans_idx
+ON gmf.shakemap_sim9p0_cszlockedtrans using GIST (geom);
 
 -- add columns to shakemap if missing
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_pga" float DEFAULT 'NaN';
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_pgv" float DEFAULT 'NaN';
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.1)" float DEFAULT 'NaN';
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.2)" float DEFAULT 'NaN';
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.3)" float DEFAULT 'NaN';
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.5)" float DEFAULT 'NaN';
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(0.6)" float DEFAULT 'NaN';
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(1.0)" float DEFAULT 'NaN';
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf ADD COLUMN IF NOT EXISTS "gmv_SA(2.0)" float DEFAULT 'NaN';
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_pga" float DEFAULT null;
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_pgv" float DEFAULT null;
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.1)" float DEFAULT null;
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.2)" float DEFAULT null;
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.3)" float DEFAULT null;
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.5)" float DEFAULT null;
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.6)" float DEFAULT null;
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(1.0)" float DEFAULT null;
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(2.0)" float DEFAULT null;
 
 
-DROP TABLE IF EXISTS gmf.shakemap_acm7p2_lrdmf_xref CASCADE;
+-- create temp table for xref only on ids matching scenario
+DROP TABLE IF EXISTS dsra.exposure_sim9p0_cszlockedtrans CASCADE;
+
+CREATE TABLE dsra.exposure_sim9p0_cszlockedtrans AS 
+(
+SELECT
+a.id,
+a.sauidlon,
+a.sauidlat,
+a.geom
+FROM exposure.canada_exposure a
+RIGHT JOIN dsra.dsra_sim9p0_cszlockedtrans b ON a.id = b."AssetID"
+);
+
+
+DROP TABLE IF EXISTS gmf.shakemap_sim9p0_cszlockedtrans_xref CASCADE;
 
 -- attach assetID to gmfdata_sitemesh based on closest location
-CREATE TABLE gmf.shakemap_acm7p2_lrdmf_xref AS
+CREATE TABLE gmf.shakemap_sim9p0_cszlockedtrans_xref AS
 
 SELECT
 a."id",
@@ -41,7 +56,8 @@ a.sauidlon AS "asset_lon",
 a.sauidlat AS "asset_lat",
 ST_Distance(a.geom,b.geom) AS "distance"
 
-FROM exposure.canada_exposure a
+--FROM exposure.canada_exposure a
+FROM dsra.dsra_sim9p0_cszlockedtrans a
 CROSS JOIN LATERAL 
 (
 SELECT
@@ -58,14 +74,16 @@ SELECT
 	lat,
 	geom
 	
-FROM gmf.shakemap_acm7p2_lrdmf
+FROM gmf.shakemap_sim9p0_cszlockedtrans
 ORDER BY a.geom <-> geom
 LIMIT 1
 ) AS b;
 
+DROP TABLE IF EXISTS dsra.exposure_sim9p0_cszlockedtrans CASCADE;
+
 -- add pkey
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf_xref DROP CONSTRAINT IF EXISTS shakemap_acm7p2_lrdmf_xref_pkey;
-ALTER TABLE gmf.shakemap_acm7p2_lrdmf_xref ADD PRIMARY KEY("id");
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans_xref DROP CONSTRAINT IF EXISTS shakemap_sim9p0_cszlockedtrans_xref_pkey;
+ALTER TABLE gmf.shakemap_sim9p0_cszlockedtrans_xref ADD PRIMARY KEY("id");
 
 -- create index
-CREATE INDEX shakemap_acm7p2_lrdmf_xref_idx ON gmf.shakemap_acm7p2_lrdmf_xref (id);
+CREATE INDEX shakemap_sim9p0_cszlockedtrans_xref_idx ON gmf.shakemap_sim9p0_cszlockedtrans_xref (id);
