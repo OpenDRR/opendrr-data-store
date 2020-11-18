@@ -32,5 +32,5 @@ ON vs30.vs30_bc_site_model using GIST (geom);
 --ALTER TABLE vs30.vs30_bc_site_model ADD COLUMN IF NOT EXISTS z1pt0 float DEFAULT 0;
 --ALTER TABLE vs30.vs30_bc_site_model ADD COLUMN IF NOT EXISTS z2pt5 float DEFAULT 0;
 
-ALTER TABLE vs30.vs30_bc_site_model ADD COLUMN IF NOT EXISTS z1pt0 float DEFAULT 'NaN';
-ALTER TABLE vs30.vs30_bc_site_model ADD COLUMN IF NOT EXISTS z2pt5 float DEFAULT 'NaN';
+ALTER TABLE vs30.vs30_bc_site_model ADD COLUMN IF NOT EXISTS z1pt0 float DEFAULT NULL;
+ALTER TABLE vs30.vs30_bc_site_model ADD COLUMN IF NOT EXISTS z2pt5 float DEFAULT NULL;

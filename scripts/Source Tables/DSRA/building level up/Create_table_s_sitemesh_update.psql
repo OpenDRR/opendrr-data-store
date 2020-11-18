@@ -1,13 +1,13 @@
 -- add columns to s_gmfdata if missing
-ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_pga" float DEFAULT null;
-ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_pgv" float DEFAULT null;
-ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.1)" float DEFAULT null;
-ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.2)" float DEFAULT null;
-ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.3)" float DEFAULT null;
-ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.5)" float DEFAULT null;
-ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.6)" float DEFAULT null;
-ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(1.0)" float DEFAULT null;
-ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(2.0)" float DEFAULT null;
+ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_pga" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_pgv" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.1)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.2)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.3)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.5)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(0.6)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(1.0)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_sim9p0_cszlockedtrans ADD COLUMN IF NOT EXISTS "gmv_SA(2.0)" float DEFAULT NULL;
 
 -- update gmf data and sitemesh data into 1 table incorporating assetID
 DROP TABLE IF EXISTS gmf.gmfdata_sitemesh_sim9p0_cszlockedtrans, gmf.gmfdata_sitemesh_sim9p0_cszlockedtrans_xref CASCADE;

@@ -1,9 +1,9 @@
 -- create schema for new scenario
-CREATE SCHEMA IF NOT EXISTS results_dsra_acm7p2_lrdmf;
+CREATE SCHEMA IF NOT EXISTS results_dsra_sim9p0_cszlockedtrans;
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_scenario_hazard_shakemap_intensity_b CASCADE;
-CREATE VIEW results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_scenario_hazard_shakemap_intensity_b AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_scenario_hazard_shakemap_intensity_b CASCADE;
+CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_scenario_hazard_shakemap_intensity_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.1 Scenario Hazard
@@ -29,6 +29,7 @@ CAST(CAST(ROUND(CAST(d.vs_lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs30La
 CAST(CAST(ROUND(CAST(d.vs30 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs30",
 CAST(CAST(ROUND(CAST(d.z1pt0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs1p0",
 CAST(CAST(ROUND(CAST(d.z2pt5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs2p5",
+CAST(CAST(ROUND(CAST(e."gmv_pgv" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_PGV",
 CAST(CAST(ROUND(CAST(e."gmv_pga" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_PGA",
 CAST(CAST(ROUND(CAST(e."gmv_SA(0.1)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p1",
 CAST(CAST(ROUND(CAST(e."gmv_SA(0.2)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p2",
@@ -39,17 +40,17 @@ CAST(CAST(ROUND(CAST(e."gmv_SA(2.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC)AS "sH_
 
 b.geom AS "geom_point"
 
-FROM dsra.dsra_acm7p2_lrdmf a
+FROM dsra.dsra_sim9p0_cszlockedtrans a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN vs30.vs30_can_site_model_xref d ON a."AssetID" = d.id
-LEFT JOIN gmf.shakemap_acm7p2_lrdmf_xref e ON b.id = e.id
+LEFT JOIN gmf.shakemap_sim9p0_cszlockedtrans_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr";
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_building_damage_damage_state_b CASCADE;
-CREATE VIEW results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_building_damage_damage_state_b AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_building_damage_damage_state_b CASCADE;
+CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_building_damage_damage_state_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.2 Building Damage
@@ -109,15 +110,15 @@ CAST(CAST(ROUND(CAST(a."sD_Collapse_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS 
 
 b.geom AS "geom_point"
 
-FROM dsra.dsra_acm7p2_lrdmf a
+FROM dsra.dsra_sim9p0_cszlockedtrans a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype;
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_building_damage_recovery_b CASCADE;
-CREATE VIEW results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_building_damage_recovery_b AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_building_damage_recovery_b CASCADE;
+CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_building_damage_recovery_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.2 Building Damage
@@ -141,14 +142,14 @@ CAST(CAST(ROUND(CAST(a."sC_DebrisC_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "
 
 b.geom AS "geom_point"
 
-FROM dsra.dsra_acm7p2_lrdmf a
+FROM dsra.dsra_sim9p0_cszlockedtrans a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_affected_people_casualties_b CASCADE;
-CREATE VIEW results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_affected_people_casualties_b AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_affected_people_casualties_b CASCADE;
+CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_affected_people_casualties_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.3 Affected People
@@ -190,14 +191,14 @@ CAST(CAST(ROUND(CAST(a."sC_CasTransitL4_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC)
 
 b.geom AS "geom_point"
 
-FROM dsra.dsra_acm7p2_lrdmf a
+FROM dsra.dsra_sim9p0_cszlockedtrans a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_affected_people_social_disruption_b CASCADE;
-CREATE VIEW results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_affected_people_social_disruption_b AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_affected_people_social_disruption_b CASCADE;
+CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_affected_people_social_disruption_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.3 Affected People
@@ -376,14 +377,14 @@ CAST(CAST(ROUND(CAST(a."sC_DisrupEmpl_360_r2" AS NUMERIC),6) AS FLOAT) AS NUMERI
 
 b.geom AS "geom_point"
 
-FROM dsra.dsra_acm7p2_lrdmf a
+FROM dsra.dsra_sim9p0_cszlockedtrans a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
 
 
 
 -- create scenario risk building indicators
-DROP VIEW IF EXISTS results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_economic_security_economic_loss_b CASCADE;
-CREATE VIEW results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_economic_security_economic_loss_b AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_economic_security_economic_loss_b CASCADE;
+CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_economic_security_economic_loss_b AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.4 Economic Security
@@ -423,5 +424,5 @@ CAST(CAST(ROUND(CAST(a."sL_Cont_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_
 
 b.geom AS "geom_point"
 
-FROM dsra.dsra_acm7p2_lrdmf a
+FROM dsra.dsra_sim9p0_cszlockedtrans a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;

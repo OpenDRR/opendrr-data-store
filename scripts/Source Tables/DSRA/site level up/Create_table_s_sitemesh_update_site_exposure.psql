@@ -1,16 +1,16 @@
 -- add columns to s_gmfdata if missing
-ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_pga" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_pgv" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.1)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.2)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.3)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.5)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.6)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(1.0)" float DEFAULT 'NaN';
-ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(2.0)" float DEFAULT 'NaN';
+ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_pga" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_pgv" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.1)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.2)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.3)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.5)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(0.6)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(1.0)" float DEFAULT NULL;
+ALTER TABLE gmf.s_gmfdata_idm6p8_jdfpathways ADD COLUMN IF NOT EXISTS "gmv_SA(2.0)" float DEFAULT NULL;
 
 -- update gmf data and sitemesh data into 1 table incorporating assetID
-DROP TABLE IF EXISTS gmf.gmfdata_sitemesh_idm6p8_jdfpathways_metrovan_site_xref,gmf.gmfdata_sitemesh_idm6p8_jdfpathways_metrovan_building_xref,gmf.gmfdata_sitemesh_idm6p8_jdfpathways_metrovan_sauid_xref;
+DROP TABLE IF EXISTS gmf.gmfdata_sitemesh_idm6p8_jdfpathways_metrovan_site_xref,gmf.gmfdata_sitemesh_idm6p8_jdfpathways_metrovan_building_xref,gmf.gmfdata_sitemesh_idm6p8_jdfpathways_metrovan_sauid_xref CASCADE;
 
 -- attach assetID to gmfdata_sitemesh based on closest location site level
 CREATE TABLE gmf.gmfdata_sitemesh_idm6p8_jdfpathways_metrovan_site_xref AS
@@ -29,8 +29,8 @@ b."gmv_SA(1.0)",
 b."gmv_SA(2.0)",
 b.lon,
 b.lat,
-a.sitelon AS "asset_lon",
-a.sitelat AS "asset_lat",
+a.sauidlon AS "asset_lon",
+a.sauidlat AS "asset_lat",
 ST_Distance(a.geom_site,b.geom) AS "distance"
 
 FROM exposure.metrovan_site_exposure a

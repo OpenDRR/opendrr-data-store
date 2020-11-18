@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS vs30.vs30_bc_site_model_metrovan_site_exposure_xref,vs30.vs30_bc_site_model_metrovan_building_exposure_xref,vs30.vs30_bc_site_model_metrovan_sauid_exposure_xref CASCADE;
+DROP TABLE IF EXISTS vs30.vs30_can_site_model_metrovan_site_exposure_xref,vs30.vs30_can_site_model_metrovan_building_exposure_xref,vs30.vs30_can_site_model_metrovan_sauid_exposure_xref CASCADE;
 
 -- attach vs30 value to assetid based on closest location site level exposure
-CREATE TABLE vs30.vs30_bc_site_model_metrovan_site_exposure_xref AS
+CREATE TABLE vs30.vs30_can_site_model_metrovan_site_exposure_xref AS
 SELECT
 a.id,
 a.sitelon AS "asset_lon",
@@ -22,14 +22,14 @@ SELECT vs30,
 	geom,
 	lon,
 	lat
-FROM vs30.vs30_bc_site_model
+FROM vs30.vs30_can_site_model
 ORDER BY a.geom_site <-> geom
 LIMIT 1
 ) AS b;
 
 
 -- attach vs30 value to assetid based on closest location building level exposure
-CREATE TABLE vs30.vs30_bc_site_model_metrovan_building_exposure_xref AS
+CREATE TABLE vs30.vs30_can_site_model_metrovan_building_exposure_xref AS
 SELECT
 a.id,
 a.sauidlon AS "asset_lon",
@@ -50,14 +50,14 @@ SELECT vs30,
 	geom,
 	lon,
 	lat
-FROM vs30.vs30_bc_site_model
+FROM vs30.vs30_can_site_model
 ORDER BY a.geom_site <-> geom
 LIMIT 1
 ) AS b;
 
 
 -- attach vs30 value to assetid based on closest location building level exposure
-CREATE TABLE vs30.vs30_bc_site_model_metrovan_sauid_exposure_xref AS
+CREATE TABLE vs30.vs30_can_site_model_metrovan_sauid_exposure_xref AS
 SELECT
 a.sauid,
 a.sauidlon AS "asset_lon",
@@ -78,7 +78,7 @@ SELECT vs30,
 	geom,
 	lon,
 	lat
-FROM vs30.vs30_bc_site_model
+FROM vs30.vs30_can_site_model
 ORDER BY a.geom_site <-> geom
 LIMIT 1
 ) AS b;

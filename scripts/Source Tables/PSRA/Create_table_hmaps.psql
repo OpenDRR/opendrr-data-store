@@ -43,8 +43,24 @@ UPDATE psra.psra_bc_hmaps SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 CREATE INDEX bc_hmaps_idx
 ON psra.psra_bc_hmaps using GIST (geom);
 
+
+DROP TABLE IF EXISTS psra.exposure_bc CASCADE;
+
+CREATE TABLE psra.exposure_bc AS
+(
+SELECT id,
+a.sauid,
+a.sauidlon,
+a.sauidlat,
+a.geom
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean b ON a.id = b.asset_id
+);
+
 -- attach assetID to hazard mean map based on closest location
-DROP TABLE IF EXISTS psra.psra_bc_hmaps_xref;
+DROP TABLE IF EXISTS psra.psra_bc_hmaps_xref CASCADE;
+
 CREATE TABLE psra.psra_bc_hmaps_xref AS
 SELECT
 a.id,
@@ -75,7 +91,7 @@ b."SA(2.0)_0.1",
 b."SA(5.0)_0.02",
 b."SA(5.0)_0.1"
 
-FROM exposure.canada_exposure a
+FROM psra.exposure_bc a
 CROSS JOIN LATERAL 
 (
 SELECT 
@@ -106,4 +122,6 @@ geom
 FROM psra.psra_bc_hmaps
 ORDER BY a.geom <-> geom
 LIMIT 1
-) AS b
+) AS b;
+
+DROP TABLE IF EXISTS psra.exposure_bc;
