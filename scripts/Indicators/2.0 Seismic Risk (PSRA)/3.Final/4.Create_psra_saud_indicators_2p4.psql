@@ -47,8 +47,66 @@ FROM psra.psra_bc5920a1_agg_curves_stats_r2 a;
 /*
 --src table aggregation samples
 -- sum of total loss value for all
+DROP TABLE IF EXISTS psra.psra_bc5920a1_src_stats_b0 CASCADE;
+
+CREATE TABLE psra.psra_bc5920a1_src_stats_b0 AS
+(
 SELECT SUM(loss_value) AS "total_loss_value"
-FROM psra.psra_bc5920a1_src_loss_b0;
+FROM psra.psra_bc5920a1_src_loss_b0
+);
+
+
+-- sum of total loss value for all
+SELECT
+'bc5920a1' AS "region",
+loss_type,
+SUM(loss_value) AS "total_lt",
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra.psra_bc5920a1_src_loss_b0 )*100 AS "total_lt_p"
+FROM psra.psra_bc5920a1_src_loss_b0
+GROUP BY loss_type;
+
+
+-- total loss value by source
+SELECT 
+'bc5920a1' AS "region",
+source,
+SUM(loss_value) AS "total_loss_source",
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra.psra_bc5920a1_src_loss_b0 )*100 AS "total_srce_p"
+FROM psra.psra_bc5920a1_src_loss_b0
+GROUP BY source;
+
+
+-- total loss value by source, loss type
+SELECT 
+'bc5920a1' AS "region",
+source,
+loss_type,
+SUM(loss_value) AS "total_srce_lt",
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra.psra_bc5920a1_src_loss_b0 )*100 AS "total_srce_lt_p"
+FROM psra.psra_bc5920a1_src_loss_b0
+GROUP BY source,loss_type;
+
+
+-- total loss value by source, loss type, trt
+SELECT 
+'bc5920a1' AS "region",
+source,
+loss_type,
+trt,
+SUM(loss_value) AS "total_srce_lt_trt",
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra.psra_bc5920a1_src_loss_b0 )*100 AS "total_srce_lt_trt_p"
+FROM psra.psra_bc5920a1_src_loss_b0
+GROUP BY source,loss_type,trt;
+
+/*
+-- sum of total loss value for all
+SELECT
+loss_type,
+SUM(loss_value) AS "total_loss_type"
+FROM psra.psra_bc5920a1_src_loss_b0
+GROUP BY loss_type;
+
+
 
 -- total loss value by source
 SELECT 
@@ -73,5 +131,6 @@ trt,
 SUM(loss_value) AS "total_loss_source"
 FROM psra.psra_bc5920a1_src_loss_b0
 GROUP BY source,loss_type,trt;
+*/
 
 */
