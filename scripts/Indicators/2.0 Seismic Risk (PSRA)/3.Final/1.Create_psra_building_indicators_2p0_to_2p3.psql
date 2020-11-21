@@ -12,6 +12,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_seismic_hazard_500yr_hazard_intensity_b
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
+b."PRUID" AS "pruid",
+b."PRNAME" AS "prname",
+b."ERUID" AS "eruid",
+b."ERNAME" AS "ername",
+b."CDUID" AS "cduid",
+b."CDNAME" AS "cdname",
+b."CSDUID" AS "csduid",
+b."CSDNAME" AS "csdname",
 
 -- 2.1.1 500yr Hazard Intensity
 CAST(CAST(ROUND(CAST(d."PGA_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_PGA",
@@ -28,6 +36,7 @@ CAST(CAST(ROUND(CAST(d."SA(10.0)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "
 a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a
+LEFT JOIN boundaries."Geometry_SAUID" b on a.sauid = b."SAUIDt"
 LEFT JOIN psra.psra_bc_hmaps_xref d ON a.id = d.id
 RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id;
 
@@ -42,6 +51,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_seismic_hazard_2500yr_hazard_intensity_
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
+b."PRUID" AS "pruid",
+b."PRNAME" AS "prname",
+b."ERUID" AS "eruid",
+b."ERNAME" AS "ername",
+b."CDUID" AS "cduid",
+b."CDNAME" AS "cdname",
+b."CSDUID" AS "csduid",
+b."CSDNAME" AS "csdname",
 
 -- 2.1.2 2500yr Hazard Intensity
 CAST(CAST(ROUND(CAST(d."PGA_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_PGA",
@@ -58,6 +75,7 @@ CAST(CAST(ROUND(CAST(d."SA(10.0)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "p
 a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a
+LEFT JOIN boundaries."Geometry_SAUID" b on a.sauid = b."SAUIDt"
 LEFT JOIN psra.psra_bc_hmaps_xref d ON a.id = d.id
 RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id;
 
@@ -73,6 +91,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_seismic_hazard_site_amplification_b AS
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
+b."PRUID" AS "pruid",
+b."PRNAME" AS "prname",
+b."ERUID" AS "eruid",
+b."ERNAME" AS "ername",
+b."CDUID" AS "cduid",
+b."CDNAME" AS "cdname",
+b."CSDUID" AS "csduid",
+b."CSDNAME" AS "csdname",
 CAST(CAST(ROUND(CAST(d.vs_lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS  "pH_Vs30Lon",
 CAST(CAST(ROUND(CAST(d.vs_lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_Vs30Lat",
 CAST(CAST(ROUND(CAST(d.vs30 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_Vs30",
@@ -82,6 +108,7 @@ CAST(CAST(ROUND(CAST(d.z2pt5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_Vs2p5",
 a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a
+LEFT JOIN boundaries."Geometry_SAUID" b on a.sauid = b."SAUIDt"
 LEFT JOIN vs30.vs30_bc_site_model_xref d ON a.id = d.id
 RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id;
 
@@ -96,6 +123,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_building_damage_classical_damage_b AS
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
+b."PRUID" AS "pruid",
+b."PRNAME" AS "prname",
+b."ERUID" AS "eruid",
+b."ERNAME" AS "ername",
+b."CDUID" AS "cduid",
+b."CDNAME" AS "cdname",
+b."CSDUID" AS "csduid",
+b."CSDNAME" AS "csdname",
 
 -- 2.2.1 Classical Damage - b0
 CAST(CAST(ROUND(CAST(c.structural_no_damage_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "cD_None_b0",
@@ -141,6 +176,7 @@ CAST(CAST(ROUND(CAST((c.structural_complete_r2/a.number) * f.collapse_pc AS NUME
 a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a
+LEFT JOIN boundaries."Geometry_SAUID" b on a.sauid = b."SAUIDt"
 RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype;
 
@@ -155,6 +191,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_building_damage_event_based_damage_b AS
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
+b."PRUID" AS "pruid",
+b."PRNAME" AS "prname",
+b."ERUID" AS "eruid",
+b."ERNAME" AS "ername",
+b."CDUID" AS "cduid",
+b."CDNAME" AS "cdname",
+b."CSDUID" AS "csduid",
+b."CSDNAME" AS "csdname",
 
 -- 2.2.2 Event-Based Damage - b0
 CAST(CAST(ROUND(CAST(e.structural_no_damage_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eD_None_b0",
@@ -197,6 +241,7 @@ CAST(CAST(ROUND(CAST((e.structural_complete_r2/a.number) * f.collapse_pc AS NUME
 a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a
+LEFT JOIN boundaries."Geometry_SAUID" b on a.sauid = b."SAUIDt"
 RIGHT JOIN psra.psra_bc5920a_ed_dmg_mean e ON a.id = e.asset_id
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype;
 

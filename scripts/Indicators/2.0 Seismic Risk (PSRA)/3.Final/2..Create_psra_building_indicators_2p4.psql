@@ -11,6 +11,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a1_economic_security_economic_loss_b AS
 SELECT 
 a.id AS "AssetID",
 a.sauid AS "Sauid",
+b."PRUID" AS "pruid",
+b."PRNAME" AS "prname",
+b."ERUID" AS "eruid",
+b."ERNAME" AS "ername",
+b."CDUID" AS "cduid",
+b."CDNAME" AS "cdname",
+b."CSDUID" AS "csduid",
+b."CSDNAME" AS "csdname",
 
 -- 2.4.1 Economic Loss - b0
 CAST(CAST(ROUND(CAST(h.structural_b0 + h.nonstructural_b0 + h.contents_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAAL_Asset_b0",
@@ -34,4 +42,5 @@ CAST(CAST(ROUND(CAST(h.contents_r2 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAAL
 a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a
+LEFT JOIN boundaries."Geometry_SAUID" b on a.sauid = b."SAUIDt"
 RIGHT JOIN psra.psra_bc5920a1_avg_losses_stats h ON a.id = h.asset_id;

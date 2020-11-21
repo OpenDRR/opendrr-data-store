@@ -11,6 +11,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_seismic_hazard_500yr_hazard_intensity_s
 -- 2.1.1 500yr Hazard Intensity
 SELECT 
 a.sauid AS "Sauid",
+z."PRUID" AS "pruid",
+z."PRNAME" AS "prname",
+z."ERUID" AS "eruid",
+z."ERNAME" AS "ername",
+z."CDUID" AS "cduid",
+z."CDNAME" AS "cdname",
+z."CSDUID" AS "csduid",
+z."CSDNAME" AS "csdname",
 
 -- 2.1.1 500yr Hazard Intensity
 CAST(CAST(ROUND(CAST(d."PGA_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_PGA",
@@ -31,7 +39,8 @@ FROM exposure.canada_exposure a
 LEFT JOIN psra.psra_bc_hmaps_xref d ON a.id = d.id
 RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
-GROUP BY a.sauid,d."PGA_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."SA(0.3)_0.02",d."SA(0.5)_0.02",d."SA(0.6)_0.02",d."SA(1.0)_0.02",d."SA(2.0)_0.02",d."SA(5.0)_0.02",d."SA(10.0)_0.02",z.geom;
+GROUP BY a.sauid,d."PGA_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."SA(0.3)_0.02",d."SA(0.5)_0.02",d."SA(0.6)_0.02",d."SA(1.0)_0.02",d."SA(2.0)_0.02",d."SA(5.0)_0.02",d."SA(10.0)_0.02",
+z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
 
 
 
@@ -43,6 +52,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_seismic_hazard_2500yr_hazard_intensity_
 -- 2.1 Probabilistic Seismic Hazard
 SELECT 
 a.sauid AS "Sauid",
+z."PRUID" AS "pruid",
+z."PRNAME" AS "prname",
+z."ERUID" AS "eruid",
+z."ERNAME" AS "ername",
+z."CDUID" AS "cduid",
+z."CDNAME" AS "cdname",
+z."CSDUID" AS "csduid",
+z."CSDNAME" AS "csdname",
 
 -- 2.1.2 2500yr Hazard Intensity
 CAST(CAST(ROUND(CAST(d."PGA_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_PGA",
@@ -64,7 +81,8 @@ FROM exposure.canada_exposure a
 LEFT JOIN psra.psra_bc_hmaps_xref d ON a.id = d.id
 RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
-GROUP BY a.sauid,d."PGA_0.1",d."SA(0.1)_0.1",d."SA(0.2)_0.1",d."SA(0.3)_0.1",d."SA(0.5)_0.1",d."SA(0.6)_0.1",d."SA(1.0)_0.1",d."SA(2.0)_0.1",d."SA(5.0)_0.1",d."SA(10.0)_0.1",z.geom;
+GROUP BY a.sauid,d."PGA_0.1",d."SA(0.1)_0.1",d."SA(0.2)_0.1",d."SA(0.3)_0.1",d."SA(0.5)_0.1",d."SA(0.6)_0.1",d."SA(1.0)_0.1",d."SA(2.0)_0.1",d."SA(5.0)_0.1",d."SA(10.0)_0.1",
+z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
 
 
 
@@ -77,6 +95,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_seismic_hazard_site_amplification_s AS
 -- 2.1.3 Site Amplification
 SELECT 
 a.sauid AS "Sauid",
+z."PRUID" AS "pruid",
+z."PRNAME" AS "prname",
+z."ERUID" AS "eruid",
+z."ERNAME" AS "ername",
+z."CDUID" AS "cduid",
+z."CDNAME" AS "cdname",
+z."CSDUID" AS "csduid",
+z."CSDNAME" AS "csdname",
 CAST(CAST(ROUND(CAST(d.vs_lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS  "pH_Vs30Lon",
 CAST(CAST(ROUND(CAST(d.vs_lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_Vs30Lat",
 CAST(CAST(ROUND(CAST(d.vs30 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_Vs30",
@@ -91,7 +117,7 @@ FROM exposure.canada_exposure a
 LEFT JOIN vs30.vs30_bc_site_model_xref d ON a.id = d.id
 RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
-GROUP BY a.sauid,d.vs_lon,d.vs_lat,d.vs30,d.z1pt0,d.z2pt5,z.geom;
+GROUP BY a.sauid,d.vs_lon,d.vs_lat,d.vs30,d.z1pt0,d.z2pt5,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
 
 
 
@@ -103,6 +129,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_building_damage_classical_damage_s AS
 -- 2.2 Building Damage
 SELECT 
 a.sauid AS "Sauid",
+z."PRUID" AS "pruid",
+z."PRNAME" AS "prname",
+z."ERUID" AS "eruid",
+z."ERNAME" AS "ername",
+z."CDUID" AS "cduid",
+z."CDNAME" AS "cdname",
+z."CSDUID" AS "csduid",
+z."CSDNAME" AS "csdname",
 
 -- 2.2.1 Classical Damage - b0
 CAST(CAST(ROUND(CAST(SUM(c.structural_no_damage_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "cDt_None_b0",
@@ -150,7 +184,7 @@ FROM exposure.canada_exposure a
 RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
-GROUP BY a.sauid,z.geom;
+GROUP BY a.sauid,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
 
 
 
@@ -162,6 +196,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a_building_damage_event_based_damage_s AS
 -- 2.2 Building Damage
 SELECT 
 a.sauid AS "Sauid",
+z."PRUID" AS "pruid",
+z."PRNAME" AS "prname",
+z."ERUID" AS "eruid",
+z."ERNAME" AS "ername",
+z."CDUID" AS "cduid",
+z."CDNAME" AS "cdname",
+z."CSDUID" AS "csduid",
+z."CSDNAME" AS "csdname",
 
 -- 2.2.2 Event-Based Damage - b0
 CAST(CAST(ROUND(CAST(SUM(e.structural_no_damage_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDt_None_b0",
@@ -208,7 +250,7 @@ FROM exposure.canada_exposure a
 RIGHT JOIN psra.psra_bc5920a_ed_dmg_mean e ON a.id = e.asset_id
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
-GROUP BY a.sauid,z.geom;
+GROUP BY a.sauid,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
 
 
 
@@ -219,6 +261,14 @@ CREATE VIEW results_psra_bc.psra_bc5920a1_economic_security_economic_loss_s AS
 -- 2.4 Economic Security
 SELECT 
 a.sauid AS "Sauid",
+z."PRUID" AS "pruid",
+z."PRNAME" AS "prname",
+z."ERUID" AS "eruid",
+z."ERNAME" AS "ername",
+z."CDUID" AS "cduid",
+z."CDNAME" AS "cdname",
+z."CSDUID" AS "csduid",
+z."CSDNAME" AS "csdname",
 
 -- 2.4.1 Economic Loss - b0
 CAST(CAST(ROUND(CAST(SUM(h.structural_b0 + h.nonstructural_b0 + h.contents_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Asset_b0",
@@ -245,7 +295,7 @@ z.geom AS "geom_poly"
 FROM exposure.canada_exposure a
 RIGHT JOIN psra.psra_bc5920a1_avg_losses_stats h ON a.id = h.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
-GROUP BY a.sauid,z.geom;
+GROUP BY a.sauid,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
 
 
 /*
