@@ -395,5 +395,3 @@ nhsl_hazard_threat_wf_threat_wf_hazard_s) DO (FOR %%y IN (6010) DO ogr2ogr -f "g
 ECHO %time%
 
 PAUSE
-
-PAUSE
