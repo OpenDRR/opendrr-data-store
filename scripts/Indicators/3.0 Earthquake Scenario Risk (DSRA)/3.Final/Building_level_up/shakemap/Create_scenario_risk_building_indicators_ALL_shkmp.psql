@@ -10,6 +10,14 @@ CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_scenar
 SELECT 
 a."AssetID",
 b.sauid AS "Sauid",
+c."PRUID" AS "pruid",
+c."PRNAME" AS "prname",
+c."ERUID" AS "eruid",
+c."ERNAME" AS "ername",
+c."CDUID" AS "cduid",
+c."CDNAME" AS "cdname",
+c."CSDUID" AS "csduid",
+c."CSDNAME" AS "csdname",
 
 -- 3.1.1 Shakemap Intensity
 f.rupture_name AS "sH_RupName",
@@ -34,6 +42,7 @@ CAST(CAST(ROUND(CAST(e."gmv_pga" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_PGA
 CAST(CAST(ROUND(CAST(e."gmv_SA(0.1)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p1",
 CAST(CAST(ROUND(CAST(e."gmv_SA(0.2)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p2",
 CAST(CAST(ROUND(CAST(e."gmv_SA(0.3)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p3",
+CAST(CAST(ROUND(CAST(e."gmv_SA(0.5)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p5",
 CAST(CAST(ROUND(CAST(e."gmv_SA(0.6)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p6",
 CAST(CAST(ROUND(CAST(e."gmv_SA(1.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa1p0",
 CAST(CAST(ROUND(CAST(e."gmv_SA(2.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC)AS "sH_Sa2p0",
@@ -42,6 +51,7 @@ b.geom AS "geom_point"
 
 FROM dsra.dsra_sim9p0_cszlockedtrans a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt"
 LEFT JOIN vs30.vs30_can_site_model_xref d ON a."AssetID" = d.id
 LEFT JOIN gmf.shakemap_sim9p0_cszlockedtrans_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr";
@@ -57,6 +67,14 @@ CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_buildi
 SELECT 
 a."AssetID",
 b.sauid AS "Sauid",
+c."PRUID" AS "pruid",
+c."PRNAME" AS "prname",
+c."ERUID" AS "eruid",
+c."ERNAME" AS "ername",
+c."CDUID" AS "cduid",
+c."CDNAME" AS "cdname",
+c."CSDUID" AS "csduid",
+c."CSDNAME" AS "csdname",
 
 -- 3.2.1 Damage State - b0
 CAST(CAST(ROUND(CAST(a."sD_None_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_None_b0",
@@ -112,6 +130,7 @@ b.geom AS "geom_point"
 
 FROM dsra.dsra_sim9p0_cszlockedtrans a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
+LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt"
 LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype;
 
 
@@ -125,6 +144,14 @@ CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_buildi
 SELECT 
 a."AssetID",
 b.sauid AS "Sauid",
+c."PRUID" AS "pruid",
+c."PRNAME" AS "prname",
+c."ERUID" AS "eruid",
+c."ERNAME" AS "ername",
+c."CDUID" AS "cduid",
+c."CDNAME" AS "cdname",
+c."CSDUID" AS "csduid",
+c."CSDNAME" AS "csdname",
 
 -- 3.2.1 Recovery - b0
 CAST(CAST(ROUND(CAST(a."sC_Repair_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Repair_b0",
@@ -143,7 +170,8 @@ CAST(CAST(ROUND(CAST(a."sC_DebrisC_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "
 b.geom AS "geom_point"
 
 FROM dsra.dsra_sim9p0_cszlockedtrans a
-LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id
+LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt";
 
 
 
@@ -156,6 +184,14 @@ CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_affect
 SELECT 
 a."AssetID",
 b.sauid AS "Sauid",
+c."PRUID" AS "pruid",
+c."PRNAME" AS "prname",
+c."ERUID" AS "eruid",
+c."ERNAME" AS "ername",
+c."CDUID" AS "cduid",
+c."CDNAME" AS "cdname",
+c."CSDUID" AS "csduid",
+c."CSDNAME" AS "csdname",
 
 -- 3.3.1 Casualties - b0
 --CAST(CAST(ROUND(CAST(a."sL_Fatalities_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Fatality_b0",
@@ -192,7 +228,8 @@ CAST(CAST(ROUND(CAST(a."sC_CasTransitL4_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC)
 b.geom AS "geom_point"
 
 FROM dsra.dsra_sim9p0_cszlockedtrans a
-LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id
+LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt";
 
 
 
@@ -205,6 +242,14 @@ CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_affect
 SELECT 
 a."AssetID",
 b.sauid AS "Sauid",
+c."PRUID" AS "pruid",
+c."PRNAME" AS "prname",
+c."ERUID" AS "eruid",
+c."ERNAME" AS "ername",
+c."CDUID" AS "cduid",
+c."CDNAME" AS "cdname",
+c."CSDUID" AS "csduid",
+c."CSDNAME" AS "csdname",
 
 -- 3.3.2 Social Disruption - b0
 -- sC_Shelter -- calculated at sauid level only
@@ -378,7 +423,8 @@ CAST(CAST(ROUND(CAST(a."sC_DisrupEmpl_360_r2" AS NUMERIC),6) AS FLOAT) AS NUMERI
 b.geom AS "geom_point"
 
 FROM dsra.dsra_sim9p0_cszlockedtrans a
-LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id
+LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt";
 
 
 
@@ -391,6 +437,14 @@ CREATE VIEW results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_econom
 SELECT 
 a."AssetID",
 b.sauid AS "Sauid",
+c."PRUID" AS "pruid",
+c."PRNAME" AS "prname",
+c."ERUID" AS "eruid",
+c."ERNAME" AS "ername",
+c."CDUID" AS "cduid",
+c."CDNAME" AS "cdname",
+c."CSDUID" AS "csduid",
+c."CSDNAME" AS "csdname",
 
 -- 3.4.1 Economic Loss - b0
 CAST(CAST(ROUND(CAST(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Asset_b0",
@@ -425,4 +479,5 @@ CAST(CAST(ROUND(CAST(a."sL_Cont_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_
 b.geom AS "geom_point"
 
 FROM dsra.dsra_sim9p0_cszlockedtrans a
-LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id;
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id
+LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt";

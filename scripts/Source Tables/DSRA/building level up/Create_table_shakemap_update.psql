@@ -34,6 +34,7 @@ RIGHT JOIN dsra.dsra_sim9p0_cszlockedtrans b ON a.id = b."AssetID"
 );
 
 
+
 DROP TABLE IF EXISTS gmf.shakemap_sim9p0_cszlockedtrans_xref CASCADE;
 
 -- attach assetID to gmfdata_sitemesh based on closest location
@@ -57,8 +58,7 @@ a.sauidlon AS "asset_lon",
 a.sauidlat AS "asset_lat",
 ST_Distance(a.geom,b.geom) AS "distance"
 
---FROM exposure.canada_exposure a
-FROM dsra.dsra_sim9p0_cszlockedtrans a
+FROM dsra.exposure_sim9p0_cszlockedtrans a
 CROSS JOIN LATERAL 
 (
 SELECT
