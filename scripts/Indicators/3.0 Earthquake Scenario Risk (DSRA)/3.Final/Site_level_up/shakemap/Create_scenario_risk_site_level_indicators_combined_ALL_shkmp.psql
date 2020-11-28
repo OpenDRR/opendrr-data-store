@@ -4,8 +4,8 @@ CREATE SCHEMA IF NOT EXISTS results_dsra_idm6p8_jdfpathways;
 
 
 -- create scenario risk site indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_scenario_hazard_shakemap_intensity_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_scenario_hazard_shakemap_intensity_ste AS 
+DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_all_indicators_ste CASCADE;
+CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_all_indicators_ste AS 
 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.1 Scenario Hazard
@@ -49,35 +49,7 @@ CAST(CAST(ROUND(CAST(e."gmv_SA(0.6)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH
 CAST(CAST(ROUND(CAST(e."gmv_SA(1.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa1p0",
 CAST(CAST(ROUND(CAST(e."gmv_SA(2.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC)AS "sH_Sa2p0",
 
-b.geom_site AS "geom_point"
-
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id 
-LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt"
-LEFT JOIN vs30.vs30_can_site_model_metrovan_site_exposure_xref d ON a."AssetID" = d.id
-LEFT JOIN gmf.shakemap_idm6p8_jdfpathways_metrovan_site_xref e ON b.id = e.id
-LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr";
-
-
-
--- create scenario risk site indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_damage_state_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_damage_state_ste AS 
-
--- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.2 Building Damage
-SELECT 
-a."AssetID",
-b.sauid AS "Sauid",
-c."PRUID" AS "pruid",
-c."PRNAME" AS "prname",
-c."ERUID" AS "eruid",
-c."ERNAME" AS "ername",
-c."CDUID" AS "cduid",
-c."CDNAME" AS "cdname",
-c."CSDUID" AS "csduid",
-c."CSDNAME" AS "csdname",
-
 -- 3.2.1 Damage State - b0
 CAST(CAST(ROUND(CAST(a."sD_None_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_None_b0",
 CAST(CAST(ROUND(CAST(a."sD_None_b0" / b.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDr_None_b0",
@@ -128,33 +100,6 @@ CAST(CAST(ROUND(CAST(a."sD_Collapse_r2" * b.number AS NUMERIC),6) AS FLOAT) AS N
 CAST(CAST(ROUND(CAST(a."sD_Collapse_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDr_Collapse_r2",
 --CAST(CAST(ROUND(CAST(a."sD_Complete_stdv_r2" * g.collapse_pc AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDsd_Collapse_r2",
 
-b.geom_site AS "geom_point"
-
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id 
-LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt"
-LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype;
-
-
-
--- create scenario risk site indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_recovery_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_building_damage_recovery_ste AS 
-
--- 3.0 Earthquake Scenario Risk (DSRA)
--- 3.2 Building Damage
-SELECT 
-a."AssetID",
-b.sauid AS "Sauid",
-c."PRUID" AS "pruid",
-c."PRNAME" AS "prname",
-c."ERUID" AS "eruid",
-c."ERNAME" AS "ername",
-c."CDUID" AS "cduid",
-c."CDNAME" AS "cdname",
-c."CSDUID" AS "csduid",
-c."CSDNAME" AS "csdname",
-
 -- 3.2.1 Recovery - b0
 CAST(CAST(ROUND(CAST(a."sC_Repair_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Repair_b0",
 CAST(CAST(ROUND(CAST(a."sC_Construxn_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Construxn_b0",
@@ -169,32 +114,7 @@ CAST(CAST(ROUND(CAST(a."sC_Downtime_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS 
 CAST(CAST(ROUND(CAST(a."sC_DebrisBW_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisBW_r2",
 CAST(CAST(ROUND(CAST(a."sC_DebrisC_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisCS_r2",
 
-b.geom_site AS "geom_point"
-
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id
-LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt";
-
-
-
--- create scenario risk site indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_casualties_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_casualties_ste AS 
-
--- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.3 Affected People
-SELECT 
-a."AssetID",
-b.sauid AS "Sauid",
-c."PRUID" AS "pruid",
-c."PRNAME" AS "prname",
-c."ERUID" AS "eruid",
-c."ERNAME" AS "ername",
-c."CDUID" AS "cduid",
-c."CDNAME" AS "cdname",
-c."CSDUID" AS "csduid",
-c."CSDNAME" AS "csdname",
-
 -- 3.3.1 Casualties - b0
 --CAST(CAST(ROUND(CAST(a."sL_Fatalities_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Fatality_b0",
 --CAST(CAST(ROUND(CAST(a."sL_Fatalities_stdv_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLsd_Fatality_b0",
@@ -226,32 +146,6 @@ CAST(CAST(ROUND(CAST(a."sC_CasTransitL1_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC)
 CAST(CAST(ROUND(CAST(a."sC_CasTransitL2_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTransitL2_r2",
 CAST(CAST(ROUND(CAST(a."sC_CasTransitL3_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTransitL3_r2",
 CAST(CAST(ROUND(CAST(a."sC_CasTransitL4_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTransitL4_r2",
-
-b.geom_site AS "geom_point"
-
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id
-LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt";
-
-
-
--- create scenario risk site indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_social_disruption_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_affected_people_social_disruption_ste AS 
-
--- 3.0 Earthquake Scenario Risk (DSRA)
--- 3.3 Affected People
-SELECT 
-a."AssetID",
-b.sauid AS "Sauid",
-c."PRUID" AS "pruid",
-c."PRNAME" AS "prname",
-c."ERUID" AS "eruid",
-c."ERNAME" AS "ername",
-c."CDUID" AS "cduid",
-c."CDNAME" AS "cdname",
-c."CSDUID" AS "csduid",
-c."CSDNAME" AS "csdname",
 
 -- 3.3.2 Social Disruption - b0
 -- sC_Shelter -- calculated at sauid level only
@@ -422,38 +316,17 @@ CAST(CAST(ROUND(CAST(a."sC_DisrupEmpl_90_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC
 CAST(CAST(ROUND(CAST(a."sC_DisrupEmpl_180_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisrupEmpl_180_r2",
 CAST(CAST(ROUND(CAST(a."sC_DisrupEmpl_360_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisrupEmpl_360_r2",
 
-b.geom_site AS "geom_point"
-
-FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id
-LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt";
-
-
-
--- create scenario risk site indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_economic_security_economic_loss_ste CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_economic_security_economic_loss_ste AS 
-
--- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.4 Economic Security
-SELECT 
-a."AssetID",
-b.sauid AS "Sauid",
-c."PRUID" AS "pruid",
-c."PRNAME" AS "prname",
-c."ERUID" AS "eruid",
-c."ERNAME" AS "ername",
-c."CDUID" AS "cduid",
-c."CDNAME" AS "cdname",
-c."CSDUID" AS "csduid",
-c."CSDNAME" AS "csdname",
-
 -- 3.4.1 Economic Loss - b0
 CAST(CAST(ROUND(CAST(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Asset_b0",
 CAST(CAST(ROUND(CAST(a."sL_Str_b0" + a."sL_NStr_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Bldg_b0",
-CAST(CAST(ROUND(CAST(COALESCE(((a."sL_Str_b0" + a."sL_NStr_b0")/(b.number))/NULLIF(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0")/(b.number)),0),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr_Bldg_b0",
-CAST(CAST(ROUND(CAST((((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2"))/(b.retrofitting)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr2_BCR_b0",
-CAST(CAST(ROUND(CAST((((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")) * ((EXP(-0.03*100)/0.03)/(b.retrofitting))) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SLr2_RoI",
+CAST(CAST(ROUND(CAST(COALESCE(((a."sL_Str_b0" + a."sL_NStr_b0")/(b.number))/NULLIF(((b.structural + b.nonstructural)/(b.number)),0),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr_Bldg_b0",
+
+CAST(CAST(ROUND(CAST((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r2" + a."sL_NStr_r2"))/(b.number))/((b.retrofitting)/(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr2_BCR_b0",
+--CAST(CAST(ROUND(CAST((((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2"))/(b.retrofitting)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr2_BCR_b0",
+
+CAST(CAST(ROUND(CAST((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r2" + a."sL_NStr_r2"))/(b.number)) * ((EXP(-0.025*50)/0.025))/((b.retrofitting)/(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SLr2_RoI",
+--CAST(CAST(ROUND(CAST((((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")) * ((EXP(-0.03*100)/0.03)/(b.retrofitting))) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SLr2_RoI",
 
 CAST(CAST(ROUND(CAST(a."sL_Str_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Str_b0",
 --CAST(CAST(ROUND(CAST(a."sL_Str_stdv_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLsd_Str_b0",
@@ -467,7 +340,7 @@ CAST(CAST(ROUND(CAST(a."sL_Cont_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_
 -- 3.4.1 Economic Loss - r2
 CAST(CAST(ROUND(CAST(a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Asset_r2",
 CAST(CAST(ROUND(CAST(a."sL_Str_r2" + a."sL_NStr_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Bldg_r2",
-CAST(CAST(ROUND(CAST(COALESCE(((a."sL_Str_r2" + a."sL_NStr_r2")/(b.number))/NULLIF(((a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")/(b.number)),0),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr_Bldg_r2",
+CAST(CAST(ROUND(CAST(COALESCE(((a."sL_Str_r2" + a."sL_NStr_r2")/(b.number))/NULLIF(((b.structural + b.nonstructural)/(b.number)),0),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr_Bldg_r2",
 
 CAST(CAST(ROUND(CAST(a."sL_Str_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Str_r2",
 --CAST(CAST(ROUND(CAST(a."sL_Str_stdv_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLsd_Str_r2",
@@ -481,5 +354,9 @@ CAST(CAST(ROUND(CAST(a."sL_Cont_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_
 b.geom_site AS "geom_point"
 
 FROM dsra.dsra_idm6p8_jdfpathways a
-LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id
-LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt";
+LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id 
+LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt"
+LEFT JOIN vs30.vs30_can_site_model_metrovan_site_exposure_xref d ON a."AssetID" = d.id
+LEFT JOIN gmf.shakemap_idm6p8_jdfpathways_metrovan_site_xref e ON b.id = e.id
+LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
+LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype;

@@ -130,14 +130,14 @@ CAST(CAST(ROUND(CAST(SUM(a."sD_Collapse_r2" * b.number) AS NUMERIC),6) AS FLOAT)
 CAST(CAST(ROUND(CAST(AVG(a."sD_Collapse_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDr_Collapse_r2",
 --CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_stdv_r2" * g.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Collapse_r2",
 
-i.geom_site AS "geom_point"
+c.geom_site AS "geom_point"
 
 FROM dsra.dsra_idm6p8_jdfpathways a
 LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id 
+LEFT JOIN exposure.metrovan_building_exposure c ON c.id = b.id_building
 LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype
-LEFT JOIN exposure.metrovan_building_exposure i ON i.id = b.id_building
 LEFT JOIN boundaries."Geometry_SAUID" z ON b.sauidid = z."SAUIDt"
-GROUP BY b.id_building,b.sauid,i.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
+GROUP BY b.id_building,b.sauid,c.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
 
 
 
@@ -173,13 +173,13 @@ CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_r2")/(AVG(b.number)) AS NUMERIC),6) AS F
 CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC)  AS "sC_DebrisBW_r2",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisC_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisCS_r2",
 
-i.geom_site AS "geom_point"
+c.geom_site AS "geom_point"
 
 FROM dsra.dsra_idm6p8_jdfpathways a
 LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id
-LEFT JOIN exposure.metrovan_building_exposure i ON i.id = b.id_building
+LEFT JOIN exposure.metrovan_building_exposure c ON c.id = b.id_building
 LEFT JOIN boundaries."Geometry_SAUID" z ON b.sauidid = z."SAUIDt"
-GROUP BY b.id_building,b.sauid,i.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
+GROUP BY b.id_building,b.sauid,c.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
 
 
 
@@ -233,13 +233,13 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL2_r2") AS NUMERIC),6) AS FLOAT) AS NUM
 CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL3_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC)  AS "sC_CasTransitL3_r2",
 CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL4_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_CasTransitL4_r2",
 
-i.geom_site AS "geom_point"
+c.geom_site AS "geom_point"
 
 FROM dsra.dsra_idm6p8_jdfpathways a
 LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id
-LEFT JOIN exposure.metrovan_building_exposure i ON i.id = b.id_building
+LEFT JOIN exposure.metrovan_building_exposure c ON c.id = b.id_building
 LEFT JOIN boundaries."Geometry_SAUID" z ON b.sauidid = z."SAUIDt"
-GROUP BY b.id_building,b.sauid,i.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
+GROUP BY b.id_building,b.sauid,c.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
 
 
 
@@ -418,13 +418,13 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_90_r2") AS NUMERIC),6) AS FLOAT) AS NU
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_180_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisrupEmpl_180_r2",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_360_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisrupEmpl_360_r2",
 
-i.geom_site AS "geom_point"
+c.geom_site AS "geom_point"
 
 FROM dsra.dsra_idm6p8_jdfpathways a
 LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id
-LEFT JOIN exposure.metrovan_building_exposure i ON i.id = b.id_building
+LEFT JOIN exposure.metrovan_building_exposure c ON c.id = b.id_building
 LEFT JOIN boundaries."Geometry_SAUID" z ON b.sauidid = z."SAUIDt"
-GROUP BY b.id_building,b.sauid,i.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
+GROUP BY b.id_building,b.sauid,c.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
 
 
 
@@ -449,13 +449,13 @@ z."CSDNAME" AS "csdname",
 -- 3.4.1 Economic Loss - b0
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Asset_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Bldg_b0",
-CAST(CAST(ROUND(CAST((COALESCE((AVG(a."sL_Str_b0" + a."sL_NStr_b0"))/ NULLIF(AVG((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0")),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr_Bldg_b0",
+CAST(CAST(ROUND(CAST((COALESCE((AVG(a."sL_Str_b0" + a."sL_NStr_b0"))/ NULLIF(AVG((b.structural + b.nonstructural)),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr_Bldg_b0",
 
-CAST(CAST(ROUND(CAST(CASE WHEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2"))/(b.retrofitting))) > 0
-THEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2"))/(b.retrofitting))) ELSE 1 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr2_BCR_b0",
+CAST(CAST(ROUND(CAST(CASE WHEN (AVG((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r2" + a."sL_NStr_r2"))/(b.number))/((b.retrofitting)/(b.number)))) > 0 
+THEN (AVG((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r2" + a."sL_NStr_r2"))/(b.number))/((b.retrofitting)/(b.number)))) ELSE 1 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr2_BCR_b0",
 
-CAST(CAST(ROUND(CAST(CASE WHEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")) * ((EXP(-0.03*100)/0.03)/(b.retrofitting)))) > 0
-THEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")) * ((EXP(-0.03*100)/0.03)/(b.retrofitting)))) ELSE 1 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SLr2_RoI",
+CAST(CAST(ROUND(CAST(CASE WHEN (AVG((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r2" + a."sL_NStr_r2"))/(b.number)) * ((EXP(-0.025*0.50)/0.025)/((b.retrofitting)/(b.number))))) > 0
+THEN (AVG((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r2" + a."sL_NStr_r2"))/(b.number)) * ((EXP(-0.025*0.50)/0.025)/((b.retrofitting)/(b.number))))) ELSE 1 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SLr2_RoI",
 
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Str_b0",
 --CAST(CAST(ROUND(CAST(a."sL_Str_stdv_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLsd_Str_b0",
@@ -469,7 +469,7 @@ CAST(CAST(ROUND(CAST(SUM(a."sL_Cont_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS
 -- 3.4.1 Economic Loss - r2
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Asset_r2",
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r2" + a."sL_NStr_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Bldg_r2",
-CAST(CAST(ROUND(CAST((COALESCE((AVG(a."sL_Str_r2" + a."sL_NStr_r2"))/ NULLIF(AVG((a."sL_Str_r2" + a."sL_NStr_r2" + a."sL_Cont_r2")),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr_Bldg_r2",
+CAST(CAST(ROUND(CAST((COALESCE((AVG(a."sL_Str_r2" + a."sL_NStr_r2"))/ NULLIF(AVG((b.structural + b.nonstructural)),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLr_Bldg_r2",
 
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Str_r2",
 --CAST(CAST(ROUND(CAST(a."sL_Str_stdv_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLsd_Str_r2",
@@ -480,10 +480,10 @@ CAST(CAST(ROUND(CAST(SUM(a."sL_NStr_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS
 CAST(CAST(ROUND(CAST(SUM(a."sL_Cont_r2") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sL_Cont_r2",
 --CAST(CAST(ROUND(CAST(a."sL_Cont_stdv_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLsd_Cont_r2",
 
-i.geom_site AS "geom_point"
+c.geom_site AS "geom_point"
 
 FROM dsra.dsra_idm6p8_jdfpathways a
 LEFT JOIN exposure.metrovan_site_exposure b ON a."AssetID" = b.id
-LEFT JOIN exposure.metrovan_building_exposure i ON i.id = b.id_building
+LEFT JOIN exposure.metrovan_building_exposure c ON c.id = b.id_building
 LEFT JOIN boundaries."Geometry_SAUID" z ON b.sauidid = z."SAUIDt"
-GROUP BY b.id_building,b.sauid,i.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
+GROUP BY b.id_building,b.sauid,c.geom_site,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME";
