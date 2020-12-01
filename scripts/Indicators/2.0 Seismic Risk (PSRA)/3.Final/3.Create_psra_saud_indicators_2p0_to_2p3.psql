@@ -36,8 +36,8 @@ CAST(CAST(ROUND(CAST(d."SA(10.0)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "
 z.geom AS "geom_poly"
 
 FROM exposure.canada_exposure a
-LEFT JOIN psra.psra_bc_hmaps_xref d ON a.id = d.id
-RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
+LEFT JOIN psra_bc.psra_bc_hmaps_xref d ON a.id = d.id
+RIGHT JOIN psra_bc.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,d."PGA_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."SA(0.3)_0.02",d."SA(0.5)_0.02",d."SA(0.6)_0.02",d."SA(1.0)_0.02",d."SA(2.0)_0.02",d."SA(5.0)_0.02",d."SA(10.0)_0.02",
 z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
@@ -78,8 +78,8 @@ z.geom AS "geom_poly"
 
 
 FROM exposure.canada_exposure a
-LEFT JOIN psra.psra_bc_hmaps_xref d ON a.id = d.id
-RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
+LEFT JOIN psra_bc.psra_bc_hmaps_xref d ON a.id = d.id
+RIGHT JOIN psra_bc.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,d."PGA_0.1",d."SA(0.1)_0.1",d."SA(0.2)_0.1",d."SA(0.3)_0.1",d."SA(0.5)_0.1",d."SA(0.6)_0.1",d."SA(1.0)_0.1",d."SA(2.0)_0.1",d."SA(5.0)_0.1",d."SA(10.0)_0.1",
 z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
@@ -115,7 +115,7 @@ z.geom AS "geom_poly"
 
 FROM exposure.canada_exposure a
 LEFT JOIN vs30.vs30_bc_site_model_xref d ON a.id = d.id
-RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
+RIGHT JOIN psra_bc.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,d.vs_lon,d.vs_lat,d.vs30,d.z1pt0,d.z2pt5,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
 
@@ -181,7 +181,7 @@ z.geom AS "geom_poly"
 
 
 FROM exposure.canada_exposure a
-RIGHT JOIN psra.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
+RIGHT JOIN psra_bc.psra_bc5920a_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
@@ -247,53 +247,8 @@ CAST(CAST(ROUND(CAST(AVG((e.structural_complete_r2/a.number) * f.collapse_pc) AS
 z.geom AS "geom_poly"
 
 FROM exposure.canada_exposure a
-RIGHT JOIN psra.psra_bc5920a_ed_dmg_mean e ON a.id = e.asset_id
+RIGHT JOIN psra_bc.psra_bc5920a_ed_dmg_mean e ON a.id = e.asset_id
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype
-LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
-GROUP BY a.sauid,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
-
-
-
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_economic_security_economic_loss_s CASCADE;
-CREATE VIEW results_psra_bc.psra_bc5920a1_economic_security_economic_loss_s AS 
-
--- 2.0 Seismic Risk (PSRA)
--- 2.4 Economic Security
-SELECT 
-a.sauid AS "Sauid",
-z."PRUID" AS "pruid",
-z."PRNAME" AS "prname",
-z."ERUID" AS "eruid",
-z."ERNAME" AS "ername",
-z."CDUID" AS "cduid",
-z."CDNAME" AS "cdname",
-z."CSDUID" AS "csduid",
-z."CSDNAME" AS "csdname",
-
--- 2.4.1 Economic Loss - b0
-CAST(CAST(ROUND(CAST(SUM(h.structural_b0 + h.nonstructural_b0 + h.contents_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Asset_b0",
-CAST(CAST(ROUND(CAST(AVG((h.structural_b0 + h.nonstructural_b0 + h.contents_b0)/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALmr_Asset_b0",
-CAST(CAST(ROUND(CAST(SUM(h.structural_b0 + h.nonstructural_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Bldg_b0",
-CAST(CAST(ROUND(CAST(AVG((h.structural_b0 + h.nonstructural_b0)/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALmr_Bldg_b0",
-CAST(CAST(ROUND(CAST(SUM(h.structural_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Str_b0",
-CAST(CAST(ROUND(CAST(SUM(h.nonstructural_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_NStr_b0",
-CAST(CAST(ROUND(CAST(SUM(h.contents_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Cont_b0",
-
--- 2.4.1 Economic Loss - r2
-CAST(CAST(ROUND(CAST(SUM(h.structural_r2 + h.nonstructural_r2 + h.contents_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Asset_r2",
-CAST(CAST(ROUND(CAST(AVG((h.structural_r2 + h.nonstructural_r2 + h.contents_r2)/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALmr_Asset_r2",
-CAST(CAST(ROUND(CAST(SUM(h.structural_r2 + h.nonstructural_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Bldg_r2",
-CAST(CAST(ROUND(CAST(AVG((h.structural_r2 + h.nonstructural_r2)/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALmr_Bldg_r2",
-CAST(CAST(ROUND(CAST(SUM(h.structural_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Str_r2",
-CAST(CAST(ROUND(CAST(SUM(h.nonstructural_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_NStr_r2",
-CAST(CAST(ROUND(CAST(SUM(h.contents_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Cont_r2",
-
---z.geompoint AS "geom_point",
-z.geom AS "geom_poly"
-
-
-FROM exposure.canada_exposure a
-RIGHT JOIN psra.psra_bc5920a1_avg_losses_stats h ON a.id = h.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
 
@@ -378,14 +333,14 @@ z.geom AS "geom_poly",
 z.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
-RIGHT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
-LEFT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
+RIGHT JOIN psra_bc.damages_rlz_000_680 e ON a.id = e.asset_refid
+LEFT JOIN psra_bc.consequences_rlz_000_680 g ON a.id = g.asset_ref
 
-LEFT JOIN psra.damages_rlz_000_686 f ON a.id = f.asset_refid
-LEFT JOIN psra.consequences_rlz_000_686 h ON a.id = h.asset_ref
+LEFT JOIN psra_bc.damages_rlz_000_686 f ON a.id = f.asset_refid
+LEFT JOIN psra_bc.consequences_rlz_000_686 h ON a.id = h.asset_ref
 
-LEFT JOIN psra.damages_rlz_000_687 j ON a.id = j.asset_refid
-LEFT JOIN psra.consequences_rlz_000_687 i ON a.id = i.asset_ref
+LEFT JOIN psra_bc.damages_rlz_000_687 j ON a.id = j.asset_refid
+LEFT JOIN psra_bc.consequences_rlz_000_687 i ON a.id = i.asset_ref
 
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
@@ -462,14 +417,14 @@ z.geom AS "geom_poly",
 z.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
-RIGHT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
-LEFT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
+RIGHT JOIN psra_bc.consequences_rlz_000_680 g ON a.id = g.asset_ref
+LEFT JOIN psra_bc.avg_losses_mean_679 h ON a.id = h.asset_id
 
-LEFT JOIN psra.consequences_rlz_000_686 i ON a.id = i.asset_ref
-LEFT JOIN psra.avg_losses_mean_684 j ON a.id = j.asset_id
+LEFT JOIN psra_bc.consequences_rlz_000_686 i ON a.id = i.asset_ref
+LEFT JOIN psra_bc.avg_losses_mean_684 j ON a.id = j.asset_id
 
-LEFT JOIN psra.consequences_rlz_000_687 k ON a.id = k.asset_ref
-LEFT JOIN psra.avg_losses_mean_685 l ON a.id = l.asset_id
+LEFT JOIN psra_bc.consequences_rlz_000_687 k ON a.id = k.asset_ref
+LEFT JOIN psra_bc.avg_losses_mean_685 l ON a.id = l.asset_id
 
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z.geom,z.geompoint;
@@ -819,14 +774,14 @@ z.geom AS "geom_poly",
 z.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
-RIGHT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
-LEFT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+RIGHT JOIN psra_bc.consequences_rlz_000_680 g ON a.id = g.asset_ref
+LEFT JOIN psra_bc.damages_rlz_000_680 e ON a.id = e.asset_refid
 
-LEFT JOIN psra.consequences_rlz_000_686 j ON a.id = j.asset_ref
-LEFT JOIN psra.damages_rlz_000_686 k ON a.id = k.asset_refid
+LEFT JOIN psra_bc.consequences_rlz_000_686 j ON a.id = j.asset_ref
+LEFT JOIN psra_bc.damages_rlz_000_686 k ON a.id = k.asset_refid
 
-LEFT JOIN psra.consequences_rlz_000_687 l ON a.id = l.asset_ref
-LEFT JOIN psra.damages_rlz_000_687 m ON a.id = m.asset_refid
+LEFT JOIN psra_bc.consequences_rlz_000_687 l ON a.id = l.asset_ref
+LEFT JOIN psra_bc.damages_rlz_000_687 m ON a.id = m.asset_refid
 
 LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt
 LEFT JOIN sovi.sovi_census_canada n on a.sauid = n.sauidt

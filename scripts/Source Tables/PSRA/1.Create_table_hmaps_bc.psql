@@ -1,9 +1,10 @@
 -- script to generate hazard map mean
+CREATE SCHEMA IF NOT EXISTS psra_bc;
 
-DROP TABLE IF EXISTS psra.psra_nu_hmaps CASCADE;
+DROP TABLE IF EXISTS psra_bc.psra_bc_hmaps CASCADE;
 
 -- create table
-CREATE TABLE psra.psra_nu_hmaps(
+CREATE TABLE psra_bc.psra_bc_hmaps(
 lon float,
 lat float,
 "PGA_0.02" float,
@@ -29,24 +30,24 @@ lat float,
 );
 
 -- import exposure from csv
-COPY psra.psra_nu_hmaps(lon,lat,"PGA_0.02","PGA_0.1","SA(0.1)_0.02","SA(0.1)_0.1","SA(0.2)_0.02","SA(0.2)_0.1","SA(0.3)_0.02","SA(0.3)_0.1","SA(0.5)_0.02","SA(0.5)_0.1","SA(0.6)_0.02","SA(0.6)_0.1","SA(1.0)_0.02","SA(1.0)_0.1","SA(10.0)_0.02","SA(10.0)_0.1","SA(2.0)_0.02","SA(2.0)_0.1","SA(5.0)_0.02","SA(5.0)_0.1")
-    FROM 'D:\workspace\data\psra_new_datasets\1_cHazard\cH_nu_hmaps.csv'
+COPY psra_bc.psra_bc_hmaps(lon,lat,"PGA_0.02","PGA_0.1","SA(0.1)_0.02","SA(0.1)_0.1","SA(0.2)_0.02","SA(0.2)_0.1","SA(0.3)_0.02","SA(0.3)_0.1","SA(0.5)_0.02","SA(0.5)_0.1","SA(0.6)_0.02","SA(0.6)_0.1","SA(1.0)_0.02","SA(1.0)_0.1","SA(10.0)_0.02","SA(10.0)_0.1","SA(2.0)_0.02","SA(2.0)_0.1","SA(5.0)_0.02","SA(5.0)_0.1")
+    FROM 'D:\workspace\data\psra_new_datasets\1_cHazard\cH_BC_hmaps.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
 
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE psra.psra_nu_hmaps ADD COLUMN geom geometry(Point,4326);
-UPDATE psra.psra_nu_hmaps SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+ALTER TABLE psra_bc.psra_bc_hmaps ADD COLUMN geom geometry(Point,4326);
+UPDATE psra_bc.psra_bc_hmaps SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 
 -- create spatial index
-CREATE INDEX nu_hmaps_idx
-ON psra.psra_nu_hmaps using GIST (geom);
+CREATE INDEX bc_hmaps_idx
+ON psra_bc.psra_bc_hmaps using GIST (geom);
 
 
-DROP TABLE IF EXISTS psra.exposure_nu CASCADE;
+DROP TABLE IF EXISTS psra_bc.exposure_bc CASCADE;
 
-CREATE TABLE psra.exposure_nu AS
+CREATE TABLE psra_bc.exposure_bc AS
 (
 SELECT id,
 sauid,
@@ -55,13 +56,13 @@ sauidlat,
 geom
 
 FROM exposure.canada_exposure 
-WHERE PRUID = '62'
+WHERE PRUID = '59'
 );
 
 -- attach assetID to hazard mean map based on closest location
-DROP TABLE IF EXISTS psra.psra_nu_hmaps_xref CASCADE;
+DROP TABLE IF EXISTS psra_bc.psra_bc_hmaps_xref CASCADE;
 
-CREATE TABLE psra.psra_nu_hmaps_xref AS
+CREATE TABLE psra_bc.psra_bc_hmaps_xref AS
 SELECT
 a.id,
 a.sauid,
@@ -91,7 +92,7 @@ b."SA(2.0)_0.1",
 b."SA(5.0)_0.02",
 b."SA(5.0)_0.1"
 
-FROM psra.exposure_nu a
+FROM psra_bc.exposure_bc a
 CROSS JOIN LATERAL 
 (
 SELECT 
@@ -119,9 +120,9 @@ lat,
 "SA(5.0)_0.1",
 geom
 
-FROM psra.psra_nu_hmaps
+FROM psra_bc.psra_bc_hmaps
 ORDER BY a.geom <-> geom
 LIMIT 1
 ) AS b;
 
-DROP TABLE IF EXISTS psra.exposure_nu;
+DROP TABLE IF EXISTS psra_bc.exposure_bc;

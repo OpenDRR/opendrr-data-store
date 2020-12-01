@@ -43,4 +43,4 @@ a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" b on a.sauid = b."SAUIDt"
-RIGHT JOIN psra.psra_bc5920a1_avg_losses_stats h ON a.id = h.asset_id;
+RIGHT JOIN psra_bc.psra_bc5920a1_avg_losses_stats h ON a.id = h.asset_id;

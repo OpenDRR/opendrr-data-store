@@ -1,8 +1,8 @@
 -- script to agg curves stats
-DROP TABLE IF EXISTS psra.psra_bc5920a1_src_loss_b0, psra.psra_bc5920a1_src_loss_r2 CASCADE;
+DROP TABLE IF EXISTS psra_bc.psra_bc5920a1_src_loss_b0, psra_bc.psra_bc5920a1_src_loss_r2 CASCADE;
 
 -- create table
-CREATE TABLE psra.psra_bc5920a1_src_loss_b0(
+CREATE TABLE psra_bc.psra_bc5920a1_src_loss_b0(
 source varchar,
 loss_type varchar,
 loss_value float,
@@ -10,7 +10,7 @@ trt varchar
 );
 
 -- import exposure from csv
-COPY psra.psra_bc5920a1_src_loss_b0(source,loss_type,loss_value,trt)
+COPY psra_bc.psra_bc5920a1_src_loss_b0(source,loss_type,loss_value,trt)
     FROM 'D:\workspace\data\psra_new_datasets\3_ebRisk\ebR_BC5920A1_src_loss_table_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -19,7 +19,7 @@ COPY psra.psra_bc5920a1_src_loss_b0(source,loss_type,loss_value,trt)
 
 
 -- create table
-CREATE TABLE psra.psra_bc5920a1_src_loss_r2(
+CREATE TABLE psra_bc.psra_bc5920a1_src_loss_r2(
 source varchar,
 loss_type varchar,
 loss_value float,
@@ -27,7 +27,7 @@ trt varchar
 );
 
 -- import exposure from csv
-COPY psra.psra_bc5920a1_src_loss_r2(source,loss_type,loss_value,trt)
+COPY psra_bc.psra_bc5920a1_src_loss_r2(source,loss_type,loss_value,trt)
     FROM 'D:\workspace\data\psra_new_datasets\3_ebRisk\ebR_BC5920A1_src_loss_table_r2.csv'
         WITH 
           DELIMITER AS ','

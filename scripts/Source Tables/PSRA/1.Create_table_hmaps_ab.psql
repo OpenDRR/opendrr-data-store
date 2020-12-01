@@ -1,9 +1,9 @@
 -- script to generate hazard map mean
 
-DROP TABLE IF EXISTS psra.psra_ab_hmaps CASCADE;
+DROP TABLE IF EXISTS psra_ab.psra_ab_hmaps CASCADE;
 
 -- create table
-CREATE TABLE psra.psra_ab_hmaps(
+CREATE TABLE psra_ab.psra_ab_hmaps(
 lon float,
 lat float,
 "PGA_0.02" float,
@@ -29,24 +29,24 @@ lat float,
 );
 
 -- import exposure from csv
-COPY psra.psra_ab_hmaps(lon,lat,"PGA_0.02","PGA_0.1","SA(0.1)_0.02","SA(0.1)_0.1","SA(0.2)_0.02","SA(0.2)_0.1","SA(0.3)_0.02","SA(0.3)_0.1","SA(0.5)_0.02","SA(0.5)_0.1","SA(0.6)_0.02","SA(0.6)_0.1","SA(1.0)_0.02","SA(1.0)_0.1","SA(10.0)_0.02","SA(10.0)_0.1","SA(2.0)_0.02","SA(2.0)_0.1","SA(5.0)_0.02","SA(5.0)_0.1")
+COPY psra_ab.psra_ab_hmaps(lon,lat,"PGA_0.02","PGA_0.1","SA(0.1)_0.02","SA(0.1)_0.1","SA(0.2)_0.02","SA(0.2)_0.1","SA(0.3)_0.02","SA(0.3)_0.1","SA(0.5)_0.02","SA(0.5)_0.1","SA(0.6)_0.02","SA(0.6)_0.1","SA(1.0)_0.02","SA(1.0)_0.1","SA(10.0)_0.02","SA(10.0)_0.1","SA(2.0)_0.02","SA(2.0)_0.1","SA(5.0)_0.02","SA(5.0)_0.1")
     FROM 'D:\workspace\data\psra_new_datasets\1_cHazard\cH_ab_hmaps.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
 
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
-ALTER TABLE psra.psra_ab_hmaps ADD COLUMN geom geometry(Point,4326);
-UPDATE psra.psra_ab_hmaps SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+ALTER TABLE psra_ab.psra_ab_hmaps ADD COLUMN geom geometry(Point,4326);
+UPDATE psra_ab.psra_ab_hmaps SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 
 -- create spatial index
 CREATE INDEX ab_hmaps_idx
-ON psra.psra_ab_hmaps using GIST (geom);
+ON psra_ab.psra_ab_hmaps using GIST (geom);
 
 
-DROP TABLE IF EXISTS psra.exposure_ab CASCADE;
+DROP TABLE IF EXISTS psra_ab.exposure_ab CASCADE;
 
-CREATE TABLE psra.exposure_ab AS
+CREATE TABLE psra_ab.exposure_ab AS
 (
 SELECT id,
 sauid,
@@ -59,9 +59,9 @@ WHERE PRUID = '48'
 );
 
 -- attach assetID to hazard mean map based on closest location
-DROP TABLE IF EXISTS psra.psra_ab_hmaps_xref CASCADE;
+DROP TABLE IF EXISTS psra_ab.psra_ab_hmaps_xref CASCADE;
 
-CREATE TABLE psra.psra_ab_hmaps_xref AS
+CREATE TABLE psra_ab.psra_ab_hmaps_xref AS
 SELECT
 a.id,
 a.sauid,
@@ -91,7 +91,7 @@ b."SA(2.0)_0.1",
 b."SA(5.0)_0.02",
 b."SA(5.0)_0.1"
 
-FROM psra.exposure_ab a
+FROM psra_ab.exposure_ab a
 CROSS JOIN LATERAL 
 (
 SELECT 
@@ -119,9 +119,9 @@ lat,
 "SA(5.0)_0.1",
 geom
 
-FROM psra.psra_ab_hmaps
+FROM psra_ab.psra_ab_hmaps
 ORDER BY a.geom <-> geom
 LIMIT 1
 ) AS b;
 
-DROP TABLE IF EXISTS psra.exposure_ab;
+DROP TABLE IF EXISTS psra_ab.exposure_ab;
