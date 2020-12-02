@@ -1,7 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS results_psra_bc;
 
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a2_economic_security_economic_loss_s CASCADE;
-CREATE VIEW results_psra_bc.psra_bc5920a2_economic_security_economic_loss_s AS 
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_economic_security_economic_loss_s CASCADE;
+CREATE VIEW results_psra_bc.psra_bc5920a1_economic_security_economic_loss_s AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security
@@ -39,15 +39,15 @@ z.geom AS "geom_poly"
 
 
 FROM exposure.canada_exposure a
-RIGHT JOIN psra_bc.psra_bc5920a2_avg_losses_stats h ON a.id = h.asset_id
+RIGHT JOIN psra_bc.psra_bc5920a1_avg_losses_stats h ON a.id = h.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
 
 
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a2_economic_security_pml_b0_s CASCADE;
-CREATE VIEW results_psra_bc.psra_bc5920a2_economic_security_pml_b0_s AS
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_economic_security_pml_b0_s CASCADE;
+CREATE VIEW results_psra_bc.psra_bc5920a1_economic_security_pml_b0_s AS
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security
@@ -63,13 +63,13 @@ a.annual_frequency_of_exceedence AS "ePML_Probability",
 a."GenOcc" AS "ePML_OccGen",
 a."GenType" AS "ePML_BldgType"
 
-FROM psra_bc.psra_bc5920a2_agg_curves_stats_b0 a;
+FROM psra_bc.psra_bc5920a1_agg_curves_stats_b0 a;
 
 
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a2_economic_security_pml_r2_s CASCADE;
-CREATE VIEW results_psra_bc.psra_bc5920a2_economic_security_pml_r2_s AS
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_economic_security_pml_r2_s CASCADE;
+CREATE VIEW results_psra_bc.psra_bc5920a1_economic_security_pml_r2_s AS
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.4 Economic Security
@@ -85,151 +85,137 @@ a.annual_frequency_of_exceedence AS "ePML_Probability",
 a."GenOcc" AS "ePML_OccGen",
 a."GenType" AS "ePML_BldgType"
 
-FROM psra_bc.psra_bc5920a2_agg_curves_stats_r2 a;
+FROM psra_bc.psra_bc5920a1_agg_curves_stats_r2 a;
 
 
 
 -- src loss values
--- b0
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a2_src_loss_b0 CASCADE;
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_loss_b0 AS
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_src_loss CASCADE;
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_loss AS
 
 SELECT 
-source AS "src_zone",
-trt AS "src_type",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_b0 ) AS "src_value"
-FROM psra_bc.psra_bc5920a2_src_loss_b0
-GROUP BY source,trt;
-
-
-
--- src loss values
--- b0
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a2_src_loss_r2 CASCADE;
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_loss_r2 AS
-
-SELECT 
-source AS "src_zone",
-trt AS "src_type",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_r2 ) AS "src_value"
-FROM psra_bc.psra_bc5920a2_src_loss_b0
-GROUP BY source,trt
-
+a.source AS "src_zone",
+a.trt AS "src_type",
+SUM(a.loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 ) AS "src_value_b0",
+SUM(b.loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 ) AS "src_value_r2"
+FROM psra_bc.psra_bc5920a1_src_loss_b0 a
+INNER JOIN psra_bc.psra_bc5920a1_src_loss_b0 b ON a.source = b.source AND a.trt = b.trt
+GROUP BY a.source,a.trt;
 
 
 /*
 
 SELECT
 SUM(loss_value) AS "TLossValue"
-FROM psra_bc.psra_bc5920a2_src_loss_b0
+FROM psra_bc.psra_bc5920a1_src_loss_b0
 GROUP BY source;
 
 -- source - b0,r2
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a2_src_stats_source_b0, results_psra_bc.psra_bc5920a2_src_stats_source_R2 CASCADE;
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_src_stats_source_b0, results_psra_bc.psra_bc5920a1_src_stats_source_R2 CASCADE;
 
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_stats_source_b0 AS
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_stats_source_b0 AS
 (
 SELECT 
-'bc5920a2' AS "region",
+'bc5920a1' AS "region",
 source,
 SUM(loss_value) AS "total_loss_source",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_b0 )*100 AS "total_srce_p"
-FROM psra_bc.psra_bc5920a2_src_loss_b0
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 )*100 AS "total_srce_p"
+FROM psra_bc.psra_bc5920a1_src_loss_b0
 GROUP BY source
 );
 
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_stats_source_r2 AS
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_stats_source_r2 AS
 (
 SELECT 
-'bc5920a2' AS "region",
+'bc5920a1' AS "region",
 source,
 SUM(loss_value) AS "total_loss_source",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_b0 )*100 AS "total_srce_p"
-FROM psra_bc.psra_bc5920a2_src_loss_r2
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 )*100 AS "total_srce_p"
+FROM psra_bc.psra_bc5920a1_src_loss_r2
 GROUP BY source
 );
 
 
 -- loss type - b0,r2
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a2_src_stats_loss_type_b0, results_psra_bc.psra_bc5920a2_src_stats_loss_type_r2 CASCADE;
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_src_stats_loss_type_b0, results_psra_bc.psra_bc5920a1_src_stats_loss_type_r2 CASCADE;
 
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_stats_loss_type_b0 AS
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_stats_loss_type_b0 AS
 (
 SELECT
-'bc5920a2_b0' AS "region",
+'bc5920a1_b0' AS "region",
 loss_type,
 SUM(loss_value) AS "total_lt",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_b0 )*100 AS "total_lt_p"
-FROM psra_bc.psra_bc5920a2_src_loss_b0
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 )*100 AS "total_lt_p"
+FROM psra_bc.psra_bc5920a1_src_loss_b0
 GROUP BY loss_type
 );
 
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_stats_loss_type_r2 AS
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_stats_loss_type_r2 AS
 (
 SELECT
-'bc5920a2_r2' AS "region",
+'bc5920a1_r2' AS "region",
 loss_type,
 SUM(loss_value) AS "total_lt",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_b0 )*100 AS "total_lt_p"
-FROM psra_bc.psra_bc5920a2_src_loss_r2
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 )*100 AS "total_lt_p"
+FROM psra_bc.psra_bc5920a1_src_loss_r2
 GROUP BY loss_type
 );
 
 
 -- source, loss type - b0, r2
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a2_src_stats_source_losstype_b0, results_psra_bc.psra_bc5920a2_src_stats_source_losstype_r2 CASCADE;
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_src_stats_source_losstype_b0, results_psra_bc.psra_bc5920a1_src_stats_source_losstype_r2 CASCADE;
 
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_stats_source_losstype_b0 AS
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_stats_source_losstype_b0 AS
 (
 SELECT 
-'bc5920a2' AS "region",
+'bc5920a1' AS "region",
 source,
 loss_type,
 SUM(loss_value) AS "total_srce_lt",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_b0 )*100 AS "total_srce_lt_p"
-FROM psra_bc.psra_bc5920a2_src_loss_b0
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 )*100 AS "total_srce_lt_p"
+FROM psra_bc.psra_bc5920a1_src_loss_b0
 GROUP BY source,loss_type
 );
 
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_stats_source_losstype_r2 AS
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_stats_source_losstype_r2 AS
 (
 SELECT 
-'bc5920a2' AS "region",
+'bc5920a1' AS "region",
 source,
 loss_type,
 SUM(loss_value) AS "total_srce_lt",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_b0 )*100 AS "total_srce_lt_p"
-FROM psra_bc.psra_bc5920a2_src_loss_r2
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 )*100 AS "total_srce_lt_p"
+FROM psra_bc.psra_bc5920a1_src_loss_r2
 GROUP BY source,loss_type
 );
 
 
 -- source, loss type, trt
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a2_src_stats_source_losstype_trt_b0, results_psra_bc.psra_bc5920a2_src_stats_source_losstype_trt_r2 CASCADE;
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_src_stats_source_losstype_trt_b0, results_psra_bc.psra_bc5920a1_src_stats_source_losstype_trt_r2 CASCADE;
 
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_stats_source_losstype_trt_b0 AS
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_stats_source_losstype_trt_b0 AS
 (
 SELECT 
-'bc5920a2' AS "region",
+'bc5920a1' AS "region",
 source,
 loss_type,
 trt,
 SUM(loss_value) AS "total_srce_lt_trt",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_b0 )*100 AS "total_srce_lt_trt_p"
-FROM psra_bc.psra_bc5920a2_src_loss_b0
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 )*100 AS "total_srce_lt_trt_p"
+FROM psra_bc.psra_bc5920a1_src_loss_b0
 GROUP BY source,loss_type,trt
 );
 
-CREATE VIEW results_psra_bc.psra_bc5920a2_src_stats_source_losstype_trt_r2  AS
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_stats_source_losstype_trt_r2  AS
 (
 SELECT 
-'bc5920a2' AS "region",
+'bc5920a1' AS "region",
 source,
 loss_type,
 trt,
 SUM(loss_value) AS "total_srce_lt_trt",
-SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a2_src_loss_b0 )*100 AS "total_srce_lt_trt_p"
-FROM psra_bc.psra_bc5920a2_src_loss_r2
+SUM(loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 )*100 AS "total_srce_lt_trt_p"
+FROM psra_bc.psra_bc5920a1_src_loss_r2
 GROUP BY source,loss_type,trt
 );
 
