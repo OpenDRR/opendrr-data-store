@@ -94,6 +94,20 @@ DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_src_loss CASCADE;
 CREATE VIEW results_psra_bc.psra_bc5920a1_src_loss AS
 
 SELECT 
+source AS "src_zone",
+trt AS "src_type",
+SUM(loss_value_b0)/(SELECT SUM(loss_value_b0) FROM psra_bc.psra_bc5920a1_src_loss ) AS "src_value_b0",
+SUM(loss_value_r2)/(SELECT SUM(loss_value_r2) FROM psra_bc.psra_bc5920a1_src_loss ) AS "src_value_r2"
+FROM psra_bc.psra_bc5920a1_src_loss
+GROUP BY source,trt;
+
+
+/*
+
+DROP VIEW IF EXISTS results_psra_bc.psra_bc5920a1_src_loss CASCADE;
+CREATE VIEW results_psra_bc.psra_bc5920a1_src_loss AS
+
+SELECT 
 a.source AS "src_zone",
 a.trt AS "src_type",
 SUM(a.loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0 ) AS "src_value_b0",
@@ -101,9 +115,6 @@ SUM(b.loss_value)/(SELECT SUM(loss_value) FROM psra_bc.psra_bc5920a1_src_loss_b0
 FROM psra_bc.psra_bc5920a1_src_loss_b0 a
 INNER JOIN psra_bc.psra_bc5920a1_src_loss_b0 b ON a.source = b.source AND a.trt = b.trt
 GROUP BY a.source,a.trt;
-
-
-/*
 
 SELECT
 SUM(loss_value) AS "TLossValue"

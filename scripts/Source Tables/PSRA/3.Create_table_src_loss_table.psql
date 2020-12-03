@@ -1,5 +1,5 @@
 -- script to agg curves stats
-DROP TABLE IF EXISTS psra_bc.psra_bc5920a1_src_loss_b0, psra_bc.psra_bc5920a1_src_loss_r2 CASCADE;
+DROP TABLE IF EXISTS psra_bc.psra_bc5920a1_src_loss_b0, psra_bc.psra_bc5920a1_src_loss_r2, psra_bc.psra_bc5920a1_src_loss CASCADE;
 
 -- create table
 CREATE TABLE psra_bc.psra_bc5920a1_src_loss_b0(
@@ -32,3 +32,18 @@ COPY psra_bc.psra_bc5920a1_src_loss_r2(source,loss_type,loss_value,trt)
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
+
+
+CREATE TABLE psra_bc.psra_bc5920a1_src_loss AS
+(
+SELECT a.source,
+a.loss_type,
+a.trt,
+a.loss_value AS "loss_value_b0",
+b.loss_value AS "loss_value_r2"
+
+FROM psra_bc.psra_bc5920a1_src_loss_b0 a
+INNER JOIN psra_bc.psra_bc5920a1_src_loss_r2 b ON a.source = b.source AND a.loss_type = b.loss_type AND a.trt = b.trt
+);
+
+DROP TABLE IF EXISTS psra_bc.psra_bc5920a1_src_loss_b0, psra_bc.psra_bc5920a1_src_loss_r2 CASCADE;
