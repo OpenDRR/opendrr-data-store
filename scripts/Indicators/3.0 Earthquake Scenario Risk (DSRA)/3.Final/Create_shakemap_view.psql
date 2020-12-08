@@ -1,0 +1,20 @@
+-- create shakemap view
+
+DROP VIEW IF EXISTS results_dsra_acm6p5_beaufort.dsra_shakemap_acm6p5_beaufort;
+
+CREATE VIEW results_dsra_acm6p5_beaufort.dsra_shakemap_acm6p5_beaufort AS
+(
+SELECT 
+site_id,
+"gmv_SA(0.1)",
+"gmv_SA(0.2)",
+"gmv_SA(0.3)",
+"gmv_SA(0.5)",
+"gmv_SA(1.0)",
+"gmv_SA(2.0)",
+lon,
+lat,
+geom,
+gmv_pgv
+FROM gmf.shakemap_acm6p5_beaufort
+);
