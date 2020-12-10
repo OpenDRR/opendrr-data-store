@@ -55,8 +55,7 @@ CAST(CAST(ROUND(CAST(a.structural AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_Str
 CAST(CAST(ROUND(CAST(a.nonstructural AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_NStrValue",
 CAST(CAST(ROUND(CAST(a.contents AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_ContValue",
 CAST(CAST(ROUND(CAST(a.retrofitting AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_RetrofitCost",
-
 a.geom_site AS "geom_point"
 
-FROM exposure.metrovan_building_exposure a
+FROM exposure.metrovan_site_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" b on a.sauid = b."SAUIDt";
