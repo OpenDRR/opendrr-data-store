@@ -1,4 +1,4 @@
--- create individual psra schema for province
+-- create individual psra schema for provinces
 CREATE SCHEMA IF NOT EXISTS psra_ab;
 CREATE SCHEMA IF NOT EXISTS psra_bc;
 CREATE SCHEMA IF NOT EXISTS psra_mb;
