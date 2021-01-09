@@ -1,0 +1,14 @@
+CREATE SCHEMA IF NOT EXISTS results_psra_{prov};
+
+
+-- src loss values
+DROP VIEW IF EXISTS results_psra_{prov}.psra_{region}_src_loss CASCADE;
+CREATE VIEW results_psra_{prov}.psra_{region}_src_loss AS
+
+SELECT 
+source AS "src_zone",
+trt AS "src_type",
+SUM(loss_value_b0)/(SELECT SUM(loss_value_b0) FROM psra_{prov}.psra_{region}_src_loss ) AS "src_value_b0",
+SUM(loss_value_r2)/(SELECT SUM(loss_value_r2) FROM psra_{prov}.psra_{region}_src_loss ) AS "src_value_r2"
+FROM psra_{prov}.psra_{region}_src_loss
+GROUP BY source,trt;

@@ -170,7 +170,7 @@ LEFT JOIN mh.mh_intensity_canada h ON a.sauid = h.sauidt
 RIGHT JOIN psra_bc.psra_bc_avg_losses_stats i ON a.id = i.asset_id;
 
 
-
+/*
 -- create psra indicators
 DROP VIEW IF EXISTS results_psra_bc.psra_bc_all_indicators_b_5910 CASCADE;
 CREATE VIEW results_psra_bc.psra_bc_all_indicators_b_5910 AS 
@@ -1544,3 +1544,4 @@ RIGHT JOIN psra_bc.psra_bc_ed_dmg_mean g ON a.id = g.asset_id
 LEFT JOIN mh.mh_intensity_canada h ON a.sauid = h.sauidt
 RIGHT JOIN psra_bc.psra_bc_avg_losses_stats i ON a.id = i.asset_id
 WHERE b."ERUID" = '5980';
+*/

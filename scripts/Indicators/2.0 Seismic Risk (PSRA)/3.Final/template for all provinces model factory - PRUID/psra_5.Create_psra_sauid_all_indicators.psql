@@ -1,10 +1,10 @@
-CREATE SCHEMA IF NOT EXISTS results_psra_bc;
+CREATE SCHEMA IF NOT EXISTS results_psra_{prov};
 
 
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_bc.psra_bc5910_all_indicators_s CASCADE;
-CREATE VIEW results_psra_bc.psra_bc5910_all_indicators_s AS 
+DROP VIEW IF EXISTS results_psra_{prov}.psra_{prov}_all_indicators_s CASCADE;
+CREATE VIEW results_psra_{prov}.psra_{prov}_all_indicators_s AS 
 
 
 -- 2.0 Seismic Risk (PSRA)
@@ -138,19 +138,60 @@ CAST(CAST(ROUND(CAST(AVG(g.structural_complete_r2/a.number) AS NUMERIC),6) AS FL
 CAST(CAST(ROUND(CAST(SUM(g.structural_complete_r2 * f.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDt_Collapse_r2",
 CAST(CAST(ROUND(CAST(AVG((g.structural_complete_r2/a.number) * f.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDmr_Collapse_r2",
 
+-- 2.4.1 Economic Loss - b0
+CAST(CAST(ROUND(CAST(SUM(i.structural_b0 + i.nonstructural_b0 + i.contents_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Asset_b0",
+CAST(CAST(ROUND(CAST(AVG((i.structural_b0 + i.nonstructural_b0 + i.contents_b0)/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALmr_Asset_b0",
+CAST(CAST(ROUND(CAST(SUM(i.structural_b0 + i.nonstructural_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Bldg_b0",
+CAST(CAST(ROUND(CAST(AVG((i.structural_b0 + i.nonstructural_b0)/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALmr_Bldg_b0",
+CAST(CAST(ROUND(CAST(SUM(i.structural_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Str_b0",
+CAST(CAST(ROUND(CAST(SUM(i.nonstructural_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_NStr_b0",
+CAST(CAST(ROUND(CAST(SUM(i.contents_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Cont_b0",
 
+-- 2.4.1 Economic Loss - r2
+CAST(CAST(ROUND(CAST(SUM(i.structural_r2 + i.nonstructural_r2 + i.contents_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Asset_r2",
+CAST(CAST(ROUND(CAST(AVG((i.structural_r2 + i.nonstructural_r2 + i.contents_r2)/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALmr_Asset_r2",
+CAST(CAST(ROUND(CAST(SUM(i.structural_r2 + i.nonstructural_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Bldg_r2",
+CAST(CAST(ROUND(CAST(AVG((i.structural_r2 + i.nonstructural_r2)/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALmr_Bldg_r2",
+CAST(CAST(ROUND(CAST(SUM(i.structural_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Str_r2",
+CAST(CAST(ROUND(CAST(SUM(i.nonstructural_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_NStr_r2",
+CAST(CAST(ROUND(CAST(SUM(i.contents_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Cont_r2",
 
 --z.geompoint AS "geom_point"
 z.geom AS "geom_poly"
 
 FROM exposure.canada_exposure a
-RIGHT JOIN psra_bc.psra_bc5910_cd_dmg_mean c ON a.id = c.asset_id
-LEFT JOIN psra_bc.psra_bc_hmaps_xref d ON a.id = d.id
+RIGHT JOIN psra_{prov}.psra_{prov}_cd_dmg_mean c ON a.id = c.asset_id
+LEFT JOIN psra_{prov}.psra_{prov}_hmaps_xref d ON a.id = d.id
 LEFT JOIN vs30.vs30_can_site_model_xref e ON a.id = e.id
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype
-RIGHT JOIN psra_bc.psra_bc5910_ed_dmg_mean g ON a.id = g.asset_id
+RIGHT JOIN psra_{prov}.psra_{prov}_ed_dmg_mean g ON a.id = g.asset_id
 LEFT JOIN mh.mh_intensity_canada h ON a.sauid = h.sauidt
+RIGHT JOIN psra_{prov}.psra_{prov}_avg_losses_stats i ON a.id = i.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
 GROUP BY a.sauid,d."PGA_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."SA(0.3)_0.02",d."SA(0.5)_0.02",d."SA(0.6)_0.02",d."SA(1.0)_0.02",d."SA(2.0)_0.02",d."SA(5.0)_0.02",d."SA(10.0)_0.02",
 d."PGA_0.1",d."SA(0.1)_0.1",d."SA(0.2)_0.1",d."SA(0.3)_0.1",d."SA(0.5)_0.1",d."SA(0.6)_0.1",d."SA(1.0)_0.1",d."SA(2.0)_0.1",d."SA(5.0)_0.1",d."SA(10.0)_0.1",
 e.vs_lon,e.vs_lat,e.vs30,e.z1pt0,e.z2pt5,h.mmi6,h.mmi7,h.mmi8,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_{prov}.psra_{prov}_pml_s CASCADE;
+CREATE VIEW results_psra_{prov}.psra_{prov}_pml_s AS
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT
+a.fsauid,
+
+-- 2.4.2 Probable Maximum Loss
+a.loss_value_b0 AS "ePML_b0",
+a.loss_ratio_b0 AS "ePMLr_b0",
+a.loss_value_r2 AS "ePML_r2",
+a.loss_ratio_r2 AS "ePMLr_r2",
+a.loss_type AS "ePML_type",
+a.return_period AS "ePML_Period",
+a.annual_frequency_of_exceedence AS "ePML_Probability",
+a."GenOcc" AS "ePML_OccGen",
+a."GenType" AS "ePML_BldgType"
+
+FROM psra_{prov}.psra_{prov}_agg_curves_stats a;
