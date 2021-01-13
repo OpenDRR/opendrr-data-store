@@ -30,8 +30,8 @@ CAST(CAST(ROUND(CAST(d."SA(0.5)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "p
 CAST(CAST(ROUND(CAST(d."SA(0.6)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_SA0p6",
 CAST(CAST(ROUND(CAST(d."SA(1.0)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_SA1p0",
 CAST(CAST(ROUND(CAST(d."SA(2.0)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_SA2p0",
-CAST(CAST(ROUND(CAST(d."SA(5.0)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_SA5p0",
-CAST(CAST(ROUND(CAST(d."SA(10.0)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_SA10p0",
+--CAST(CAST(ROUND(CAST(d."SA(5.0)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_SA5p0",
+--CAST(CAST(ROUND(CAST(d."SA(10.0)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_SA10p0",
 
 -- 2.1.2 2500yr Hazard Intensity
 CAST(CAST(ROUND(CAST(d."PGA_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_PGA",
@@ -43,8 +43,8 @@ CAST(CAST(ROUND(CAST(d."SA(0.5)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH
 CAST(CAST(ROUND(CAST(d."SA(0.6)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_SA0p6",
 CAST(CAST(ROUND(CAST(d."SA(1.0)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_SA1p0",
 CAST(CAST(ROUND(CAST(d."SA(2.0)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_SA2p0",
-CAST(CAST(ROUND(CAST(d."SA(5.0)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_SA5p0",
-CAST(CAST(ROUND(CAST(d."SA(10.0)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_SA10p0",
+--CAST(CAST(ROUND(CAST(d."SA(5.0)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_SA5p0",
+--CAST(CAST(ROUND(CAST(d."SA(10.0)_0.1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH2500_SA10p0",
 
 -- 2.1.3 Site Amplification
 CAST(CAST(ROUND(CAST(e.vs_lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS  "pH_Vs30Lon",
@@ -168,9 +168,13 @@ RIGHT JOIN psra_{prov}.psra_{prov}_ed_dmg_mean g ON a.id = g.asset_id
 LEFT JOIN mh.mh_intensity_canada h ON a.sauid = h.sauidt
 RIGHT JOIN psra_{prov}.psra_{prov}_avg_losses_stats i ON a.id = i.asset_id
 LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
-GROUP BY a.sauid,d."PGA_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."SA(0.3)_0.02",d."SA(0.5)_0.02",d."SA(0.6)_0.02",d."SA(1.0)_0.02",d."SA(2.0)_0.02",d."SA(5.0)_0.02",d."SA(10.0)_0.02",
+GROUP BY a.sauid,d."PGA_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."SA(0.3)_0.02",d."SA(0.5)_0.02",d."SA(0.6)_0.02",d."SA(1.0)_0.02",d."SA(2.0)_0.02",
+d."PGA_0.1",d."SA(0.1)_0.1",d."SA(0.2)_0.1",d."SA(0.3)_0.1",d."SA(0.5)_0.1",d."SA(0.6)_0.1",d."SA(1.0)_0.1",d."SA(2.0)_0.1",e.vs_lon,e.vs_lat,e.vs30,
+e.z1pt0,e.z2pt5,h.mmi6,h.mmi7,h.mmi8,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
+
+/*GROUP BY a.sauid,d."PGA_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."SA(0.3)_0.02",d."SA(0.5)_0.02",d."SA(0.6)_0.02",d."SA(1.0)_0.02",d."SA(2.0)_0.02",d."SA(5.0)_0.02",d."SA(10.0)_0.02",
 d."PGA_0.1",d."SA(0.1)_0.1",d."SA(0.2)_0.1",d."SA(0.3)_0.1",d."SA(0.5)_0.1",d."SA(0.6)_0.1",d."SA(1.0)_0.1",d."SA(2.0)_0.1",d."SA(5.0)_0.1",d."SA(10.0)_0.1",
-e.vs_lon,e.vs_lat,e.vs30,e.z1pt0,e.z2pt5,h.mmi6,h.mmi7,h.mmi8,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;
+e.vs_lon,e.vs_lat,e.vs30,e.z1pt0,e.z2pt5,h.mmi6,h.mmi7,h.mmi8,z."PRUID",z."PRNAME",z."ERUID",z."ERNAME",z."CDUID",z."CDNAME",z."CSDUID",z."CSDNAME",z.geom;*/
 
 
 
