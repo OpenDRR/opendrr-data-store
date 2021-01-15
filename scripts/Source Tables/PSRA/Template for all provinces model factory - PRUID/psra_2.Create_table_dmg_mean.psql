@@ -44,7 +44,7 @@ pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_m
     FROM '/usr/src/app/cDamage/{prov}/cD_{prov}_dmg-mean_b0.csv'
         WITH 
           DELIMITER AS ','
-          CSV;
+          CSV ;
 
 
 -- create cd table r2
@@ -89,7 +89,7 @@ pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_m
     FROM '/usr/src/app/cDamage/{prov}/cD_{prov}_dmg-mean_r2.csv'
         WITH 
           DELIMITER AS ','
-          CSV;
+          CSV ;
 
 
 -- combine cd b0 and r2 table
@@ -178,7 +178,7 @@ structural_complete float
 -- import exposure from csv
 COPY psra_{prov}.psra_{prov}_ed_dmg_mean_b0(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
 pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_moderate,structural_extensive,structural_complete)
-    FROM '/usr/src/app/cDamage/{prov}/eD_{prov}_damages-mean_b0.csv'
+    FROM '/usr/src/app/eDamage/{prov}/eD_{prov}_damages-mean_b0.csv'
         WITH 
           DELIMITER AS ','
           CSV ;
@@ -223,7 +223,7 @@ structural_complete float
 -- import exposure from csv
 COPY psra_{prov}.psra_{prov}_ed_dmg_mean_r2(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
 pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_moderate,structural_extensive,structural_complete)
-    FROM '/usr/src/app/cDamage/{prov}/eD_{prov}_damages-mean_r2.csv'
+    FROM '/usr/src/app/eDamage/{prov}/eD_{prov}_damages-mean_r2.csv'
         WITH 
           DELIMITER AS ','
           CSV ;

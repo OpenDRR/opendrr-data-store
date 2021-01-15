@@ -1,5 +1,5 @@
 -- script to agg curves stats
-DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_curves_stats_b0, psra_{prov}.psra_{prov}_agg_curves_stats_r2 CASCADE;
+DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_curves_stats_b0, psra_{prov}.psra_{prov}_agg_curves_stats_r2, psra_{prov}.psra_{prov}_agg_curves_stats CASCADE;
 
 -- create table
 CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_stats_b0(
@@ -19,7 +19,7 @@ COPY psra_{prov}.psra_{prov}_agg_curves_stats_b0(return_period,stat,loss_type,fs
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-stats_b0.csv'
         WITH 
           DELIMITER AS ','
-          CSV HEADER ;
+          CSV ;
 
 
 
