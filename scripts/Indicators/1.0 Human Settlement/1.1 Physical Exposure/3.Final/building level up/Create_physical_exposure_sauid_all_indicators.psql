@@ -18,6 +18,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -87,7 +91,7 @@ FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -108,6 +112,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -178,7 +186,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '10'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -199,6 +207,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -269,7 +281,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '11'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -290,6 +302,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -360,7 +376,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '12'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -381,6 +397,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -451,7 +471,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '13'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -472,6 +492,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -542,7 +566,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '24'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -563,6 +587,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -633,7 +661,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '35'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -654,6 +682,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -724,7 +756,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '46'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -745,6 +777,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -815,7 +851,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '47'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -836,6 +872,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -906,7 +946,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '48'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -927,6 +967,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -997,7 +1041,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '59'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -1018,6 +1062,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -1088,7 +1136,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '60'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -1109,6 +1157,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -1179,7 +1231,7 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '61'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
 
@@ -1200,6 +1252,10 @@ d."CDUID" AS "cduid",
 d."CDNAME" AS "cdname",
 d."CSDUID" AS "csduid",
 d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SauidLat",
 c.sactype AS "E_SAC",
@@ -1270,4 +1326,4 @@ LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
 WHERE d."PRUID" = '62'
 GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
-d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d.geom;
+d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;

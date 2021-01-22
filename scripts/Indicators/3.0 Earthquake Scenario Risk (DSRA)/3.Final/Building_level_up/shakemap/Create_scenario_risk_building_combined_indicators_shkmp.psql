@@ -18,6 +18,11 @@ c."CDUID" AS "cduid",
 c."CDNAME" AS "cdname",
 c."CSDUID" AS "csduid",
 c."CSDNAME" AS "csdname",
+c."CFSAUID" AS "fsauid",
+c."DAUIDt" AS "dauid",
+c."SACCODE" AS "saccode",
+c."SACTYPE" AS "sactype",
+b.landuse,
 
 -- 3.1.1 Shakemap Intensity
 f.rupture_name AS "sH_RupName",
