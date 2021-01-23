@@ -2,7 +2,6 @@
 CREATE SCHEMA IF NOT EXISTS results_dsra_idm6p8_jdfpathways;
 
 
-
 -- create scenario risk site indicators
 DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_all_indicators_ste CASCADE;
 CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_all_indicators_ste AS 
@@ -20,6 +19,11 @@ c."CDUID" AS "cduid",
 c."CDNAME" AS "cdname",
 c."CSDUID" AS "csduid",
 c."CSDNAME" AS "csdname",
+c."CFSAUID" AS "fsauid",
+c."DAUIDt" AS "dauid",
+c."SACCODE" AS "saccode",
+c."SACTYPE" AS "sactype",
+b.landuse,
 
 -- 3.1.1 Shakemap Intensity
 f.rupture_name AS "sH_RupName",

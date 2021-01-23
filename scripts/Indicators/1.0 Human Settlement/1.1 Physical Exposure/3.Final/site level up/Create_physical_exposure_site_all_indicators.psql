@@ -23,7 +23,6 @@ b."CFSAUID" AS "fsauid",
 b."DAUIDt" AS "dauid",
 b."SACCODE" AS "saccode",
 b."SACTYPE" AS "sactype",
-
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLat",
 CAST(CAST(ROUND(CAST(a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgNum",
