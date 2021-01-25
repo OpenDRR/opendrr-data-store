@@ -1,0 +1,56 @@
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_low is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_central is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_high is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+[2019-10-23 18:49:27,825 #27 INFO] murrayjourneay running /Users/murrayjourneay/Dropbox/gitlab/canada/jobs/scenario/regions/JdFM6p8/sRisk_JdFM6p8_s2.ini [--hc=None]
+[2019-10-23 18:49:27,828 #27 INFO] Using engine version 3.7.0
+[2019-10-23 18:49:28,803 #27 INFO] Zipping the input files
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_low is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_central is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+/Users/murrayjourneay/openquake/lib/python3.6/site-packages/openquake/hazardlib/gsim/base.py:218: ExperimentalWarning: NBCC2015_AA13_inslab50_high is experimental and may change in future versions - the user is liable for their application
+  warnings.warn(msg, ExperimentalWarning)
+[2019-10-23 18:49:30,639 #27 WARNING] Using 8 cores on MacBook-Pro-4.local
+[2019-10-23 18:49:30,722 #27 INFO] Checksum of the input files: 3406217224
+[2019-10-23 18:49:30,756 #27 INFO] Reading the risk model if present
+[2019-10-23 18:49:52,931 #27 INFO] Reading /Users/murrayjourneay/Dropbox/gitlab/canada/models/exposure/regions/british_columbia/BC.xml
+[2019-10-23 18:50:09,709 #27 INFO] Associated 162483 assets to 14703 sites
+[2019-10-23 18:50:15,929 #27 INFO] 39412 assets were discarded because too far from the rupture; use `oq show discarded` to show them and `oq plot_assets` to plot them
+[2019-10-23 18:50:16,245 #27 INFO] Reducing risk model from 7260 to 531 taxonomies
+[2019-10-23 18:50:16,955 #27 INFO] Storing exposed_values/agg
+[2019-10-23 18:50:19,128 #27 INFO] There are 3 realization(s)
+[2019-10-23 18:53:43,110 #27 INFO] Building risk inputs from 3 realization(s)
+[2019-10-23 18:54:58,164 #27 INFO] Built 14703 risk inputs
+[2019-10-23 18:56:11,929 #27 INFO] scenario_risk 1.31 GB sent, 9 tasks submitted, 8 queued
+[2019-10-23 18:56:13,911 #27 INFO] scenario_risk  11% [10 tasks submitted, 7 queued]
+[2019-10-23 18:56:14,655 #27 INFO] scenario_risk  17% [11 tasks submitted, 6 queued]
+[2019-10-23 18:56:17,454 #27 INFO] scenario_risk  23% [12 tasks submitted, 5 queued]
+[2019-10-23 18:56:19,562 #27 INFO] scenario_risk  29% [13 tasks submitted, 4 queued]
+[2019-10-23 18:56:20,095 #27 INFO] scenario_risk  35% [14 tasks submitted, 3 queued]
+[2019-10-23 18:56:22,447 #27 INFO] scenario_risk  41% [15 tasks submitted, 2 queued]
+[2019-10-23 18:56:22,952 #27 INFO] scenario_risk  47% [16 tasks submitted, 1 queued]
+[2019-10-23 18:56:23,165 #27 INFO] scenario_risk  52% [17 tasks submitted, 0 queued]
+[2019-10-23 18:57:17,457 #27 INFO] scenario_risk  58% [17 tasks submitted, 0 queued]
+[2019-10-23 18:57:26,096 #27 INFO] scenario_risk  64% [17 tasks submitted, 0 queued]
+[2019-10-23 18:57:28,167 #27 INFO] scenario_risk  70% [17 tasks submitted, 0 queued]
+[2019-10-23 18:57:30,279 #27 INFO] scenario_risk  76% [17 tasks submitted, 0 queued]
+[2019-10-23 18:57:32,725 #27 INFO] scenario_risk  82% [17 tasks submitted, 0 queued]
+[2019-10-23 18:57:32,853 #27 INFO] scenario_risk  88% [17 tasks submitted, 0 queued]
+[2019-10-23 18:57:35,024 #27 INFO] scenario_risk  94% [17 tasks submitted, 0 queued]
+[2019-10-23 18:57:36,258 #27 INFO] scenario_risk 100% [17 tasks submitted, 0 queued]
+[2019-10-23 18:57:36,271 #27 INFO] Received 82.94 MB in 157 seconds, biggest output=5.29 MB
+[2019-10-23 18:57:36,275 #27 INFO] Received {'agg': '799.45 KB', 'avg': '82.16 MB', 'all_losses': '1.18 KB'}
+[2019-10-23 18:57:37,125 #27 INFO] Exposing the outputs to the database
+[2019-10-23 18:57:37,330 #27 INFO] Calculation 27 finished correctly in 486 seconds
+  id | name
+ 123 | Aggregate Asset Losses
+ 129 | Aggregate Event Losses
+ 128 | Average Asset Losses
+ 124 | Events
+ 125 | Full Report
+ 126 | Ground Motion Fields
+ 127 | Input Files
+ 130 | Realizations

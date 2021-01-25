@@ -1,0 +1,30 @@
+-- script to generate relationships for risk dynamics
+
+-- results_nhsl_risk_dynamics.nhsl_risk_dynamics_hazard_susceptibility_s_tbl
+-- add pkey
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_hazard_susceptibility_s_tbl DROP CONSTRAINT IF EXISTS nhsl_risk_dynamics_hazard_susceptibility_s_tbl_pkey;
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_hazard_susceptibility_s_tbl ADD PRIMARY KEY("ghslID");
+
+-- add fkey
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_hazard_susceptibility_s_tbl DROP CONSTRAINT IF EXISTS nhsl_risk_dynamics_hazard_susceptibility_s_tbl_fkey;
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_hazard_susceptibility_s_tbl ADD CONSTRAINT nhsl_risk_dynamics_hazard_susceptibility_s_tbl_fkey FOREIGN KEY ("ghslID") REFERENCES ghsl.ghsl_hazthreat_may2020_v1p2(ghslid);
+
+
+-- results_nhsl_risk_dynamics.nhsl_risk_dynamics_land_use_change_s_tbl
+-- add pkey
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_land_use_change_s_tbl DROP CONSTRAINT IF EXISTS nhsl_risk_dynamics_land_use_change_s_tbl_pkey;
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_land_use_change_s_tbl ADD PRIMARY KEY("ghslID");
+
+-- add fkey
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_land_use_change_s_tbl DROP CONSTRAINT IF EXISTS nhsl_risk_dynamics_land_use_change_s_tbl_fkey;
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_land_use_change_s_tbl ADD CONSTRAINT nhsl_risk_dynamics_land_use_change_s_tbl_fkey FOREIGN KEY ("ghslID") REFERENCES ghsl.ghsl_hazthreat_may2020_v1p2(ghslid);
+
+
+-- results_nhsl_risk_dynamics.nhsl_risk_dynamics_population_growth_s_tbl
+-- add pkey
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_population_growth_s_tbl DROP CONSTRAINT IF EXISTS nhsl_risk_dynamics_population_growth_s_tbl_pkey;
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_population_growth_s_tbl ADD PRIMARY KEY("ghslID");
+
+-- add fkey
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_population_growth_s_tbl DROP CONSTRAINT IF EXISTS nhsl_risk_dynamics_population_growth_s_tbl_fkey;
+ALTER TABLE results_nhsl_risk_dynamics.nhsl_risk_dynamics_population_growth_s_tbl ADD CONSTRAINT nhsl_risk_dynamics_population_growth_s_tbl_fkey FOREIGN KEY ("ghslID") REFERENCES ghsl.ghsl_hazthreat_may2020_v1p2(ghslid);

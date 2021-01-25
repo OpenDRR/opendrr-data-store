@@ -1,0 +1,923 @@
+CREATE SCHEMA IF NOT EXISTS results_psra_677;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_seismic_hazard_500yr_hazard_intensity_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_seismic_hazard_500yr_hazard_intensity_s AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.1 Probabilistic Seismic Hazard
+-- 2.1.1 500yr Hazard Intensity
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.1.1 500yr Hazard Intensity - b0
+CAST(d."PGA_0.02" AS NUMERIC) AS "pH500_PGA",
+CAST(d."PGV_0.02" AS NUMERIC) AS "pH500_PGV",
+CAST(d."SA(0.1)_0.02" AS NUMERIC) AS "pH500_SA0p1",
+CAST(d."SA(0.2)_0.02" AS NUMERIC) AS "pH500_SA0p2",
+CAST(d."SA(0.3)_0.02" AS NUMERIC) AS "pH500_SA0p3",
+CAST(d."SA(0.5)_0.02" AS NUMERIC) AS "pH500_SA0p5",
+CAST(d."SA(0.6)_0.02" AS NUMERIC) AS "pH500_SA0p6",
+CAST(d."SA(1.0)_0.02" AS NUMERIC) AS "pH500_SA1p0",
+CAST(d."SA(2.0)_0.02" AS NUMERIC) AS "pH500_SA2p0",
+CAST(d."SA(5.0)_0.02" AS NUMERIC) AS "pH500_SA5p0",
+CAST(d."SA(10.0)_0.02" AS NUMERIC) AS "pH500_SA10p0",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
+RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,d."PGA_0.02",d."PGV_0.02",d."SA(0.1)_0.02",d."SA(0.2)_0.02",d."SA(0.3)_0.02",d."SA(0.5)_0.02",d."SA(0.6)_0.02",d."SA(1.0)_0.02",d."SA(2.0)_0.02",d."SA(5.0)_0.02",d."SA(10.0)_0.02",z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_seismic_hazard_2500yr_hazard_intensity_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_seismic_hazard_2500yr_hazard_intensity_s AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.1 Probabilistic Seismic Hazard
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.1.2 2500yr Hazard Intensity
+CAST(d."PGA_0.1" AS NUMERIC) AS "pH2500_PGA",
+CAST(d."PGV_0.1" AS NUMERIC) AS "pH2500_PGV",
+CAST(d."SA(0.1)_0.1" AS NUMERIC) AS "pH2500_SA0p1",
+CAST(d."SA(0.2)_0.1" AS NUMERIC) AS "pH2500_SA0p2",
+CAST(d."SA(0.3)_0.1" AS NUMERIC) AS "pH2500_SA0p3",
+CAST(d."SA(0.5)_0.1" AS NUMERIC) AS "pH2500_SA0p5",
+CAST(d."SA(0.6)_0.1" AS NUMERIC) AS "pH2500_SA0p6",
+CAST(d."SA(1.0)_0.1" AS NUMERIC) AS "pH2500_SA1p0",
+CAST(d."SA(2.0)_0.1" AS NUMERIC) AS "pH2500_SA2p0",
+CAST(d."SA(5.0)_0.1" AS NUMERIC) AS "pH2500_SA5p0",
+CAST(d."SA(10.0)_0.1" AS NUMERIC) AS "pH2500_SA10p0",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN psra.hazard_map_mean_677_xref d ON a.id = d.id
+RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,d."PGA_0.1",d."PGV_0.1",d."SA(0.1)_0.1",d."SA(0.2)_0.1",d."SA(0.3)_0.1",d."SA(0.5)_0.1",d."SA(0.6)_0.1",d."SA(1.0)_0.1",d."SA(2.0)_0.1",d."SA(5.0)_0.1",d."SA(10.0)_0.1",z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_seismic_hazard_site_amplification_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_seismic_hazard_site_amplification_s AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.1 Probabilistic Seismic Hazard
+-- 2.1.3 Site Amplification
+SELECT 
+a.sauid AS "Sauid",
+CAST(d.vs_lon AS NUMERIC) AS  "pH_Vs30Lon",
+CAST(d.vs_lat AS NUMERIC) AS "pH_Vs30Lat",
+CAST(d.vs30 AS NUMERIC) AS "pH_Vs30",
+CAST(0 AS NUMERIC) AS "pH_Vs1p0", --add later
+CAST(0 AS NUMERIC) AS "pH_V2p5", -- add later
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+LEFT JOIN vs30.vs30_bc_site_model_xref d ON a.id = d.id
+RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,d.vs_lon,d.vs_lat,d.vs30,z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_building_damage_classical_damage_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_building_damage_classical_damage_s AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.2 Building Damage
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.2.1 Classical Damage - b0
+CAST(SUM(c.no_damage) AS NUMERIC) AS "cDt_None_b0",
+CAST(AVG(c.no_damage/a.number) AS NUMERIC) AS "cDmr_None_b0",
+
+CAST(SUM(c.slight) AS NUMERIC) AS "cDt_Slight_b0",
+CAST(AVG(c.slight/a.number) AS NUMERIC) AS "cDmr_Slight_b0",
+
+CAST(SUM(c.moderate) AS NUMERIC) AS "cDt_Moderate_b0",
+CAST(AVG(c.moderate/a.number) AS NUMERIC) AS "cDmr_Moderate_b0",
+
+CAST(SUM(c.extensive) AS NUMERIC) AS "cDt_Extensive_b0",
+CAST(AVG(c.extensive/a.number) AS NUMERIC) AS "cDmr_Extensive_b0",
+
+CAST(SUM(c.complete) AS NUMERIC) AS "cDt_Complete_b0",
+CAST(AVG(c.complete/a.number) AS NUMERIC) AS "cDmr_Complete_b0",
+
+CAST(f.collapse_pc AS NUMERIC) AS "CDr_Collapse_b0",
+CAST(SUM(c.complete * f.collapse_pc) AS NUMERIC) AS "cDt_Collapse_b0",
+CAST(AVG(c.complete/a.number) * f.collapse_pc AS NUMERIC) AS "cDtp_Collapse_b0",
+
+-- 2.2.1 Classical Damage - r1
+CAST(SUM(d.no_damage) AS NUMERIC) AS "cDt_None_r1",
+CAST(AVG(d.no_damage/a.number) AS NUMERIC) AS "cDmr_None_r1",
+
+CAST(SUM(d.slight) AS NUMERIC) AS "cDt_Slight_r1",
+CAST(AVG(d.slight/a.number) AS NUMERIC) AS "cDmr_Slight_r1",
+
+CAST(SUM(d.moderate) AS NUMERIC) AS "cDt_Moderate_r1",
+CAST(AVG(d.moderate/a.number) AS NUMERIC) AS "cDmr_Moderate_r1",
+
+CAST(SUM(d.extensive) AS NUMERIC) AS "cDt_Extensive_r1",
+CAST(AVG(d.extensive/a.number) AS NUMERIC) AS "cDmr_Extensive_r1",
+
+CAST(SUM(d.complete) AS NUMERIC) AS "cDt_Complete_r1",
+CAST(AVG(d.complete/a.number) AS NUMERIC) AS "cDmr_Complete_r1",
+
+CAST(f.collapse_pc AS NUMERIC) AS "CDr_Collapse_r1",
+CAST(SUM(d.complete * f.collapse_pc) AS NUMERIC) AS "cDt_Collapse_r1",
+CAST(AVG(d.complete/a.number) * f.collapse_pc AS NUMERIC) AS "cDtp_Collapse_r1",
+
+-- 2.2.1 Classical Damage - r2
+CAST(SUM(e.no_damage) AS NUMERIC) AS "cDt_None_r2",
+CAST(AVG(e.no_damage/a.number) AS NUMERIC) AS "cDmr_None_r2",
+
+CAST(SUM(e.slight) AS NUMERIC) AS "cDt_Slight_r2",
+CAST(AVG(e.slight/a.number) AS NUMERIC) AS "cDmr_Slight_r2",
+
+CAST(SUM(e.moderate) AS NUMERIC) AS "cDt_Moderate_r2",
+CAST(AVG(e.moderate/a.number) AS NUMERIC) AS "cDmr_Moderate_r2",
+
+CAST(SUM(e.extensive) AS NUMERIC) AS "cDt_Extensive_r2",
+CAST(AVG(e.extensive/a.number) AS NUMERIC) AS "cDmr_Extensive_r2",
+
+CAST(SUM(e.complete) AS NUMERIC) AS "cDt_Complete_r2",
+CAST(AVG(e.complete/a.number) AS NUMERIC) AS "cDmr_Complete_r2",
+
+CAST(f.collapse_pc AS NUMERIC) AS "CDr_Collapse_r2",
+CAST(SUM(e.complete * f.collapse_pc) AS NUMERIC) AS "cDt_Collapse_r2",
+CAST(AVG(e.complete/a.number) * f.collapse_pc AS NUMERIC) AS "cDtp_Collapse_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.damages_structural_mean_678 c ON a.id = c.asset_id
+LEFT JOIN psra.damages_structural_mean_682 d ON a.id = d.asset_id
+LEFT JOIN psra.damages_structural_mean_683 e ON a.id = e.asset_id
+LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,f.collapse_pc,z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_building_damage_event_based_damage_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_building_damage_event_based_damage_s AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.2 Building Damage
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.2.2 Event-Based Damage - b0
+CAST(SUM(e.structural_no_damage) AS NUMERIC) AS "eDt_None_b0",
+CAST(AVG(e.structural_no_damage_stdv) AS NUMERIC) AS "eDmsd_None_b0",
+CAST(AVG(e.structural_no_damage/a.number) AS NUMERIC) AS "eDmr_None_b0",
+
+CAST(SUM(e.structural_slight_mean) AS NUMERIC) AS "eDt_Slight_b0",
+CAST(AVG(e.structural_slight_stdv) AS NUMERIC) AS "eDmsd_Slight_b0",
+CAST(AVG(e.structural_slight_mean/a.number) AS NUMERIC) AS "eDmr_Slight_b0",
+
+CAST(SUM(e.structural_moderate_mean) AS NUMERIC) AS "eDt_Moderate_b0",
+CAST(AVG(e.structural_moderate_stdv) AS NUMERIC) AS "eDmsd_Moderate_b0",
+CAST(AVG(e.structural_moderate_mean/a.number) AS NUMERIC) AS "eDmr_Moderate_b0",
+
+CAST(SUM(e.structural_extensive_mean) AS NUMERIC) AS "eDt_Extensive_b0",
+CAST(AVG(e.structural_extensive_stdv) AS NUMERIC) AS "eDmsd_Extensive_b0",
+CAST(AVG(e.structural_extensive_mean/a.number) AS NUMERIC) AS "eDmr_Extensive_b0",
+
+CAST(SUM(e.structural_complete_mean) AS NUMERIC) AS "eDt_Complete_b0",
+CAST(AVG(e.structural_complete_stdv) AS NUMERIC) AS "eDmsd_Complete_b0",
+CAST(AVG(e.structural_complete_mean/a.number) AS NUMERIC) AS "eDmr_Complete_b0",
+
+CAST(SUM(e.structural_complete_mean * f.collapse_pc) AS NUMERIC) AS "eDt_Collapse_b0",
+CAST(AVG(e.structural_complete_stdv * f.collapse_pc) AS NUMERIC) AS "eDmsd_Collapse_b0",
+CAST(AVG((e.structural_complete_mean/a.number) * f.collapse_pc) AS NUMERIC) AS "eDmr_Collapse_b0",
+
+-- 2.2.2 Event-Based Damage - r1
+CAST(SUM(g.structural_no_damage) AS NUMERIC) AS "eDt_None_r1",
+CAST(AVG(g.structural_no_damage_stdv) AS NUMERIC) AS "eDmsd_None_r1",
+CAST(AVG(g.structural_no_damage/a.number) AS NUMERIC) AS "eDmr_None_r1",
+
+CAST(SUM(g.structural_slight_mean) AS NUMERIC) AS "eDt_Slight_r1",
+CAST(AVG(g.structural_slight_stdv) AS NUMERIC) AS "eDmsd_Slight_r1",
+CAST(AVG(g.structural_slight_mean/a.number) AS NUMERIC) AS "eDmr_Slight_r1",
+
+CAST(SUM(g.structural_moderate_mean) AS NUMERIC) AS "eDt_Moderate_r1",
+CAST(AVG(g.structural_moderate_stdv) AS NUMERIC) AS "eDmsd_Moderate_r1",
+CAST(AVG(g.structural_moderate_mean/a.number) AS NUMERIC) AS "eDmr_Moderate_r1",
+
+CAST(SUM(g.structural_extensive_mean) AS NUMERIC) AS "eDt_Extensive_r1",
+CAST(AVG(g.structural_extensive_stdv) AS NUMERIC) AS "eDmsd_Extensive_r1",
+CAST(AVG(g.structural_extensive_mean/a.number) AS NUMERIC) AS "eDmr_Extensive_r1",
+
+CAST(SUM(g.structural_complete_mean) AS NUMERIC) AS "eDt_Complete_r1",
+CAST(AVG(g.structural_complete_stdv) AS NUMERIC) AS "eDmsd_Complete_r1",
+CAST(AVG(g.structural_complete_mean/a.number) AS NUMERIC) AS "eDmr_Complete_r1",
+
+CAST(SUM(g.structural_complete_mean * f.collapse_pc) AS NUMERIC) AS "eDt_Collapse_r1",
+CAST(AVG(g.structural_complete_stdv * f.collapse_pc) AS NUMERIC) AS "eDmsd_Collapse_r1",
+CAST(AVG((g.structural_complete_mean/a.number) * f.collapse_pc) AS NUMERIC) AS "eDmr_Collapse_r1",
+
+-- 2.2.2 Event-Based Damage - r2
+CAST(SUM(h.structural_no_damage) AS NUMERIC) AS "eDt_None_r2",
+CAST(AVG(h.structural_no_damage_stdv) AS NUMERIC) AS "eDmsd_None_r2",
+CAST(AVG(h.structural_no_damage/a.number) AS NUMERIC) AS "eDmr_None_r2",
+
+CAST(SUM(h.structural_slight_mean) AS NUMERIC) AS "eDt_Slight_r2",
+CAST(AVG(h.structural_slight_stdv) AS NUMERIC) AS "eDmsd_Slight_r2",
+CAST(AVG(h.structural_slight_mean/a.number) AS NUMERIC) AS "eDmr_Slight_r2",
+
+CAST(SUM(h.structural_moderate_mean) AS NUMERIC) AS "eDt_Moderate_r2",
+CAST(AVG(h.structural_moderate_stdv) AS NUMERIC) AS "eDmsd_Moderate_r2",
+CAST(AVG(h.structural_moderate_mean/a.number) AS NUMERIC) AS "eDmr_Moderate_r2",
+
+CAST(SUM(h.structural_extensive_mean) AS NUMERIC) AS "eDt_Extensive_r2",
+CAST(AVG(h.structural_extensive_stdv) AS NUMERIC) AS "eDmsd_Extensive_r2",
+CAST(AVG(h.structural_extensive_mean/a.number) AS NUMERIC) AS "eDmr_Extensive_r2",
+
+CAST(SUM(h.structural_complete_mean) AS NUMERIC) AS "eDt_Complete_r2",
+CAST(AVG(h.structural_complete_stdv) AS NUMERIC) AS "eDmsd_Complete_r2",
+CAST(AVG(h.structural_complete_mean/a.number) AS NUMERIC) AS "eDmr_Complete_r2",
+
+CAST(SUM(h.structural_complete_mean * f.collapse_pc) AS NUMERIC) AS "eDt_Collapse_r2",
+CAST(AVG(h.structural_complete_stdv * f.collapse_pc) AS NUMERIC) AS "eDmsd_Collapse_r2",
+CAST(AVG((h.structural_complete_mean/a.number) * f.collapse_pc) AS NUMERIC) AS "eDmr_Collapse_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+LEFT JOIN psra.damages_rlz_000_686 g ON a.id = g.asset_refid
+LEFT JOIN psra.damages_rlz_000_687 h ON a.id = h.asset_refid
+LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_building_damage_recovery_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_building_damage_recovery_s AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.2 Building Performance
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.2.3 Recovery - b0
+CAST(SUM(e.structural_slight_mean + e.structural_moderate_mean) AS NUMERIC) AS "eDt_GreenTag_b_b0",
+CAST(SUM(e.structural_slight_mean + e.structural_moderate_mean)/5 AS NUMERIC) AS "eDt_GreenTag_i_b0",
+
+CAST(SUM(e.structural_extensive_mean) AS NUMERIC) AS "eDt_YellowTag_b_b0",
+CAST(SUM(e.structural_extensive_mean)/2.5 AS NUMERIC) AS "eDt_YellowTag_i_b0",
+
+CAST(SUM(e.structural_complete_mean) AS NUMERIC) AS "eDt_RedTag_b_b0",
+CAST(SUM(e.structural_complete_mean)/5 AS NUMERIC) AS "eDt_RedTag_i_b0",
+
+CAST(SUM(e.structural_no_damage + (e.structural_slight_mean * 0.20) + (e.structural_moderate_mean * 0.05)) AS NUMERIC) AS "eDt_Operational_b0",
+CAST(SUM((e.structural_slight_mean * 0.80) + (e.structural_moderate_mean * 0.05 * 0.75) + (e.structural_extensive_mean * 0.20)) AS NUMERIC) AS "eDt_Functional_b0",
+CAST(SUM((e.structural_moderate_mean * 0.20) + (e.structural_extensive_mean * 0.40)) AS NUMERIC) AS "eDt_Repairable_b0",
+CAST(SUM((e.structural_extensive_mean * 0.30) + (e.structural_complete_mean * 0.20)) AS NUMERIC) AS "eDt_Failure_b0",
+
+CAST(AVG(g.mean_repair_time) AS NUMERIC) AS "eCm_Repair_b0",
+CAST(AVG(g.mean_interruption_time) AS NUMERIC) AS "eC_Construxn_b0",
+CAST(AVG(g.mean_recovery_time) AS NUMERIC) AS "eCm_Downtime_b0",
+CAST(SUM(g.debris_brick_wood_tons + g.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisT_b0",
+CAST(SUM(g.debris_brick_wood_tons) AS NUMERIC) AS "eCt_DebrisBW_b0",
+CAST(SUM(g.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisC_b0",
+
+-- 2.2.3 Recovery - r1
+CAST(SUM(f.structural_slight_mean + f.structural_moderate_mean) AS NUMERIC) AS "eDt_GreenTag_b_r1",
+CAST(SUM(f.structural_slight_mean + f.structural_moderate_mean)/5 AS NUMERIC) AS "eDt_GreenTag_i_r1",
+
+CAST(SUM(f.structural_extensive_mean) AS NUMERIC) AS "eDt_YellowTag_b_r1",
+CAST(SUM(f.structural_extensive_mean)/2.5 AS NUMERIC) AS "eDt_YellowTag_i_r1",
+
+CAST(SUM(f.structural_complete_mean) AS NUMERIC) AS "eDt_RedTag_b_r1",
+CAST(SUM(f.structural_complete_mean)/5 AS NUMERIC) AS "eDt_RedTag_i_r1",
+
+CAST(SUM(f.structural_no_damage + (f.structural_slight_mean * 0.20) + (f.structural_moderate_mean * 0.05)) AS NUMERIC) AS "eDt_Operational_r1",
+CAST(SUM((f.structural_slight_mean * 0.80) + (f.structural_moderate_mean * 0.05 * 0.75) + (f.structural_extensive_mean * 0.20)) AS NUMERIC) AS "eDt_Functional_r1",
+CAST(SUM((f.structural_moderate_mean * 0.20) + (f.structural_extensive_mean * 0.40)) AS NUMERIC) AS "eDt_Repairable_r1",
+CAST(SUM((f.structural_extensive_mean * 0.30) + (f.structural_complete_mean * 0.20)) AS NUMERIC) AS "eDt_Failure_r1",
+
+CAST(AVG(h.mean_repair_time) AS NUMERIC) AS "eCm_Repair_r1",
+CAST(AVG(h.mean_interruption_time) AS NUMERIC) AS "eC_Construxn_r1",
+CAST(AVG(h.mean_recovery_time) AS NUMERIC) AS "eCm_Downtime_r1",
+CAST(SUM(h.debris_brick_wood_tons + h.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisT_r1",
+CAST(SUM(h.debris_brick_wood_tons) AS NUMERIC) AS "eCt_DebrisBW_r1",
+CAST(SUM(h.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisC_r1",
+
+-- 2.2.3 Recovery - r2
+CAST(SUM(j.structural_slight_mean + j.structural_moderate_mean) AS NUMERIC) AS "eDt_GreenTag_b_r2",
+CAST(SUM(j.structural_slight_mean + j.structural_moderate_mean)/5 AS NUMERIC) AS "eDt_GreenTag_i_r2",
+
+CAST(SUM(j.structural_extensive_mean) AS NUMERIC) AS "eDt_YellowTag_b_r2",
+CAST(SUM(j.structural_extensive_mean)/2.5 AS NUMERIC) AS "eDt_YellowTag_i_r2",
+
+CAST(SUM(j.structural_complete_mean) AS NUMERIC) AS "eDt_RedTag_b_r2",
+CAST(SUM(j.structural_complete_mean)/5 AS NUMERIC) AS "eDt_RedTag_i_r2",
+
+CAST(SUM(j.structural_no_damage + (j.structural_slight_mean * 0.20) + (j.structural_moderate_mean * 0.05)) AS NUMERIC) AS "eDt_Operational_r2",
+CAST(SUM((j.structural_slight_mean * 0.80) + (j.structural_moderate_mean * 0.05 * 0.75) + (j.structural_extensive_mean * 0.20)) AS NUMERIC) AS "eDt_Functional_r2",
+CAST(SUM((j.structural_moderate_mean * 0.20) + (j.structural_extensive_mean * 0.40)) AS NUMERIC) AS "eDt_Repairable_r2",
+CAST(SUM((j.structural_extensive_mean * 0.30) + (j.structural_complete_mean * 0.20)) AS NUMERIC) AS "eDt_Failure_r2",
+
+CAST(AVG(i.mean_repair_time) AS NUMERIC) AS "eCm_Repair_r2",
+CAST(AVG(i.mean_interruption_time) AS NUMERIC) AS "eC_Construxn_r2",
+CAST(AVG(i.mean_recovery_time) AS NUMERIC) AS "eCm_Downtime_r2",
+CAST(SUM(i.debris_brick_wood_tons + i.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisT_r2",
+CAST(SUM(i.debris_brick_wood_tons) AS NUMERIC) AS "eCt_DebrisBW_r2",
+CAST(SUM(i.debris_concrete_steel_tons) AS NUMERIC) AS "eCt_DebrisC_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+LEFT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
+
+LEFT JOIN psra.damages_rlz_000_686 f ON a.id = f.asset_refid
+LEFT JOIN psra.consequences_rlz_000_686 h ON a.id = h.asset_ref
+
+LEFT JOIN psra.damages_rlz_000_687 j ON a.id = j.asset_refid
+LEFT JOIN psra.consequences_rlz_000_687 i ON a.id = i.asset_ref
+
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_affected_people_casualties_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_affected_people_casualties_s AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.3 Affected People
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.3.1 Casualties - b0
+CAST(SUM(h.occupants) AS NUMERIC) AS "eCt_Fatality_b0",
+CAST(AVG(COALESCE(h.occupants/NULLIF(a.night,0),0)) AS NUMERIC) AS "eCmr_Fatality_b0",
+
+CAST(SUM(g.casualties_day_severity_1) AS NUMERIC) AS "eCt_CasDayL1_b0",
+CAST(SUM(g.casualties_day_severity_2) AS NUMERIC) AS "eCt_CasDayL2_b0",
+CAST(SUM(g.casualties_day_severity_3) AS NUMERIC) AS "eCt_CasDayL3_b0",
+CAST(SUM(g.casualties_day_severity_4) AS NUMERIC) AS "eCt_CasDayL4_b0",
+
+CAST(SUM(g.casualties_night_severity_1) AS NUMERIC) AS "eCt_CasNightL1_b0",
+CAST(SUM(g.casualties_night_severity_2) AS NUMERIC) AS "eCt_CasNightL2_b0",
+CAST(SUM(g.casualties_night_severity_3) AS NUMERIC) AS "eCt_CasNightL3_b0",
+CAST(SUM(g.casualties_night_severity_4) AS NUMERIC) AS "eCt_CasNightL4_b0",
+
+CAST(SUM(g.casualties_transit_severity_1) AS NUMERIC) AS "eCt_CasTransitL1_b0",
+CAST(SUM(g.casualties_transit_severity_2) AS NUMERIC) AS "eCt_CasTransitL2_b0",
+CAST(SUM(g.casualties_transit_severity_3) AS NUMERIC) AS "eCt_CasTransitL3_b0",
+CAST(SUM(g.casualties_transit_severity_4) AS NUMERIC) AS "eCt_CasTransitL4_b0",
+
+-- 2.3.1 Casualties - r1
+CAST(SUM(j.occupants) AS NUMERIC) AS "eCt_Fatality_r1",
+CAST(AVG(COALESCE(j.occupants/NULLIF(a.night,0),0)) AS NUMERIC) AS "eCmr_Fatality_r1",
+
+CAST(SUM(i.casualties_day_severity_1) AS NUMERIC) AS "eCt_CasDayL1_r1",
+CAST(SUM(i.casualties_day_severity_2) AS NUMERIC) AS "eCt_CasDayL2_r1",
+CAST(SUM(i.casualties_day_severity_3) AS NUMERIC) AS "eCt_CasDayL3_r1",
+CAST(SUM(i.casualties_day_severity_4) AS NUMERIC) AS "eCt_CasDayL4_r1",
+
+CAST(SUM(i.casualties_night_severity_1) AS NUMERIC) AS "eCt_CasNightL1_r1",
+CAST(SUM(i.casualties_night_severity_2) AS NUMERIC) AS "eCt_CasNightL2_r1",
+CAST(SUM(i.casualties_night_severity_3) AS NUMERIC) AS "eCt_CasNightL3_r1",
+CAST(SUM(i.casualties_night_severity_4) AS NUMERIC) AS "eCt_CasNightL4_r1",
+
+CAST(SUM(i.casualties_transit_severity_1) AS NUMERIC) AS "eCt_CasTransitL1_r1",
+CAST(SUM(i.casualties_transit_severity_2) AS NUMERIC) AS "eCt_CasTransitL2_r1",
+CAST(SUM(i.casualties_transit_severity_3) AS NUMERIC) AS "eCt_CasTransitL3_r1",
+CAST(SUM(i.casualties_transit_severity_4) AS NUMERIC) AS "eCt_CasTransitL4_r1",
+
+-- 2.3.1 Casualties - r2
+CAST(SUM(l.occupants) AS NUMERIC) AS "eCt_Fatality_r2",
+CAST(AVG(COALESCE(l.occupants/NULLIF(a.night,0),0)) AS NUMERIC) AS "eCmr_Fatality_r2",
+
+CAST(SUM(k.casualties_day_severity_1) AS NUMERIC) AS "eCt_CasDayL1_r2",
+CAST(SUM(k.casualties_day_severity_2) AS NUMERIC) AS "eCt_CasDayL2_r2",
+CAST(SUM(k.casualties_day_severity_3) AS NUMERIC) AS "eCt_CasDayL3_r2",
+CAST(SUM(k.casualties_day_severity_4) AS NUMERIC) AS "eCt_CasDayL4_r2",
+
+CAST(SUM(k.casualties_night_severity_1) AS NUMERIC) AS "eCt_CasNightL1_r2",
+CAST(SUM(k.casualties_night_severity_2) AS NUMERIC) AS "eCt_CasNightL2_r2",
+CAST(SUM(k.casualties_night_severity_3) AS NUMERIC) AS "eCt_CasNightL3_r2",
+CAST(SUM(k.casualties_night_severity_4) AS NUMERIC) AS "eCt_CasNightL4_r2",
+
+CAST(SUM(k.casualties_transit_severity_1) AS NUMERIC) AS "eCt_CasTransitL1_r2",
+CAST(SUM(k.casualties_transit_severity_2) AS NUMERIC) AS "eCt_CasTransitL2_r2",
+CAST(SUM(k.casualties_transit_severity_3) AS NUMERIC) AS "eCt_CasTransitL3_r2",
+CAST(SUM(k.casualties_transit_severity_4) AS NUMERIC) AS "eCt_CasTransitL4_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
+LEFT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
+
+LEFT JOIN psra.consequences_rlz_000_686 i ON a.id = i.asset_ref
+LEFT JOIN psra.avg_losses_mean_684 j ON a.id = j.asset_id
+
+LEFT JOIN psra.consequences_rlz_000_687 k ON a.id = k.asset_ref
+LEFT JOIN psra.avg_losses_mean_685 l ON a.id = l.asset_id
+
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_affected_people_social_disruption_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_affected_people_social_disruption_s AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.3 Affected People
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.3.2 Social Disruption - b0
+CAST(((0.73 * COALESCE((CASE WHEN n.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 15000 AND n.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 20000 AND n.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 35000 AND n.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) + 
+(0.27 * COALESCE(n.imm_lt5 * 0.24,0) + COALESCE(n.live_alone * 0.48,0) + COALESCE(n.no_engfr * 0.47,0) + COALESCE(n.lonepar3kids * 0.26,0) +
+COALESCE(n.indigenous * 0.26,0))) *
+(COALESCE(((SUM(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0))) * i.censuspop) / NULLIF(i.censusdu,0),0)) *
+(COALESCE((CASE WHEN n.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 15000 AND n.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 20000 AND n.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 35000 AND n.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) * 
+(COALESCE(n.imm_lt5 * 0.24,0) + COALESCE(n.live_alone * 0.48,0) + COALESCE(n.no_engfr * 0.47,0) + COALESCE(n.lonepar3kids * 0.26,0) +
+COALESCE(n.indigenous * 0.26,0)) * 
+(COALESCE(n.renter * 0.40,0) + COALESCE(((i.censusdu * a.popdu) - n.renter) * 0.40,0)) * 
+(COALESCE(n.age_gt65 * 0.40,0) + COALESCE(n.age_lt6 * 0.40,0)) AS NUMERIC) AS "sCt_Shelter_b0",
+
+CAST(SUM(g.sc_displ3) AS NUMERIC) AS "eCt_DisplRes3_b0",
+CAST(SUM(g.sc_displ30) AS NUMERIC) AS "eCt_DisplRes30_b0",
+CAST(SUM(g.sc_displ90) AS NUMERIC) AS "eCt_DisplRes90_b0",
+CAST(SUM(g.sc_displ180) AS NUMERIC) AS "eCt_DisplRes180_b0",
+CAST(SUM(g.sc_displ360) AS NUMERIC) AS "eCt_DisplRes360_b0",
+
+CAST(SUM(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean  / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean  / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+(i.censusdu / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) AS NUMERIC) AS "eCt_DisplHshld_b0",
+
+CAST(SUM(CASE WHEN g.mean_recovery_time > 3 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld3_b0",
+
+CAST(SUM(CASE WHEN g.mean_recovery_time > 30 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld30_b0",
+
+CAST(SUM(CASE WHEN g.mean_recovery_time > 90 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld90_b0",
+
+CAST(SUM(CASE WHEN g.mean_recovery_time > 180 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld180_b0",
+
+CAST(SUM(CASE WHEN g.mean_recovery_time > 360 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN e.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN e.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld360_b0",
+
+CAST(SUM(g.sc_busdispl30) AS NUMERIC) AS "eCt_DisrupEmpl30_b0",
+CAST(SUM(g.sc_busdispl90) AS NUMERIC) AS "eCt_DisrupEmpl90_b0",
+CAST(SUM(g.sc_busdispl180) AS NUMERIC) AS "eCt_DisrupEmpl180_b0",
+CAST(SUM(g.sc_busdispl360) AS NUMERIC) AS "eCt_DisrupEmpl360_b0",
+
+-- 2.3.2 Social Disruption - r1
+CAST(((0.73 * COALESCE((CASE WHEN n.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 15000 AND n.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 20000 AND n.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 35000 AND n.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) + 
+(0.27 * COALESCE(n.imm_lt5 * 0.24,0) + COALESCE(n.live_alone * 0.48,0) + COALESCE(n.no_engfr * 0.47,0) + COALESCE(n.lonepar3kids * 0.26,0) +
+COALESCE(n.indigenous * 0.26,0))) *
+(COALESCE(((SUM(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0))) * i.censuspop) / NULLIF(i.censusdu,0),0)) *
+(COALESCE((CASE WHEN n.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 15000 AND n.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 20000 AND n.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 35000 AND n.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) * 
+(COALESCE(n.imm_lt5 * 0.24,0) + COALESCE(n.live_alone * 0.48,0) + COALESCE(n.no_engfr * 0.47,0) + COALESCE(n.lonepar3kids * 0.26,0) +
+COALESCE(n.indigenous * 0.26,0)) * 
+(COALESCE(n.renter * 0.40,0) + COALESCE(((i.censusdu * a.popdu) - n.renter) * 0.40,0)) * 
+(COALESCE(n.age_gt65 * 0.40,0) + COALESCE(n.age_lt6 * 0.40,0)) AS NUMERIC) AS "sCt_Shelter_r1",
+
+CAST(SUM(j.sc_displ3) AS NUMERIC) AS "eCt_DisplRes3_r1",
+CAST(SUM(j.sc_displ30) AS NUMERIC) AS "eCt_DisplRes30_r1",
+CAST(SUM(j.sc_displ90) AS NUMERIC) AS "eCt_DisplRes90_r1",
+CAST(SUM(j.sc_displ180) AS NUMERIC) AS "eCt_DisplRes180_r1",
+CAST(SUM(j.sc_displ360) AS NUMERIC) AS "eCt_DisplRes360_r1",
+
+CAST(SUM(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_moderate_mean  / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_moderate_mean  / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_complete_mean / a.number ELSE 0 END))))) * 
+(i.censusdu / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) AS NUMERIC) AS "eCt_DisplHshld_r1",
+
+CAST(SUM(CASE WHEN j.mean_recovery_time > 3 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld3_r1",
+
+CAST(SUM(CASE WHEN j.mean_recovery_time > 30 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld30_r1",
+
+CAST(SUM(CASE WHEN j.mean_recovery_time > 90 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld90_r1",
+
+CAST(SUM(CASE WHEN j.mean_recovery_time > 180 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld180_r1",
+
+CAST(SUM(CASE WHEN j.mean_recovery_time > 360 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN k.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN k.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld360_r1",
+
+CAST(SUM(j.sc_busdispl30) AS NUMERIC) AS "eCt_DisrupEmpl30_r1",
+CAST(SUM(j.sc_busdispl90) AS NUMERIC) AS "eCt_DisrupEmpl90_r1",
+CAST(SUM(j.sc_busdispl180) AS NUMERIC) AS "eCt_DisrupEmpl180_r1",
+CAST(SUM(j.sc_busdispl360) AS NUMERIC) AS "eCt_DisrupEmpl360_r1",
+
+-- 2.3.2 Social Disruption - r2
+CAST(((0.73 * COALESCE((CASE WHEN n.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 15000 AND n.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 20000 AND n.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 35000 AND n.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) + 
+(0.27 * COALESCE(n.imm_lt5 * 0.24,0) + COALESCE(n.live_alone * 0.48,0) + COALESCE(n.no_engfr * 0.47,0) + COALESCE(n.lonepar3kids * 0.26,0) +
+COALESCE(n.indigenous * 0.26,0))) *
+(COALESCE(((SUM(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0))) * i.censuspop) / NULLIF(i.censusdu,0),0)) *
+(COALESCE((CASE WHEN n.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 15000 AND n.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 20000 AND n.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 35000 AND n.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
+COALESCE((CASE WHEN n.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) * 
+(COALESCE(n.imm_lt5 * 0.24,0) + COALESCE(n.live_alone * 0.48,0) + COALESCE(n.no_engfr * 0.47,0) + COALESCE(n.lonepar3kids * 0.26,0) +
+COALESCE(n.indigenous * 0.26,0)) * 
+(COALESCE(n.renter * 0.40,0) + COALESCE(((i.censusdu * a.popdu) - n.renter) * 0.40,0)) * 
+(COALESCE(n.age_gt65 * 0.40,0) + COALESCE(n.age_lt6 * 0.40,0)) AS NUMERIC) AS "sCt_Shelter_r2",
+
+CAST(SUM(l.sc_displ3) AS NUMERIC) AS "eCt_DisplRes3_r2",
+CAST(SUM(l.sc_displ30) AS NUMERIC) AS "eCt_DisplRes30_r2",
+CAST(SUM(l.sc_displ90) AS NUMERIC) AS "eCt_DisplRes90_r2",
+CAST(SUM(l.sc_displ180) AS NUMERIC) AS "eCt_DisplRes180_r2",
+CAST(SUM(l.sc_displ360) AS NUMERIC) AS "eCt_DisplRes360_r2",
+
+CAST(SUM(COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_moderate_mean  / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_moderate_mean  / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_complete_mean / a.number ELSE 0 END))))) * 
+(i.censusdu / NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) AS NUMERIC) AS "eCt_DisplHshld_r2",
+
+CAST(SUM(CASE WHEN l.mean_recovery_time > 3 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld3_r2",
+
+CAST(SUM(CASE WHEN l.mean_recovery_time > 30 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld30_r2",
+
+CAST(SUM(CASE WHEN l.mean_recovery_time > 90 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld90_r2",
+
+CAST(SUM(CASE WHEN l.mean_recovery_time > 180 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld180_r2",
+
+CAST(SUM(CASE WHEN l.mean_recovery_time > 360 THEN (COALESCE((((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) * 
+((0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-LD' THEN m.structural_complete_mean / a.number ELSE 0 END)))) + 
+((CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) *
+((0 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_moderate_mean / a.number ELSE 0 END)) + 
+(0.9 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_extensive_mean / a.number ELSE 0 END)) + 
+(1 * (CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN m.structural_complete_mean / a.number ELSE 0 END))))) * 
+((CASE WHEN a.genocc ='Residential-LD' OR a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END) / 
+NULLIF((CASE WHEN a.genocc ='Residential-LD' THEN a.night/a.popdu ELSE 0 END) + 
+(CASE WHEN a.genocc ='Residential-MD' OR a.genocc ='Residential-HD' THEN a.night/a.popdu ELSE 0 END),0)),0)) ELSE 0 END) AS NUMERIC) AS "eCt_DisplHshld360_r2",
+
+CAST(SUM(l.sc_busdispl30) AS NUMERIC) AS "eCt_DisrupEmpl30_r2",
+CAST(SUM(l.sc_busdispl90) AS NUMERIC) AS "eCt_DisrupEmpl90_r2",
+CAST(SUM(l.sc_busdispl180) AS NUMERIC) AS "eCt_DisrupEmpl180_r2",
+CAST(SUM(l.sc_busdispl360) AS NUMERIC) AS "eCt_DisrupEmpl360_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.consequences_rlz_000_680 g ON a.id = g.asset_ref
+LEFT JOIN psra.damages_rlz_000_680 e ON a.id = e.asset_refid
+
+LEFT JOIN psra.consequences_rlz_000_686 j ON a.id = j.asset_ref
+LEFT JOIN psra.damages_rlz_000_686 k ON a.id = k.asset_refid
+
+LEFT JOIN psra.consequences_rlz_000_687 l ON a.id = l.asset_ref
+LEFT JOIN psra.damages_rlz_000_687 m ON a.id = m.asset_refid
+
+LEFT JOIN census.census_2016_canada i ON a.sauid = i.sauidt
+LEFT JOIN sovi.sovi_census_canada n on a.sauid = n.sauidt
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,i.censuspop,i.censusdu,a.popdu,n.age_gt65,n.age_lt6,n.renter,n.inc_hshld,n.imm_lt5,n.live_alone,n.no_engfr,n.lonepar3kids,n.indigenous,z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_economic_security_economic_loss_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_economic_security_economic_loss_s AS 
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT 
+a.sauid AS "Sauid",
+
+-- 2.4.1 Economic Loss - b0
+CAST(SUM(h.structural + h.nonstructural + h.contents) AS NUMERIC) AS "eAALt_Asset_b0",
+CAST(AVG((h.structural + h.nonstructural + h.contents)/a.number) AS NUMERIC) AS "eAALmr_Asset_b0",
+CAST(SUM(h.structural + h.nonstructural) AS NUMERIC) AS "eAALt_Bldg_b0",
+CAST(AVG((h.structural + h.nonstructural)/a.number) AS NUMERIC) AS "eAALmr_Bldg_b0",
+CAST(SUM(h.structural) AS NUMERIC) AS "eAALt_Str_b0",
+CAST(SUM(h.nonstructural) AS NUMERIC) AS "eAALt_NStr_b0",
+CAST(SUM(h.contents) AS NUMERIC) AS "eAALt_Cont_b0",
+
+-- 2.4.1 Economic Loss - r1
+CAST(SUM(i.structural + i.nonstructural + i.contents) AS NUMERIC) AS "eAALt_Asset_r1",
+CAST(AVG((i.structural + i.nonstructural + i.contents)/a.number) AS NUMERIC) AS "eAALmr_Asset_r1",
+CAST(SUM(i.structural + i.nonstructural) AS NUMERIC) AS "eAALt_Bldg_r1",
+CAST(AVG((i.structural + i.nonstructural)/a.number) AS NUMERIC) AS "eAALmr_Bldg_r1",
+CAST(SUM(i.structural) AS NUMERIC) AS "eAALt_Str_r1",
+CAST(SUM(i.nonstructural) AS NUMERIC) AS "eAALt_NStr_r1",
+CAST(SUM(i.contents) AS NUMERIC) AS "eAALt_Cont_r1",
+
+-- 2.4.1 Economic Loss - r2
+CAST(SUM(j.structural + j.nonstructural + j.contents) AS NUMERIC) AS "eAALt_Asset_r2",
+CAST(AVG((j.structural + j.nonstructural + j.contents)/a.number) AS NUMERIC) AS "eAALmr_Asset_r2",
+CAST(SUM(j.structural + j.nonstructural) AS NUMERIC) AS "eAALt_Bldg_r2",
+CAST(AVG((j.structural + j.nonstructural)/a.number) AS NUMERIC) AS "eAALmr_Bldg_r2",
+CAST(SUM(j.structural) AS NUMERIC) AS "eAALt_Str_r2",
+CAST(SUM(j.nonstructural) AS NUMERIC) AS "eAALt_NStr_r2",
+CAST(SUM(j.contents) AS NUMERIC) AS "eAALt_Cont_r2",
+
+z.geom AS "geom_poly",
+z.geompoint AS "geom_point"
+
+FROM exposure.canada_exposure a
+RIGHT JOIN psra.avg_losses_mean_679 h ON a.id = h.asset_id
+LEFT JOIN psra.avg_losses_mean_684 i ON a.id = i.asset_id
+LEFT JOIN psra.avg_losses_mean_685 j ON a.id = j.asset_id
+LEFT JOIN boundaries."Geometry_SAUID" z ON a.sauid = z."SAUIDt"
+GROUP BY a.sauid,z.geom,z.geompoint;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_economic_security_pml_b0_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_economic_security_pml_b0_s AS
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT
+a.sauid,
+
+-- 2.4.2 Probable Maximum Loss - b0
+a.loss_value AS "ePML",
+a.loss_ratio AS "ePMLr",
+a.loss_type AS "ePML_type",
+a.return_period AS "ePML_Period",
+a.annual_frequency_of_exceedence AS "ePML_Probability",
+a.genocc AS "ePML_OccGen",
+a.eqbldgtype AS "ePML_BldgType"
+
+FROM psra.agg_curves_stats_679 a;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_economic_security_pml_r1_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_economic_security_pml_r1_s AS
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT
+a.sauid,
+
+-- 2.4.2 Probable Maximum Loss - r1
+a.loss_value AS "ePML",
+a.loss_ratio AS "ePMLr",
+a.loss_type AS "ePML_type",
+a.return_period AS "ePML_Period",
+a.annual_frequency_of_exceedence AS "ePML_Probability",
+a.genocc AS "ePML_OccGen",
+a.eqbldgtype AS "ePML_BldgType"
+
+FROM psra.agg_curves_stats_684 a;
+
+
+
+-- create psra indicators
+DROP VIEW IF EXISTS results_psra_677.psra_677_economic_security_pml_r2_s CASCADE;
+CREATE VIEW results_psra_677.psra_677_economic_security_pml_r2_s AS
+
+-- 2.0 Seismic Risk (PSRA)
+-- 2.4 Economic Security
+SELECT
+a.sauid,
+
+-- 2.4.2 Probable Maximum Loss - r2
+a.loss_value AS "ePML",
+a.loss_ratio AS "ePMLr",
+a.loss_type AS "ePML_type",
+a.return_period AS "ePML_Period",
+a.annual_frequency_of_exceedence AS "ePML_Probability",
+a.genocc AS "ePML_OccGen",
+a.eqbldgtype AS "ePML_BldgType"
+
+FROM psra.agg_curves_stats_685 a;
