@@ -8,8 +8,10 @@ Sample datasets for sandbox database creation (obsolete data).
 PostgreSQL scripts, data export scripts for local development and testing.
 
 #### / Data Export
-Scripts for exporting PostreSQL tables to different formats using GDAL OGR2OGR.
-https://gdal.org/index.html
+Scripts for exporting PostreSQL tables to different formats using GDAL OGR2OGR.  
+
+https://gdal.org/index.html  
+
 https://gdal.org/programs/ogr2ogr.html
 
 #### / ER Creation
