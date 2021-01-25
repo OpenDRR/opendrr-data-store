@@ -11,11 +11,10 @@ PostgreSQL scripts, data export scripts for local development and testing.
 Scripts for exporting PostreSQL tables to different formats using GDAL OGR2OGR.  
 
 https://gdal.org/index.html  
-
 https://gdal.org/programs/ogr2ogr.html
 
 #### / ER Creation
-Scripts for ER creation development (PK/FK).  For future implementation of ER Diagrams using schemaspy.
+Scripts for ER creation development (PK/FK).  For future implementation of ER Diagrams using schemaspy.  
 http://schemaspy.org/
 
 #### / Indicators
