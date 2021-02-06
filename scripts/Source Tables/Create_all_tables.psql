@@ -1,0 +1,433 @@
+-- create tables in one script
+
+/* Create_table_canada_exposure.sql */
+-- script to generate Canada exposure table
+DROP TABLE IF EXISTS exposure.canada_exposure CASCADE;
+
+-- create table
+CREATE TABLE exposure.canada_exposure(
+    PRIMARY KEY (id),
+    objectid varchar,
+    id varchar,
+    SauidLat float,
+    SauidLon float,
+    Sauid_km2 float,
+    Sauid_ha float,
+    LandUse varchar,
+    taxonomy varchar,
+    number float,
+    structural float,
+    nonstructural float,
+    contents float,
+    retrofitting float,
+    day float,
+    night float,
+    transit float,
+    GenOcc varchar,
+    OccClass1 varchar,
+    OccClass2 varchar,
+    PopDU float,
+    GenType varchar,
+    BldgType varchar,
+    NumFloors float,
+    Bldg_ft2 float,
+    BldYear float,
+    BldEpoch varchar,
+    SSC_Zone varchar,
+    EqDesLev varchar,
+    sauid varchar,
+    dauid varchar,
+    adauid varchar,
+    fsauid varchar,
+    csduid varchar,
+    csdname varchar,
+    cduid varchar,
+    cdname varchar,
+    SAC varchar,
+    eruid varchar,
+    ername varchar,
+    pruid varchar,
+    prname varchar
+
+);
+
+
+
+/*Create_table_canada_site_exposure_ste.sql */
+-- script to generate Canada  site level exposure table
+DROP TABLE IF EXISTS exposure.metrovan_site_exposure CASCADE;
+
+-- create table
+CREATE TABLE exposure.metrovan_site_exposure(
+PRIMARY KEY (id),
+OBJECTID varchar,
+id varchar,
+SiteID varchar,
+SiteLon float,
+SiteLat float,
+SauidID varchar,
+SauidLat float,
+SauidLon float,
+Sauid_km2 float,
+Sauid_ha float,
+LandUse varchar,
+taxonomy varchar,
+number float,
+structural float,
+nonstructural float,
+contents float,
+business float,
+"limit" float,
+deductible float,
+retrofitting float,
+day float,
+night float,
+transit float,
+GenOcc varchar,
+OccClass1 varchar,
+OccClass2 varchar,
+PopDU float,
+GenType varchar,
+BldgType varchar,
+NumFloors float,
+Bldg_ft2 float,
+BldYear float,
+BldEpoch varchar,
+SSC_Zone varchar,
+EqDesLev varchar,
+sauid varchar,
+dauid varchar,
+adauid varchar,
+fsauid varchar,
+csduid varchar,
+csdname varchar,
+cduid varchar,
+cdname varchar,
+SAC varchar,
+eruid varchar,
+ername varchar,
+pruid varchar,
+prname varchar,
+OBJECTID_1 varchar,
+OBJECTID_12 varchar,
+SAUIDt varchar,
+SAUIDi varchar,
+Lon varchar,
+Lat varchar,
+Area_km2 varchar,
+Area_ha varchar,
+DAUIDt varchar,
+DAUIDi varchar,
+ADAUID_1 varchar,
+CFSAUID varchar,
+PRUID_1 varchar,
+PRNAME_1 varchar,
+CSDUID_1 varchar,
+CSDNAME_1 varchar,
+CSDTYPE varchar,
+CDUID_1 varchar,
+CDNAME_1 varchar,
+CDTYPE varchar,
+CCSUID varchar,
+CCSNAME varchar,
+ERUID_1 varchar,
+ERNAME_1 varchar,
+SACCODE varchar,
+SACTYPE varchar,
+CMAUID varchar,
+CMAPUID varchar,
+CMANAME varchar,
+CMATYPE varchar,
+Shape_Leng varchar,
+Shape_Length varchar,
+Shape_Area varchar
+
+);
+
+
+
+/* Create_table_vs_30_CAN_site_model.sql */
+-- script to generate vs30 table
+DROP TABLE IF EXISTS vs30.vs30_can_site_model CASCADE;
+
+-- create table
+CREATE TABLE vs30.vs30_can_site_model(
+    lon float,
+    lat float,
+    vs30 float,
+    z1pt0 float,
+    z2pt5 float  
+);
+
+
+
+/* Create_table_vs_30_CAN_site_model_xref.sql */
+-- script to generate vs30 can site model xref
+DROP TABLE IF EXISTS vs30.vs30_can_site_model_xref CASCADE;
+
+-- create table
+CREATE TABLE vs30.vs30_can_site_model_xref(
+    id varchar,
+    asset_lon float,
+    asset_lat float,
+    vs30 float,
+    z1pt0 float,
+    z2pt5 float,
+    vs_lon float,
+    vs_lat float,
+    distance float 
+);
+
+
+/* Create_table_shakemap.sql */
+
+
+
+/* Create_table_2016_census_v3.sql */
+-- script to generate census table
+DROP TABLE IF EXISTS census.census_2016_canada CASCADE;
+
+-- create table
+CREATE TABLE census.census_2016_canada(
+    PRIMARY KEY(SAUIDt),
+    OBJECTID varchar,
+    SAUIDt varchar,
+    SAUIDi float,
+    DAUIDt varchar,
+    DAUIDi float,
+    Fsauid varchar,
+    Csdname varchar,
+    Cdname varchar,
+    Ername varchar,
+    Prname varchar,
+    Lon float,
+    Lat float,
+    BldgNum float,
+    CostAsset float,
+    CostBldg float,
+    PopDay float,
+    PopNight float,
+    PopTrnst float,
+    Concrete float,
+    Manufactured float,
+    Precast float,
+    RMasonry float,
+    Steel float,
+    URMasonry float,
+    Wood float,
+    Agr float,
+    Comm float,
+    Ind float,
+    Civic float,
+    Res_HD float,
+    Res_MD float,
+    Res_LD float,
+    CensusPop float,
+    CensusBldg float,
+    CensusDU float,
+    CensusRESLD float,
+    CensusResMD float,
+    CensusRESHD float,
+    CensusCOMM float,
+    CensusIND float,
+    CensusCIVIC float,
+    CensusAGR float,
+    Area_km2 float,
+    Area_ha float,
+    Shape_Length float,
+    Shape_Area float,
+    LandUse varchar,
+    PRUID varchar,
+    ProvAbbr varchar,
+    People_DU float,
+    DAUID varchar,
+    SACTYPE varchar,
+    PopTotal float,
+    Pop_Dens float,
+    Pop_Ha float,
+    Bus_Ha float,
+    Pre_1975 float,
+    Renter float,
+    Hshld_NSuit float,
+    Hshld_Mntn1 float,
+    Hshld_MntnAge float,
+    Pub_Trans float,
+    Vis_Min float,
+    Imm_LT5 float,
+    Indigenous float,
+    Age_GT65 float,
+    Age_LT6 float,
+    Age_Median float,
+    NoSec_School float,
+    Retail_Job float,
+    Health_Job float,
+    Fam_GT5 float,
+    LonePar3Kids float,
+    Live_Alone float,
+    No_EngFr float,
+    Moved_LT1 float,
+    NoWrkPlace float,
+    Shltr_GT30 float,
+    Inc_Indv float,
+    Inc_Hshld float,
+    Inc_LowDecile float,
+    Unemployed float,
+    Work_Parttime float,
+    Work_None float,
+    Employ_Inc float
+    
+);
+
+
+
+/* Create_table_sovi_index_canada_v2.sql */
+-- script to generate sovi index
+DROP TABLE IF EXISTS sovi.sovi_index_canada CASCADE;
+
+-- create table
+CREATE TABLE sovi.sovi_index_canada(
+    PRIMARY KEY(SAUIDt),
+    OBJECTID varchar,
+    SAUIDt varchar,
+    SAUIDi integer,
+    Lon float,
+    Lat float,
+    Area_km2 float,
+    Area_ha float,
+    DAUIDt varchar,
+    DAUIDi integer,
+    ADAUID varchar,
+    CFSAUID varchar,
+    PRUID varchar,
+    PRNAME varchar,
+    CSDUID varchar,
+    CSDNAME varchar,
+    CSDTYPE varchar,
+    CDUID varchar,
+    CDNAME varchar,
+    CDTYPE varchar,
+    CCSUID varchar,
+    CCSNAME varchar,
+    ERUID varchar,
+    ERNAME varchar,
+    SACCODE varchar,
+    SACTYPE varchar,
+    CMAUID varchar,
+    CMAPUID varchar,
+    CMANAME varchar,
+    CMATYPE varchar,
+    Shape_Length varchar,
+    Shape_Area varchar,
+    DAUID varchar,
+    Pop_Density float,
+    Pop_Ha float,
+    Bus_Ha float,
+    Pre_1975 float,
+    Renter float,
+    Hshld_NSuit float,
+    Hshld_Mntn1 float,
+    Hshld_MntnAge float,
+    Pub_Trans float,
+    Vis_Min float,
+    Imm_LT5 float,
+    Indigenous float,
+    Age_GT65 float,
+    Age_LT6 float,
+    Age_Median float,
+    NoSec_School float,
+    Retail_Job float,
+    Health_Job float,
+    Fam_GT5 float,
+    LonePar3Kids float,
+    Live_Alone float,
+    No_EngFr float,
+    Moved_LT1 float,
+    NoWrkPlace float,
+    Shltr_GT30 float,
+    Inc_Indv float,
+    Inc_Hshld float,
+    Inc_LowDecile float,
+    Unemployed float,
+    Work_Parttime float,
+    Work_None float,
+    Employ_Inc float,
+    MH_Index float
+);
+
+
+
+/* Create_table_sovi_census_canada.sql */
+DROP TABLE IF EXISTS sovi.sovi_census_canada CASCADE;
+
+-- create table
+CREATE TABLE sovi.sovi_census_canada(
+    PRIMARY KEY(SAUIDt),
+    OBJECTID varchar,
+    SAUIDt varchar,
+    SAUIDi integer,
+    Lon float,
+    Lat float,
+    Area_km2 float,
+    Area_ha float,
+    DAUIDt varchar,
+    DAUIDi integer,
+    ADAUID varchar,
+    CFSAUID varchar,
+    PRUID varchar,
+    PRNAME varchar,
+    CSDUID varchar,
+    CSDNAME varchar,
+    CSDTYPE varchar,
+    CDUID varchar,
+    CDNAME varchar,
+    CDTYPE varchar,
+    CCSUID varchar,
+    CCSNAME varchar,
+    ERUID varchar,
+    ERNAME varchar,
+    SACCODE varchar,
+    SACTYPE varchar,
+    CMAUID varchar,
+    CMAPUID varchar,
+    CMANAME varchar,
+    CMATYPE varchar,
+    Shape_Length float,
+    Shape_Area float,
+    DAUID varchar,
+    Pop_Dens float,
+    Pop_Ha float,
+    Bus_Ha float,
+    Pre_1975 float,
+    Renter float,
+    Hshld_NSuit float,
+    Hshld_Mntn1 float,
+    Hshld_MntnAge float,
+    Pub_Trans float,
+    Vis_Min float,
+    Imm_LT5 float,
+    Indigenous float,
+    Age_GT65 float,
+    Age_LT6 float,
+    Age_Median float,
+    NoSec_School float,
+    Retail_Job float,
+    Health_Job float,
+    Fam_GT5 float,
+    LonePar3Kids float,
+    Live_Alone float,
+    No_EngFr float,
+    Moved_LT1 float,
+    NoWrkPlace float,
+    Shltr_GT30 float,
+    Inc_Indv float,
+    Inc_Hshld float,
+    Inc_LowDecile float,
+    Unemployed float,
+    Work_Parttime float,
+    Work_None float,
+    Employ_Inc float
+);
+
+
+
+/* placeholder for Create_table_sovi_thresholds.psql */
