@@ -12,19 +12,6 @@ CREATE TABLE results_nhsl_hazard_threat.nhsl_hazard_threat_all_indicators_b_tbl 
 -- 4.1.1 Multi-Hazard Intensity
 SELECT 
 a.id AS "BldgID",
-a.sauid AS "Sauid",
-d."PRUID" AS "pruid",
-d."PRNAME" AS "prname",
-d."ERUID" AS "eruid",
-d."ERNAME" AS "ername",
-d."CDUID" AS "cduid",
-d."CDNAME" AS "cdname",
-d."CSDUID" AS "csduid",
-d."CSDNAME" AS "csdname",
-d."CFSAUID" AS "fsauid",
-d."DAUIDt" AS "dauid",
-d."SACCODE" AS "saccode",
-d."SACTYPE" AS "sactype",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLat",
 CAST(CAST(ROUND(CAST(a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgNum",
@@ -44,11 +31,13 @@ CAST(CAST(ROUND(CAST(a.transit AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_PopTra
 CAST(CAST(ROUND(CAST(a.structural + a.nonstructural + a.contents AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AssetValue",
 CAST(CAST(ROUND(CAST(a.structural + a.nonstructural AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgValue",
 
+/*
 CASE
 	WHEN (c.pop_ha < 35) THEN 'Low'
 	WHEN (c.pop_ha > 35 AND c.pop_ha < 75) THEN 'Moderate'
 	WHEN (c.pop_ha > 55) THEN 'High'
 	ELSE 'None' END AS "HTt_Exposure",
+*/
 
 -- PGV
 CAST(CAST(ROUND(CAST(b.pgv2500 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_PGV2500",
@@ -134,6 +123,19 @@ CASE
 
 CAST(CAST(ROUND(CAST(b.cy1000 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_Cy1000",
 
+a.sauid AS "Sauid",
+d."PRUID" AS "pruid",
+d."PRNAME" AS "prname",
+d."ERUID" AS "eruid",
+d."ERNAME" AS "ername",
+d."CDUID" AS "cduid",
+d."CDNAME" AS "cdname",
+d."CSDUID" AS "csduid",
+d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a

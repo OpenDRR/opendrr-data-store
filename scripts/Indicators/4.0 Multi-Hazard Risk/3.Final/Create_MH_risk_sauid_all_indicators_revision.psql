@@ -11,19 +11,7 @@ CREATE TABLE results_nhsl_hazard_threat.nhsl_hazard_threat_all_indicators_s_tbl 
 -- 4.1 Multi-Hazard Threat
 -- 4.1.1 Multi-Hazard Intensity
 SELECT 
-a.sauid AS "E_Sauid",
-d."PRUID" AS "pruid",
-d."PRNAME" AS "prname",
-d."ERUID" AS "eruid",
-d."ERNAME" AS "ername",
-d."CDUID" AS "cduid",
-d."CDNAME" AS "cdname",
-d."CSDUID" AS "csduid",
-d."CSDNAME" AS "csdname",
-d."CFSAUID" AS "fsauid",
-d."DAUIDt" AS "dauid",
-d."SACCODE" AS "saccode",
-d."SACTYPE" AS "sactype",
+a.sauid AS "Sauid",
 CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_SauidLon",
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_SauidLat",
 CAST(CAST(ROUND(CAST(a.sauid_km2 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
@@ -93,7 +81,6 @@ CASE
 	WHEN (b.pga500 > 0.180 AND b.pga500 <= 0.340) OR (b.pga500 > 0.340 AND b.pga500 <= 0.650) OR (b.pga500 > 0.650) AND (c.pop_ha <= 35) THEN 'C1'
 	WHEN (b.pga500 > 0.180 AND b.pga500 <= 0.340) OR (b.pga500 > 0.340 AND b.pga500 <= 0.650) OR (b.pga500 > 0.650) AND (c.pop_ha > 35 AND c.pop_ha <= 75) THEN 'C2'
 	WHEN (b.pga500 > 0.180 AND b.pga500 <= 0.340) OR (b.pga500 > 0.340 AND b.pga500 <= 0.650) OR (b.pga500 > 0.650) AND (c.pop_ha > 75) THEN 'C3'
-	
 	ELSE 'None' END AS "HTt_PGA500",
 
 CASE WHEN (b.pga500 >= 0.18) OR (b.tsun500 >= 50) THEN CAST(CAST(ROUND(CAST(SUM(a.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) ELSE 0 END AS "HTp_PGA500",
@@ -223,10 +210,21 @@ CASE
 	WHEN (b.cy500 > 154 AND b.cy500 <= 177) OR (b.cy500 > 178 AND b.cy500 <= 208) OR (b.cy500 > 209) AND (c.pop_ha > 75) THEN 'B3'
 	ELSE 'None' END AS "HTt_Cy500",
 
-
-CAST(CAST(ROUND(CAST(b.cy1000 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_Cy1000",
 CASE WHEN (b.cy500 >= 178) THEN CAST(CAST(ROUND(CAST(SUM(a.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) ELSE 0 END AS "HTp_Cy500",
+CAST(CAST(ROUND(CAST(b.cy1000 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_Cy1000",
 
+d."PRUID" AS "pruid",
+d."PRNAME" AS "prname",
+d."ERUID" AS "eruid",
+d."ERNAME" AS "ername",
+d."CDUID" AS "cduid",
+d."CDNAME" AS "cdname",
+d."CSDUID" AS "csduid",
+d."CSDNAME" AS "csdname",
+d."CFSAUID" AS "fsauid",
+d."DAUIDt" AS "dauid",
+d."SACCODE" AS "saccode",
+d."SACTYPE" AS "sactype",
 d.geom AS "geom_poly"
 --d.geompoint AS "geom_point"
 
