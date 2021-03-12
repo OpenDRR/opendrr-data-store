@@ -156,6 +156,7 @@ CAST(CAST(ROUND(CAST(a."sC_DisplRes_90_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) 
 CAST(CAST(ROUND(CAST(a."sC_DisplRes_180_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisplRes180_b0",
 CAST(CAST(ROUND(CAST(a."sC_DisplRes_360_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisplRes360_b0",
 
+/*
 CAST(CAST(ROUND(CAST(COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) * 
 ((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
 (0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
@@ -167,6 +168,7 @@ CAST(CAST(ROUND(CAST(COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.nig
 ((CASE WHEN b.genocc ='Residential-LD' OR b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END) / 
 NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) + 
 (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END),0)),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisplHshld_b0",
+*/
 
 CAST(CAST(ROUND(CAST((CASE WHEN a."sC_Downtime_b0" > 3 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) * 
 ((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
@@ -240,6 +242,7 @@ CAST(CAST(ROUND(CAST(a."sC_DisplRes_30_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) 
 CAST(CAST(ROUND(CAST(a."sC_DisplRes_90_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisplRes90_r2",
 CAST(CAST(ROUND(CAST(a."sC_DisplRes_360_r2" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisplRes360_r2",
 
+/*
 CAST(CAST(ROUND(CAST(COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) * 
 ((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 
 (0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_r2" / b.number ELSE 0 END)) + 
@@ -251,6 +254,7 @@ CAST(CAST(ROUND(CAST(COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.nig
 ((CASE WHEN b.genocc ='Residential-LD' OR b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END) / 
 NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) + 
 (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END),0)),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DisplHshld_r2",
+*/
 
 CAST(CAST(ROUND(CAST((CASE WHEN a."sC_Downtime_r2" > 3 THEN (COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) * 
 ((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_r2" / b.number ELSE 0 END)) + 

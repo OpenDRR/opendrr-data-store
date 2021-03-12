@@ -1,0 +1,181 @@
+-- create master dsra table
+DROP TABLE IF EXISTS dsra.dsra_all_scenarios_tbl CASCADE;
+CREATE TABLE dsra.dsra_all_scenarios_tbl(
+assetid varchar,
+sauid varchar,
+pruid varchar,
+prname varchar,
+eruid varchar,
+ername varchar,
+cduid varchar,
+cdname varchar,
+csduid varchar,
+csdname varchar,
+fsauid varchar,
+dauid varchar,
+sh_rupname varchar,
+sh_mag varchar,
+sh_hypolon float,
+sh_hypolat float,
+sh_hypodepth float,
+sh_rake varchar,
+geom_point geometry
+); 
+
+-- insert values into table
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
+FROM results_dsra_acm6p5_beaufort.dsra_acm6p5_beaufort_all_indicators_b;
+
+-- insert values into table
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
+FROM results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_all_indicators_b;
+
+-- insert values into table
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
+FROM results_dsra_idm5p0_sidney.dsra_idm5p0_sidney_all_indicators_b;
+
+-- insert values into table
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
+FROM results_dsra_idm5p6_sidney.dsra_idm5p6_sidney_all_indicators_b;
+
+-- insert values into table
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
+FROM results_dsra_idm6p6_sidney.dsra_idm6p6_sidney_all_indicators_b;
+
+-- insert values into table
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
+FROM results_dsra_scm7p0_montrealnw.dsra_scm7p0_montrealnw_all_indicators_b;
+
+-- insert values into table
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
+FROM results_dsra_scm6p5_ottawa.dsra_scm6p5_ottawa_all_indicators_b;
+
+/* -- template
+-- insert values into table
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth",geom_point
+FROM results_{scenario}.{scenario}_all_indicators_b;
+*/
+
+
+
+-- create scenario risk building indicators
+DROP VIEW IF EXISTS dsra.dsra_all_scenarios CASCADE;
+CREATE VIEW dsra.dsra_all_scenarios AS 
+SELECT * FROM dsra.dsra_all_scenarios_tbl ORDER BY assetid, sh_rupname;
+
+
+-- sauid
+select 
+a.sauid,
+a.pruid,
+a.prname,
+a.eruid,
+a.cduid,
+a.cdname,
+a.csduid,
+a.csdname,
+a.fsauid,
+a.dauid,
+a.sh_rupname,
+a.sh_mag,
+a.sh_hypolon,
+a.sh_hypolat,
+a.sh_hypodepth,
+a.sh_rake,
+b.geom
+FROM dsra.dsra_all_scenarios_tbl a
+LEFT JOIN boundaries."Geometry_SAUID" b ON a.sauid = b."SAUIDt"
+GROUP BY sauid,pruid,prname,eruid,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,
+sh_hypodepth,sh_rake,b.geom;
+
+-- dauid
+select 
+a.dauid,
+a.pruid,
+a.prname,
+a.eruid,
+a.cduid,
+a.cdname,
+a.csduid,
+a.csdname,
+a.fsauid,
+a.sh_rupname,
+a.sh_mag,
+a.sh_hypolon,
+a.sh_hypolat,
+a.sh_hypodepth,
+a.sh_rake,
+b.geom
+FROM dsra.dsra_all_scenarios_tbl a
+LEFT JOIN boundaries."Geometry_DAUID" b ON a.dauid = b."DAUID"
+GROUP BY dauid,pruid,prname,eruid,cduid,cdname,csduid,csdname,fsauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,
+sh_hypodepth,sh_rake,b.geom;
+
+-- csduid
+select 
+a.csduid,
+a.csdname,
+a.pruid,
+a.prname,
+a.eruid,
+a.cduid,
+a.cdname,
+a.fsauid,
+a.sh_rupname,
+a.sh_mag,
+a.sh_hypolon,
+a.sh_hypolat,
+a.sh_hypodepth,
+a.sh_rake,
+b.geom
+FROM dsra.dsra_all_scenarios_tbl a
+LEFT JOIN boundaries."Geometry_CSDUID" b ON a.csduid = b."CSDUID"
+GROUP BY csduid,csdname,pruid,prname,eruid,cduid,cdname,fsauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,
+sh_hypodepth,sh_rake,b.geom;
+
+
+
+
+
+
+
+-- values for dsra master table
+/*
+SELECT 
+a."AssetID",
+f.rupture_name AS "sH_RupName",
+a."Rupture_Abbr" AS "sH_RupAbbr",
+f.magnitude AS "sH_Mag",
+CAST(CAST(ROUND(CAST(f.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLon",
+CAST(CAST(ROUND(CAST(f.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLat",
+CAST(CAST(ROUND(CAST(f.depth AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoDepth",
+f.rake AS "sH_Rake",
+b.sauid AS "Sauid",
+c."PRUID" AS "pruid",
+c."PRNAME" AS "prname",
+c."ERUID" AS "eruid",
+c."ERNAME" AS "ername",
+c."CDUID" AS "cduid",
+c."CDNAME" AS "cdname",
+c."CSDUID" AS "csduid",
+c."CSDNAME" AS "csdname",
+c."CFSAUID" AS "fsauid",
+c."DAUIDt" AS "dauid",
+c."SACCODE" AS "saccode",
+c."SACTYPE" AS "sactype",
+b.geom AS "geom_point"
+
+FROM dsra.dsra_sim9p0_cszlockedtrans a
+LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id
+LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt"
+LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr";
+*/
+

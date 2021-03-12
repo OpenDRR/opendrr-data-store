@@ -151,7 +151,7 @@ CAST(CAST(ROUND(CAST(AVG((i.structural_b0 + i.nonstructural_b0)/a.number) AS NUM
 CAST(CAST(ROUND(CAST(SUM(i.structural_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Str_b0",
 CAST(CAST(ROUND(CAST(SUM(i.nonstructural_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_NStr_b0",
 CAST(CAST(ROUND(CAST(SUM(i.contents_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Cont_b0",
--- sLr2_BCR_b0
+
 
 -- 2.4.1 Economic Loss - r2
 CAST(CAST(ROUND(CAST(SUM(i.structural_r2 + i.nonstructural_r2 + i.contents_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Asset_r2",
@@ -161,7 +161,7 @@ CAST(CAST(ROUND(CAST(AVG((i.structural_r2 + i.nonstructural_r2)/a.number) AS NUM
 CAST(CAST(ROUND(CAST(SUM(i.structural_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Str_r2",
 CAST(CAST(ROUND(CAST(SUM(i.nonstructural_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_NStr_r2",
 CAST(CAST(ROUND(CAST(SUM(i.contents_r2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Cont_r2",
--- SLr2_RoI
+
 
 z."PRUID" AS "pruid",
 z."PRNAME" AS "prname",
