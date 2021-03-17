@@ -82,3 +82,22 @@ nhsl_hazard_threat_all_indicators_s_qc, ^
 nhsl_hazard_threat_all_indicators_s_sk, ^
 nhsl_hazard_threat_all_indicators_s_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\province\layer_name\multi_hazard_threat\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_hazard_threat.%%x" -nln %%x
 PAUSE
+
+
+REM Geopackage multi hazard threat
+FOR %%x IN (nhsl_hazard_threat_all_indicators_b, ^
+nhsl_hazard_threat_all_indicators_b_ab, ^
+nhsl_hazard_threat_all_indicators_b_bc, ^
+nhsl_hazard_threat_all_indicators_b_mb, ^
+nhsl_hazard_threat_all_indicators_b_nb, ^
+nhsl_hazard_threat_all_indicators_b_nl, ^
+nhsl_hazard_threat_all_indicators_b_ns, ^
+nhsl_hazard_threat_all_indicators_b_nt, ^
+nhsl_hazard_threat_all_indicators_b_nu, ^
+nhsl_hazard_threat_all_indicators_b_on, ^
+nhsl_hazard_threat_all_indicators_b_pe, ^
+nhsl_hazard_threat_all_indicators_b_qc, ^
+nhsl_hazard_threat_all_indicators_b_sk, ^
+nhsl_hazard_threat_all_indicators_b_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\province\layer_name\multi_hazard_threat\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_hazard_threat.%%x" -nln %%x
+PAUSE
+

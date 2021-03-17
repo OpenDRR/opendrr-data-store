@@ -44,74 +44,6 @@ CAST(CAST(ROUND(CAST(b.mmi6 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_MMI6",
 CAST(CAST(ROUND(CAST(b.mmi7 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_MMI7",
 CAST(CAST(ROUND(CAST(b.mmi8 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_MMI8",
 
--- PGV
-CAST(CAST(ROUND(CAST(b.pgv2500 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_PGV2500",
-CAST(CAST(ROUND(CAST(b.pgv500 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_PGV500",
-
-/*
-CASE 
-	WHEN (b.pgv500 > 0.011 AND b.pgv500 < 0.081) THEN 'Low'
-	WHEN (b.pgv500 > 0.081 AND b.pgv500 < 0.16) THEN 'Moderate'
-	WHEN (b.pgv500 > 0.16 AND b.pgv500 < 0.31) THEN 'Considerable'
-	WHEN (b.pgv500 > 0.31 AND b.pgv500 < 0.6) THEN 'High'
-	WHEN (b.pgv500 > 0.6) THEN 'Extreme'
-	ELSE 'None' END AS "HTd_PGV500",
-
-CASE
-	WHEN (b.pgv500 > 0.011 AND b.pgv500 < 0.081) AND (c.pop_ha <= 35) THEN 'A1'
-	WHEN (b.pgv500 > 0.011 AND b.pgv500 < 0.081) AND (c.pop_ha > 35 AND c.pop_ha <= 75) THEN 'A2'
-	WHEN (b.pgv500 > 0.011 AND b.pgv500 < 0.081) AND (c.pop_ha > 75) THEN 'A3'
-	WHEN (b.pgv500 > 0.081 AND b.pgv500 < 0.16) AND (c.pop_ha <= 35) THEN 'B1'
-	WHEN (b.pgv500 > 0.081 AND b.pgv500 < 0.16) AND (c.pop_ha > 35 AND c.pop_ha <= 75) THEN 'B2'
-	WHEN (b.pgv500 > 0.081 AND b.pgv500 < 0.16) AND (c.pop_ha > 75) THEN 'B3'
-	WHEN (b.pgv500 > 0.16 AND b.pgv500 < 0.31) OR (b.pgv500 > 0.31 AND b.pgv500 < 0.6) OR (b.pgv500 > 0.6) AND (c.pop_ha <= 35) THEN 'C1'
-	WHEN (b.pgv500 > 0.16 AND b.pgv500 < 0.31) OR (b.pgv500 > 0.31 AND b.pgv500 < 0.6) OR (b.pgv500 > 0.6) AND (c.pop_ha > 35 AND c.pop_ha <= 75) THEN 'C2'
-	WHEN (b.pgv500 > 0.16 AND b.pgv500 < 0.31) OR (b.pgv500 > 0.31 AND b.pgv500 < 0.6) OR (b.pgv500 > 0.6) AND (c.pop_ha > 75) THEN 'C3'
-	ELSE 'None' END AS "HTt_PGV500",
-*/
-
-CASE 
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'Low'
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'Moderate'
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable')) THEN 'Considerable'
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'High'
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'Extreme'
-	ELSE 'None' END AS "HTd_PGV500",
-
-CASE
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high')) AND 
-	(c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'A1'
-
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high')) AND
-	(c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high') AND c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'A2'
-
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high')) AND 
-	(c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'A3'
-	
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate')) AND 
-    (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'B1'
-
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate')) AND 
-   (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high') AND c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'B2'
-
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate')) AND
-    (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'B3'
-	
-    WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable')) OR 
-    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) OR 
-    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'C1'
-
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable')) OR 
-    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) OR 
-    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high') AND 
-    c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C2'
-
-	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable')) OR 
-    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) OR 
-    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C3'
-    
-	ELSE 'None' END AS "HTt_PGV500",
-
 -- PGA
 CAST(CAST(ROUND(CAST(b.pga2500 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_PGA2500",
 CAST(CAST(ROUND(CAST(b.pga500 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_PGA500",
@@ -146,6 +78,78 @@ CASE
 	WHEN (b.pga500 > (SELECT hti_pga500 FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'Extreme'
 	ELSE 'None' END AS "HTd_PGA500",
 
+-- PGV
+--CAST(CAST(ROUND(CAST(b.pgv2500 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_PGV2500",
+--CAST(CAST(ROUND(CAST(b.pgv500 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_PGV500",
+
+/*
+CASE 
+	WHEN (b.pgv500 > 0.011 AND b.pgv500 < 0.081) THEN 'Low'
+	WHEN (b.pgv500 > 0.081 AND b.pgv500 < 0.16) THEN 'Moderate'
+	WHEN (b.pgv500 > 0.16 AND b.pgv500 < 0.31) THEN 'Considerable'
+	WHEN (b.pgv500 > 0.31 AND b.pgv500 < 0.6) THEN 'High'
+	WHEN (b.pgv500 > 0.6) THEN 'Extreme'
+	ELSE 'None' END AS "HTd_PGV500",
+
+CASE
+	WHEN (b.pgv500 > 0.011 AND b.pgv500 < 0.081) AND (c.pop_ha <= 35) THEN 'A1'
+	WHEN (b.pgv500 > 0.011 AND b.pgv500 < 0.081) AND (c.pop_ha > 35 AND c.pop_ha <= 75) THEN 'A2'
+	WHEN (b.pgv500 > 0.011 AND b.pgv500 < 0.081) AND (c.pop_ha > 75) THEN 'A3'
+	WHEN (b.pgv500 > 0.081 AND b.pgv500 < 0.16) AND (c.pop_ha <= 35) THEN 'B1'
+	WHEN (b.pgv500 > 0.081 AND b.pgv500 < 0.16) AND (c.pop_ha > 35 AND c.pop_ha <= 75) THEN 'B2'
+	WHEN (b.pgv500 > 0.081 AND b.pgv500 < 0.16) AND (c.pop_ha > 75) THEN 'B3'
+	WHEN (b.pgv500 > 0.16 AND b.pgv500 < 0.31) OR (b.pgv500 > 0.31 AND b.pgv500 < 0.6) OR (b.pgv500 > 0.6) AND (c.pop_ha <= 35) THEN 'C1'
+	WHEN (b.pgv500 > 0.16 AND b.pgv500 < 0.31) OR (b.pgv500 > 0.31 AND b.pgv500 < 0.6) OR (b.pgv500 > 0.6) AND (c.pop_ha > 35 AND c.pop_ha <= 75) THEN 'C2'
+	WHEN (b.pgv500 > 0.16 AND b.pgv500 < 0.31) OR (b.pgv500 > 0.31 AND b.pgv500 < 0.6) OR (b.pgv500 > 0.6) AND (c.pop_ha > 75) THEN 'C3'
+	ELSE 'None' END AS "HTt_PGV500",
+*/
+/*
+CASE 
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'Low'
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'Moderate'
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable')) THEN 'Considerable'
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'High'
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'Extreme'
+	ELSE 'None' END AS "HTd_PGV500",
+*/
+
+/*
+CASE
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high')) AND 
+	(c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'A1'
+
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high')) AND
+	(c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high') AND c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'A2'
+
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high')) AND 
+	(c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'A3'
+	
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate')) AND 
+    (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'B1'
+
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate')) AND 
+   (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high') AND c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'B2'
+
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate')) AND
+    (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'B3'
+	
+    WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable')) OR 
+    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) OR 
+    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'C1'
+
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable')) OR 
+    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) OR 
+    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high') AND 
+    c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C2'
+
+	WHEN (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'moderate') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable')) OR 
+    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.pgv500 < (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) OR 
+    (b.pgv500 > (SELECT hti_pgv500 FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C3'
+    
+	ELSE 'None' END AS "HTt_PGV500",
+*/
+
+/*
 CASE
 	WHEN (b.pga500 > (SELECT hti_pga500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.pga500 <= (SELECT hti_pga500 FROM mh.mh_thresholds WHERE threat = 'low_high')) AND 
     (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'A1'
@@ -178,6 +182,7 @@ CASE
     (b.pga500 > (SELECT hti_pga500 FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C3'
 
 	ELSE 'None' END AS "HTt_PGA500",
+*/
 
 -- Tsunami
 CAST(CAST(ROUND(CAST(b.tsun500 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_Tsun500",
@@ -207,7 +212,8 @@ CASE
     WHEN (b.tsun500 > (SELECT hti_tsun500 FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.tsun500 <= (SELECT hti_tsun500 FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'High'
 	WHEN (b.tsun500 > (SELECT hti_tsun500 FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'Extreme'
 	ELSE 'None' END AS "Htd_Tsun500",
-	
+
+/*	
 CASE
 	WHEN (b.tsun500 > (SELECT hti_tsun500 FROM mh.mh_thresholds WHERE threat = 'moderate') AND b.tsun500 <= (SELECT hti_tsun500 FROM mh.mh_thresholds WHERE threat = 'considerable')) AND 
     (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'A1'
@@ -235,6 +241,7 @@ CASE
 	WHEN (b.tsun500 > (SELECT hti_tsun500 FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C3'
 
 	ELSE 'None' END AS "HTt_Tsun500",
+*/
 
 -- Flood
 CAST(CAST(ROUND(CAST(b.fld50_jrc AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_Fld50",
@@ -273,6 +280,7 @@ CASE
 	WHEN (b.fld500_jrc >= (SELECT hti_fld500 FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'Extreme'
 	ELSE 'None' END AS "HTd_Fld500",
 
+/*
 CASE
 	WHEN (b.fld500_jrc > (SELECT hti_fld500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.fld500_jrc < (SELECT hti_fld500 FROM mh.mh_thresholds WHERE threat = 'low_high')) AND 
     (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'A1'
@@ -302,6 +310,7 @@ CASE
     (b.fld500_jrc >= 400) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C3'
 	
     ELSE 'None' END AS "HTt_Fld500",
+*/
 
 --CAST(CAST(ROUND(CAST(b.fld1000 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_Fld1000",
 
@@ -372,6 +381,7 @@ CASE
 	WHEN (b.wildfire > (SELECT hti_wildfire FROM mh.mh_thresholds WHERE threat = 'high') AND (b.wui_type = 'Mixed' OR b.wui_type = 'Interface')) THEN 'Extreme'
 	ELSE 'None' END AS "HTd_Wildfire",
 
+/*
 CASE
 	WHEN (b.wildfire > (SELECT hti_wildfire FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.wildfire <= (SELECT hti_wildfire FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.wui_type = 'Interface') AND 
     (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'A1'
@@ -405,9 +415,11 @@ CASE
     (b.wildfire > (SELECT hti_wildfire FROM mh.mh_thresholds WHERE threat = 'high') AND (b.wui_type = 'Mixed' OR b.wui_type = 'Interface')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C3'
 
 	ELSE 'None' END AS "HTt_Wildfire",
+*/
+
 
 -- Landslide
-CAST(CAST(ROUND(CAST(b.lndsus AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_LndSus",
+--CAST(CAST(ROUND(CAST(b.lndsus AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_LndSus",
 
 /*
 CASE 
@@ -431,6 +443,7 @@ CASE
 	ELSE 'None' END AS "HTt_LndSus",
 */
 
+/*
 CASE 
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.lndsus <= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'Low'
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.lndsus <= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'Moderate'
@@ -438,7 +451,9 @@ CASE
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.lndsus <= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'High'
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'Extreme'
  	ELSE 'None' END AS "HTd_LndSus",
+*/
 
+/*
 CASE
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.lndsus <= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_high')) AND 
     (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'A1'
@@ -472,6 +487,7 @@ CASE
     (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C3'
 
 	ELSE 'None' END AS "HTt_LndSus",
+*/
 
 --Cyclone
 CAST(CAST(ROUND(CAST(b.cy100 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_Cy100",
@@ -509,6 +525,7 @@ CASE
 	WHEN (b.cy500 > (SELECT hti_cy500 FROM mh.mh_thresholds WHERE threat = 'high_p1')) THEN 'Extreme'
 	ELSE 'None' END AS "HTd_Cy500",
 
+/*
 CASE
 	WHEN (b.cy500 > (SELECT hti_cy500 FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.cy500 <= (SELECT hti_cy500 FROM mh.mh_thresholds WHERE threat = 'low_high')) AND 
     (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'A1'
@@ -541,6 +558,7 @@ CASE
     (b.cy500 > (SELECT hti_cy500 FROM mh.mh_thresholds WHERE threat = 'high_p1')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'B3'
 
 	ELSE 'None' END AS "HTt_Cy500",
+*/
 
 CAST(CAST(ROUND(CAST(b.cy1000 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_Cy1000",
 
@@ -619,4 +637,3 @@ SELECT * FROM results_nhsl_hazard_threat.nhsl_hazard_threat_all_indicators_b WHE
 DROP VIEW IF EXISTS results_nhsl_hazard_threat.nhsl_hazard_threat_all_indicators_b_nu CASCADE;
 CREATE VIEW results_nhsl_hazard_threat.nhsl_hazard_threat_all_indicators_b_nu AS 
 SELECT * FROM results_nhsl_hazard_threat.nhsl_hazard_threat_all_indicators_b WHERE pruid ='62';
-

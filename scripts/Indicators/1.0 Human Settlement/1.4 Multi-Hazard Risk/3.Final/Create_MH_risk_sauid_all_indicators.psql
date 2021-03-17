@@ -397,7 +397,7 @@ CASE
 CASE WHEN (b.wildfire >= (SELECT hti_wildfire FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN CAST(CAST(ROUND(CAST(SUM(a.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) ELSE 0 END AS "HTp_Wildfire",
 
 -- Landslide
-CAST(CAST(ROUND(CAST(b.lndsus AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_LndSus",
+--CAST(CAST(ROUND(CAST(b.lndsus AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_LndSus",
 
 /*
 CASE 
@@ -423,6 +423,7 @@ CASE
 CASE WHEN (b.lndsus >= 3) THEN CAST(CAST(ROUND(CAST(SUM(a.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) ELSE 0 END AS "HTp_LndSus",
 */
 
+/*
 CASE 
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.lndsus <= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'Low'
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_high') AND b.lndsus <= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'Moderate'
@@ -430,7 +431,9 @@ CASE
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'considerable') AND b.lndsus <= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'High'
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'high')) THEN 'Extreme'
  	ELSE 'None' END AS "HTd_LndSus",
+*/
 
+/*
 CASE
 	WHEN (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_bottom') AND b.lndsus <= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'low_high')) AND 
     (c.pop_ha < (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'low_high')) THEN 'A1'
@@ -464,8 +467,9 @@ CASE
     (b.lndsus > (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'high')) AND (c.pop_ha > (SELECT htt_exposure FROM mh.mh_thresholds WHERE threat = 'moderate')) THEN 'C3'
 
 	ELSE 'None' END AS "HTt_LndSus",
-	
-CASE WHEN (b.lndsus >= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'considerable')) THEN CAST(CAST(ROUND(CAST(SUM(a.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) ELSE 0 END AS "HTp_LndSus",
+*/
+
+--CASE WHEN (b.lndsus >= (SELECT hti_lndsus FROM mh.mh_thresholds WHERE threat = 'considerable')) THEN CAST(CAST(ROUND(CAST(SUM(a.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) ELSE 0 END AS "HTp_LndSus",
 
 --Cyclone
 CAST(CAST(ROUND(CAST(b.cy100 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "HTi_Cy100",
