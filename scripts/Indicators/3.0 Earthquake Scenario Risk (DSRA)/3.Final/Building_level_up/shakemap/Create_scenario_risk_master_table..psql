@@ -233,9 +233,9 @@ a.sh_hypolat,
 a.sh_hypodepth,
 a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
-LEFT JOIN boundaries."Geometry_SAUID" b ON a.sauid = b."SAUIDt"
-GROUP BY sauid,dauid,csduid,csdname,cduid,cdname,fsauid,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
+GROUP BY sauid,dauid,csduid,csdname,cduid,cdname,fsauid,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
+DROP TABLE IF EXISTS dsra.dsra_all_scenarios_sauid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_sauid_tbl AS
 (
 SELECT
@@ -346,6 +346,7 @@ FROM dsra.dsra_all_scenarios_tbl a
 LEFT JOIN boundaries."Geometry_DAUID" b ON a.dauid = b."DAUID"
 GROUP BY dauid,csduid,csdname,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
+DROP TABLE IF EXISTS dsra.dsra_all_scenarios_dauid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_dauid_tbl AS
 (
 SELECT
@@ -448,6 +449,7 @@ a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
 GROUP BY csduid,csdname,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
+DROP TABLE IF EXISTS dsra.dsra_all_scenarios_csduid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_csduid_tbl AS
 (
 SELECT
@@ -472,7 +474,6 @@ LEFT JOIN boundaries."Geometry_CSDUID" b ON a.csduid = b."CSDUID");
 
 -- create index on master dsra csduid table
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_csduid_csduid_idx ON dsra.dsra_all_scenarios_csduid_tbl(csduid);
-CREATE INDEX IF NOT EXISTS dsra_all_scenarios_csduid_fsauid_idx ON dsra.dsra_all_scenarios_csduid_tbl(fsauid);
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_csduid_cduid_idx ON dsra.dsra_all_scenarios_csduid_tbl(cduid);
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_csduid_eruid_idx ON dsra.dsra_all_scenarios_csduid_tbl(eruid);
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_csduid_pruid_idx ON dsra.dsra_all_scenarios_csduid_tbl(pruid);
@@ -628,6 +629,7 @@ a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
 GROUP BY cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
+DROP TABLE IF EXISTS dsra.dsra_all_scenarios_cduid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_cduid_tbl AS
 (
 SELECT
