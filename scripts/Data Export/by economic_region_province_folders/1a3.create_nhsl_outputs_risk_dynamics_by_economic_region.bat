@@ -1,5 +1,6 @@
 REM Export NHSL risk dynamics views from postgis db into Geopackage by economic region. Change ogr2ogr path,location paths,db information if needed.
 
+ECHO %TIME% 
 REM Geopackage risk dynamics BC
 FOR %%x IN (nhsl_risk_dynamics_all_indicators) DO (FOR %%y IN (5910,5920,5930,5940,5950,5960,5970,5980) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\risk_dynamics\economic_region\bc\%%x_%%y.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_risk_dynamics.%%x WHERE eruid = '%%y'" -nln %%x_%%y)
 
@@ -39,4 +40,5 @@ FOR %%x IN (nhsl_risk_dynamics_all_indicators) DO (FOR %%y IN (6110) DO ogr2ogr 
 REM Geopackage risk dynamics NU
 FOR %%x IN (nhsl_risk_dynamics_all_indicators) DO (FOR %%y IN (6210) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\risk_dynamics\economic_region\nu\%%x_%%y.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_risk_dynamics.%%x WHERE eruid = '%%y'" -nln %%x_%%y)
 
+ECHO %TIME% 
 PAUSE

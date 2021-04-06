@@ -1,6 +1,6 @@
 REM Export NHSL hazard threat views from postgis db into Geopackage by economic region. Change ogr2ogr path,location paths,db information if needed.
 
- 
+ECHO %TIME% 
 REM Geopackage multi hazard threat BC
 FOR %%x IN (nhsl_hazard_threat_all_indicators_s,nhsl_hazard_threat_all_indicators_b) DO (FOR %%y IN (5910,5920,5930,5940,5950,5960,5970,5980) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\multi_hazard_threat\economic_region\bc\%%x_%%y.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_hazard_threat.%%x WHERE eruid = '%%y'" -nln %%x_%%y)
 
@@ -40,4 +40,5 @@ FOR %%x IN (nhsl_hazard_threat_all_indicators_s,nhsl_hazard_threat_all_indicator
 REM Geopackage multi hazard threat NU
 FOR %%x IN (nhsl_hazard_threat_all_indicators_s,nhsl_hazard_threat_all_indicators_b) DO (FOR %%y IN (6210) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\multi_hazard_threat\economic_region\nu\%%x_%%y.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_hazard_threat.%%x WHERE eruid = '%%y'" -nln %%x_%%y)
 
+ECHO %TIME% 
 PAUSE

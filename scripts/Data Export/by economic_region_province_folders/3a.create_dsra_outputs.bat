@@ -1,6 +1,6 @@
 REM Export DSRA views from postgis db into Geopackage. Change ogr2ogr path, location paths, db information if needed.
 
-
+ECHO %TIME% 
 REM Geopackage dsra, _all_indicators_b
 FOR %%x IN (dsra_acm6p5_beaufort, ^
 dsra_acm7p2_lrdmf, ^
@@ -75,4 +75,5 @@ dsra_scm7p0_montrealnw, ^
 dsra_scm7p0_montrealnwcanshm5, ^
 dsra_sim9p0_cszlockedtrans) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_%%x.%%x_shakemap" -nln %%x_shakemap
 
+ECHO %TIME% 
 PAUSE
