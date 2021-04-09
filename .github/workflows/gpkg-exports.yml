@@ -1,0 +1,179 @@
+name: GeoPackage exports
+
+# Reference: https://docs.github.com/en/actions/guides/creating-postgresql-service-containers
+# Pre-installed tools in "ubuntu-20.04" include: 7z, docker, time, pg_restore
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '38 2 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  opendrr-api-pgdump-to-gpkg:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: password
+      DB_NAME: opendrr
+      # Update the following whenever there is a new database dump file from Drew
+      DBDUMP_UPSTREAM_FILENAME: opendrr_04072021.backup
+      DBDUMP_DOWNLOAD_URL: ${{ secrets.DBDUMP_DOWNLOAD_URL }}
+      #DBDUMP_MD5SUM: 660b8a231bd918096df7741624435886
+      #DBDUMP_SHA1SUM: cbfe21da7142c677a183f2bd7a40a7ecc8458b97
+      #DBDUMP_SHA256SUM: 1e9d017be8a9eb1018da1833bc95f2e47e1bf44604c472817fc91814f24bb160
+      DBDUMP_SHA512SUM: 5509bf9dab6f9ab768f985f851a1ac2a79f91b921b43194121ddf9fbe1eb71a2d7076cc66f5584e53e7fef502b3a1fe7df0debeffd2cc8a284bdafbe0901856c
+      DBDUMP_FILE: opendrr_04072021.dump
+      TZ: America/Vancouver
+
+    services:
+      postgis:
+        image: postgis/postgis
+        env:
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # GitHub allows up to 5GB of cache
+      - name: Cache downloaded OpenDRR PostgreSQL database dump
+        uses: actions/cache@v2
+        with:
+          path: cache
+          key: ${{ runner.os }}-opendrr-20210407-${{ hashFiles('**/*.dump') }}
+
+      - name: Pre-run information
+        if: ${{ github.event_name != 'schedule' }}
+        run: |
+          set -x
+          ls -l
+          df -h
+          whoami
+          cat /etc/os-release
+          docker ps
+          sudo ls -l /var/lib/docker/volumes
+          sudo du -csh /var/lib/docker/volumes
+
+      - name: Download PostGIS database dump from opendrr-api run, if not already cached
+        if: ${{ github.event_name != 'schedule' }}
+        run: |
+          mkdir -p cache
+          cd cache
+          rm -f opendrrapi-backup-20210205*
+          if [ ! -f "$DBDUMP_FILE" ]; then
+            curl -JLO "$DBDUMP_DOWNLOAD_URL"
+            mv -v "$DBDUMP_UPSTREAM_FILENAME" "$DBDUMP_FILE"
+          fi
+          ls -l
+
+      - name: Verify SHA512 checksum
+        if: ${{ github.event_name != 'schedule' }}
+        run: |
+          cd cache
+          #/usr/bin/time md5sum --binary "$DBDUMP_FILE"
+          #/usr/bin/time sha1sum --binary "$DBDUMP_FILE"
+          #/usr/bin/time sha256sum --binary "$DBDUMP_FILE"
+          #/usr/bin/time sha512sum --binary "$DBDUMP_FILE"
+          CALCULATED_SHA512SUM=$(sha512sum --binary "$DBDUMP_FILE" | cut -d ' ' -f 1)
+          echo "Calculated: $CALCULATED_SHA512SUM"
+          echo "  Expected: $DBDUMP_SHA512SUM"
+          if [ "$CALCULATED_SHA512SUM" != "$DBDUMP_SHA512SUM" ]; then
+            echo "Error, checksum mismatch:"
+            echo "Aborting."
+            exit 1
+          fi
+
+      - name: Install gdal-bin from ubuntugis-unstable
+        if: ${{ github.event_name != 'schedule' }}
+        run: |
+          set -x
+          sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+          sudo apt update -q
+          sudo apt install --no-install-recommends -q -y gdal-bin
+          sudo apt install --no-install-recommends -q -y backblaze-b2
+
+      - name: Make more room by deleting unused software
+        if: ${{ github.event_name != 'schedule' }}
+        run: |
+          df -h
+          sudo eatmydata rm -rf /usr/share/dotnet       # 24.1 GB
+          sudo eatmydata rm -rf /usr/local/lib/android  # 11.3 GB
+          sudo eatmydata rm -rf /opt/ghc                #  1.8 GB
+          #sudo eatmydata rm -rf /usr/share/swift        # 1.3 GB
+          #sudo eatmydata rm -rf /usr/local/graalvm      # 1.0 GB
+          df -h
+
+      - name: Display pg_restore version and database dump information
+        if: ${{ github.event_name != 'schedule' }}
+        run: |
+          pg_restore --version
+          pg_restore -l cache/"$DBDUMP_FILE"
+          createdb -T template0 "$DB_NAME"
+
+      - name: Run pg_restore to import the database
+        if: ${{ github.event_name != 'schedule' }}
+        run: /usr/bin/time pg_restore -d "$DB_NAME" --verbose cache/"$DBDUMP_FILE"
+
+      - name: Convert batch files to shell scripts
+        if: ${{ github.event_name != 'schedule' }}
+        run: |
+          for i in 'scripts/Data Export'/*.bat; do
+            .github/workflows/convert-bat-to-bash.sh < "$i" > $(basename "$i" .bat).sh
+            chmod +x $(basename "$i" .bat).sh
+          done
+
+      # See https://serverfault.com/questions/310098/how-to-add-a-timestamp-to-bash-script-log
+      - name: Generate GeoPackage files (1. NHSL)
+        if: ${{ github.event_name != 'schedule' }}
+        run: script -q /dev/null -c ./1.create_nhsl_outputs_combined.sh | while IFS= read -r line; do printf '%s %s\n' "$(date '+[%Y-%m-%d %H:%M:%S]')" "$line"; done
+
+      - name: Generate GeoPackage files (2. PSRA)
+        if: ${{ github.event_name != 'schedule' }}
+        run: script -q /dev/null -c ./2.create_psra_outputs_combined.sh | while IFS= read -r line; do printf '%s %s\n' "$(date '+[%Y-%m-%d %H:%M:%S]')" "$line"; done
+
+      - name: Generate GeoPackage files (3. DSRA)
+        if: ${{ github.event_name != 'schedule' }}
+        run: script -q /dev/null -c ./3.create_dsra_outputs_combined.sh | while IFS= read -r line; do printf '%s %s\n' "$(date '+[%Y-%m-%d %H:%M:%S]')" "$line"; done
+
+      - name: Upload to Backblaze B2
+        if: ${{ github.event_name != 'schedule' }}
+        env:
+          OPENDRR_B2_KEY_ID: ${{ secrets.OPENDRR_B2_KEY_ID }}
+          OPENDRR_B2_APPLICATION_KEY: ${{ secrets.OPENDRR_B2_APPLICATION_KEY }}
+        run: |
+          set -x
+          find data -type f > data/manifest.txt
+          tree -ifpugDs > data/tree.txt
+          backblaze-b2 version
+          backblaze-b2 authorize-account "$OPENDRR_B2_KEY_ID" "$OPENDRR_B2_APPLICATION_KEY"
+          backblaze-b2 sync data/ b2://OpenDRR/data/
+          backblaze-b2 clear-account
+
+      - name: Post-run information
+        if: ${{ github.event_name != 'schedule' }}
+        run: |
+          set -x
+          ls -l
+          du -csh *
+          df -h
+          docker ps
+          sudo ls -l /var/lib/docker/volumes
+          sudo du -csh /var/lib/docker/volumes
+          echo
+          tree -ifpugDs
+
+# TODO: Find ways to show that the database archive stored on B2 or S3 matches the repo
+#       (using e.g. timestamp, checksum, commit hash, GPG signature?)
