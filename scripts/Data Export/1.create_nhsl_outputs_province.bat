@@ -29,7 +29,7 @@ nhsl_physical_exposure_all_indicators_s_on, ^
 nhsl_physical_exposure_all_indicators_s_pe, ^
 nhsl_physical_exposure_all_indicators_s_qc, ^
 nhsl_physical_exposure_all_indicators_s_sk, ^
-nhsl_physical_exposure_all_indicators_s_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\physical_exposure\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_physical_exposure.%%x" -nln %%x
+nhsl_physical_exposure_all_indicators_s_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\physical_exposure\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_nhsl_physical_exposure.%%x" -nln %%x
 
 REM Geopackage risk dynamics
 FOR %%x IN (nhsl_risk_dynamics_all_indicators, ^
@@ -45,7 +45,7 @@ nhsl_risk_dynamics_all_indicators_on, ^
 nhsl_risk_dynamics_all_indicators_pe, ^
 nhsl_risk_dynamics_all_indicators_qc, ^
 nhsl_risk_dynamics_all_indicators_sk, ^
-nhsl_risk_dynamics_all_indicators_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\risk_dynamics\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_risk_dynamics.%%x" -nln %%x
+nhsl_risk_dynamics_all_indicators_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\risk_dynamics\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_nhsl_risk_dynamics.%%x" -nln %%x
 
 REM Geopackage social fabric
 FOR %%x IN (nhsl_social_fabric_all_indicators_s, ^
@@ -61,7 +61,7 @@ nhsl_social_fabric_all_indicators_s_on, ^
 nhsl_social_fabric_all_indicators_s_pe, ^
 nhsl_social_fabric_all_indicators_s_qc, ^
 nhsl_social_fabric_all_indicators_s_sk, ^
-nhsl_social_fabric_all_indicators_s_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\social_fabric\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_social_fabric.%%x" -nln %%x
+nhsl_social_fabric_all_indicators_s_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\social_fabric\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_nhsl_social_fabric.%%x" -nln %%x
 
 REM Geopackage multi hazard threat
 FOR %%x IN (nhsl_hazard_threat_all_indicators_s, ^
@@ -77,7 +77,7 @@ nhsl_hazard_threat_all_indicators_s_on, ^
 nhsl_hazard_threat_all_indicators_s_pe, ^
 nhsl_hazard_threat_all_indicators_s_qc, ^
 nhsl_hazard_threat_all_indicators_s_sk, ^
-nhsl_hazard_threat_all_indicators_s_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\multi_hazard_threat\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_hazard_threat.%%x" -nln %%x
+nhsl_hazard_threat_all_indicators_s_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\multi_hazard_threat\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_nhsl_hazard_threat.%%x" -nln %%x
 
 REM Geopackage multi hazard threat
 FOR %%x IN (nhsl_hazard_threat_all_indicators_b, ^
@@ -93,7 +93,7 @@ nhsl_hazard_threat_all_indicators_b_on, ^
 nhsl_hazard_threat_all_indicators_b_pe, ^
 nhsl_hazard_threat_all_indicators_b_qc, ^
 nhsl_hazard_threat_all_indicators_b_sk, ^
-nhsl_hazard_threat_all_indicators_b_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\multi_hazard_threat\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr_allscenarios password=admin" -sql "SELECT * FROM results_nhsl_hazard_threat.%%x" -nln %%x
+nhsl_hazard_threat_all_indicators_b_yt) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\multi_hazard_threat\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_nhsl_hazard_threat.%%x" -nln %%x
 
 ECHO %TIME% 
 PAUSE
