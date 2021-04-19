@@ -91,10 +91,10 @@ dsra_all_scenarios_eruid, ^
 dsra_all_scenarios_fsauid, ^
 dsra_all_scenarios_pruid, ^
 dsra_all_scenarios_sauid
-) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM dsra.%%x" -nln %%x
+) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\scenario_info\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM dsra.%%x" -nln %%x
 
 REM Geopackage dsra, shakemap scenario extents
-FOR %%x IN (shakemap_scenario_extents) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM gmf.%%x" -nln %%x
+FOR %%x IN (shakemap_scenario_extents) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\scenario_info\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM gmf.%%x" -nln %%x
 
 ECHO %TIME% 
 PAUSE
