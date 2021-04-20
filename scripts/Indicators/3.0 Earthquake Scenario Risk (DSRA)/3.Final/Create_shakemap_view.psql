@@ -18,4 +18,5 @@ geom,
 gmv_pgv,
 gmv_pga
 FROM gmf.shakemap_acm6p5_beaufort
+WHERE "gmv_SA(0.3)" >=0.02
 );
