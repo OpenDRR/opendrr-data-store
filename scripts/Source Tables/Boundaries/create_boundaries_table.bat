@@ -20,5 +20,15 @@ ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password
 
 ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password=admin" "D:\workspace\GitHub\boundaries\Geometry_PRUID.gpkg" -t_srs "EPSG:4326" -nln boundaries."Geometry_PRUID" -lco LAUNDER=NO 
 
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password=admin" "D:\Workspace\GitHub\boundaries\hexbin_4326\HexGrid_5km.gpkg" -t_srs "EPSG:4326" -nln boundaries."HexGrid_5km" -lco LAUNDER=NO 
+
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password=admin" "D:\Workspace\GitHub\boundaries\hexbin_4326\HexGrid_10km.gpkg" -t_srs "EPSG:4326" -nln boundaries."HexGrid_10km" -lco LAUNDER=NO 
+
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password=admin" "D:\Workspace\GitHub\boundaries\hexbin_4326\HexGrid_25km.gpkg" -t_srs "EPSG:4326" -nln boundaries."HexGrid_25km" -lco LAUNDER=NO 
+
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password=admin" "D:\Workspace\GitHub\boundaries\hexbin_4326\HexGrid_50km.gpkg" -t_srs "EPSG:4326" -nln boundaries."HexGrid_50km" -lco LAUNDER=NO 
+
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password=admin" "D:\Workspace\GitHub\boundaries\hexbin_4326\SAUID_HexGrid.gpkg" -t_srs "EPSG:4326" -nln boundaries."SAUID_HexGrid" -lco LAUNDER=NO 
+
 pause
 
