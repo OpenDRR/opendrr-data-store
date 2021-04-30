@@ -83,7 +83,7 @@ REM Export DSRA master all scenarios views from postgis db into Geopackage. Chan
 
 
 REM Geopackage dsra, _all_scenarios
-FOR %%x IN (dsra_all_scenarios, ^
+FOR %%x IN (dsra_all_scenarios_building, ^
 dsra_all_scenarios_cduid, ^
 dsra_all_scenarios_csduid, ^
 dsra_all_scenarios_dauid, ^
