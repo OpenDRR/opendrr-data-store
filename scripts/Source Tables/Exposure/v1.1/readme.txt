@@ -1,0 +1,1 @@
+update exposure to include ss_region, nation
