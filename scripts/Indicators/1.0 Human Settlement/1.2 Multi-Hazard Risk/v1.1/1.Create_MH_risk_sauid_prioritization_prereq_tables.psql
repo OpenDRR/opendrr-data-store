@@ -554,8 +554,8 @@ d."CSDNAME" AS "csdname",
 d."CFSAUID" AS "fsauid",
 d."DAUIDt" AS "dauid",
 d."SACCODE" AS "saccode",
-d."SACTYPE" AS "sactype"
---d.geom AS "geom_poly"
+d."SACTYPE" AS "sactype",
+d.geom AS "geom_poly"
 --d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
