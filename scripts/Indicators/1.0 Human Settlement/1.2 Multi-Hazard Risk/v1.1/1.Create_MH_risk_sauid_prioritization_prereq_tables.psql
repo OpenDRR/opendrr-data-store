@@ -2,8 +2,8 @@
 CREATE SCHEMA IF NOT EXISTS results_nhsl_hazard_threat;
 
 -- create multi hazard indicators
-DROP TABLE IF EXISTS results_nhsl_hazard_threat.hazard_treat_values_s CASCADE;
-CREATE TABLE results_nhsl_hazard_threat.hazard_treat_values_s AS 
+DROP TABLE IF EXISTS results_nhsl_hazard_threat.hazard_threat_values_s CASCADE;
+CREATE TABLE results_nhsl_hazard_threat.hazard_threat_values_s AS 
 
 -- 1.0 Human Settlement
 -- 1.2 Hazard Threat
@@ -568,13 +568,13 @@ b.lndsus,b.wui_type,c.pop_ha,c.sactype,e.censusdu,d."PRNAME",d."ERUID",d."ERNAME
 
 
 -- create req indicator values at CSD level
-DROP TABLE IF EXISTS  results_nhsl_hazard_threat.hazard_treat_values_csd;
-CREATE TABLE results_nhsl_hazard_threat.hazard_treat_values_csd AS
+DROP TABLE IF EXISTS  results_nhsl_hazard_threat.hazard_threat_values_csd;
+CREATE TABLE results_nhsl_hazard_threat.hazard_threat_values_csd AS
 SELECT
 csduid,
 SUM("Et_BldgNum") AS "Et_BldgNum",
 SUM("Et_PopNight") AS "Et_PopNight",
 SUM("Et_AssetValue") AS "Et_AssetValue"
-FROM results_nhsl_hazard_threat.hazard_treat_values_s
+FROM results_nhsl_hazard_threat.hazard_threat_values_s
 GROUP BY csduid
 ORDER BY csduid ASC;
