@@ -1,6 +1,7 @@
 -- create schema for new scenario
 CREATE SCHEMA IF NOT EXISTS results_nhsl_hazard_threat;
 
+-- create prereq tables for prioritization calculation, based off previous hazard threat run v1.0
 -- create multi hazard indicators
 DROP TABLE IF EXISTS results_nhsl_hazard_threat.hazard_threat_values_s CASCADE;
 CREATE TABLE results_nhsl_hazard_threat.hazard_threat_values_s AS 
