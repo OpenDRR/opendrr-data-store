@@ -1082,6 +1082,8 @@ CREATE TABLE results_nhsl_hazard_threat.nhsl_hazard_threat_prioritization_csd_tb
 SELECT
 a.csduid,
 b."CSDNAME",
+SUM("E_AreaKm2") AS "Et_AreaKm2",
+SUM("E_AreaHa") AS "Et_AreaHa",
 SUM("Et_BldgNum") AS "Et_BldgNum",
 SUM("Et_AssetValue") AS "Et_AssetValue",
 SUM("Et_PopNight") AS "Et_PopNight",
