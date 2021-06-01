@@ -327,8 +327,8 @@ GROUP BY b.gridid_50,d.geom;
 
 
 --50km
-DROP TABLE IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_hexbin_50km CASCADE;
-CREATE TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_hexbin_50km AS 
+DROP TABLE IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_hexbin_100km CASCADE;
+CREATE TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_hexbin_100km AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
