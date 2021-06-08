@@ -22,6 +22,7 @@ CREATE TABLE exposure.canada_exposure(
     night float,
     transit float,
     GenOcc varchar,
+    OccType varchar,
     OccClass1 varchar,
     OccClass2 varchar,
     PopDU float,
@@ -51,7 +52,7 @@ CREATE TABLE exposure.canada_exposure(
 );
 
 -- import exposure from csv
-COPY exposure.canada_exposure (objectid,id,SauidLat,SauidLon,Sauid_km2,Sauid_ha,LandUse,taxonomy,number,structural,nonstructural,contents,retrofitting,day,night,transit,GenOcc,OccClass1,OccClass2,PopDU,GenType,BldgType,NumFloors,Bldg_ft2,BldYear,BldEpoch,SSC_Zone,EqDesLev,sauid,dauid,adauid,fsauid,csduid,csdname,cduid,cdname,SAC,eruid,ername,pruid,prname,ss_region,nation)
+COPY exposure.canada_exposure (objectid,id,SauidLat,SauidLon,Sauid_km2,Sauid_ha,LandUse,taxonomy,number,structural,nonstructural,contents,retrofitting,day,night,transit,GenOcc,OccType,OccClass1,OccClass2,PopDU,GenType,BldgType,NumFloors,Bldg_ft2,BldYear,BldEpoch,SSC_Zone,EqDesLev,sauid,dauid,adauid,fsauid,csduid,csdname,cduid,cdname,SAC,eruid,ername,pruid,prname,ss_region,nation)
     FROM 'D:\Workspace\GitHub\openquake-inputs\exposure\general-building-stock\BldgExpRef_CA_master_v3p2.csv'
         WITH 
           DELIMITER AS ','
