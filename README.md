@@ -1,9 +1,6 @@
 # opendrr-data-store
 Repo for storage of PostGIS/PostgreSQL gsql scripts, data exports and related works for testing and development.  Scripts in this repo are run on and tested on local host and modified accordingly to support model_factory repo.
 
-## sample-datasets
-Sample datasets for sandbox database creation.
-
 ## scripts
 PostgreSQL scripts, data export scripts for local development and testing.
 
