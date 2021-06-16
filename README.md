@@ -12,12 +12,15 @@ PostgreSQL scripts, data export scripts for local development and testing.
 Bat scripts for exporting, zipping various PostgreSQL tables to GeoPackage format using GDAL OGR2OGR.
 
 https://gdal.org/
+
 https://gdal.org/programs/ogr2ogr.html
+
 https://www.7-zip.org/
   
 
 #### /Diagrams
 ER Diagram of OpenDRR database in draw.io format
+
 https://www.diagrams.net/
 
 #### / Indicators
