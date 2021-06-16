@@ -28,6 +28,8 @@ ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password
 
 ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password=admin" "D:\Workspace\GitHub\boundaries\hexbin_4326\HexGrid_50km.gpkg" -t_srs "EPSG:4326" -nln boundaries."HexGrid_50km" -lco LAUNDER=NO 
 
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password=admin" "D:\Workspace\GitHub\boundaries\hexbin_4326\HexGrid_100km.gpkg" -t_srs "EPSG:4326" -nln boundaries."HexGrid_50km" -lco LAUNDER=NO 
+
 ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=opendrr password=admin" "D:\Workspace\GitHub\boundaries\hexbin_4326\SAUID_HexGrid.gpkg" -t_srs "EPSG:4326" -nln boundaries."SAUID_HexGrid" -lco LAUNDER=NO 
 
 pause
