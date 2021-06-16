@@ -77,9 +77,9 @@ d.geom AS "geom_poly"
 --d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
-LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a.sauid = b.sauid
+LEFT JOIN boundaries."SAUID_HexGrid" b ON a.sauid = b.sauid
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."HexGrid_5km_v1" d ON b.gridid_5 = d.gridid_5
+LEFT JOIN boundaries."HexGrid_5km" d ON b.gridid_5 = d.gridid_5
 GROUP BY b.gridid_5,d.geom;
 
 
@@ -158,9 +158,9 @@ d.geom AS "geom_poly"
 --d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
-LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a.sauid = b.sauid
+LEFT JOIN boundaries."SAUID_HexGrid" b ON a.sauid = b.sauid
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."HexGrid_10km_v1" d ON b.gridid_10 = d.gridid_10
+LEFT JOIN boundaries."HexGrid_10km" d ON b.gridid_10 = d.gridid_10
 GROUP BY b.gridid_10,d.geom;
 
 
@@ -239,9 +239,9 @@ d.geom AS "geom_poly"
 --d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
-LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a.sauid = b.sauid
+LEFT JOIN boundaries."SAUID_HexGrid" b ON a.sauid = b.sauid
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."HexGrid_25km_v1" d ON b.gridid_25 = d.gridid_25
+LEFT JOIN boundaries."HexGrid_25km" d ON b.gridid_25 = d.gridid_25
 GROUP BY b.gridid_25,d.geom;
 
 
@@ -320,9 +320,9 @@ d.geom AS "geom_poly"
 --d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
-LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a.sauid = b.sauid
+LEFT JOIN boundaries."SAUID_HexGrid" b ON a.sauid = b.sauid
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."HexGrid_50km_v1" d ON b.gridid_50 = d.gridid_50
+LEFT JOIN boundaries."HexGrid_50km" d ON b.gridid_50 = d.gridid_50
 GROUP BY b.gridid_50,d.geom;
 
 
@@ -401,7 +401,7 @@ d.geom AS "geom_poly"
 --d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
-LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a.sauid = b.sauid
+LEFT JOIN boundaries."SAUID_HexGrid" b ON a.sauid = b.sauid
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
-LEFT JOIN boundaries."HexGrid_100km_v1" d ON b.gridid_100 = d.gridid_100
+LEFT JOIN boundaries."HexGrid_100km" d ON b.gridid_100 = d.gridid_100
 GROUP BY b.gridid_100,d.geom;
