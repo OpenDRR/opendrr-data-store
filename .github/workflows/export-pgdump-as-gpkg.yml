@@ -1,11 +1,21 @@
-name: GeoPackage exports
+name: Read completed database and export as (compressed) GeoPackage files
+
+# This GitHub Actions workflow downloads the PostGIS database dump
+# at the end of OpenDRR/opendrr-api "add_data.sh" run, then creates
+# NHSL, PSRA and DSRA outputs as compressed GeoPackage files for the
+# general public to download via the Data section of the OpenDRR website.
+
+# TODO: Find ways to keep the upstream data up-to-date,
+#       not hardcoded to opendrr_04072021.backup like it is now.
 
 # Reference: https://docs.github.com/en/actions/guides/creating-postgresql-service-containers
 # Pre-installed tools in "ubuntu-20.04" include: 7z, docker, time, pg_restore
 
 on:
-  push:
-  pull_request:
+  #push:
+  #  branches: [ master ]
+  #pull_request:
+  #  branches: [ master ]
   schedule:
     - cron: '38 2 */3 * *'
   workflow_dispatch:
