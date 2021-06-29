@@ -91,7 +91,7 @@ Shape_Area varchar
 
 -- import exposure from csv
 COPY exposure.metrovan_site_exposure (OBJECTID,id,SiteID,SiteLon,SiteLat,SauidID,SauidLat,SauidLon,Sauid_km2,Sauid_ha,LandUse,taxonomy,number,structural,nonstructural,contents,business,"limit",deductible,retrofitting,day,night,transit,GenOcc,OccClass1,OccClass2,PopDU,GenType,BldgType,NumFloors,Bldg_ft2,BldYear,BldEpoch,SSC_Zone,EqDesLev,sauid,dauid,adauid,fsauid,csduid,csdname,cduid,cdname,SAC,eruid,ername,pruid,prname,OBJECTID_1,OBJECTID_12,SAUIDt,SAUIDi,Lon,Lat,Area_km2,Area_ha,DAUIDt,DAUIDi,ADAUID_1,CFSAUID,PRUID_1,PRNAME_1,CSDUID_1,CSDNAME_1,CSDTYPE,CDUID_1,CDNAME_1,CDTYPE,CCSUID,CCSNAME,ERUID_1,ERNAME_1,SACCODE,SACTYPE,CMAUID,CMAPUID,CMANAME,CMATYPE,Shape_Leng,Shape_Length,Shape_Area)
-    FROM 'D:\workspace\data\source datasets\exposure\PhysExpRef_MetroVan_v4.csv'
+    FROM 'D:\Workspace\GitHub\model-inputs\exposure\building-inventory\metro-vancouver\PhysExpRef_MetroVan_v4.csv'
         WITH 
           DELIMITER AS ','
           CSV HEADER ;
