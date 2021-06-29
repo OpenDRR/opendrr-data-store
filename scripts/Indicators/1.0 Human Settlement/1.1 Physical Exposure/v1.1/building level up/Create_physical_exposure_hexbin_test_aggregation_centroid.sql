@@ -11,8 +11,8 @@ CREATE TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicator
 -- 1.1.1 Settled Area
 SELECT 
 b.gridid_5,
-CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
-CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
 CAST(CAST(ROUND(CAST(SUM(a.bldg_ft2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgArea",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaRes",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaComm",
@@ -92,8 +92,8 @@ CREATE TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicator
 -- 1.1.1 Settled Area
 SELECT 
 b.gridid_10,
-CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
-CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
 CAST(CAST(ROUND(CAST(SUM(a.bldg_ft2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgArea",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaRes",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaComm",
@@ -173,8 +173,8 @@ CREATE TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicator
 -- 1.1.1 Settled Area
 SELECT 
 b.gridid_25,
-CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
-CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
 CAST(CAST(ROUND(CAST(SUM(a.bldg_ft2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgArea",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaRes",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaComm",
@@ -254,8 +254,8 @@ CREATE TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicator
 -- 1.1.1 Settled Area
 SELECT 
 b.gridid_50,
-CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
-CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
 CAST(CAST(ROUND(CAST(SUM(a.bldg_ft2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgArea",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaRes",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaComm",
@@ -335,8 +335,8 @@ CREATE TABLE results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicator
 -- 1.1.1 Settled Area
 SELECT 
 b.gridid_100,
-CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
-CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
+--CAST(CAST(ROUND(CAST(SUM(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
 CAST(CAST(ROUND(CAST(SUM(a.bldg_ft2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgArea",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaRes",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaComm",
