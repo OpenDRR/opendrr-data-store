@@ -118,6 +118,32 @@ ALTER TABLE boundaries.SAUID_HexGrid_100km_intersect ADD PRIMARY KEY (gridid_100
 CREATE INDEX IF NOT EXISTS sauid_hexgrid_100km_intersect_idx ON boundaries.SAUID_HexGrid_100km_intersect (gridid_100,sauid);
 
 
+
+-- create intersection geometry between sauid polygon, and hexgrids, calculate area and area ratios between both polygons
+-- global fabric
+DROP TABLE IF EXISTS boundaries.SAUID_HexGrid_Global_Fabric_intersect;
+CREATE TABLE boundaries.SAUID_HexGrid_Global_Fabric_intersect AS
+(SELECT 
+gridid,
+"SAUIDt" AS sauid,
+SUM(ST_AREA(b.geom)) AS "sauid_area",
+SUM(ST_AREA(ST_INTERSECTION(a.geom,b.geom))) AS "area_intersect",
+SUM(ST_AREA(ST_INTERSECTION(a.geom,b.geom))/ST_AREA(b.geom)) AS "area_ratio"
+--ST_INTERSECTION(a.geom,b.geom) AS "geom"
+FROM boundaries."HexGrid_global_fabric" a,boundaries."Geometry_SAUID" b
+WHERE ST_INTERSECTS(a.geom,b.geom)
+GROUP BY gridid,"SAUIDt");
+--GROUP BY gridid,"SAUIDt",ST_INTERSECTION(a.geom,b.geom));
+
+-- add PK
+ALTER TABLE boundaries.SAUID_HexGrid_Global_Fabric_intersect ADD PRIMARY KEY (gridid,sauid);
+
+-- create indexes
+--CREATE INDEX IF NOT EXISTS sauid_hexgrid_global_fabric_intersect_geom_idx ON boundaries.SAUID_HexGrid_Global_Fabric_intersect using GIST (geom);
+CREATE INDEX IF NOT EXISTS sauid_hexgrid_global_fabric_intersect_idx ON boundaries.SAUID_HexGrid_Global_Fabric_intersect (gridid,sauid);
+
+
+
 /*
 -- create intersection geometry between sauid polygon, and hexgrids, calculate area and area ratios between both polygons
 -- 5km
