@@ -126,7 +126,6 @@ SUM(a."Et_StrValue" * b.area_ratio) AS "Et_StrValue",
 SUM(a."Et_NStrValue" * b.area_ratio) AS "Et_NStrValue",
 SUM(a."Et_ContValue" * b.area_ratio) AS "Et_ContValue",
 
-
 c.geom
 
 FROM results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s a
@@ -197,7 +196,6 @@ SUM(a."Et_StrValue" * b.area_ratio) AS "Et_StrValue",
 SUM(a."Et_NStrValue" * b.area_ratio) AS "Et_NStrValue",
 SUM(a."Et_ContValue" * b.area_ratio) AS "Et_ContValue",
 
-
 c.geom
 
 FROM results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s a
@@ -266,7 +264,6 @@ SUM(a."Et_BldgValue" * b.area_ratio) AS "Et_BldgValue",
 SUM(a."Et_StrValue" * b.area_ratio) AS "Et_StrValue",
 SUM(a."Et_NStrValue" * b.area_ratio) AS "Et_NStrValue",
 SUM(a."Et_ContValue" * b.area_ratio) AS "Et_ContValue",
-
 
 c.geom
 
@@ -337,7 +334,6 @@ SUM(a."Et_BldgValue" * b.area_ratio) AS "Et_BldgValue",
 SUM(a."Et_StrValue" * b.area_ratio) AS "Et_StrValue",
 SUM(a."Et_NStrValue" * b.area_ratio) AS "Et_NStrValue",
 SUM(a."Et_ContValue" * b.area_ratio) AS "Et_ContValue",
-
 
 c.geom
 
