@@ -15,7 +15,7 @@ CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLat
 a.sauid AS "Sauid",
 CAST(CAST(ROUND(CAST(a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgNum",
 a.taxonomy AS "E_BldgTaxon",
-CAST(CAST(ROUND(CAST(a.bldg_ft2 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgArea",
+CAST(CAST(ROUND(CAST(a.bldg_ft2 * a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgArea",
 --CAST(CAST(ROUND(CAST(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaRes",
 --CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaComm",
 --CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Industrial' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaInd",
@@ -47,6 +47,7 @@ CAST(CAST(ROUND(CAST((CASE
 					  WHEN a.occclass1 = 'RES3E' THEN a.number * 32
 					  WHEN a.occclass1 = 'RES3F' THEN a.number * 110
 					  ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_MFHshld",
+
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure

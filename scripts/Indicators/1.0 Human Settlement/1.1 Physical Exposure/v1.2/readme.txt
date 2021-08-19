@@ -8,9 +8,8 @@ from v1.1
 - updated indicators Et_BldgArea, Et_BldgAreaRes, Et_BldgAreaComm, Et_BldgAreaInd, Et_BldgAreaCivic, Et_BldgAreaAgr
 - renamed indicators Et_Pop_Km2, Et_Pop_Ha to Et_PopDay_Km2, Et_PopDay_Ha
 - new indicators Et_PopNight_Km2, Et_PopNight_Ha
-- removed indicators E_CensusBldg
-- updated Et_PPH (Et_PopDay_Bldg,Et_PopNight_Bldg)
-- update Et_SFHshld / Et_MFHshld calculations, now included in building level
+- removed indicators E_CensusBldg, E_SAC, ss_region
+- updated Et_SFHshld,Et_MFHshld
 - removed centroid hexbin aggregations
 
 

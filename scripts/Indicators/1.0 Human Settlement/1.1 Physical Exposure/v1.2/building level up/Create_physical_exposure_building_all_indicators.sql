@@ -5,6 +5,7 @@ CREATE SCHEMA IF NOT EXISTS results_nhsl_physical_exposure;
 DROP VIEW IF EXISTS results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_b CASCADE;
 CREATE VIEW results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_b AS 
 
+-- 1.0 Human Settlement
 -- 1.1 Physical Exposure
 -- 1.1.1 Buildings
 SELECT 
@@ -14,7 +15,7 @@ CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "BldgLat
 a.sauid AS "Sauid",
 CAST(CAST(ROUND(CAST(a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgNum",
 a.taxonomy AS "E_BldgTaxon",
-CAST(CAST(ROUND(CAST(a.bldg_ft2 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgArea",
+CAST(CAST(ROUND(CAST(a.bldg_ft2 * a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgArea",
 --CAST(CAST(ROUND(CAST(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaRes",
 --CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Commercial' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaComm",
 --CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Industrial' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaInd",
@@ -77,7 +78,6 @@ b."CFSAUID" AS "fsauid",
 b."DAUIDt" AS "dauid",
 b."SACCODE" AS "saccode",
 b."SACTYPE" AS "sactype",
-
 a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a

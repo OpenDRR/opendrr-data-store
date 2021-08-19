@@ -14,8 +14,8 @@ CAST(CAST(ROUND(CAST(a.sauidlon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_Sauid
 CAST(CAST(ROUND(CAST(a.sauidlat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_SauidLat",
 CAST(CAST(ROUND(CAST(a.sauid_km2 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaKm2",
 CAST(CAST(ROUND(CAST(a.sauid_ha AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_AreaHa",
-c.sactype AS "E_SAC",
-a.ss_region AS "E_SSRegion",
+--c.sactype AS "E_SAC",
+--a.ss_region AS "E_SSRegion",
 a.landuse AS "E_LandUse",
 CAST(CAST(ROUND(CAST(SUM(a.bldg_ft2 * a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgArea",
 CAST(CAST(ROUND(CAST(SUM(CASE WHEN a.genocc IN ('Residential-LD','Residential-MD','Residential-HD') THEN a.bldg_ft2 * a.number ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_BldgAreaRes",
@@ -36,8 +36,8 @@ CAST(CAST(ROUND(CAST(SUM(a.day)/(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERI
 CAST(CAST(ROUND(CAST(SUM(a.day)/(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_PopDay_Ha",
 CAST(CAST(ROUND(CAST(SUM(a.night)/(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_PopNight_Km2",
 CAST(CAST(ROUND(CAST(SUM(a.night)/(a.sauid_ha) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_PopNight_Ha",
-CAST(CAST(ROUND(CAST(AVG(a.day/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_PopDay_Bldg",
-CAST(CAST(ROUND(CAST(AVG(a.night/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_PopNight_Bldg",
+--CAST(CAST(ROUND(CAST(AVG(a.day/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_PopDay_Bldg",
+--CAST(CAST(ROUND(CAST(AVG(a.night/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_PopNight_Bldg",
 CAST(CAST(ROUND(CAST(SUM(a.number)/(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) as "Et_Bldg_Km2",
 CAST(CAST(ROUND(CAST(SUM(a.structural + a.nonstructural + a.contents)/(a.sauid_km2) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_Value_Km2",
 
@@ -69,7 +69,6 @@ CAST(CAST(ROUND(CAST(SUM(CASE
 					  WHEN a.occclass1 = 'RES3E' THEN a.number * 32
 					  WHEN a.occclass1 = 'RES3F' THEN a.number * 110
 					  ELSE 0 END) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "Et_MFHshld",
-
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure
@@ -114,14 +113,13 @@ d."CFSAUID" AS "fsauid",
 d."DAUIDt" AS "dauid",
 d."SACCODE" AS "saccode",
 d."SACTYPE" AS "sactype",
-
 d.geom AS "geom_poly"
 --d.geompoint AS "geom_point"
 
 FROM exposure.canada_exposure a
 LEFT JOIN census.census_2016_canada c ON a.sauid = c.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" d on a.sauid = d."SAUIDt"
-GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.ss_region,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusbldg,c.censusdu,c.sactype,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
+GROUP BY a.sauid,a.sauidlon,a.sauidlat,a.landuse,a.sauid_km2,a.sauid_ha,c.censuspop,c.censusdu,c.landuse,d."PRUID",d."PRNAME",d."ERUID",d."ERNAME",
 d."CDUID",d."CDNAME",d."CSDUID",d."CSDNAME",d."CFSAUID",d."DAUIDt",d."SACCODE",d."SACTYPE",d.geom;
 
 
