@@ -6,3 +6,5 @@ v1.2
 - resource repo to new final dsra repo
 - additional indicators added in building level
 - rename all r2 indicators, r2 references to r1 except for metrovan
+
+v1.3
