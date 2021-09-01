@@ -1,11 +1,11 @@
--- create schema for new scenario
+--create schema for new scenario
 --CREATE SCHEMA IF NOT EXISTS results_dsra_{eqScenario};
 CREATE SCHEMA IF NOT EXISTS results_dsra_acm7p3_leechriverfullfault;
 
 
--- intermediates table to calculate displaced households for DSRA
--- DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc1
--- CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc1 AS
+--intermediates table to calculate displaced households for DSRA
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc1
+--CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc1 AS
 DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc1;
 CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc1 AS
 (
@@ -57,9 +57,9 @@ LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s
 );
 
 
--- intermediate tables to calculate displaced households for DSRA
--- DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc2
--- CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc2 AS
+--intermediate tables to calculate displaced households for DSRA
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc2
+--CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc2 AS
 DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc2;
 CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc2 AS
 (
@@ -77,16 +77,16 @@ FROM results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhsh
 );
 
 
--- intermediate tables to calculate displaced households for DSRA
--- DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc3
--- CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc3 AS
+--intermediate tables to calculate displaced households for DSRA
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc3
+--CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc3 AS
 DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc3;
 CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc3 AS
 (
 SELECT
 a."AssetID",
 
--- (([SF_Hshlds] * [SF]) + ([MF_Hshlds] * [MF])) * ([CensusDU] / ([SF_Hshlds] + [MF_Hshlds]) = DH
+--(([SF_Hshlds] * [SF]) + ([MF_Hshlds] * [MF])) * ([CensusDU] / ([SF_Hshlds] + [MF_Hshlds]) = DH
 COALESCE((a."E_SFHshld" * b."SF_b0") + (a."E_MFHshld" * b."MF_b0") * (a."E_CensusDU" /NULLIF((a."E_SFHshld" + a."E_MFHshld"),0)),0) AS "sC_DisplHshld_b0",
 COALESCE((a."E_SFHshld" * b."SF_r1") + (a."E_MFHshld" * b."MF_r1") * (a."E_CensusDU" /NULLIF((a."E_SFHshld" + a."E_MFHshld"),0)),0) AS "sC_DisplHshld_r1"
 
@@ -95,9 +95,9 @@ LEFT JOIN results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_dis
 );
 
 
--- intermediate tables to calculate displaced households for DSRA
--- DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld
--- CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld AS
+--intermediate tables to calculate displaced households for DSRA
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld
+--CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld AS
 DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld;
 CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld AS
 (
@@ -150,14 +150,14 @@ DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfu
 
 
 
--- create scenario risk building indicators
+--create scenario risk building indicators
 --DROP VIEW IF EXISTS results_dsra_acm7p3_leechriverfullfault.dsra_{eqScenario)_all_indicators_b CASCADE;
 --CREATE VIEW results_dsra_acm7p3_leechriverfullfault.dsra_{eqScenario}_all_indicators_b AS 
 DROP VIEW IF EXISTS results_dsra_acm7p3_leechriverfullfault.dsra_acm7p3_leechriverfullfault_all_indicators_b CASCADE;
 CREATE VIEW results_dsra_acm7p3_leechriverfullfault.dsra_acm7p3_leechriverfullfault_all_indicators_b AS 
 
--- 3.0 Earthquake Scenario Risk (DSRA)
--- 3.1 Scenario Hazard
+--3.0 Earthquake Scenario Risk (DSRA)
+--3.1 Scenario Hazard
 SELECT 
 a."AssetID",
 
