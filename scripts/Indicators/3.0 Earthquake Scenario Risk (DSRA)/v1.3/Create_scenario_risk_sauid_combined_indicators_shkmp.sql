@@ -3,6 +3,158 @@
 CREATE SCHEMA IF NOT EXISTS results_dsra_acm7p3_leechriverfullfault;
 
 
+
+--intermediates table to calculate shelter for DSRA
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc1;
+--CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 AS
+DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc1;
+CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc1 AS
+(
+SELECT 
+"Sauid",
+SUM("sC_DisplHshld_b0") AS "sCt_DisplHshld_b0",
+SUM("sC_DisplHshld_r1") AS "sCt_DisplHshld_r1"
+FROM results_dsra_acm7p3_leechriverfullfault.dsra_acm7p3_leechriverfullfault_all_indicators_b
+--FROM results_dsra_{eqScenario}.dsra_{eqScenario}_all_indicators_b
+GROUP BY "Sauid"
+);
+
+
+--intermediates table to calculate shelter for DSRA
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc2
+--CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc2 AS
+DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc2;
+CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc2 AS
+(
+SELECT
+a."Sauid",
+a."sCt_DisplHshld_b0",
+a."sCt_DisplHshld_r1",
+b."E_CensusPop",
+b."E_CensusDU",
+b."E_People_DU",
+
+--IM
+--IF [Inc_Hshld] =< $15,000, THEN 0.62 = IM1
+CASE WHEN c.inc_hshld <= 15000 THEN 0.62 ELSE 0 END AS "IM1",
+--IF [Inc_Hshld] > $15,000 AND [Inc_Hshld] =<, $20,000 THEN 0.42 = IM2
+CASE WHEN c.inc_hshld > 15000 AND c.inc_hshld <= 20000 THEN 0.29 ELSE 0 END AS "IM2",
+--IF [Inc_Hshld] > $20,000 AND [Inc_Hshld] =<, $35,000 THEN 0.29 = IM3
+CASE WHEN c.inc_hshld > 20000 AND c.inc_hshld <= 35000 THEN 0.29 ELSE 0 END AS "IM3",
+--IF [Inc_Hshld] > $35,000 AND [Inc_Hshld] =<, $50,000 THEN  0.22 = IM4
+CASE WHEN c.inc_hshld > 35000 AND c.inc_hshld <= 50000 THEN 0.29 ELSE 0 END AS "IM4",
+--IF [Inc_Hshld] > $50,000 THEN 0.13 = IM5
+CASE WHEN c.inc_hshld > 50000 THEN 0.13 ELSE 0 END AS "IM5",
+
+--EM
+--[Imm_LT5] * 0.24 = EM1
+d.imm_lt5 * 0.24 AS "EM1",
+--[Live_Alone] * 0.48 = EM2
+d.live_alone * 0.48 AS "EM2",
+--[No_EngFr] * 0.47 = EM3
+d.no_engfr * 0.47 AS "EM3",
+--[LonePar3Kids] * 0.26 = EM4
+d.lonepar3kids * 0.26 AS "EM4",
+--[Indigenous] * 0.26 = EM5
+d.indigenous * 0.26 AS "EM5",
+
+--OM
+--[Renter] * 0.40 = OM1
+d.renter * 0.40 AS "OM1",
+--(([CensusDU] * People_DU]) - [Renter] ) * 0.40 = OM2
+((b."E_CensusDU" * b."E_People_DU") - d.renter) * 0.40 AS "OM2",
+
+--AM
+--[Age_GT65] * 0.40 = AM1
+d.age_gt65 * 0.40 AS "AM1",
+--[Age_LT6] * 0.40 = AM2
+d.age_lt6 * 0.40 AS "AM2"
+
+FROM results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc1 a
+LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s b ON a."Sauid" = b."Sauid"
+LEFT JOIN sovi.sovi_census_canada c ON b."Sauid" = c.sauidt
+LEFT JOIN sovi.sovi_index_canada d ON b."Sauid" = d.sauidt
+);
+
+
+-- intermediates table to calculate shelter for DSRA
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc3
+--CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc3 AS
+DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc3;
+CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc3 AS
+(
+SELECT
+"Sauid",
+
+--(0.73* ([IM1]+[IM2]+[IM3]+[IM4]+[IM5])) + (0.27*([EM1]+[EM2]+[EM3]+[EM4]+[EM5])) = sigma
+(0.73 * ("IM1" + "IM2" + "IM3" + "IM4" + "IM5")) + (0.27 * ("EM1" + "EM2" + "EM3" + "EM4" + "EM5")) AS "sigma"
+
+FROM results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc2
+--FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2
+);
+
+
+-- intermediates table to calculate shelter for DSRA
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc4
+--CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc4 AS
+DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc4;
+CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc4 AS
+(
+SELECT
+a."Sauid",
+--[sigma] * (([DisplHshld] * [CensusPop]) / CensusDU) * ([IM1]+[IM2]+[IM3]+[IM4]+[IM5]) * ([EM1]+[EM2]+[EM3]+[EM4]+[EM5]) * ([OM1]+[OM2]) * ([AM1]+[AM2]) = Shelter
+b.sigma * COALESCE(((a."sCt_DisplHshld_b0" * a."E_CensusPop") / NULLIF(a."E_CensusDU",0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3" + a."EM4" + a."EM5") * (a."OM1" + a."OM2") * 
+(a."AM1" + a."AM2") AS "sCt_Shelter_b0",
+b.sigma * COALESCE(((a."sCt_DisplHshld_r1" * a."E_CensusPop") / NULLIF(a."E_CensusDU",0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3" + a."EM4" + a."EM5") * (a."OM1" + a."OM2") * 
+(a."AM1" + a."AM2") AS "sCt_Shelter_r1"
+
+FROM results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc2 a
+LEFT JOIN results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc3 b ON a."Sauid" = b."Sauid"
+);
+
+
+--intermediates table to calculate shelter for DSRA
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter
+--CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.shelter AS
+DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter;
+CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter AS
+(
+SELECT
+a."Sauid",
+a."sCt_DisplHshld_b0",
+a."sCt_DisplHshld_r1",
+a."E_CensusPop",
+a."E_CensusDU",
+a."E_People_DU",
+a."IM1",
+a."IM2",
+a."IM3",
+a."IM4",
+a."IM5",
+a."EM1",
+a."EM2",
+a."EM3",
+a."EM4",
+a."EM5",
+a."OM1",
+a."OM2",
+a."AM1",
+a."AM2",
+b.sigma,
+c."sCt_Shelter_b0",
+c."sCt_Shelter_r1"
+
+FROM results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc2 a
+LEFT JOIN results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc3 b ON a."Sauid" = b."Sauid"
+LEFT JOIN results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc4 c ON a."Sauid" = c."Sauid"
+);
+
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc1,results_dsra_{eqScenario}.{eqScenario}_shelter_calc2,results_dsra_{eqScenario}.{eqScenario}_shelter_calc3,results_dsra_{eqScenario}.{eqScenario}_shelter_calc4;
+DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc1,results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc2,results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc3,results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter_calc4;
+
+
+
+
 -- create scenario risk sauid indicators
 --DROP VIEW IF EXISTS results_dsra_acm7p3_leechriverfullfault.dsra_{eqScenario}_all_indicators_s CASCADE;
 --CREATE VIEW results_dsra_acm7p3_leechriverfullfault.dsra_{eqScenario}_all_indicators_s AS 
@@ -161,33 +313,7 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL3_r1") AS NUMERIC),6) AS FLOAT) AS NUM
 CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL4_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_CasTransitL4_r1",
 
 -- 3.3.2 Social Disruption - b0
-CAST(CAST(ROUND(CAST(((0.73 * COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 20000 AND j.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 35000 AND j.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) + 
-(0.27 * COALESCE(j.imm_lt5 * 0.24,0) + COALESCE(j.live_alone * 0.48,0) + COALESCE(j.no_engfr * 0.47,0) + COALESCE(j.lonepar3kids * 0.26,0) +
-COALESCE(j.indigenous * 0.26,0))) *
-(COALESCE(((SUM(COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) * 
-((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_b0" / b.number ELSE 0 END)))) + 
-((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END) *
-((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_b0" / b.number ELSE 0 END)) + 
-(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_b0" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_b0" / b.number ELSE 0 END))))) * 
-((CASE WHEN b.genocc ='Residential-LD' OR b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END) / NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) + 
-(CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END),0)),0))) * h.censuspop) / NULLIF(h.censusdu,0),0)) *
-(COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 20000 AND j.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 35000 AND j.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) * 
-(COALESCE(j.imm_lt5 * 0.24,0) + COALESCE(j.live_alone * 0.48,0) + COALESCE(j.no_engfr * 0.47,0) + COALESCE(j.lonepar3kids * 0.26,0) +
-COALESCE(j.indigenous * 0.26,0)) * 
-(COALESCE(j.renter * 0.40,0) + COALESCE(((h.censusdu * b.popdu) - j.renter) * 0.40,0)) * 
-(COALESCE(j.age_gt65 * 0.40,0) + COALESCE(j.age_lt6 * 0.40,0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Shelter_b0",
-
+CAST(CAST(ROUND(CAST(k."sCt_Shelter_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Shelter_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_b0",
@@ -195,7 +321,7 @@ CAST(CAST(ROUND(CAST(AVG(COALESCE(a."sC_DisplRes_90_b0"/NULLIF((b.night),0),0)) 
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_180_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res180_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_360_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res360_b0",
 
-CAST(CAST(ROUND(CAST(SUM(k."sC_DisplHshld_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DisplHshld_b0",
+CAST(CAST(ROUND(CAST(k."sCt_DisplHshld_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DisplHshld_b0",
 
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_30_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl30_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_90_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl90_b0",
@@ -204,33 +330,7 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_180_b0") AS NUMERIC),6) AS FLOAT) AS N
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_360_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl360_b0",
 
 -- 3.3.2 Social Disruption - r1
-CAST(CAST(ROUND(CAST(((0.73 * COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 20000 AND j.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 35000 AND j.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) + 
-(0.27 * COALESCE(j.imm_lt5 * 0.24,0) + COALESCE(j.live_alone * 0.48,0) + COALESCE(j.no_engfr * 0.47,0) + COALESCE(j.lonepar3kids * 0.26,0) +
-COALESCE(j.indigenous * 0.26,0))) *
-(COALESCE(((SUM(COALESCE((((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) * 
-((0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Moderate_r1" / b.number ELSE 0 END)) + 
-(0 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Extensive_r1" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-LD' THEN a."sD_Complete_r1" / b.number ELSE 0 END)))) + 
-((CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END) *
-((0 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Moderate_r1" / b.number ELSE 0 END)) + 
-(0.9 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Extensive_r1" / b.number ELSE 0 END)) + 
-(1 * (CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN a."sD_Complete_r1" / b.number ELSE 0 END))))) * 
-((CASE WHEN b.genocc ='Residential-LD' OR b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END) / NULLIF((CASE WHEN b.genocc ='Residential-LD' THEN b.night/b.popdu ELSE 0 END) + 
-(CASE WHEN b.genocc ='Residential-MD' OR b.genocc ='Residential-HD' THEN b.night/b.popdu ELSE 0 END),0)),0))) * h.censuspop) / NULLIF(h.censusdu,0),0)) *
-(COALESCE((CASE WHEN j.inc_hshld <= 15000 THEN 0.62 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 15000 AND j.inc_hshld <= 20000 THEN 0.42 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 20000 AND j.inc_hshld <= 35000 THEN 0.29 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 35000 AND j.inc_hshld <= 50000 THEN 0.22 ELSE 0 END),0) + 
-COALESCE((CASE WHEN j.inc_hshld > 50000 THEN 0.13 ELSE 0 END),0)) * 
-(COALESCE(j.imm_lt5 * 0.24,0) + COALESCE(j.live_alone * 0.48,0) + COALESCE(j.no_engfr * 0.47,0) + COALESCE(j.lonepar3kids * 0.26,0) +
-COALESCE(j.indigenous * 0.26,0)) * 
-(COALESCE(j.renter * 0.40,0) + COALESCE(((h.censusdu * b.popdu) - j.renter) * 0.40,0)) * 
-(COALESCE(j.age_gt65 * 0.40,0) + COALESCE(j.age_lt6 * 0.40,0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Shelter_r1",
-
+CAST(CAST(ROUND(CAST(k."sCt_Shelter_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Shelter_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_r1",
@@ -238,7 +338,7 @@ CAST(CAST(ROUND(CAST(AVG(COALESCE(a."sC_DisplRes_90_r1"/NULLIF((b.night),0),0)) 
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_180_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res180_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_360_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res360_r1",
 
-CAST(CAST(ROUND(CAST(SUM(k."sC_DisplHshld_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DisplHshld_r1",
+CAST(CAST(ROUND(CAST(k."sCt_DisplHshld_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DisplHshld_r1",
 
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_30_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl30_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_90_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl90_r1",
@@ -308,13 +408,18 @@ LEFT JOIN gmf.shakemap_acm7p3_leechriverfullfault_xref e ON b.id = e.id
 --LEFT JOIN gmf.shakemap_{eqScenario}_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
 --LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype
-LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
+--LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
-LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
-LEFT JOIN results_dsra_acm7p3_leechriverfullfault.dsra_acm7p3_leechriverfullfault_all_indicators_b k ON a."AssetID" = k."AssetID"
---LEFT JOIN results_dsra_{eqScenario}.dsra_{eqScenario}_all_indicators_b h ON a."AssetID" = h."AssetID"
+--LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
+LEFT JOIN results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_shelter k ON b.sauid = k."Sauid"
+--LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter k ON b.id = k."Sauid"
 WHERE e."gmv_SA(0.3)" >=0.02
+GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,b.landuse,d.vs30,d.z1pt0,d.z2pt5,d.vs_lon,d.vs_lat,e.site_id,e.lon,e.lat,f.source_type,
+f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2)",e."gmv_SA(0.3)",e."gmv_SA(0.5)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(0.3)",e."gmv_SA(2.0)",b.popdu,
+i."PRUID",i."PRNAME",i."ERUID",i."ERNAME",i."CDUID",i."CDNAME",i."CSDUID",i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0",k."sCt_DisplHshld_r1",k."sCt_Shelter_b0",k."sCt_Shelter_r1",i.geom;
+/*
 GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,b.landuse,d.vs30,d.z1pt0,d.z2pt5,d.vs_lon,d.vs_lat,e.site_id,e.lon,e.lat,f.source_type,
 f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2)",e."gmv_SA(0.3)",e."gmv_SA(0.5)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(0.3)",e."gmv_SA(2.0)",
 h.censuspop,h.censusdu,b.popdu,j.inc_hshld,j.imm_lt5,j.live_alone,j.no_engfr,j.lonepar3kids,j.indigenous,j.renter,j.age_lt6,j.age_gt65,i."PRUID",i."PRNAME",i."ERUID",i."ERNAME",i."CDUID",i."CDNAME",i."CSDUID",
-i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",i.geom;
+i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0",k."sCt_DisplHshld_r1",i.geom;
+*/
