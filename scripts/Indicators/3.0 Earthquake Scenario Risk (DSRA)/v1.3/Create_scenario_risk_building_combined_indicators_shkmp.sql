@@ -1,16 +1,17 @@
 --create schema for new scenario
 --CREATE SCHEMA IF NOT EXISTS results_dsra_{eqScenario};
-CREATE SCHEMA IF NOT EXISTS results_dsra_acm7p3_leechriverfullfault;
+CREATE SCHEMA IF NOT EXISTS results_dsra_sim9p0_cascadiainterfacebestfault;
 
 
 --intermediates table to calculate displaced households for DSRA
 --DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc1
 --CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc1 AS
-DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc1;
-CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc1 AS
+DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 CASCADE;
+CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 AS
 (
 SELECT
 a."AssetID",
+c.number,
 a."sD_Moderate_b0",
 a."sD_Moderate_r1",
 a."sD_Extensive_b0",
@@ -27,21 +28,38 @@ b."E_MFHshld",
 -- SFM
 CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Moderate_b0" / c.number) ELSE 0 END AS "SFM_b0",
 CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Moderate_r1" / c.number) ELSE 0 END AS "SFM_r1",
+--CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Moderate_b0") ELSE 0 END AS "SFM_b0",
+--CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Moderate_r1") ELSE 0 END AS "SFM_r1",
+
 -- SFE
 CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Extensive_b0" / c.number) ELSE 0 END AS "SFE_b0",
 CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Extensive_r1" / c.number) ELSE 0 END AS "SFE_r1",
+--CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Extensive_b0") ELSE 0 END AS "SFE_b0",
+--CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Extensive_r1") ELSE 0 END AS "SFE_r1",
+
 -- SFC
 CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Complete_b0" / c.number) ELSE 0 END AS "SFC_b0",
 CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Complete_r1" / c.number) ELSE 0 END AS "SFC_r1",
+--CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Complete_b0") ELSE 0 END AS "SFC_b0",
+--CASE WHEN b."E_BldgOccG" = 'Residential-LD' THEN (a."sD_Complete_r1") ELSE 0 END AS "SFC_r1",
+
 -- MFM
 CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Moderate_b0" / c.number) ELSE 0 END AS "MFM_b0",
 CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Moderate_r1" / c.number) ELSE 0 END AS "MFM_r1",
+--CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Moderate_b0") ELSE 0 END AS "MFM_b0",
+--CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Moderate_r1") ELSE 0 END AS "MFM_r1",
+
 -- MFE
 CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Extensive_b0" / c.number) ELSE 0 END AS "MFE_b0",
 CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Extensive_r1" / c.number) ELSE 0 END AS "MFE_r1",
+--CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Extensive_b0") ELSE 0 END AS "MFE_b0",
+--CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Extensive_r1") ELSE 0 END AS "MFE_r1",
+
 -- MFC
 CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Complete_b0" / c.number) ELSE 0 END AS "MFC_b0",
 CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Complete_r1" / c.number) ELSE 0 END AS "MFC_r1",
+--CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Complete_b0") ELSE 0 END AS "MFC_b0",
+--CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD' THEN (a."sD_Complete_r1") ELSE 0 END AS "MFC_r1",
 
 0 AS "W_SFM",
 0 AS "W_SFE",
@@ -50,7 +68,7 @@ CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD'
 0.9 AS "W_MFE",
 1 AS "W_MFC"
 
-FROM dsra.dsra_acm7p3_leechriverfullfault a
+FROM dsra.dsra_sim9p0_cascadiainterfacebestfault a
 LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_b b ON a."AssetID" = b."BldgID"
 LEFT JOIN exposure.canada_exposure c ON  a."AssetID" = c.id
 LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s d ON c.sauid = d."Sauid"
@@ -60,8 +78,8 @@ LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s
 --intermediate tables to calculate displaced households for DSRA
 --DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc2
 --CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc2 AS
-DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc2;
-CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc2 AS
+DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 CASCADE;
+CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 AS
 (
 SELECT
 "AssetID",
@@ -73,36 +91,39 @@ SELECT
 ("W_MFM" * "MFM_b0") + ("W_MFE" * "MFE_b0") + ("W_MFC" * "MFC_b0") AS "MF_b0",
 ("W_MFM" * "MFM_r1") + ("W_MFE" * "MFE_r1") + ("W_MFC" * "MFC_r1") AS "MF_r1"
 
-FROM results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc1
+FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1
 );
 
 
 --intermediate tables to calculate displaced households for DSRA
 --DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc3
 --CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc3 AS
-DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc3;
-CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc3 AS
+DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc3 CASCADE;
+CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc3 AS
 (
 SELECT
 a."AssetID",
 
 --(([SF_Hshlds] * [SF]) + ([MF_Hshlds] * [MF])) * ([CensusDU] / ([SF_Hshlds] + [MF_Hshlds]) = DH
-COALESCE((a."E_SFHshld" * b."SF_b0") + (a."E_MFHshld" * b."MF_b0") * (a."E_CensusDU" /NULLIF((a."E_SFHshld" + a."E_MFHshld"),0)),0) AS "sC_DisplHshld_b0",
-COALESCE((a."E_SFHshld" * b."SF_r1") + (a."E_MFHshld" * b."MF_r1") * (a."E_CensusDU" /NULLIF((a."E_SFHshld" + a."E_MFHshld"),0)),0) AS "sC_DisplHshld_r1"
+--COALESCE((a."E_SFHshld" * b."SF_b0") + (a."E_MFHshld" * b."MF_b0") * (a."E_CensusDU" /NULLIF((a."E_SFHshld" + a."E_MFHshld"),0)),0) AS "sC_DisplHshld_b0",
+COALESCE((a."E_SFHshld" * b."SF_b0") + (a."E_MFHshld" * b."MF_b0"),0) AS "sC_DisplHshld_b0",
+--COALESCE((a."E_SFHshld" * b."SF_r1") + (a."E_MFHshld" * b."MF_r1") * (a."E_CensusDU" /NULLIF((a."E_SFHshld" + a."E_MFHshld"),0)),0) AS "sC_DisplHshld_r1",
+COALESCE((a."E_SFHshld" * b."SF_r1") + (a."E_MFHshld" * b."MF_r1"),0) AS "sC_DisplHshld_r1"
 
-FROM results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc1 a
-LEFT JOIN results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc2 b on a."AssetID" = b."AssetID"
+FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 a
+LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 b on a."AssetID" = b."AssetID"
 );
 
 
 --intermediate tables to calculate displaced households for DSRA
 --DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld
 --CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld AS
-DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld;
-CREATE TABLE results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld AS
+DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld CASCADE;
+CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld AS
 (
 SELECT
 a."AssetID",
+a.number,
 a."sD_Moderate_b0",
 a."sD_Moderate_r1",
 a."sD_Extensive_b0",
@@ -140,21 +161,21 @@ b."MF_r1",
 c."sC_DisplHshld_b0",
 c."sC_DisplHshld_r1"
 
-FROM results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc1 a
-LEFT JOIN results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc2 b ON a."AssetID" = b."AssetID"
-LEFT JOIN results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc3 c ON a."AssetID" = c."AssetID"
+FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 a
+LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 b ON a."AssetID" = b."AssetID"
+LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc3 c ON a."AssetID" = c."AssetID"
 );
 
 --DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_displhshld_calc1,results_dsra_{eqScenario}.{eqScenario}_displhshld_calc2,results_dsra_{eqScenario}.{eqScenario}_displhshld_calc3;
-DROP TABLE IF EXISTS results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc1,results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc2,results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld_calc3;
+DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1,results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2,results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc3;
 
 
 
 --create scenario risk building indicators
---DROP VIEW IF EXISTS results_dsra_acm7p3_leechriverfullfault.dsra_{eqScenario)_all_indicators_b CASCADE;
---CREATE VIEW results_dsra_acm7p3_leechriverfullfault.dsra_{eqScenario}_all_indicators_b AS 
-DROP VIEW IF EXISTS results_dsra_acm7p3_leechriverfullfault.dsra_acm7p3_leechriverfullfault_all_indicators_b CASCADE;
-CREATE VIEW results_dsra_acm7p3_leechriverfullfault.dsra_acm7p3_leechriverfullfault_all_indicators_b AS 
+--DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario)_all_indicators_b CASCADE;
+--CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario}_all_indicators_b AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_b CASCADE;
+CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_b AS 
 
 --3.0 Earthquake Scenario Risk (DSRA)
 --3.1 Scenario Hazard
@@ -246,16 +267,22 @@ CAST(CAST(ROUND(CAST(a."sD_Collapse_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS 
 -- 3.0 Earthquake Scenario Risk (DSRA)
 -- 3.2 Building Damage
 -- 3.2.1 Recovery - b0
+--CAST(CAST(ROUND(CAST(a."sC_Repair_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Repair_b0",
+--CAST(CAST(ROUND(CAST(a."sC_Construxn_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Recovery_b0",
+--CAST(CAST(ROUND(CAST(a."sC_Downtime_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Downtime_b0",
 CAST(CAST(ROUND(CAST(a."sC_Repair_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Repair_b0",
-CAST(CAST(ROUND(CAST(a."sC_Construxn_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Recovery_b0",
+CAST(CAST(ROUND(CAST(a."sC_Recovery_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Recovery_b0",
 CAST(CAST(ROUND(CAST(a."sC_Downtime_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Downtime_b0",
 CAST(CAST(ROUND(CAST((a."sC_DebrisBW_b0" + a."sC_DebrisC_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisTotal_b0",
 CAST(CAST(ROUND(CAST(a."sC_DebrisBW_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisBW_b0",
 CAST(CAST(ROUND(CAST(a."sC_DebrisC_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisCS_b0",
 
 -- 3.2.1 Recovery - r1
+--CAST(CAST(ROUND(CAST(a."sC_Repair_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Repair_r1",
+--CAST(CAST(ROUND(CAST(a."sC_Construxn_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Recovery_r1",
+--CAST(CAST(ROUND(CAST(a."sC_Downtime_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Downtime_r1",
 CAST(CAST(ROUND(CAST(a."sC_Repair_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Repair_r1",
-CAST(CAST(ROUND(CAST(a."sC_Construxn_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Recovery_r1",
+CAST(CAST(ROUND(CAST(a."sC_Recovery_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Recovery_r1",
 CAST(CAST(ROUND(CAST(a."sC_Downtime_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_Downtime_r1",
 CAST(CAST(ROUND(CAST((a."sC_DebrisBW_r1" + a."sC_DebrisC_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisTotal_r1",
 CAST(CAST(ROUND(CAST(a."sC_DebrisBW_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sC_DebrisBW_r1",
@@ -385,15 +412,15 @@ c."SACTYPE" AS "sactype",
 b.landuse,
 b.geom AS "geom_point"
 
-FROM dsra.dsra_acm7p3_leechriverfullfault a
+FROM dsra.dsra_sim9p0_cascadiainterfacebestfault a
 --FROM dsra.dsra_{eqScenario} a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id
 LEFT JOIN vs30.vs30_can_site_model_xref d ON a."AssetID" = d.id
 LEFT JOIN boundaries."Geometry_SAUID" c on b.sauid = c."SAUIDt"
-LEFT JOIN gmf.shakemap_acm7p3_leechriverfullfault_xref e ON b.id = e.id
+LEFT JOIN gmf.shakemap_sim9p0_cascadiainterfacebestfault_xref e ON b.id = e.id
 --LEFT JOIN gmf.shakemap_{eqScenario}_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
 --LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype
-LEFT JOIN results_dsra_acm7p3_leechriverfullfault.acm7p3_leechriverfullfault_displhshld h ON a."AssetID" = h."AssetID"
+LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld h ON a."AssetID" = h."AssetID"
 --LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_displhshld h ON a."AssetID" = h."AssetID"
 WHERE e."gmv_SA(0.3)" >=0.02;
