@@ -5,7 +5,7 @@ CREATE SCHEMA IF NOT EXISTS results_dsra_sim9p0_cascadiainterfacebestfault;
 
 
 --intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc1;
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 CASCADE;
 --CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc1 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc1 AS
@@ -24,7 +24,7 @@ GROUP BY a."Sauid"
 
 
 --intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc2
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc2 CASCADE;
 --CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc2 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2 AS
@@ -108,7 +108,7 @@ LEFT JOIN results_nhsl_social_fabric.nhsl_social_fabric_all_indicators_s d ON a.
 
 
 -- intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc3
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc3 CASCADE;
 --CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc3 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc3 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc3 AS
@@ -125,7 +125,7 @@ FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebest
 
 
 -- intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc4
+--DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc4 CASCADE;
 --CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.shelter_calc4 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc4 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc4 AS

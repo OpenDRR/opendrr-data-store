@@ -238,14 +238,14 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
 a.sh_hypodepth,
 a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
-GROUP BY sauid,dauid,csduid,csdname,cduid,cdname,fsauid,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
+GROUP BY sauid,dauid,csduid,csdname,cduid,cdname,fsauid,eruid,ername,pruid,prname,sh_rupname,/*sh_rupabbr,*/sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
 DROP TABLE IF EXISTS dsra.dsra_all_scenarios_sauid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_sauid_tbl AS
@@ -263,7 +263,7 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
@@ -348,7 +348,7 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
@@ -356,7 +356,7 @@ a.sh_hypodepth,
 a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
 LEFT JOIN boundaries."Geometry_DAUID" b ON a.dauid = b."DAUID"
-GROUP BY dauid,csduid,csdname,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
+GROUP BY dauid,csduid,csdname,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,/*sh_rupabbr,*/sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
 DROP TABLE IF EXISTS dsra.dsra_all_scenarios_dauid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_dauid_tbl AS
@@ -372,7 +372,7 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
@@ -452,14 +452,14 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
 a.sh_hypodepth,
 a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
-GROUP BY csduid,csdname,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
+GROUP BY csduid,csdname,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,/*sh_rupabbr,*/sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
 DROP TABLE IF EXISTS dsra.dsra_all_scenarios_csduid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_csduid_tbl AS
@@ -474,7 +474,7 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
@@ -545,14 +545,14 @@ a.fsauid,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
 a.sh_hypodepth,
 a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
-GROUP BY fsauid,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
+GROUP BY fsauid,pruid,prname,sh_rupname,/*sh_rupabbr,*/sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
 DROP TABLE IF EXISTS dsra.dsra_all_scenarios_fsauid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_fsauid_tbl AS
@@ -632,14 +632,14 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
 a.sh_hypodepth,
 a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
-GROUP BY cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
+GROUP BY cduid,cdname,eruid,ername,pruid,prname,sh_rupname,/*sh_rupabbr,*/sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
 DROP TABLE IF EXISTS dsra.dsra_all_scenarios_cduid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_cduid_tbl AS
@@ -652,7 +652,7 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
@@ -722,14 +722,14 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
 a.sh_hypodepth,
 a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
-GROUP BY eruid,ername,pruid,prname,sh_rupname,sh_mag,sh_rupabbr,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
+GROUP BY eruid,ername,pruid,prname,sh_rupname,sh_mag,/*sh_rupabbr,*/sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
 DROP TABLE IF EXISTS dsra.dsra_all_scenarios_eruid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_eruid_tbl AS
@@ -740,7 +740,7 @@ a.ername,
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
@@ -805,14 +805,14 @@ SELECT
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
 a.sh_hypodepth,
 a.sh_rake
 FROM dsra.dsra_all_scenarios_tbl a
-GROUP BY pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
+GROUP BY pruid,prname,sh_rupname,/*sh_rupabbr,*/sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake);
 
 DROP TABLE IF EXISTS dsra.dsra_all_scenarios_pruid_tbl CASCADE;
 CREATE TABLE dsra.dsra_all_scenarios_pruid_tbl AS
@@ -821,7 +821,7 @@ SELECT
 a.pruid,
 a.prname,
 a.sh_rupname,
-a.sh_rupabbr,
+--a.sh_rupabbr,
 a.sh_mag,
 a.sh_hypolon,
 a.sh_hypolat,
