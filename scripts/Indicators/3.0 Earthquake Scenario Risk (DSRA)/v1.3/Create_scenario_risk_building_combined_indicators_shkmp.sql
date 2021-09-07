@@ -4,8 +4,8 @@ CREATE SCHEMA IF NOT EXISTS results_dsra_sim9p0_cascadiainterfacebestfault;
 
 
 --intermediates table to calculate displaced households for DSRA
---DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc1 CASCADE;
---CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc1 AS
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}.displhshld_calc1 CASCADE;
+--CREATE TABLE results_dsra_{eqScenario}.{eqScenario}.displhshld_calc1 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 AS
 (
@@ -76,8 +76,8 @@ LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s
 
 
 --intermediate tables to calculate displaced households for DSRA
---DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc2 CASCADE;
---CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc2 AS
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}.displhshld_calc2 CASCADE;
+--CREATE TABLE results_dsra_{eqScenario}.{eqScenario}.displhshld_calc2 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 AS
 (
@@ -96,8 +96,8 @@ FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebest
 
 
 --intermediate tables to calculate displaced households for DSRA
---DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc3 CASCADE;
---CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}.displhshld_calc3 AS
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}.displhshld_calc3 CASCADE;
+--CREATE TABLE results_dsra_{eqScenario}.{eqScenario}.displhshld_calc3 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc3 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc3 AS
 (
@@ -116,8 +116,8 @@ LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfac
 
 
 --intermediate tables to calculate displaced households for DSRA
---DROP TABLE IF EXISTS results_dsra_{eq_Scenario}.{eq_Scenario}_displhshld CASCADE
---CREATE TABLE results_dsra_{eq_Scenario}.{eq_Scenario}_displhshld AS
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_displhshld CASCADE
+--CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_displhshld AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld AS
 (
