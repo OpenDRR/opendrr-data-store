@@ -4,8 +4,8 @@ CREATE SCHEMA IF NOT EXISTS results_dsra_sim9p0_cascadiainterfacebestfault;
 
 
 --intermediates table to calculate displaced households for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}.displhshld_calc1 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}.displhshld_calc1 AS
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_displhshld_calc1 CASCADE;
+--CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_displhshld_calc1 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 AS
 (
@@ -69,6 +69,7 @@ CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD'
 1 AS "W_MFC"
 
 FROM dsra.dsra_sim9p0_cascadiainterfacebestfault a
+--FROM dsra.dsra_{eqScenario} a
 LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_b b ON a."AssetID" = b."BldgID"
 LEFT JOIN exposure.canada_exposure c ON  a."AssetID" = c.id
 LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s d ON c.sauid = d."Sauid"
@@ -76,8 +77,8 @@ LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s
 
 
 --intermediate tables to calculate displaced households for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}.displhshld_calc2 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}.displhshld_calc2 AS
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_displhshld_calc2 CASCADE;
+--CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_displhshld_calc2 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 AS
 (
@@ -92,12 +93,13 @@ SELECT
 ("W_MFM" * "MFM_r1") + ("W_MFE" * "MFE_r1") + ("W_MFC" * "MFC_r1") AS "MF_r1"
 
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1
+--FROM results_dsra_{eqScenario}.{eqScenario}_displhshld_calc1
 );
 
 
 --intermediate tables to calculate displaced households for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}.displhshld_calc3 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}.displhshld_calc3 AS
+--DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_displhshld_calc3 CASCADE;
+--CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_displhshld_calc3 AS
 DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc3 CASCADE;
 CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc3 AS
 (
@@ -111,7 +113,9 @@ COALESCE((a."E_SFHshld" * b."SF_b0") + (a."E_MFHshld" * b."MF_b0"),0) AS "sC_Dis
 COALESCE((a."E_SFHshld" * b."SF_r1") + (a."E_MFHshld" * b."MF_r1"),0) AS "sC_DisplHshld_r1"
 
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 a
+--FROM results_dsra_{eqScenario}.{eqScenario}_displhshld_calc1 a
 LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 b on a."AssetID" = b."AssetID"
+--LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_displhshld_calc2 b on a."AssetID" = b."AssetID"
 );
 
 
@@ -162,8 +166,11 @@ c."sC_DisplHshld_b0",
 c."sC_DisplHshld_r1"
 
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc1 a
+--FROM results_dsra_{eqScenario}.{eqScenario}_displhshld_calc1 a
 LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc2 b ON a."AssetID" = b."AssetID"
+--LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_displhshld_calc2 b ON a."AssetID" = b."AssetID"
 LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_displhshld_calc3 c ON a."AssetID" = c."AssetID"
+--LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_displhshld_calc3 c ON a."AssetID" = c."AssetID"
 );
 
 --DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_displhshld_calc1,results_dsra_{eqScenario}.{eqScenario}_displhshld_calc2,results_dsra_{eqScenario}.{eqScenario}_displhshld_calc3;
