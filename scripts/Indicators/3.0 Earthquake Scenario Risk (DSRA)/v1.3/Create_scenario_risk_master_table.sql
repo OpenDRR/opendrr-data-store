@@ -14,7 +14,7 @@ ername varchar,
 pruid varchar,
 prname varchar,
 sh_rupname varchar,
-sh_rupabbr varchar,
+--sh_rupabbr varchar,
 sh_mag varchar,
 sh_hypolon float,
 sh_hypolat float,
@@ -24,137 +24,137 @@ geom_point geometry
 ); 
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_acm6p5_beaufort.dsra_acm6p5_beaufort_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_acm7p2_lrdmf.dsra_acm7p2_lrdmf_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_acm7p3_georgiastraitnew.dsra_acm7p3_georgiastraitnew_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm4p7_sidney.dsra_idm4p7_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm4p8_sidney.dsra_idm4p8_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm5p0_sidney.dsra_idm5p0_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm5p2_sidney.dsra_idm5p2_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm5p4_sidney.dsra_idm5p4_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm5p6_sidney.dsra_idm5p6_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm5p8_sidney.dsra_idm5p8_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm6p0_sidney.dsra_idm6p0_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm6p2_sidney.dsra_idm6p2_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm6p4_sidney.dsra_idm6p4_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm6p6_sidney.dsra_idm6p6_sidney_all_indicators_b;
 
 /*
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_all_indicators_b;
 */
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm6p8_sidney.dsra_idm6p8_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm7p0_sidney.dsra_idm7p0_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm7p1_sidney.dsra_idm7p1_sidney_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_idm7p1_sidneytest.dsra_idm7p1_sidneytest_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_scm6p5_ottawa.dsra_scm6p5_ottawa_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_scm7p0_montrealnw.dsra_scm7p0_montrealnw_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_scm7p0_montrealnwcanshm5.dsra_scm7p0_montrealnwcanshm5_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_b;
 
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_sim9p0_cszlockedtrans.dsra_sim9p0_cszlockedtrans_all_indicators_b;
 
 /*
 -- insert values into table, this scenario has no rupture info, ignore for now
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth","sH_Rake",geom_point
 FROM results_dsra_scm7p0_montrealnwcanshm5.dsra_scm7p0_montrealnwcanshm5_all_indicators_b;
 */
 
 /* -- template
 -- insert values into table
-INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
+INSERT INTO dsra.dsra_all_scenarios_tbl(assetid,sauid,pruid,prname,eruid,cduid,cdname,csduid,csdname,fsauid,dauid,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,geom_point)
 SELECT "AssetID","Sauid",pruid,prname,eruid,ername,cduid,cdname,csduid,csdname,fsauid,dauid,"sH_RupName","sH_Mag","sH_HypoLon","sH_HypoLat","sH_HypoDepth",geom_point
 FROM results_{eqScenario}.dsra_{eqScenario}_all_indicators_b;
 */
@@ -203,7 +203,7 @@ a.sh_rake,
 b.geom
 FROM dsra.dsra_all_scenarios_tbl a
 LEFT JOIN boundaries."Geometry_SAUID" b ON a.sauid = b."SAUIDt"
-GROUP BY sauid,dauid,csduid,csdname,cduid,cdname,fsauid,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
+GROUP BY sauid,dauid,csduid,csdname,cduid,cdname,fsauid,eruid,ername,pruid,prname,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
 
 -- create index on master dsra sauid table
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_sauid_sauid_idx ON dsra.dsra_all_scenarios_sauid_tbl(sauid);
@@ -316,7 +316,7 @@ a.sh_rake,
 b.geom
 FROM dsra.dsra_all_scenarios_tbl a
 LEFT JOIN boundaries."Geometry_DAUID" b ON a.dauid = b."DAUID"
-GROUP BY dauid,csduid,csdname,fsauid,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
+GROUP BY dauid,csduid,csdname,fsauid,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
 
 -- create index on master dsra dauid table
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_dauid_dauid_idx ON dsra.dsra_all_scenarios_dauid_tbl(dauid);
@@ -521,7 +521,7 @@ a.sh_rake,
 b.geom
 FROM dsra.dsra_all_scenarios_tbl a
 LEFT JOIN boundaries."Geometry_FSAUID" b ON a.fsauid = b."CFSAUID"
-GROUP BY fsauid,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
+GROUP BY fsauid,cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
 
 -- create index on master dsra fsauid table
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_fsauid_fsauid_idx ON dsra.dsra_all_scenarios_fsauid_tbl(fsauid);
@@ -606,7 +606,7 @@ a.sh_rake,
 b.geom
 FROM dsra.dsra_all_scenarios_tbl a
 LEFT JOIN boundaries."Geometry_CDUID" b ON a.cduid = b."CDUID"
-GROUP BY cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
+GROUP BY cduid,cdname,eruid,ername,pruid,prname,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
 
 -- create index on master dsra cduid table
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_cduid_cduid_idx ON dsra.dsra_all_scenarios_cduid_tbl(cduid);
@@ -696,7 +696,7 @@ a.sh_rake,
 b.geom
 FROM dsra.dsra_all_scenarios_tbl a
 LEFT JOIN boundaries."Geometry_CDUID" b ON a.eruid = b."CDUID"
-GROUP BY eruid,ername,pruid,prname,sh_rupname,sh_mag,sh_rupabbr,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
+GROUP BY eruid,ername,pruid,prname,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
 
 -- create index on master dsra eruid table
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_eruid_eruid_idx ON dsra.dsra_all_scenarios_eruid_tbl(eruid);
@@ -782,7 +782,7 @@ a.sh_rake,
 b.geom
 FROM dsra.dsra_all_scenarios_tbl a
 LEFT JOIN boundaries."Geometry_PRUID" b ON a.pruid = b."PRUID"
-GROUP BY pruid,prname,sh_rupname,sh_rupabbr,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
+GROUP BY pruid,prname,sh_rupname,sh_mag,sh_hypolon,sh_hypolat,sh_hypodepth,sh_rake,b.geom);
 
 -- create index on master dsra pruid table
 CREATE INDEX IF NOT EXISTS dsra_all_scenarios_pruid_pruid_idx ON dsra.dsra_all_scenarios_pruid_tbl(pruid);
