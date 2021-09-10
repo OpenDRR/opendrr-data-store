@@ -39,19 +39,35 @@ b."E_CensusDU",
 b."E_People_DU",
 b."Et_SFHshld",
 b."Et_MFHshld",
+c.inc_hshld,
+c.vis_min,
+c.indigenous,
+c.renter,
+c.age_gt65,
+c.age_lt6,
 
 --IM
 --IF [Inc_Hshld] =< $15,000, THEN 0.62 = IM1
-CASE WHEN c.inc_hshld <= 15000 THEN 0.62 ELSE 0 END AS "IM1",
+CASE WHEN c.inc_hshld <= 15000 THEN 1 * 0.62 ELSE 0 END AS "IM1",
 --IF [Inc_Hshld] > $15,000 AND [Inc_Hshld] =<, $20,000 THEN 0.42 = IM2
-CASE WHEN c.inc_hshld > 15000 AND c.inc_hshld <= 20000 THEN 0.29 ELSE 0 END AS "IM2",
+CASE WHEN c.inc_hshld > 15000 AND c.inc_hshld <= 20000 THEN 1 * 0.42 ELSE 0 END AS "IM2",
 --IF [Inc_Hshld] > $20,000 AND [Inc_Hshld] =<, $35,000 THEN 0.29 = IM3
-CASE WHEN c.inc_hshld > 20000 AND c.inc_hshld <= 35000 THEN 0.29 ELSE 0 END AS "IM3",
+CASE WHEN c.inc_hshld > 20000 AND c.inc_hshld <= 35000 THEN 1 * 0.29 ELSE 0 END AS "IM3",
 --IF [Inc_Hshld] > $35,000 AND [Inc_Hshld] =<, $50,000 THEN  0.22 = IM4
-CASE WHEN c.inc_hshld > 35000 AND c.inc_hshld <= 50000 THEN 0.29 ELSE 0 END AS "IM4",
+CASE WHEN c.inc_hshld > 35000 AND c.inc_hshld <= 50000 THEN 1 *  0.22 ELSE 0 END AS "IM4",
 --IF [Inc_Hshld] > $50,000 THEN 0.13 = IM5
-CASE WHEN c.inc_hshld > 50000 THEN 0.13 ELSE 0 END AS "IM5",
+CASE WHEN c.inc_hshld > 50000 THEN 1 * 0.13 ELSE 0 END AS "IM5",
 
+--EM
+-- 1 - vis_min - indigenous = white
+-- white * 0.24 = EM1
+(1 - c.vis_min - c.indigenous) * 0.24 AS "EM1",
+-- vis_min * 0.40 = EM2, modification factors is average of Hazus visible minority values {avg(0.48 + 0.47 + 0.26)} = 0.40
+c.vis_min * 0.40 AS "EM2",
+-- indigenous * 0.26 = EM3
+c.indigenous * 0.26 AS "EM3",
+
+/*
 --EM
 --[Imm_LT5_p] * 0.24 = EM1, Imm_LT5_p = IF [Imm_LT5_t] =1 Then ([Imm_LT5] x [CensusPop]
 --CASE WHEN d."VFt_ImmLT5" = 1 THEN c.imm_lt5 * b."E_CensusPop" * 0.24 ELSE 0 END AS "EM1",
@@ -77,6 +93,7 @@ c.lonepar3kids * 0.26 AS "EM4",
 --CASE WHEN d."VAt_Indigenous" = 1 THEN c.indigenous * b."E_CensusPop" * 0.26 ELSE 0 END AS "EM5",
 --CASE WHEN d."VAt_Indigenous" = 1 THEN c.indigenous * 0.26 ELSE 0 END AS "EM5",
 c.indigenous * 0.26 AS "EM5",
+*/
 
 --OM
 --[Renter_p] * 0.40 = OM1, Renter_p = IF [Renter_t] =1 Then ([Renter] x [CensusPop]
@@ -87,6 +104,7 @@ c.renter * 0.40 AS "OM1",
 --(([CensusDU] * People_DU]) - [Renter] ) * 0.40 = OM2
 --((b."E_CensusDU" * b."E_People_DU") - c.renter) * 0.40 AS "OM2",
 1 - c.renter * 0.40 AS "OM2",
+
 
 --AM
 --[Age_GT65_p] * 0.40 = AM1, Age_GT65_p = IF [Age_GT65_t] =1 Then ([Age_GT65] x [CensusPop]
@@ -99,12 +117,11 @@ c.age_gt65 * 0.40 AS "AM1",
 --CASE WHEN d."VAt_AgeLT6" = 1 THEN c.age_lt6 * 0.40 ELSE 0 END AS "AM2",
 c.age_lt6 * 0.40 AS "AM2"
 
-
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc1 a
 --FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 a
 LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s b ON a."Sauid" = b."Sauid"
-LEFT JOIN sovi.sovi_census_canada c ON b."Sauid" = c.sauidt
-LEFT JOIN results_nhsl_social_fabric.nhsl_social_fabric_all_indicators_s d ON a."Sauid" = d."Sauid"
+LEFT JOIN census.census_2016_canada c ON b."Sauid" = c.sauidt
+--LEFT JOIN results_nhsl_social_fabric.nhsl_social_fabric_all_indicators_s d ON a."Sauid" = d."Sauid"
 );
 
 
@@ -118,7 +135,8 @@ SELECT
 "Sauid",
 
 --(0.73* ([IM1]+[IM2]+[IM3]+[IM4]+[IM5])) + (0.27*([EM1]+[EM2]+[EM3]+[EM4]+[EM5])) = sigma
-(0.73 * ("IM1" + "IM2" + "IM3" + "IM4" + "IM5")) + (0.27 * ("EM1" + "EM2" + "EM3" + "EM4" + "EM5")) AS "sigma"
+--(0.73 * ("IM1" + "IM2" + "IM3" + "IM4" + "IM5")) + (0.27 * ("EM1" + "EM2" + "EM3" + "EM4" + "EM5")) AS "sigma"
+(0.73 * ("IM1" + "IM2" + "IM3" + "IM4" + "IM5")) + (0.27 * ("EM1" + "EM2" + "EM3")) AS "sigma"
 
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2
 --FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2
@@ -135,9 +153,12 @@ SELECT
 a."Sauid",
 --[sigma] * (([DisplHshld] * [CensusPop]) / CensusDU) * ([IM1]+[IM2]+[IM3]+[IM4]+[IM5]) * ([EM1]+[EM2]+[EM3]+[EM4]+[EM5]) * ([OM1]+[OM2]) * ([AM1]+[AM2]) = Shelter
 --b.sigma * COALESCE(((a."sCt_DisplHshld_b0" * a."E_CensusPop") / NULLIF(a."E_CensusDU",0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3" + a."EM4" + a."EM5") * (a."OM1" + a."OM2") * (a."AM1" + a."AM2") AS "sCt_Shelter_b0",
-b.sigma * COALESCE(((a."sCt_DisplHshld_b0" * a."Et_PopNight") / NULLIF((a."Et_SFHshld" + a."Et_MFHshld"),0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3" + a."EM4" + a."EM5") * (a."OM1" + a."OM2") * (a."AM1" + a."AM2") AS "sCt_Shelter_b0",
+--b.sigma * COALESCE(((a."sCt_DisplHshld_b0" * a."Et_PopNight") / NULLIF((a."Et_SFHshld" + a."Et_MFHshld"),0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3" + a."EM4" + a."EM5") * (a."OM1" + a."OM2") * (a."AM1" + a."AM2") AS "sCt_Shelter_b0",
+b.sigma * COALESCE(((a."sCt_DisplHshld_b0" * a."Et_PopNight") / NULLIF((a."Et_SFHshld" + a."Et_MFHshld"),0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3") * (a."OM1" + a."OM2") * (a."AM1" + a."AM2") AS "sCt_Shelter_b0",
+
 --b.sigma * COALESCE(((a."sCt_DisplHshld_r1" * a."E_CensusPop") / NULLIF(a."E_CensusDU",0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3" + a."EM4" + a."EM5") * (a."OM1" + a."OM2") * (a."AM1" + a."AM2") AS "sCt_Shelter_r1"
-b.sigma * COALESCE(((a."sCt_DisplHshld_r1" * a."Et_PopNight") / NULLIF((a."Et_SFHshld" + a."Et_MFHshld"),0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3" + a."EM4" + a."EM5") * (a."OM1" + a."OM2") * (a."AM1" + a."AM2") AS "sCt_Shelter_r1"
+--b.sigma * COALESCE(((a."sCt_DisplHshld_r1" * a."Et_PopNight") / NULLIF((a."Et_SFHshld" + a."Et_MFHshld"),0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3" + a."EM4" + a."EM5") * (a."OM1" + a."OM2") * (a."AM1" + a."AM2") AS "sCt_Shelter_r1"
+b.sigma * COALESCE(((a."sCt_DisplHshld_r1" * a."Et_PopNight") / NULLIF((a."Et_SFHshld" + a."Et_MFHshld"),0)),0) * (a."IM1" + a."IM2" + a."IM3" + a."IM4" + a."IM5") * (a."EM1" + a."EM2" + a."EM3") * (a."OM1" + a."OM2") * (a."AM1" + a."AM2") AS "sCt_Shelter_r1"
 
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2 a
 --FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 a
@@ -162,6 +183,12 @@ a."E_CensusDU",
 a."E_People_DU",
 a."Et_SFHshld",
 a."Et_MFHshld",
+a.inc_hshld,
+a.vis_min,
+a.indigenous,
+a.renter,
+a.age_gt65,
+a.age_lt6,
 a."IM1",
 a."IM2",
 a."IM3",
@@ -170,8 +197,6 @@ a."IM5",
 a."EM1",
 a."EM2",
 a."EM3",
-a."EM4",
-a."EM5",
 a."OM1",
 a."OM2",
 a."AM1",
@@ -200,6 +225,7 @@ DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_casca
 DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_s CASCADE;
 CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_s AS 
 
+
 SELECT
 b.sauid AS "Sauid",
 
@@ -213,9 +239,9 @@ CAST(CAST(ROUND(CAST(f.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLat",
 CAST(CAST(ROUND(CAST(f.depth AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoDepth",
 f.rake AS "sH_Rake",
 a."gmpe_Model" AS "sH_GMPE",
-e.site_id AS "sH_SiteID",
-CAST(CAST(ROUND(CAST(e.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_SiteLon",
-CAST(CAST(ROUND(CAST(e.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_SiteLat",
+--e.site_id AS "sH_SiteID",
+--CAST(CAST(ROUND(CAST(e.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_SiteLon",
+--CAST(CAST(ROUND(CAST(e.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_SiteLat",
 CAST(CAST(ROUND(CAST(d.vs_lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS  "sH_Vs30Lon",
 CAST(CAST(ROUND(CAST(d.vs_lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs30Lat",
 CAST(CAST(ROUND(CAST(d.vs30 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs30",
@@ -296,7 +322,8 @@ CAST(CAST(ROUND(CAST(AVG(a."sD_Collapse_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_b0")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Downtime_b0",
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_b0")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_b0",
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Construxn_b0")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_b0",
-CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Downtime_b0",
+--CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Downtime_b0",
+CAST(CAST(ROUND(CAST(AVG(a."sC_Interruption_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Interruption_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Recovery_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_b0" + a."sC_DebrisC_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DebrisTotal_b0",
@@ -317,7 +344,8 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisC_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC)
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_r1")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Downtime_r1",
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_r1")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_r1",
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Construxn_r1")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_r1",
-CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Downtime_r1",
+--CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Downtime_r1",
+CAST(CAST(ROUND(CAST(AVG(a."sC_Interruption_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Interruption_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Recovery_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_r1" + a."sC_DebrisC_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DebrisTotal_r1",
@@ -359,25 +387,33 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL4_r1") AS NUMERIC),6) AS FLOAT) AS NUM
 
 -- 3.3.2 Social Disruption - b0
 CAST(CAST(ROUND(CAST(k."sCt_Shelter_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Shelter_b0",
+/*
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sC_DisplRes_90_b0")/AVG(b.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_DisplRes90_b0",
 --CAST(CAST(ROUND(CAST(AVG(COALESCE(a."sC_DisplRes_90_b0"/NULLIF((b.night),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_DisplRes90_b0",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_180_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res180_b0",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_360_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res360_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_180_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res180_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_360_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res360_b0",
+*/
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_30_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_90_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_b0",
+CAST(CAST(ROUND(CAST(AVG(a."sC_AfftRes_90_b0")/NULLIF(AVG(b.night),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_Res90_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_180_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res180_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_360_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res360_b0",
 
 CAST(CAST(ROUND(CAST(k."sCt_DisplHshld_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DisplHshld_b0",
 
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_30_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl30_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_90_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl90_b0",
-CAST(CAST(ROUND(CAST(AVG(a."sC_DisrupEmpl_90_b0")/AVG(b.day) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_Empl90_b0",
---CAST(CAST(ROUND(CAST(AVG(COALESCE(a."sC_DisrupEmpl_90_b0"/NULLIF((b.day),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_Empl90_b0",
+CAST(CAST(ROUND(CAST(AVG(a."sC_DisrupEmpl_90_b0")/NULLIF(AVG(b.day),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_Empl90_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_180_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl180_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_360_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl360_b0",
 
 -- 3.3.2 Social Disruption - r1
 CAST(CAST(ROUND(CAST(k."sCt_Shelter_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Shelter_r1",
+/*
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_r1",
@@ -385,13 +421,19 @@ CAST(CAST(ROUND(CAST(AVG(a."sC_DisplRes_90_r1")/AVG(b.night) AS NUMERIC),6) AS F
 --CAST(CAST(ROUND(CAST(AVG(COALESCE(a."sC_DisplRes_90_r1"/NULLIF((b.night),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_DisplRes90_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_180_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res180_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_360_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res360_r1",
+*/
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_3_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_r1",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_30_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_r1",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_90_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_r1",
+CAST(CAST(ROUND(CAST(AVG(a."sC_AfftRes_90_r1")/NULLIF(AVG(b.night),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_Res90_r1",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_180_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res180_r1",
+CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_360_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res360_r1",
 
 CAST(CAST(ROUND(CAST(k."sCt_DisplHshld_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DisplHshld_r1",
 
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_30_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl30_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_90_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl90_r1",
-CAST(CAST(ROUND(CAST(AVG(a."sC_DisrupEmpl_90_r1")/AVG(b.day) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_Empl90_r1",
---CAST(CAST(ROUND(CAST(AVG(COALESCE(a."sC_DisrupEmpl_90_r1"/NULLIF((b.day),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_Empl90_r1",
+CAST(CAST(ROUND(CAST(AVG(a."sC_DisrupEmpl_90_r1")/NULLIF(AVG(b.day),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_Empl90_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_180_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl180_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_360_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Empl360_r1",
 
@@ -465,7 +507,7 @@ LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter k ON b.sauid = k."Sauid"
 --LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter k ON b.id = k."Sauid"
 WHERE e."gmv_SA(0.3)" >=0.02
-GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,b.landuse,d.vs30,d.z1pt0,d.z2pt5,d.vs_lon,d.vs_lat,e.site_id,e.lon,e.lat,f.source_type,
+GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,b.landuse,d.vs30,d.z1pt0,d.z2pt5,d.vs_lon,d.vs_lat,f.source_type,
 f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2)",e."gmv_SA(0.3)",e."gmv_SA(0.5)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(0.3)",e."gmv_SA(2.0)",
 i."PRUID",i."PRNAME",i."ERUID",i."ERNAME",i."CDUID",i."CDNAME",i."CSDUID",i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0",k."sCt_DisplHshld_r1",k."sCt_Shelter_b0",k."sCt_Shelter_r1",i.geom;
 /*
