@@ -415,8 +415,8 @@ SUM(a."Et_ContValue" * b.area_ratio) AS "Et_ContValue",
 c.geom
 
 FROM results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s a
-LEFT JOIN boundaries.sauid_hexgrid_global_fabric_intersect b ON a."Sauid" = b.sauid
-LEFT JOIN boundaries."HexGrid_global_fabric" c ON b.gridid = c.gridid
+LEFT JOIN boundaries."SAUID_HexGrid_GlobalFabric_intersect" b ON a."Sauid" = b.sauid
+LEFT JOIN boundaries."HexGrid_GlobalFabric" c ON b.gridid = c.gridid
 GROUP BY c.gridid,c.geom;
 
 /*
