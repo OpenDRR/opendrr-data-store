@@ -8,3 +8,4 @@ v1.2
 - rename all r2 indicators, r2 references to r1 except for metrovan
 
 v1.3
+- revised/updated indicators (https://github.com/OpenDRR/opendrr-data-store/issues/54)
