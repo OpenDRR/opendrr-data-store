@@ -716,6 +716,7 @@ a."Rupture_Abbr" AS "sH_RupName",
 --a."Rupture_Abbr" AS "sH_RupAbbr",
 f.source_type AS "sH_Source",
 f.magnitude AS "sH_Mag",
+0.0 AS "sH_MMI",
 CAST(CAST(ROUND(CAST(f.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLon",
 CAST(CAST(ROUND(CAST(f.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLat",
 CAST(CAST(ROUND(CAST(f.depth AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoDepth",
@@ -724,8 +725,8 @@ a."gmpe_Model" AS "sH_GMPE",
 --e.site_id AS "sH_SiteID",
 --CAST(CAST(ROUND(CAST(e.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_SiteLon",
 --CAST(CAST(ROUND(CAST(e.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_SiteLat",
-CAST(CAST(ROUND(CAST(d.vs_lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS  "sH_Vs30Lon",
-CAST(CAST(ROUND(CAST(d.vs_lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs30Lat",
+--CAST(CAST(ROUND(CAST(d.vs_lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS  "sH_Vs30Lon",
+--CAST(CAST(ROUND(CAST(d.vs_lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs30Lat",
 CAST(CAST(ROUND(CAST(d.vs30 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs30",
 CAST(CAST(ROUND(CAST(d.z1pt0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_z1p0",
 CAST(CAST(ROUND(CAST(d.z2pt5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_z2p5",
@@ -761,7 +762,7 @@ CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC
 CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_b0" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Complete_b0",
 --CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_stdv_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Complete_b0",
 
-CAST(CAST(ROUND(CAST(SUM(a."sD_Collapse_b0" * b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Collapse_b0",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Collapse_b0" * b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Collapse_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Collapse_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Collapse_b0",
 --CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_stdv_b0" * g.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Collapse_b0",
 
@@ -786,7 +787,7 @@ CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC
 CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_r1" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Complete_r1",
 --CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_stdv_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Complete_r1",
 
-CAST(CAST(ROUND(CAST(SUM(a."sD_Collapse_r1" * b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sD_Collapse_r1",
+CAST(CAST(ROUND(CAST(SUM(a."sD_Collapse_r1" * b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Collapse_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Collapse_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Collapse_r1",
 --CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_stdv_r1" * g.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Collapse_r1",
 
@@ -998,3 +999,115 @@ f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2
 h.censuspop,h.censusdu,b.popdu,j.inc_hshld,j.imm_lt5,j.live_alone,j.no_engfr,j.lonepar3kids,j.indigenous,j.renter,j.age_lt6,j.age_gt65,i."PRUID",i."PRNAME",i."ERUID",i."ERNAME",i."CDUID",i."CDNAME",i."CSDUID",
 i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0",k."sCt_DisplHshld_r1",i.geom;
 */
+
+
+-- aggregate to CSD level
+SELECT
+a.csduid,
+a.csdname,
+a."sH_RupName",
+a."sH_Source",
+a."sH_Mag",
+a."sH_MMI",
+a."sH_HypoLon",
+a."sH_HypoLat",
+a."sH_HypoDepth",
+a."sH_Rake",
+a."sH_GMPE",
+ROUND(AVG(a."sH_Vs30"),6) AS "sH_Vs30", --need verify
+ROUND(AVG(a."sH_z1p0"),6) AS "sH_z1p0", --need verify
+ROUND(AVG(a."sH_z2p5"),6) AS "sH_z2p5", --need verify
+ROUND(AVG(a."sH_PGA"),6) AS "sH_PGA",   --need verify
+ROUND(AVG(a."sH_Sa0p1"),6) AS "sH_Sa0p1",
+ROUND(AVG(a."sH_Sa0p2"),6) AS "sH_Sa0p2",
+ROUND(AVG(a."sH_Sa0p3"),6) AS "sH_Sa0p3",
+ROUND(AVG(a."sH_Sa0p5"),6) AS "sH_Sa0p5",
+ROUND(AVG(a."sH_Sa0p6"),6) AS "sH_Sa0p6",
+ROUND(AVG(a."sH_Sa1p0"),6) AS "sH_Sa1p0",
+ROUND(AVG(a."sH_Sa2p0"),6) AS "sH_Sa2p0",
+
+ROUND(SUM(a."sDt_None_b0"),6) AS "sDt_None_b0",
+ROUND(AVG(a."sDtr_None_b0"),6) AS "sDtr_None_b0",
+ROUND(SUM(a."sDt_Slight_b0"),6) AS "sDt_Slight_b0",
+ROUND(AVG(a."sDtr_Slight_b0"),6) AS "sDtr_Slight_b0",
+ROUND(SUM(a."sDt_Moderate_b0"),6) AS "sDt_Moderate_b0",
+ROUND(AVG(a."sDtr_Moderate_b0"),6) AS "sDtr_Moderate_b0",
+ROUND(SUM(a."sDt_Extensive_b0"),6) AS "sDt_Extensive_b0",
+ROUND(AVG(a."sDtr_Extensive_b0"),6) AS "sDtr_Extensive_b0",
+ROUND(SUM(a."sDt_Complete_b0"),6) AS "sDt_Complete_b0",
+ROUND(AVG(a."sDtr_Complete_b0"),6) AS "sDtr_Complete_b0",
+ROUND(SUM(a."sDt_Collapse_b0"),6) AS "sDt_Collapse_b0",
+ROUND(AVG(a."sDtr_Collapse_b0"),6) AS "sDtr_Collapse_b0",
+
+ROUND(SUM(a."sDt_None_r1"),6) AS "sDt_None_r1",
+ROUND(AVG(a."sDtr_None_r1"),6) AS "sDtr_None_r1",
+ROUND(SUM(a."sDt_Slight_r1"),6) AS "sDt_Slight_r1",
+ROUND(AVG(a."sDtr_Slight_r1"),6) AS "sDtr_Slight_r1",
+ROUND(SUM(a."sDt_Moderate_r1"),6) AS "sDt_Moderate_r1",
+ROUND(AVG(a."sDtr_Moderate_r1"),6) AS "sDtr_Moderate_r1",
+ROUND(SUM(a."sDt_Extensive_r1"),6) AS "sDt_Extensive_r1",
+ROUND(AVG(a."sDtr_Extensive_r1"),6) AS "sDtr_Extensive_r1",
+ROUND(SUM(a."sDt_Complete_r1"),6) AS "sDt_Complete_r1",
+ROUND(AVG(a."sDtr_Complete_r1"),6) AS "sDtr_Complete_r1",
+ROUND(SUM(a."sDt_Collapse_r1"),6) AS "sDt_Collapse_r1",
+ROUND(AVG(a."sDtr_Collapse_r1"),6) AS "sDtr_Collapse_r1",
+
+ROUND(AVG(a."SCm_Interruption_b0"),6) AS "SCm_Interruption_b0",
+ROUND(AVG(a."sCm_Repair_b0"),6) AS "sCm_Repair_b0",
+ROUND(AVG(a."SCm_Recovery_b0"),6) AS "SCm_Recovery_b0",
+ROUND(SUM(a."sCt_DebrisTotal_b0"),6) AS "sCt_DebrisTotal_b0" ,
+ROUND(SUM(a."sCt_DebrisBW_b0"),6) AS "sCt_DebrisBW_b0",
+ROUND(SUM(a."sCt_DebrisCS_b0"),6) AS "sCt_DebrisCS_b0",
+
+ROUND(AVG(a."SCm_Interruption_r1"),6) AS "SCm_Interruption_r1",
+ROUND(AVG(a."sCm_Repair_r1"),6) AS "sCm_Repair_r1",
+ROUND(AVG(a."SCm_Recovery_r1"),6) AS "SCm_Recovery_r1",
+ROUND(SUM(a."sCt_DebrisTotal_r1"),6) AS "sCt_DebrisTotal_r1" ,
+ROUND(SUM(a."sCt_DebrisBW_r1"),6) AS "sCt_DebrisBW_r1",
+ROUND(SUM(a."sCt_DebrisCS_r1"),6) AS "sCt_DebrisCS_r1",
+
+ROUND(SUM(a."sCt_CasDayL1_b0"),6) AS "sCt_CasDayL1_b0",
+ROUND(SUM(a."sCt_CasDayL2_b0"),6) AS "sCt_CasDayL2_b0",
+ROUND(SUM(a."sCt_CasDayL3_b0"),6) AS "sCt_CasDayL3_b0",
+ROUND(SUM(a."sCt_CasDayL4_b0"),6) AS "sCt_CasDayL4_b0",
+ROUND(SUM(a."sCt_CasNightL1_b0"),6) AS "sCt_CasNightL1_b0",
+ROUND(SUM(a."sCt_CasNightL2_b0"),6) AS "sCt_CasNightL2_b0",
+ROUND(SUM(a."sCt_CasNightL3_b0"),6) AS "sCt_CasNightL3_b0",
+ROUND(SUM(a."sCt_CasNightL4_b0"),6) AS "sCt_CasNightL4_b0",
+ROUND(SUM(a."sCt_CasTransitL1_b0"),6) AS "sCt_CasTransitL1_b0",
+ROUND(SUM(a."sCt_CasTransitL2_b0"),6) AS "sCt_CasTransitL2_b0",
+ROUND(SUM(a."sCt_CasTransitL3_b0"),6) AS "sCt_CasTransitL3_b0",
+ROUND(SUM(a."sCt_CasTransitL4_b0"),6) AS "sCt_CasTransitL4_b0",
+
+ROUND(SUM(a."sCt_CasDayL1_r1"),6) AS "sCt_CasDayL1_r1",
+ROUND(SUM(a."sCt_CasDayL2_r1"),6) AS "sCt_CasDayL2_r1",
+ROUND(SUM(a."sCt_CasDayL3_r1"),6) AS "sCt_CasDayL3_r1",
+ROUND(SUM(a."sCt_CasDayL4_r1"),6) AS "sCt_CasDayL4_r1",
+ROUND(SUM(a."sCt_CasNightL1_r1"),6) AS "sCt_CasNightL1_r1",
+ROUND(SUM(a."sCt_CasNightL2_r1"),6) AS "sCt_CasNightL2_r1",
+ROUND(SUM(a."sCt_CasNightL3_r1"),6) AS "sCt_CasNightL3_r1",
+ROUND(SUM(a."sCt_CasNightL4_r1"),6) AS "sCt_CasNightL4_r1",
+ROUND(SUM(a."sCt_CasTransitL1_r1"),6) AS "sCt_CasTransitL1_r1",
+ROUND(SUM(a."sCt_CasTransitL2_r1"),6) AS "sCt_CasTransitL2_r1",
+ROUND(SUM(a."sCt_CasTransitL3_r1"),6) AS "sCt_CasTransitL3_r1",
+ROUND(SUM(a."sCt_CasTransitL4_r1"),6) AS "sCt_CasTransitL4_r1",
+
+ROUND(SUM(a."sCt_Shelter_b0"),6) AS "sCt_Shelter_b0",
+ROUND(SUM(a."sCt_Res3_b0"),6) AS "sCt_Res3_b0",
+ROUND(SUM(a."sCt_Res30_b0"),6) AS "sCt_Res30_b0",
+ROUND(SUM(a."sCt_Res90_b0"),6) AS "sCt_Res90_b0",
+ROUND(SUM(a."sCt_Res180_b0"),6) AS "sCt_Res180_b0",
+ROUND(SUM(a."sCt_Res360_b0"),6) AS "sCt_Res360_b0",
+ROUND(SUM(a."sCt_Hshld_b0"),6) AS "sCt_Hshld_b0",
+ROUND(SUM(a."sCt_Empl30_r1"),6) AS "sCt_Empl30_r1",
+ROUND(SUM(a."sCt_Empl90_r1"),6) AS "sCt_Empl90_r1",
+ROUND(AVG(a."sCr_Empl90_r1"),6) AS "sCr_Empl90_r1",
+ROUND(SUM(a."sCt_Empl90_r1"),6) AS "sCt_Empl90_r1",
+
+b.geom
+
+
+FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_s a
+LEFT JOIN boundaries."Geometry_CSDUID" b ON a.csduid = b."CSDUID"
+GROUP BY a.csduid,a.csdname,a."sH_RupName",a."sH_Source",a."sH_Mag",a."sH_MMI",a."sH_HypoLon",a."sH_HypoLat",a."sH_HypoDepth",a."sH_Rake",a."sH_GMPE",
+b.geom;
