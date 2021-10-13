@@ -22,7 +22,7 @@ CAST(CAST(ROUND(CAST(a.bldg_ft2 * a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) 
 --CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Civic' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaCivic",
 --CAST(CAST(ROUND(CAST(CASE WHEN a.genocc = 'Agricultural' THEN a.bldg_ft2 ELSE 0 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "E_BldgAreaAgr",
 a.landuse AS "E_LandUse",
-a.genocc AS "E_BldgOccG",
+a.occtype AS "E_BldgOccG",
 a.occclass1 AS "E_BldgOccS1",
 a.occclass2 AS "E_BldgOccS2",
 a.gentype AS "E_BldgTypeG",
