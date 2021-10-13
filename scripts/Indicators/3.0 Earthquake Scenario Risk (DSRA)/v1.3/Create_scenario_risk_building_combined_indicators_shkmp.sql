@@ -72,9 +72,9 @@ CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD'
 
 FROM dsra.dsra_sim9p0_cascadiainterfacebestfault a
 --FROM dsra.dsra_{eqScenario} a
-LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_b b ON a."AssetID" = b."BldgID"
+LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_b b ON a."AssetID" = b."BldgID"
 LEFT JOIN exposure.canada_exposure c ON  a."AssetID" = c.id
-LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s d ON c.sauid = d."Sauid"
+LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_s d ON c.sauid = d."Sauid"
 );
 
 
@@ -183,10 +183,10 @@ DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_casca
 
 
 --create scenario risk building indicators
---DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario)_all_indicators_b CASCADE;
---CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario}_all_indicators_b AS 
-DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_b CASCADE;
-CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_b AS 
+--DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario)_indicators_b CASCADE;
+--CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario}_indicators_b AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_b CASCADE;
+CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_b AS 
 
 --3.0 Earthquake Scenario Risk (DSRA)
 --3.1 Scenario Hazard

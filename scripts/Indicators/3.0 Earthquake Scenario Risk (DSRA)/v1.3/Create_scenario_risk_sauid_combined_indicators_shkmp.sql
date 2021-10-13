@@ -15,9 +15,9 @@ SUM(a."sC_Hshld_b0") AS "sCt_DisplHshld_b0",
 SUM(a."sC_Hshld_r1") AS "sCt_DisplHshld_r1",
 SUM(b."E_PopNight") AS "Et_PopNight"
 	
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_b a
---FROM results_dsra_{eqScenario}.dsra_{eqScenario}_all_indicators_b a
-LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_b b ON a."AssetID" = b."BldgID"
+FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_b a
+--FROM results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_b a
+LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_b b ON a."AssetID" = b."BldgID"
 GROUP BY a."Sauid"
 );
 
@@ -93,7 +93,7 @@ c.age_gt65 * 0.40 AS "AM3"
 
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc1 a
 --FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 a
-LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s b ON a."Sauid" = b."Sauid"
+LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_s b ON a."Sauid" = b."Sauid"
 LEFT JOIN census.census_2016_canada c ON b."Sauid" = c.sauidt
 );
 
@@ -703,10 +703,10 @@ results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault
 
 
 -- create scenario risk sauid indicators
---DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario}_all_indicators_s CASCADE;
---CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario}_all_indicators_s AS 
-DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_s CASCADE;
-CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_s AS 
+--DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario}_indicators_s CASCADE;
+--CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario}_indicators_s AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_s CASCADE;
+CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_s AS 
 
 SELECT
 b.sauid AS "Sauid",
@@ -990,7 +990,7 @@ LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter k ON b.sauid = k."Sauid"
 --LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter k ON b.id = k."Sauid"
 WHERE e."gmv_SA(0.3)" >=0.02
-GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,b.landuse,d.vs30,d.z1pt0,d.z2pt5,d.vs_lon,d.vs_lat,f.source_type,
+GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,b.landuse,d.vs30,d.z1pt0,d.z2pt5,f.source_type,
 f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2)",e."gmv_SA(0.3)",e."gmv_SA(0.5)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(0.3)",e."gmv_SA(2.0)",
 i."PRUID",i."PRNAME",i."ERUID",i."ERNAME",i."CDUID",i."CDNAME",i."CSDUID",i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0",k."sCt_DisplHshld_r1",k."sCt_Shelter_b0",k."sCt_Shelter_r1",i.geom;
 /*
@@ -1002,6 +1002,10 @@ i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0"
 
 
 -- aggregate to CSD level
+--DROP VIEW IF EXISTS results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_csd CASCADE;
+--CREATE VIEW results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_csd AS 
+DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_csd CASCADE;
+CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_csd AS 
 SELECT
 a.csduid,
 a.csdname,
@@ -1014,10 +1018,10 @@ a."sH_HypoLat",
 a."sH_HypoDepth",
 a."sH_Rake",
 a."sH_GMPE",
-ROUND(AVG(a."sH_Vs30"),6) AS "sH_Vs30", --need verify
-ROUND(AVG(a."sH_z1p0"),6) AS "sH_z1p0", --need verify
-ROUND(AVG(a."sH_z2p5"),6) AS "sH_z2p5", --need verify
-ROUND(AVG(a."sH_PGA"),6) AS "sH_PGA",   --need verify
+ROUND(AVG(a."sH_Vs30"),6) AS "sH_Vs30",
+ROUND(AVG(a."sH_z1p0"),6) AS "sH_z1p0",
+ROUND(AVG(a."sH_z2p5"),6) AS "sH_z2p5",
+ROUND(AVG(a."sH_PGA"),6) AS "sH_PGA",
 ROUND(AVG(a."sH_Sa0p1"),6) AS "sH_Sa0p1",
 ROUND(AVG(a."sH_Sa0p2"),6) AS "sH_Sa0p2",
 ROUND(AVG(a."sH_Sa0p3"),6) AS "sH_Sa0p3",
@@ -1099,15 +1103,45 @@ ROUND(SUM(a."sCt_Res90_b0"),6) AS "sCt_Res90_b0",
 ROUND(SUM(a."sCt_Res180_b0"),6) AS "sCt_Res180_b0",
 ROUND(SUM(a."sCt_Res360_b0"),6) AS "sCt_Res360_b0",
 ROUND(SUM(a."sCt_Hshld_b0"),6) AS "sCt_Hshld_b0",
+ROUND(SUM(a."sCt_Empl30_b0"),6) AS "sCt_Empl30_b0",
+ROUND(SUM(a."sCr_Empl90_b0"),6) AS "sCt_Empl90_b0",
+ROUND(AVG(a."sCr_Empl90_b0"),6) AS "sCr_Empl90_b0",
+ROUND(SUM(a."sCt_Empl180_b0"),6) AS "sCt_Empl180_b0",
+ROUND(SUM(a."sCt_Empl360_b0"),6) AS "sCt_Empl360_b0",
+
+ROUND(SUM(a."sCt_Shelter_r1"),6) AS "sCt_Shelter_r1",
+ROUND(SUM(a."sCt_Res3_r1"),6) AS "sCt_Res3_r1",
+ROUND(SUM(a."sCt_Res30_r1"),6) AS "sCt_Res30_r1",
+ROUND(SUM(a."sCt_Res90_r1"),6) AS "sCt_Res90_r1",
+ROUND(SUM(a."sCt_Res180_r1"),6) AS "sCt_Res180_r1",
+ROUND(SUM(a."sCt_Res360_r1"),6) AS "sCt_Res360_r1",
+ROUND(SUM(a."sCt_Hshld_r1"),6) AS "sCt_Hshld_r1",
 ROUND(SUM(a."sCt_Empl30_r1"),6) AS "sCt_Empl30_r1",
-ROUND(SUM(a."sCt_Empl90_r1"),6) AS "sCt_Empl90_r1",
+ROUND(SUM(a."sCr_Empl90_r1"),6) AS "sCt_Empl90_r1",
 ROUND(AVG(a."sCr_Empl90_r1"),6) AS "sCr_Empl90_r1",
-ROUND(SUM(a."sCt_Empl90_r1"),6) AS "sCt_Empl90_r1",
+ROUND(SUM(a."sCt_Empl180_r1"),6) AS "sCt_Empl180_r1",
+ROUND(SUM(a."sCt_Empl360_r1"),6) AS "sCt_Empl360_r1",
+
+ROUND(SUM(a."sLt_Asset_b0"),6) AS "sLt_Asset_b0",
+ROUND(AVG(a."sLm_Asset_b0"),6) AS "sLm_Asset_b0",
+ROUND(SUM(a."sLt_Bldg_b0"),6) AS "sLt_Bldg_b0",
+ROUND(AVG(a."sLmr_Bldg_b0"),6) AS "sLmr_Bldg_b0",
+ROUND(SUM(a."sLt_Str_b0"),6) AS "sLt_Str_b0",
+ROUND(SUM(a."sLt_NStr_b0"),6) AS "sLt_NStr_b0",
+ROUND(SUM(a."sLt_Cont_b0"),6) AS "sLt_Cont_b0",
+
+ROUND(SUM(a."sLt_Asset_r1"),6) AS "sLt_Asset_r1",
+ROUND(AVG(a."sLm_Asset_r1"),6) AS "sLm_Asset_r1",
+ROUND(SUM(a."sLt_Bldg_r1"),6) AS "sLt_Bldg_r1",
+ROUND(AVG(a."sLmr_Bldg_r1"),6) AS "sLmr_Bldg_r1",
+ROUND(SUM(a."sLt_Str_r1"),6) AS "sLt_Str_r1",
+ROUND(SUM(a."sLt_NStr_r1"),6) AS "sLt_NStr_r1",
+ROUND(SUM(a."sLt_Cont_r1"),6) AS "sLt_Cont_r1",
 
 b.geom
 
-
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_s a
+FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_s a
+--FROM results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_s a
 LEFT JOIN boundaries."Geometry_CSDUID" b ON a.csduid = b."CSDUID"
 GROUP BY a.csduid,a.csdname,a."sH_RupName",a."sH_Source",a."sH_Mag",a."sH_MMI",a."sH_HypoLon",a."sH_HypoLat",a."sH_HypoDepth",a."sH_Rake",a."sH_GMPE",
 b.geom;

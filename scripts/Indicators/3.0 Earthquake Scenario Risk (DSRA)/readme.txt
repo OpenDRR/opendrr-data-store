@@ -9,3 +9,4 @@ v1.2
 
 v1.3
 - revised/updated indicators (https://github.com/OpenDRR/opendrr-data-store/issues/54)
+- renamed all_indicators to indicators

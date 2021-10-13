@@ -65,7 +65,7 @@ b."SVlt_Score" + 1 AS "SVlt_Score_translated",
 
 FROM results_psra_ns.psra_ns_eqriskindex_calc a
 --FROM results_psra_{prov}.psra_{prov}_eqriskindex_calcs a
-LEFT JOIN results_nhsl_social_fabric.nhsl_social_fabric_all_indicators_s b ON a.sauid = b."Sauid"
+LEFT JOIN results_nhsl_social_fabric.nhsl_social_fabric_indicators_s b ON a.sauid = b."Sauid"
 GROUP BY a.sauid,b."SVlt_Score"
 );
 

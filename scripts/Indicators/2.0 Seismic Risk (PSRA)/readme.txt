@@ -4,3 +4,4 @@ v1.1
 v1.2
 - revised indicators
 - new indicator EQRiskIndex
+- renamed all_indicators to indicators

@@ -3,8 +3,8 @@ CREATE SCHEMA IF NOT EXISTS results_dsra_idm6p8_jdfpathways;
 
 
 -- create scenario risk sauid indicators
-DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_all_indicators_s CASCADE;
-CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_all_indicators_s AS 
+DROP VIEW IF EXISTS results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_indicators_s CASCADE;
+CREATE VIEW results_dsra_idm6p8_jdfpathways.dsra_idm6p8_jdfpathways_indicators_s AS 
 
 SELECT
 b.sauid AS "Sauid",

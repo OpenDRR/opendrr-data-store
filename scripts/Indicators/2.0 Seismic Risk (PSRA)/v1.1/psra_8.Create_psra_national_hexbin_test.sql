@@ -1,8 +1,8 @@
 -- test hexbin aggregation for psra national level
 
 -- 5km
-DROP TABLE IF EXISTS results_psra_national.psra_all_indicators_s_hexbin_5km CASCADE;
-CREATE TABLE results_psra_national.psra_all_indicators_s_hexbin_5km AS
+DROP TABLE IF EXISTS results_psra_national.psra_indicators_s_hexbin_5km CASCADE;
+CREATE TABLE results_psra_national.psra_indicators_s_hexbin_5km AS
 SELECT 
 b.gridid_5,
 AVG("pH500_PGA") AS "pH500_PGA",
@@ -76,7 +76,7 @@ SUM("eAALt_NStr_r1") AS "eAALt_NStr_r1",
 SUM("eAALt_Cont_r1") AS "eAALt_Cont_r1",
 c.geom
 
-FROM results_psra_national.psra_all_indicators_s_tbl a
+FROM results_psra_national.psra_indicators_s_tbl a
 LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a."Sauid" = b.sauid
 LEFT JOIN boundaries."HexGrid_5km_v1" c ON b.gridid_5 = c.gridid_5
 GROUP BY b.gridid_5,c.geom;
@@ -86,8 +86,8 @@ GROUP BY b.gridid_5,c.geom;
 -- test hexbin aggregation for psra national level
 
 -- 10km
-DROP TABLE IF EXISTS results_psra_national.psra_all_indicators_s_hexbin_10km CASCADE;
-CREATE TABLE results_psra_national.psra_all_indicators_s_hexbin_10km AS
+DROP TABLE IF EXISTS results_psra_national.psra_indicators_s_hexbin_10km CASCADE;
+CREATE TABLE results_psra_national.psra_indicators_s_hexbin_10km AS
 SELECT 
 b.gridid_10,
 AVG("pH500_PGA") AS "pH500_PGA",
@@ -161,7 +161,7 @@ SUM("eAALt_NStr_r1") AS "eAALt_NStr_r1",
 SUM("eAALt_Cont_r1") AS "eAALt_Cont_r1",
 c.geom
 
-FROM results_psra_national.psra_all_indicators_s_tbl a
+FROM results_psra_national.psra_indicators_s_tbl a
 LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a."Sauid" = b.sauid
 LEFT JOIN boundaries."HexGrid_10km_v1" c ON b.gridid_10 = c.gridid_10
 GROUP BY b.gridid_10,c.geom;
@@ -171,8 +171,8 @@ GROUP BY b.gridid_10,c.geom;
 -- test hexbin aggregation for psra national level
 
 -- 25km
-DROP TABLE IF EXISTS results_psra_national.psra_all_indicators_s_hexbin_25km CASCADE;
-CREATE TABLE results_psra_national.psra_all_indicators_s_hexbin_25km AS
+DROP TABLE IF EXISTS results_psra_national.psra_indicators_s_hexbin_25km CASCADE;
+CREATE TABLE results_psra_national.psra_indicators_s_hexbin_25km AS
 SELECT 
 b.gridid_25,
 AVG("pH500_PGA") AS "pH500_PGA",
@@ -246,7 +246,7 @@ SUM("eAALt_NStr_r1") AS "eAALt_NStr_r1",
 SUM("eAALt_Cont_r1") AS "eAALt_Cont_r1",
 c.geom
 
-FROM results_psra_national.psra_all_indicators_s_tbl a
+FROM results_psra_national.psra_indicators_s_tbl a
 LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a."Sauid" = b.sauid
 LEFT JOIN boundaries."HexGrid_25km_v1" c ON b.gridid_25 = c.gridid_25
 GROUP BY b.gridid_25,c.geom;
@@ -256,8 +256,8 @@ GROUP BY b.gridid_25,c.geom;
 -- test hexbin aggregation for psra national level
 
 -- 50km
-DROP TABLE IF EXISTS results_psra_national.psra_all_indicators_s_hexbin_50km CASCADE;
-CREATE TABLE results_psra_national.psra_all_indicators_s_hexbin_50km AS
+DROP TABLE IF EXISTS results_psra_national.psra_indicators_s_hexbin_50km CASCADE;
+CREATE TABLE results_psra_national.psra_indicators_s_hexbin_50km AS
 SELECT 
 b.gridid_50,
 AVG("pH500_PGA") AS "pH500_PGA",
@@ -331,7 +331,7 @@ SUM("eAALt_NStr_r1") AS "eAALt_NStr_r1",
 SUM("eAALt_Cont_r1") AS "eAALt_Cont_r1",
 c.geom
 
-FROM results_psra_national.psra_all_indicators_s_tbl a
+FROM results_psra_national.psra_indicators_s_tbl a
 LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a."Sauid" = b.sauid
 LEFT JOIN boundaries."HexGrid_50km_v1" c ON b.gridid_50 = c.gridid_50
 GROUP BY b.gridid_50,c.geom;
@@ -341,8 +341,8 @@ GROUP BY b.gridid_50,c.geom;
 -- test hexbin aggregation for psra national level
 
 -- 100km
-DROP TABLE IF EXISTS results_psra_national.psra_all_indicators_s_hexbin_100km CASCADE;
-CREATE TABLE results_psra_national.psra_all_indicators_s_hexbin_100km AS
+DROP TABLE IF EXISTS results_psra_national.psra_indicators_s_hexbin_100km CASCADE;
+CREATE TABLE results_psra_national.psra_indicators_s_hexbin_100km AS
 SELECT 
 b.gridid_100,
 AVG("pH500_PGA") AS "pH500_PGA",
@@ -416,7 +416,7 @@ SUM("eAALt_NStr_r1") AS "eAALt_NStr_r1",
 SUM("eAALt_Cont_r1") AS "eAALt_Cont_r1",
 c.geom
 
-FROM results_psra_national.psra_all_indicators_s_tbl a
+FROM results_psra_national.psra_indicators_s_tbl a
 LEFT JOIN boundaries."SAUID_HexGrid_v1" b ON a."Sauid" = b.sauid
 LEFT JOIN boundaries."HexGrid_100km_v1" c ON b.gridid_100 = c.gridid_100
 GROUP BY b.gridid_100,c.geom;

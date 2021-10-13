@@ -2,8 +2,8 @@
 CREATE SCHEMA IF NOT EXISTS results_nhsl_metrovan_physical_exposure;
 
 -- create physical exposure indicators
-DROP VIEW IF EXISTS results_nhsl_metrovan_physical_exposure.nhsl_metrovan_physical_exposure_all_indicators_s CASCADE;
-CREATE VIEW results_nhsl_metrovan_physical_exposure.nhsl_metrovan_physical_exposure_all_indicators_s AS 
+DROP VIEW IF EXISTS results_nhsl_metrovan_physical_exposure.nhsl_metrovan_physical_exposure_indicators_s CASCADE;
+CREATE VIEW results_nhsl_metrovan_physical_exposure.nhsl_metrovan_physical_exposure_indicators_s AS 
 
 -- 1.0 Human Settlement
 -- 1.1 Physical Exposure

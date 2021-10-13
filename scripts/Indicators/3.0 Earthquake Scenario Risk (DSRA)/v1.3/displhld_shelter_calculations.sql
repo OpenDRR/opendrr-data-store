@@ -68,9 +68,9 @@ CASE WHEN b."E_BldgOccG" = 'Residential-MD' OR b."E_BldgOccG" = 'Residential-HD'
 
 FROM dsra.dsra_sim9p0_cascadiainterfacebestfault a
 --FROM dsra.dsra_{eqScenario} a
-LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_b b ON a."AssetID" = b."BldgID"
+LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_b b ON a."AssetID" = b."BldgID"
 LEFT JOIN exposure.canada_exposure c ON  a."AssetID" = c.id
-LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s d ON c.sauid = d."Sauid"
+LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_s d ON c.sauid = d."Sauid"
 );
 
 
@@ -194,9 +194,9 @@ SUM(a."sC_Hshld_b0") AS "sCt_DisplHshld_b0",
 SUM(a."sC_Hshld_r1") AS "sCt_DisplHshld_r1",
 SUM(b."E_PopNight") AS "Et_PopNight"
 	
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_all_indicators_b a
---FROM results_dsra_{eqScenario}.dsra_{eqScenario}_all_indicators_b a
-LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_b b ON a."AssetID" = b."BldgID"
+FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_b a
+--FROM results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_b a
+LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_b b ON a."AssetID" = b."BldgID"
 GROUP BY a."Sauid"
 );
 
@@ -272,7 +272,7 @@ c.age_gt65 * 0.40 AS "AM3"
 
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc1 a
 --FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 a
-LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_all_indicators_s b ON a."Sauid" = b."Sauid"
+LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_s b ON a."Sauid" = b."Sauid"
 LEFT JOIN census.census_2016_canada c ON b."Sauid" = c.sauidt
 );
 

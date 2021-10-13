@@ -1,8 +1,8 @@
 CREATE SCHEMA IF NOT EXISTS results_psra_{prov};
 
 -- create psra indicators
-DROP VIEW IF EXISTS results_psra_{prov}.psra_{prov}_all_indicators_b CASCADE;
-CREATE VIEW results_psra_{prov}.psra_{prov}_all_indicators_b AS 
+DROP VIEW IF EXISTS results_psra_{prov}.psra_{prov}_indicators_b CASCADE;
+CREATE VIEW results_psra_{prov}.psra_{prov}_indicators_b AS 
 
 -- 2.0 Seismic Risk (PSRA)
 -- 2.1 Probabilistic Seismic Hazard
