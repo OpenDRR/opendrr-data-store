@@ -716,7 +716,7 @@ a."Rupture_Abbr" AS "sH_RupName",
 --a."Rupture_Abbr" AS "sH_RupAbbr",
 f.source_type AS "sH_Source",
 f.magnitude AS "sH_Mag",
-0.0 AS "sH_MMI",
+--0.0 AS "sH_MMI",
 CAST(CAST(ROUND(CAST(f.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLon",
 CAST(CAST(ROUND(CAST(f.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLat",
 CAST(CAST(ROUND(CAST(f.depth AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoDepth",
@@ -1012,7 +1012,7 @@ a.csdname,
 a."sH_RupName",
 a."sH_Source",
 a."sH_Mag",
-a."sH_MMI",
+--a."sH_MMI",
 a."sH_HypoLon",
 a."sH_HypoLat",
 a."sH_HypoDepth",
@@ -1143,5 +1143,7 @@ b.geom
 FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_s a
 --FROM results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_s a
 LEFT JOIN boundaries."Geometry_CSDUID" b ON a.csduid = b."CSDUID"
-GROUP BY a.csduid,a.csdname,a."sH_RupName",a."sH_Source",a."sH_Mag",a."sH_MMI",a."sH_HypoLon",a."sH_HypoLat",a."sH_HypoDepth",a."sH_Rake",a."sH_GMPE",
+GROUP BY a.csduid,a.csdname,a."sH_RupName",a."sH_Source",a."sH_Mag",a."sH_HypoLon",a."sH_HypoLat",a."sH_HypoDepth",a."sH_Rake",a."sH_GMPE",
 b.geom;
+-- GROUP BY a.csduid,a.csdname,a."sH_RupName",a."sH_Source",a."sH_Mag",a."sH_MMI",a."sH_HypoLon",a."sH_HypoLat",a."sH_HypoDepth",a."sH_Rake",a."sH_GMPE",
+-- b.geom;
