@@ -52,6 +52,7 @@ CAST(CAST(ROUND(CAST(h.mmi8 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_MMI8",
 
 
 -- 2.2 Building Damage
+/*
 -- 2.2.1 Classical Damage - b0
 CAST(CAST(ROUND(CAST(c.structural_no_damage_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "cD_None_b0",
 CAST(CAST(ROUND(CAST((c.structural_no_damage_b0/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "cDr_None_b0",
@@ -92,6 +93,7 @@ CAST(CAST(ROUND(CAST((c.structural_complete_r1/a.number) AS NUMERIC),6) AS FLOAT
 CAST(CAST(ROUND(CAST(f.collapse_pc AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "CDr_Collapse_r1",
 CAST(CAST(ROUND(CAST(c.structural_complete_r1 * f.collapse_pc AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "cD_Collapse_r1",
 CAST(CAST(ROUND(CAST((c.structural_complete_r1/a.number) * f.collapse_pc AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "cDp_Collapse_r1",
+*/
 
 -- 2.2.2 Event-Based Damage - b0
 CAST(CAST(ROUND(CAST(g.structural_no_damage_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eD_None_b0",
@@ -143,6 +145,15 @@ CAST(CAST(ROUND(CAST(g.structural_complete_r1 * f.collapse_pc AS NUMERIC),6) AS 
 -- eDsd_Collapse_r1
 CAST(CAST(ROUND(CAST((g.structural_complete_r1/a.number) * f.collapse_pc AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDr_Collapse_r1",
 
+-- 2.3 Affected People
+-- 2.3.1 Life Safety - b0
+CAST(CAST(ROUND(CAST(occupants_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eC_Fatality_b0",
+CAST(CAST(ROUND(CAST(COALESCE(occupants_b0/NULLIF(a.night,0),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCr_Fatality_b0",
+
+-- 2.3.1 Life Safety - r1
+CAST(CAST(ROUND(CAST(occupants_r1 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eC_Fatality_r1",
+CAST(CAST(ROUND(CAST(COALESCE(occupants_r1/NULLIF(a.night,0),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCr_Fatality_r1",
+
 -- 2.4.1 Economic Loss - b0
 CAST(CAST(ROUND(CAST(i.structural_b0 + i.nonstructural_b0 + i.contents_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAAL_Asset_b0",
 CAST(CAST(ROUND(CAST((i.structural_b0 + i.nonstructural_b0 + i.contents_b0)/a.number AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALr_Asset_b0",
@@ -181,7 +192,7 @@ a.geom AS "geom_point"
 
 FROM exposure.canada_exposure a
 LEFT JOIN boundaries."Geometry_SAUID" b on a.sauid = b."SAUIDt"
-RIGHT JOIN psra_{prov}.psra_{prov}_cd_dmg_mean c ON a.id = c.asset_id
+--RIGHT JOIN psra_{prov}.psra_{prov}_cd_dmg_mean c ON a.id = c.asset_id
 LEFT JOIN psra_{prov}.psra_{prov}_hmaps_xref d ON a.id = d.id
 LEFT JOIN vs30.vs30_can_site_model_xref e ON a.id = e.id
 LEFT JOIN lut.collapse_probability f ON a.bldgtype = f.eqbldgtype
