@@ -10,6 +10,7 @@ CREATE VIEW results_psra_{prov}.psra_{prov}_indicators_b AS
 SELECT 
 a.id AS "AssetID",
 
+/*
 -- 2.1.1 500yr Hazard Intensity
 CAST(CAST(ROUND(CAST(d."PGA_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_PGA",
 CAST(CAST(ROUND(CAST(d."SA(0.1)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_SA0p1",
@@ -49,6 +50,7 @@ CAST(CAST(ROUND(CAST(h.mmi7 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_MMI7",
 -- MMI7n
 CAST(CAST(ROUND(CAST(h.mmi8 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_MMI8",
 -- MMI8n
+*/
 
 
 -- 2.2 Building Damage
