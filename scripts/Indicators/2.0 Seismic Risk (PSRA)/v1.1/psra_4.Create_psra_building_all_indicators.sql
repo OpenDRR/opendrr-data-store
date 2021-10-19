@@ -98,9 +98,9 @@ CAST(CAST(ROUND(CAST((c.structural_complete_r1/a.number) * f.collapse_pc AS NUME
 */
 
 -- 2.2.2 Event-Based Damage - b0
-CAST(CAST(ROUND(CAST(g.structural_no_damage_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eD_None_b0",
+--CAST(CAST(ROUND(CAST(g.structural_no_damage_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eD_None_b0",
 -- eDsd_None_b0
-CAST(CAST(ROUND(CAST((g.structural_no_damage_b0/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDr_None_b0",
+--CAST(CAST(ROUND(CAST((g.structural_no_damage_b0/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDr_None_b0",
 
 CAST(CAST(ROUND(CAST(g.structural_slight_b0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eD_Slight_b0",
 -- eDsd_Slight_b0
@@ -123,9 +123,9 @@ CAST(CAST(ROUND(CAST(g.structural_complete_b0 * f.collapse_pc AS NUMERIC),6) AS 
 CAST(CAST(ROUND(CAST((g.structural_complete_b0/a.number) * f.collapse_pc AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDr_Collapse_b0",
 
 -- 2.2.2 Event-Based Damage - r1
-CAST(CAST(ROUND(CAST(g.structural_no_damage_r1 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eD_None_r1",
+--CAST(CAST(ROUND(CAST(g.structural_no_damage_r1 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eD_None_r1",
 -- eDsd_None_r1
-CAST(CAST(ROUND(CAST((g.structural_no_damage_r1/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDr_None_r1",
+--CAST(CAST(ROUND(CAST((g.structural_no_damage_r1/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDr_None_r1",
 
 CAST(CAST(ROUND(CAST(g.structural_slight_r1 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eD_Slight_r1",
 -- eDsd_Slight_r1
