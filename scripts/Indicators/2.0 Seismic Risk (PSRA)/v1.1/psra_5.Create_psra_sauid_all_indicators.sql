@@ -174,6 +174,7 @@ CREATE VIEW results_psra_{prov}.psra_{prov}_indicators_s AS
 SELECT 
 a.sauid AS "Sauid",
 
+/*
 -- 2.1.1 500yr Hazard Intensity
 CAST(CAST(ROUND(CAST(d."PGA_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_PGA",
 CAST(CAST(ROUND(CAST(d."SA(0.1)_0.02" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH500_SA0p1",
@@ -213,6 +214,7 @@ CAST(CAST(ROUND(CAST(h.mmi7 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_MMI7",
 -- MMI7n
 CAST(CAST(ROUND(CAST(h.mmi8 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "pH_MMI8",
 -- MMI8n
+*/
 
 -- 2.2 Building Damage
 /*
@@ -258,9 +260,9 @@ CAST(CAST(ROUND(CAST(AVG((c.structural_complete_r2/a.number) * f.collapse_pc) AS
 */
 
 -- 2.2.2 Event-Based Damage - b0
-CAST(CAST(ROUND(CAST(SUM(g.structural_no_damage_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDt_None_b0",
+--CAST(CAST(ROUND(CAST(SUM(g.structural_no_damage_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDt_None_b0",
 -- eDtsd_None_b0
-CAST(CAST(ROUND(CAST(AVG(g.structural_no_damage_b0/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDtr_None_b0",
+--CAST(CAST(ROUND(CAST(AVG(g.structural_no_damage_b0/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDtr_None_b0",
 
 CAST(CAST(ROUND(CAST(SUM(g.structural_slight_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDt_Slight_b0",
 -- eDtsd_Slight_b0
@@ -283,9 +285,9 @@ CAST(CAST(ROUND(CAST(SUM(g.structural_complete_b0 * f.collapse_pc) AS NUMERIC),6
 CAST(CAST(ROUND(CAST(AVG((g.structural_complete_b0/a.number) * f.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDtr_Collapse_b0",
 
 -- 2.2.2 Event-Based Damage - r1
-CAST(CAST(ROUND(CAST(SUM(g.structural_no_damage_r1) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDt_None_r1",
+--CAST(CAST(ROUND(CAST(SUM(g.structural_no_damage_r1) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDt_None_r1",
 -- eDtsd_None_r1
-CAST(CAST(ROUND(CAST(AVG(g.structural_no_damage_r1/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDtr_None_r1",
+--CAST(CAST(ROUND(CAST(AVG(g.structural_no_damage_r1/a.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDtr_None_r1",
 
 CAST(CAST(ROUND(CAST(SUM(g.structural_slight_r1) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDt_Slight_r1",
 -- eDtsd_Slight_r1
@@ -306,6 +308,16 @@ CAST(CAST(ROUND(CAST(AVG(g.structural_complete_r1/a.number) AS NUMERIC),6) AS FL
 CAST(CAST(ROUND(CAST(SUM(g.structural_complete_r1 * f.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDt_Collapse_r1",
 -- eDtsd_Collapse_r1
 CAST(CAST(ROUND(CAST(AVG((g.structural_complete_r1/a.number) * f.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eDtr_Collapse_r1",
+
+
+-- 2.3 Affected People
+-- 2.3.1 Life Safety - b0
+CAST(CAST(ROUND(CAST(SUM(occupants_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eC_Fatality_b0",
+CAST(CAST(ROUND(CAST(AVG(COALESCE(occupants_b0/NULLIF(a.night,0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCr_Fatality_b0",
+
+-- 2.3.1 Life Safety - r1
+CAST(CAST(ROUND(CAST(SUM(occupants_r1) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eC_Fatality_r1",
+CAST(CAST(ROUND(CAST(AVG(COALESCE(occupants_r1/NULLIF(a.night,0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCr_Fatality_r1",
 
 -- 2.4.1 Average Annual Loss - b0
 CAST(CAST(ROUND(CAST(SUM(i.structural_b0 + i.nonstructural_b0 + i.contents_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Asset_b0",
