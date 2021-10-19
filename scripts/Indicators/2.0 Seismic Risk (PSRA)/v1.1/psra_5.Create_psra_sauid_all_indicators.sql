@@ -368,8 +368,8 @@ COALESCE(c.loss_ratio_r1,0) AS "e95Lr_r1",
 a.loss_type AS "eEL_type",
 a.return_period AS "eEL_Period",
 a.annual_frequency_of_exceedence AS "eEL_Probability",
-a."GenOcc" AS "ePML_OccGen",
-a."GenType" AS "ePML_BldgType",
+a."GenOcc" AS "eEL_OccGen",
+a."GenType" AS "eEL_BldgType",
 UPPER('{prov}') AS "e_Aggregation"
 --b.geom  -in case fsa geom is needed
 
