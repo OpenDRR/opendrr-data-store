@@ -377,3 +377,4 @@ ALTER TABLE results_psra_national.psra_hmaps_tbl ADD COLUMN fid SERIAL;
 -- create psra hmaps national view
 DROP VIEW IF EXISTS results_psra_national.psra_hmaps CASCADE;
 CREATE VIEW results_psra_national.psra_hmaps AS SELECT * FROM results_psra_national.psra_hmaps_tbl;
+*/
