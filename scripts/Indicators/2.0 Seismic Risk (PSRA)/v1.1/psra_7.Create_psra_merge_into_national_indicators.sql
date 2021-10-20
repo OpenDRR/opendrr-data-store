@@ -221,16 +221,16 @@ SELECT * FROM results_psra_pe.psra_pe_expected_loss_fsa;
 ALTER TABLE results_psra_national.psra_expected_loss_fsa_tbl ADD COLUMN fid SERIAL;
 
 -- create index
-CREATE INDEX psra_expected_loss_fsa_tbl_sauid_idx ON results_psra_national.psra_expected_loss_fsa_tbl("ePML_FSAUID");
+CREATE INDEX psra_expected_loss_fsa_tbl_sauid_idx ON results_psra_national.psra_expected_loss_fsa_tbl("eEL_FSAUID");
 CREATE INDEX psra_expected_loss_fsa_tbl_fid_idx ON results_psra_national.psra_expected_loss_fsa_tbl("fid");
 
 
 -- create psra pml national view
-DROP VIEW IF EXISTS results_psra_national.psra_pml_s CASCADE;
-CREATE VIEW results_psra_national.psra_pml_s AS SELECT * FROM results_psra_national.psra_pml_s_tbl;
+DROP VIEW IF EXISTS results_psra_national.psra_expected_loss_fsa CASCADE;
+CREATE VIEW results_psra_national.psra_expected_loss_fsa AS SELECT * FROM results_psra_national.psra_expected_loss_fsa_tbl;
 
 
-
+/*
 -- combine psra uhs indicators into national level
 DROP TABLE IF EXISTS results_psra_national.psra_uhs_tbl CASCADE;
 
@@ -280,7 +280,7 @@ CREATE INDEX psra_uhs_tbl_fid_idx ON results_psra_national.psra_uhs_tbl("fid");
 -- create psra pml national view
 DROP VIEW IF EXISTS results_psra_national.psra_uhs CASCADE;
 CREATE VIEW results_psra_national.psra_uhs AS SELECT * FROM results_psra_national.psra_uhs_tbl;
-
+*/
 
 
 -- combine psra src_loss indicators into national level
@@ -331,7 +331,7 @@ DROP VIEW IF EXISTS results_psra_national.psra_src_loss CASCADE;
 CREATE VIEW results_psra_national.psra_src_loss AS SELECT * FROM results_psra_national.psra_src_loss_tbl;
 
 
-
+/*
 -- combine psra hmaps into national level
 DROP TABLE IF EXISTS results_psra_national.psra_hmaps_tbl CASCADE;
 
