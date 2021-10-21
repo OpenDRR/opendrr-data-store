@@ -1,5 +1,19 @@
 -- script to agg curves stats
-DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_src_loss_b0, psra_{prov}.psra_{prov}_src_loss_r1, psra_{prov}.psra_{prov}_src_loss, psra_{prov}.psra_{prov}_src_loss_b0_temp, psra_{prov}.psra_{prov}_src_loss_r1_temp CASCADE;
+DROP TABLE IF EXISTS lut.psra_source_types,psra_{prov}.psra_{prov}_src_loss_b0, psra_{prov}.psra_{prov}_src_loss_r1, psra_{prov}.psra_{prov}_src_loss, psra_{prov}.psra_{prov}_src_loss_b0_temp, psra_{prov}.psra_{prov}_src_loss_r1_temp CASCADE;
+
+-- create source type table
+CREATE TABLE lut.psra_source_types(
+srccode varchar,
+srcname varchar,
+tectreg varchar
+);
+
+-- import table from csv
+COPY lut.psra_source_types(srccode,srcname,tectreg)
+    FROM 'D:\Workspace\data\source datasets\psra sample dataset\sourceTypes.csv'
+        WITH 
+          DELIMITER AS ','
+          CSV ;
 
 
 -- create table
@@ -7,7 +21,6 @@ CREATE TABLE psra_{prov}.psra_{prov}_src_loss_b0(
 source varchar,
 loss_type varchar,
 loss_value float,
-trt varchar,
 region varchar
 );
 
@@ -41,7 +54,6 @@ CREATE TABLE psra_{prov}.psra_{prov}_src_loss_r1(
 source varchar,
 loss_type varchar,
 loss_value float,
-trt varchar,
 region varchar
 );
 
@@ -51,7 +63,6 @@ COPY psra_{prov}.psra_{prov}_src_loss_r1(source,loss_type,loss_value,trt,region)
         WITH 
           DELIMITER AS ','
           CSV ;
-
 
 
 
