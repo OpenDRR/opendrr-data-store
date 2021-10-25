@@ -18,7 +18,7 @@ COPY psra_{prov}.psra_{prov}_agg_curves_q05_b0(return_period,loss_type,fsauid,"G
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-q05_b0.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 -- create table
 CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_q05_r1(
@@ -37,7 +37,7 @@ COPY psra_{prov}.psra_{prov}_agg_curves_q05_r1(return_period,loss_type,fsauid,"G
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-q05_r1.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 
 -- combine b0 and r1 tables - q05
@@ -79,7 +79,7 @@ COPY psra_{prov}.psra_{prov}_agg_curves_q95_b0(return_period,loss_type,fsauid,"G
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-q95_b0.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 -- create table
 CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_q95_r1(
@@ -98,7 +98,7 @@ COPY psra_{prov}.psra_{prov}_agg_curves_q95_b0(return_period,loss_type,fsauid,"G
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-q95_r1.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 
 -- combine b0 and r1 tables - q95
@@ -143,7 +143,7 @@ COPY psra_{prov}.psra_{prov}_agg_curves_stats_b0(return_period,loss_type,fsauid,
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-stats_b0.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 
 
@@ -166,7 +166,7 @@ COPY psra_{prov}.psra_{prov}_agg_curves_stats_r1(return_period,loss_type,fsauid,
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-stats_r1.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 
 
@@ -210,11 +210,11 @@ loss_ratio float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_q05_b0(return_period,loss_type,fsauid,"GenOcc","GenType",loss_value,loss_ratio,annual_frequency_of_exceedence)
+COPY psra_{prov}.psra_{prov}_agg_losses_q05_b0(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-q05_b0.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 
 -- create table
@@ -229,11 +229,11 @@ loss_ratio float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_q05_r1(return_period,loss_type,fsauid,"GenOcc","GenType",loss_value,loss_ratio,annual_frequency_of_exceedence)
+COPY psra_{prov}.psra_{prov}_agg_losses_q05_r1(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-q05_r1.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_q05 AS
 SELECT
@@ -241,12 +241,12 @@ a.loss_type,
 a.fsauid,
 a."GenOcc",
 a."GenType",
-a.loss_value_b0,
-a.exposured_value_b0,
-a.loss_ratio_b0,
-b.loss_value_r1,
-b.exposured_value_r1,
-b.loss_ratio_r1
+a.loss_value AS "loss_value_b0",
+a.exposed_value AS "exposed_value_b0",
+a.loss_ratio AS "loss_ratio_b0",
+b.loss_value AS "loss_value_r1",
+b.exposed_value AS "exposed_value_r1",
+b.loss_ratio AS "loss_ratio_r1"
 
 FROM psra_{prov}.psra_{prov}_agg_losses_q05_b0 a
 LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_q05_r1 b ON a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" AND a."GenType" = b."GenType";
@@ -254,7 +254,7 @@ LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_q05_r1 b ON a.loss_type = b.loss_ty
 -- delete *total* rows from table
 DELETE FROM psra_{prov}.psra_{prov}_agg_losses_q05 WHERE fsauid = '*total*';
 
-DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_losses_q95_b0, psra_{prov}.psra_{prov}_agg_losses_q95_r1 CASCADE;
+DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_losses_q05_b0, psra_{prov}.psra_{prov}_agg_losses_q05_r1 CASCADE;
 
 
 
@@ -272,11 +272,11 @@ loss_ratio float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_q95_b0(loss_type,fsauid,"GenOcc","GenType",loss_value,exposured_value,loss_ratio)
+COPY psra_{prov}.psra_{prov}_agg_losses_q95_b0(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-q95_b0.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 
 -- create table
@@ -291,11 +291,11 @@ loss_ratio float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_q95_r1(loss_type,fsauid,"GenOcc","GenType",loss_value,exposured_value,loss_ratio)
+COPY psra_{prov}.psra_{prov}_agg_losses_q95_r1(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-q95_r1.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 
 
@@ -305,12 +305,12 @@ a.loss_type,
 a.fsauid,
 a."GenOcc",
 a."GenType",
-a.loss_value_b0,
-a.exposured_value_b0,
-a.loss_ratio_b0,
-b.loss_value_r1,
-b.exposured_value_r1,
-b.loss_ratio_r1
+a.loss_value AS "loss_value_b0",
+a.exposed_value AS "exposed_value_b0",
+a.loss_ratio AS "loss_ratio_b0",
+b.loss_value AS "loss_value_r1",
+b.exposed_value AS "exposed_value_r1",
+b.loss_ratio AS "loss_ratio_r1"
 
 FROM psra_{prov}.psra_{prov}_agg_losses_q95_b0 a
 LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_q95_r1 b ON a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" AND a."GenType" = b."GenType";
@@ -337,11 +337,11 @@ region varchar
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_stats_b0(loss_type,fsauid,"GenOcc","GenType",loss_value,exposured_value,loss_ratio,region)
+COPY psra_{prov}.psra_{prov}_agg_losses_stats_b0(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio,region)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-stats_b0.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 
 -- create table
@@ -357,11 +357,11 @@ region varchar
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_stats_r1(loss_type,fsauid,"GenOcc","GenType",loss_value,exposured_value,loss_ratio,region)
+COPY psra_{prov}.psra_{prov}_agg_losses_stats_r1(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio,region)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-stats_r1.csv'
         WITH 
           DELIMITER AS ','
-          CSV ;
+          CSV HEADER;
 
 
 
@@ -372,12 +372,12 @@ a.fsauid,
 a."GenOcc",
 a."GenType",
 a.region,
-a.loss_value_b0,
-a.exposured_value_b0,
-a.loss_ratio_b0,
-b.loss_value_r1,
-b.exposured_value_r1,
-b.loss_ratio_r1
+a.loss_value AS "loss_value_b0",
+a.exposed_value AS "exposed_value_b0",
+a.loss_ratio AS "loss_ratio_b0",
+b.loss_value AS "loss_value_r1",
+b.exposed_value AS "exposed_value_r1",
+b.loss_ratio AS "loss_ratio_r1"
 
 FROM psra_{prov}.psra_{prov}_agg_losses_stats_b0 a
 LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_stats_r1 b ON a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" AND a."GenType" = b."GenType";
