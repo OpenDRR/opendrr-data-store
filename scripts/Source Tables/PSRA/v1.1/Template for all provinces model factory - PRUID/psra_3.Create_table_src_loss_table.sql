@@ -3,13 +3,13 @@ DROP TABLE IF EXISTS lut.psra_source_types,psra_{prov}.psra_{prov}_src_loss_b0, 
 
 -- create source type table
 CREATE TABLE lut.psra_source_types(
-srccode varchar,
-srcname varchar,
-tectreg varchar
+code varchar,
+name varchar,
+tectonicregion varchar
 );
 
 -- import table from csv
-COPY lut.psra_source_types(srccode,srcname,tectreg)
+COPY lut.psra_source_types(code,name,tectonicregion)
     FROM 'D:\Workspace\data\source datasets\psra sample dataset\sourceTypes.csv'
         WITH 
           DELIMITER AS ','
@@ -80,19 +80,17 @@ FROM psra_{prov}.psra_{prov}_src_loss_r1
 GROUP BY source,loss_type,trt,region);
 
 
-
-
+DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_src_loss CASCADE;
 CREATE TABLE psra_{prov}.psra_{prov}_src_loss AS
 (
 SELECT a.source,
 a.loss_type,
-a.trt,
 a.region,
 a.loss_value AS "loss_value_b0",
 b.loss_value AS "loss_value_r1"
 
-FROM psra_{prov}.psra_{prov}_src_loss_b0_temp a
-INNER JOIN psra_{prov}.psra_{prov}_src_loss_r1_temp b ON a.source = b.source AND a.loss_type = b.loss_type AND a.trt = b.trt AND a.region = b.region
+FROM psra_{prov}.psra_{prov}_src_loss_b0 a
+INNER JOIN psra_{prov}.psra_{prov}_src_loss_r1 b ON a.source = b.source AND a.loss_type = b.loss_type AND a.region = b.region
 );
 
 DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_src_loss_b0_temp, psra_{prov}.psra_{prov}_src_loss_r1_temp CASCADE;

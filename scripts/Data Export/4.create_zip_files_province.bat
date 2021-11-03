@@ -5,6 +5,10 @@ REM earthquake scenarios
 CD /D "D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
 DEL *.gpkg
 
+REM earthquake scenarios scenario info
+CD /D "D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\scenario_info\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
 REM multi_hazard_threat
 CD /D "D:\Workspace\data\view_outputs\all_indicators\multi_hazard_threat\province\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
 DEL *.gpkg

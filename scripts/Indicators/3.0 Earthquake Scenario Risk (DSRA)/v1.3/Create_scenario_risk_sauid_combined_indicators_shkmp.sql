@@ -716,7 +716,6 @@ a."Rupture_Abbr" AS "sH_RupName",
 --a."Rupture_Abbr" AS "sH_RupAbbr",
 f.source_type AS "sH_Source",
 f.magnitude AS "sH_Mag",
---0.0 AS "sH_MMI",
 CAST(CAST(ROUND(CAST(f.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLon",
 CAST(CAST(ROUND(CAST(f.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLat",
 CAST(CAST(ROUND(CAST(f.depth AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoDepth",
@@ -739,6 +738,7 @@ CAST(CAST(ROUND(CAST(e."gmv_SA(0.5)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH
 CAST(CAST(ROUND(CAST(e."gmv_SA(0.6)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p6",
 CAST(CAST(ROUND(CAST(e."gmv_SA(1.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa1p0",
 CAST(CAST(ROUND(CAST(e."gmv_SA(2.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC)AS "sH_Sa2p0", 
+--0.0 AS "sH_MMI",
 
 -- 3.2 Building Damage
 -- 3.2.1 Damage State - b0
@@ -806,7 +806,7 @@ CAST(CAST(ROUND(CAST(AVG(a."sD_Collapse_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_b0")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_b0",
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Construxn_b0")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_b0",
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Downtime_b0",
-CAST(CAST(ROUND(CAST(AVG(a."sC_Interruption_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Interruption_b0",
+CAST(CAST(ROUND(CAST(AVG(a."sC_Interruption_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Interruption_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Recovery_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_b0" + a."sC_DebrisC_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DebrisTotal_b0",
@@ -828,7 +828,7 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisC_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC)
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_r1")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_r1",
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Construxn_r1")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_r1",
 --CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Downtime_r1",
-CAST(CAST(ROUND(CAST(AVG(a."sC_Interruption_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Interruption_r1",
+CAST(CAST(ROUND(CAST(AVG(a."sC_Interruption_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Interruption_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Recovery_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_r1" + a."sC_DebrisC_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DebrisTotal_r1",
@@ -973,7 +973,7 @@ i."CFSAUID" AS "fsauid",
 i."DAUIDt" AS "dauid",
 i."SACCODE" AS "saccode",
 i."SACTYPE" AS "sactype",
-b.landuse,
+--b.landuse,
 i.geom AS "geom_poly"
 
 FROM dsra.dsra_sim9p0_cascadiainterfacebestfault a
@@ -990,7 +990,7 @@ LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter k ON b.sauid = k."Sauid"
 --LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter k ON b.id = k."Sauid"
 WHERE e."gmv_SA(0.3)" >=0.02
-GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,b.landuse,d.vs30,d.z1pt0,d.z2pt5,f.source_type,
+GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,d.vs30,d.z1pt0,d.z2pt5,f.source_type,
 f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2)",e."gmv_SA(0.3)",e."gmv_SA(0.5)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(0.3)",e."gmv_SA(2.0)",
 i."PRUID",i."PRNAME",i."ERUID",i."ERNAME",i."CDUID",i."CDNAME",i."CSDUID",i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0",k."sCt_DisplHshld_r1",k."sCt_Shelter_b0",k."sCt_Shelter_r1",i.geom;
 /*
@@ -1012,7 +1012,6 @@ a.csdname,
 a."sH_RupName",
 a."sH_Source",
 a."sH_Mag",
---a."sH_MMI",
 a."sH_HypoLon",
 a."sH_HypoLat",
 a."sH_HypoDepth",
@@ -1029,6 +1028,7 @@ ROUND(AVG(a."sH_Sa0p5"),6) AS "sH_Sa0p5",
 ROUND(AVG(a."sH_Sa0p6"),6) AS "sH_Sa0p6",
 ROUND(AVG(a."sH_Sa1p0"),6) AS "sH_Sa1p0",
 ROUND(AVG(a."sH_Sa2p0"),6) AS "sH_Sa2p0",
+--a."sH_MMI",
 
 ROUND(SUM(a."sDt_None_b0"),6) AS "sDt_None_b0",
 ROUND(AVG(a."sDtr_None_b0"),6) AS "sDtr_None_b0",
@@ -1056,14 +1056,14 @@ ROUND(AVG(a."sDtr_Complete_r1"),6) AS "sDtr_Complete_r1",
 ROUND(SUM(a."sDt_Collapse_r1"),6) AS "sDt_Collapse_r1",
 ROUND(AVG(a."sDtr_Collapse_r1"),6) AS "sDtr_Collapse_r1",
 
-ROUND(AVG(a."SCm_Interruption_b0"),6) AS "SCm_Interruption_b0",
+ROUND(AVG(a."sCm_Interruption_b0"),6) AS "sCm_Interruption_b0",
 ROUND(AVG(a."sCm_Repair_b0"),6) AS "sCm_Repair_b0",
 ROUND(AVG(a."SCm_Recovery_b0"),6) AS "SCm_Recovery_b0",
 ROUND(SUM(a."sCt_DebrisTotal_b0"),6) AS "sCt_DebrisTotal_b0" ,
 ROUND(SUM(a."sCt_DebrisBW_b0"),6) AS "sCt_DebrisBW_b0",
 ROUND(SUM(a."sCt_DebrisCS_b0"),6) AS "sCt_DebrisCS_b0",
 
-ROUND(AVG(a."SCm_Interruption_r1"),6) AS "SCm_Interruption_r1",
+ROUND(AVG(a."sCm_Interruption_r1"),6) AS "sCm_Interruption_r1",
 ROUND(AVG(a."sCm_Repair_r1"),6) AS "sCm_Repair_r1",
 ROUND(AVG(a."SCm_Recovery_r1"),6) AS "SCm_Recovery_r1",
 ROUND(SUM(a."sCt_DebrisTotal_r1"),6) AS "sCt_DebrisTotal_r1" ,

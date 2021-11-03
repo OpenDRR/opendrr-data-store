@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS results_psra_{prov}.psra_{prov}_src_loss_temp CASCADE;
 CREATE TABLE results_psra_{prov}.psra_{prov}_src_loss_temp AS
 SELECT 
 a.source AS "src_zone",
-b.tectreg AS "src_type",
+b.tectonicregion AS "src_type",
 CASE 
 	WHEN a.loss_type IN ('contents','nonstructural','structural') THEN 'building'
 	WHEN a.loss_type IN ('occupants') THEN 'occupants'
@@ -34,8 +34,8 @@ SUM(a.loss_value_r1) AS "src_value_r1"
 --SUM(a.loss_value_r1)/(SELECT SUM(loss_value_r1) FROM psra_{prov}.psra_{prov}_src_loss ) AS "src_value_r1"
 
 FROM psra_{prov}.psra_{prov}_src_loss a
-LEFT JOIN lut.psra_source_types b ON a.source = b.srccode
-GROUP BY a.source,b.tectreg,a.loss_type,a.region
+LEFT JOIN lut.psra_source_types b ON a.source = b.code
+GROUP BY a.source,b.tectonicregion,a.loss_type,a.region
 ORDER BY a.source ASC;
 
 
@@ -58,7 +58,7 @@ DROP VIEW IF EXISTS results_psra_{prov}.psra_{prov}_src_loss;
 
 CREATE VIEW results_psra_{prov}.psra_{prov}_src_loss AS SELECT * FROM results_psra_{prov}.psra_{prov}_src_loss_tbl;
 
-DROP TABLE IF EXISTS results_psra_{prov}.psra_{prov}_src_loss_temp;
+DROP TABLE IF EXISTS results_psra_{prov}.psra_{prov}_src_loss_temp,psra_{prov}.psra_{prov}_src_loss_b0, psra_{prov}.psra_{prov}_src_loss_r1 CASCADE;
 
 
 

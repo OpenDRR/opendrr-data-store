@@ -1,16 +1,22 @@
 REM Export DSRA views from postgis db into Geopackage. Change ogr2ogr path, location paths, db information if needed.
 
 ECHO %TIME% 
-REM Geopackage dsra, _all_indicators_b
+REM Geopackage dsra, _indicators_b
 FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
 dsra_idm7p1_sidney, ^
-dsra_sim9p0_cascadiainterfacebestfault) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_all_indicators_b.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_%%x.%%x_all_indicators_b" -nln %%x_all_indicators_b
+dsra_sim9p0_cascadiainterfacebestfault) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_indicators_b.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_%%x.%%x_indicators_b" -nln %%x_indicators_b
 
 
-REM Geopackage dsra, _all_indicators_s
+REM Geopackage dsra, _indicators_s
 FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
 dsra_idm7p1_sidney, ^
-dsra_sim9p0_cascadiainterfacebestfault) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_all_indicators_s.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_%%x.%%x_all_indicators_s" -nln %%x_all_indicators_s
+dsra_sim9p0_cascadiainterfacebestfault) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_indicators_s.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_%%x.%%x_indicators_s" -nln %%x_indicators_s
+
+
+REM Geopackage dsra, _indicators_csd
+FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
+dsra_idm7p1_sidney, ^
+dsra_sim9p0_cascadiainterfacebestfault) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_indicators_csd.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_%%x.%%x_indicators_csd" -nln %%x_indicators_csd
 
 
 REM Geopackage dsra, _shakemap
