@@ -4,17 +4,18 @@ DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_curves_q05_b0, psra_{prov}.psra
 -- create table
 CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_q05_b0(
 return_period varchar,
+loss_value float,
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
-loss_value float,
+--"GenOcc" varchar,
 loss_ratio float,
 annual_frequency_of_exceedence float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_curves_q05_b0(return_period,loss_type,fsauid,"GenOcc","GenType",loss_value,loss_ratio,annual_frequency_of_exceedence)
+COPY psra_{prov}.psra_{prov}_agg_curves_q05_b0(return_period,loss_value,loss_type,fsauid,"OccType","GenType",loss_ratio,annual_frequency_of_exceedence)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-q05_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -23,17 +24,18 @@ COPY psra_{prov}.psra_{prov}_agg_curves_q05_b0(return_period,loss_type,fsauid,"G
 -- create table
 CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_q05_r1(
 return_period varchar,
+loss_value float,
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
-loss_value float,
+--"GenOcc" varchar,
 loss_ratio float,
 annual_frequency_of_exceedence float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_curves_q05_r1(return_period,loss_type,fsauid,"GenOcc","GenType",loss_value,loss_ratio,annual_frequency_of_exceedence)
+COPY psra_{prov}.psra_{prov}_agg_curves_q05_r1(return_period,loss_value,loss_type,fsauid,"OccType","GenType",loss_ratio,annual_frequency_of_exceedence)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-q05_r1.csv'
         WITH 
           DELIMITER AS ','
@@ -46,7 +48,8 @@ CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_q05 AS
 a.return_period,
 a.loss_type,
 a.fsauid,
-a."GenOcc",
+--a."GenOcc",
+a."OccType",
 a."GenType",
 a.loss_value AS "loss_value_b0",
 a.loss_ratio AS "loss_ratio_b0",
@@ -54,7 +57,7 @@ b.loss_value AS "loss_value_r1",
 b.loss_ratio AS "loss_ratio_r1",
 a.annual_frequency_of_exceedence
 FROM psra_{prov}.psra_{prov}_agg_curves_q05_b0 a
-LEFT JOIN psra_{prov}.psra_{prov}_agg_curves_q05_r1 b ON a.return_period = b.return_period AND a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" AND
+LEFT JOIN psra_{prov}.psra_{prov}_agg_curves_q05_r1 b ON a.return_period = b.return_period AND a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."OccType" = b."OccType" AND
 a."GenType" = b."GenType" and a.annual_frequency_of_exceedence = b.annual_frequency_of_exceedence);
 
 -- delete *total* rows from table
@@ -65,17 +68,18 @@ DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_curves_q95_b0, psra_{prov}.psra
 -- create table
 CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_q95_b0(
 return_period varchar,
+loss_value float,
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
-loss_value float,
+--"GenOcc" varchar,
 loss_ratio float,
 annual_frequency_of_exceedence float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_curves_q95_b0(return_period,loss_type,fsauid,"GenOcc","GenType",loss_value,loss_ratio,annual_frequency_of_exceedence)
+COPY psra_{prov}.psra_{prov}_agg_curves_q95_b0(return_period,loss_value,loss_type,fsauid,"OccType","GenType",loss_ratio,annual_frequency_of_exceedence)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-q95_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -84,17 +88,18 @@ COPY psra_{prov}.psra_{prov}_agg_curves_q95_b0(return_period,loss_type,fsauid,"G
 -- create table
 CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_q95_r1(
 return_period varchar,
+loss_value float,
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
-loss_value float,
+--"GenOcc" varchar,
 loss_ratio float,
 annual_frequency_of_exceedence float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_curves_q95_b0(return_period,loss_type,fsauid,"GenOcc","GenType",loss_value,loss_ratio,annual_frequency_of_exceedence)
+COPY psra_{prov}.psra_{prov}_agg_curves_q95_b0(return_period,loss_value,loss_type,fsauid,"OccType","GenType",loss_ratio,annual_frequency_of_exceedence)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-q95_r1.csv'
         WITH 
           DELIMITER AS ','
@@ -107,7 +112,8 @@ CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_q95 AS
 a.return_period,
 a.loss_type,
 a.fsauid,
-a."GenOcc",
+--a."GenOcc",
+a."OccType",
 a."GenType",
 a.loss_value AS "loss_value_b0",
 a.loss_ratio AS "loss_ratio_b0",
@@ -115,7 +121,7 @@ b.loss_value AS "loss_value_r1",
 b.loss_ratio AS "loss_ratio_r1",
 a.annual_frequency_of_exceedence
 FROM psra_{prov}.psra_{prov}_agg_curves_q95_b0 a
-LEFT JOIN psra_{prov}.psra_{prov}_agg_curves_q95_r1 b ON a.return_period = b.return_period AND a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" AND
+LEFT JOIN psra_{prov}.psra_{prov}_agg_curves_q95_r1 b ON a.return_period = b.return_period AND a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."OccType" = b."OccType" AND
 a."GenType" = b."GenType" and a.annual_frequency_of_exceedence = b.annual_frequency_of_exceedence);
 
 -- delete *total* rows from table
@@ -127,19 +133,19 @@ DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_curves_stats_b0, psra_{prov}.ps
 -- create table
 CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_stats_b0(
 return_period varchar,
-stat varchar,
+loss_value float,
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
-loss_value float,
+--"GenOcc" varchar,
 loss_ratio float,
-annual_frequency_of_exceedence float,
+annual_frequency_of_exceedence float
 region varchar
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_curves_stats_b0(return_period,loss_type,fsauid,"GenOcc","GenType",loss_value,loss_ratio,annual_frequency_of_exceedence,region)
+COPY psra_{prov}.psra_{prov}_agg_curves_stats_b0(return_period,loss_value,loss_type,fsauid,"OccType","GenType",loss_ratio,annual_frequency_of_exceedence,region)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-stats_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -150,19 +156,19 @@ COPY psra_{prov}.psra_{prov}_agg_curves_stats_b0(return_period,loss_type,fsauid,
 -- create table
 CREATE TABLE psra_{prov}.psra_{prov}_agg_curves_stats_r1(
 return_period varchar,
-stat varchar,
+loss_value float,
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
-loss_value float,
+--"GenOcc" varchar,
 loss_ratio float,
-annual_frequency_of_exceedence float,
+annual_frequency_of_exceedence float
 region varchar
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_curves_stats_r1(return_period,loss_type,fsauid,"GenOcc","GenType",loss_value,loss_ratio,annual_frequency_of_exceedence)
+COPY psra_{prov}.psra_{prov}_agg_curves_stats_r1(return_period,loss_value,loss_type,fsauid,"OccType","GenType",loss_ratio,annual_frequency_of_exceedence,region)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_curves-stats_r1.csv'
         WITH 
           DELIMITER AS ','
@@ -177,7 +183,8 @@ a.return_period,
 a.stat,
 a.loss_type,
 a.fsauid,
-a."GenOcc",
+--a."GenOcc",
+a."OccType",
 a."GenType",
 a.region
 a.loss_value AS "loss_value_b0",
@@ -186,7 +193,7 @@ b.loss_value AS "loss_value_r1",
 b.loss_ratio AS "loss_ratio_r1",
 a.annual_frequency_of_exceedence
 FROM psra_{prov}.psra_{prov}_agg_curves_stats_b0 a
-LEFT JOIN psra_{prov}.psra_{prov}_agg_curves_stats_r1 b ON a.return_period = b.return_period AND a.stat = b.stat AND a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" AND
+LEFT JOIN psra_{prov}.psra_{prov}_agg_curves_stats_r1 b ON a.return_period = b.return_period AND a.stat = b.stat AND a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."OccType" = b."OccType" AND
 a."GenType" = b."GenType" and a.annual_frequency_of_exceedence = b.annual_frequency_of_exceedence);
 
 -- delete *total* rows from table
@@ -202,7 +209,8 @@ DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_losses_q05_b0, psra_{prov}.psra
 CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_q05_b0(
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+--"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
 loss_value float,
 exposed_value float,
@@ -210,7 +218,7 @@ loss_ratio float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_q05_b0(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio)
+COPY psra_{prov}.psra_{prov}_agg_losses_q05_b0(loss_type,fsauid,"OccType","GenType",loss_value,exposed_value,loss_ratio)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-q05_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -221,7 +229,8 @@ COPY psra_{prov}.psra_{prov}_agg_losses_q05_b0(loss_type,fsauid,"GenOcc","GenTyp
 CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_q05_r1(
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+--"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
 loss_value float,
 exposed_value float,
@@ -229,7 +238,7 @@ loss_ratio float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_q05_r1(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio)
+COPY psra_{prov}.psra_{prov}_agg_losses_q05_r1(loss_type,fsauid,"OccType","GenType",loss_value,exposed_value,loss_ratio)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-q05_r1.csv'
         WITH 
           DELIMITER AS ','
@@ -239,7 +248,8 @@ CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_q05 AS
 SELECT
 a.loss_type,
 a.fsauid,
-a."GenOcc",
+--a."GenOcc",
+a."OccType",
 a."GenType",
 a.loss_value AS "loss_value_b0",
 a.exposed_value AS "exposed_value_b0",
@@ -249,7 +259,7 @@ b.exposed_value AS "exposed_value_r1",
 b.loss_ratio AS "loss_ratio_r1"
 
 FROM psra_{prov}.psra_{prov}_agg_losses_q05_b0 a
-LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_q05_r1 b ON a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" AND a."GenType" = b."GenType";
+LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_q05_r1 b ON a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."OccType" = b."OccType" AND a."GenType" = b."GenType";
 
 -- delete *total* rows from table
 DELETE FROM psra_{prov}.psra_{prov}_agg_losses_q05 WHERE fsauid = '*total*';
@@ -264,7 +274,8 @@ DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_losses_q95_b0, psra_{prov}.psra
 CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_q95_b0(
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+--"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
 loss_value float,
 exposed_value float,
@@ -272,7 +283,7 @@ loss_ratio float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_q95_b0(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio)
+COPY psra_{prov}.psra_{prov}_agg_losses_q95_b0(loss_type,fsauid,"OccType","GenType",loss_value,exposed_value,loss_ratio)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-q95_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -283,7 +294,8 @@ COPY psra_{prov}.psra_{prov}_agg_losses_q95_b0(loss_type,fsauid,"GenOcc","GenTyp
 CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_q95_r1(
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+--"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
 loss_value float,
 exposed_value float,
@@ -291,7 +303,7 @@ loss_ratio float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_q95_r1(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio)
+COPY psra_{prov}.psra_{prov}_agg_losses_q95_r1(loss_type,fsauid,"OccType","GenType",loss_value,exposed_value,loss_ratio)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-q95_r1.csv'
         WITH 
           DELIMITER AS ','
@@ -303,7 +315,8 @@ CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_q95 AS
 SELECT
 a.loss_type,
 a.fsauid,
-a."GenOcc",
+--a."GenOcc",
+a."OccType",
 a."GenType",
 a.loss_value AS "loss_value_b0",
 a.exposed_value AS "exposed_value_b0",
@@ -313,7 +326,7 @@ b.exposed_value AS "exposed_value_r1",
 b.loss_ratio AS "loss_ratio_r1"
 
 FROM psra_{prov}.psra_{prov}_agg_losses_q95_b0 a
-LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_q95_r1 b ON a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" AND a."GenType" = b."GenType";
+LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_q95_r1 b ON a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."OccType" = b."OccType" AND a."GenType" = b."GenType";
 
 -- delete *total* rows from table
 DELETE FROM psra_{prov}.psra_{prov}_agg_losses_q95 WHERE fsauid = '*total*';
@@ -328,16 +341,17 @@ DROP TABLE IF EXISTS psra_{prov}.psra_{prov}_agg_losses_stats_b0, psra_{prov}.ps
 CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_stats_b0(
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+--"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
 loss_value float,
 exposed_value float,
-loss_ratio float,
+loss_ratio float
 region varchar
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_stats_b0(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio,region)
+COPY psra_{prov}.psra_{prov}_agg_losses_stats_b0(loss_type,fsauid,"OccType","GenType",loss_value,exposed_value,loss_ratio,region)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-stats_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -348,16 +362,17 @@ COPY psra_{prov}.psra_{prov}_agg_losses_stats_b0(loss_type,fsauid,"GenOcc","GenT
 CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_stats_r1(
 loss_type varchar,
 fsauid varchar,
-"GenOcc" varchar,
+--"GenOcc" varchar,
+"OccType" varchar,
 "GenType" varchar,
 loss_value float,
 exposed_value float,
-loss_ratio float,
+loss_ratio float
 region varchar
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_agg_losses_stats_r1(loss_type,fsauid,"GenOcc","GenType",loss_value,exposed_value,loss_ratio,region)
+COPY psra_{prov}.psra_{prov}_agg_losses_stats_r1(loss_type,fsauid,"OccType","GenType",loss_value,exposed_value,loss_ratio,region)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_agg_losses-stats_r1.csv'
         WITH 
           DELIMITER AS ','
@@ -369,7 +384,8 @@ CREATE TABLE psra_{prov}.psra_{prov}_agg_losses_stats AS
 SELECT
 a.loss_type,
 a.fsauid,
-a."GenOcc",
+--a."GenOcc",
+a."OccType"
 a."GenType",
 a.region,
 a.loss_value AS "loss_value_b0",
@@ -380,7 +396,7 @@ b.exposed_value AS "exposed_value_r1",
 b.loss_ratio AS "loss_ratio_r1"
 
 FROM psra_{prov}.psra_{prov}_agg_losses_stats_b0 a
-LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_stats_r1 b ON a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."GenOcc" = b."GenOcc" AND a."GenType" = b."GenType";
+LEFT JOIN psra_{prov}.psra_{prov}_agg_losses_stats_r1 b ON a.loss_type = b.loss_type AND a.fsauid = b.fsauid AND a."OccType" = b."OccType" AND a."GenType" = b."GenType";
 
 -- delete *total* rows from table
 DELETE FROM psra_{prov}.psra_{prov}_agg_losses_stats WHERE fsauid = '*total*';

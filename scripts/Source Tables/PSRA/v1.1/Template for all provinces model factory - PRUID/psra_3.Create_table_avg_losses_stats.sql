@@ -12,9 +12,12 @@ asset_id varchar,
 "GenType" varchar,
 "LandUse" varchar,
 "OccClass" varchar,
+"OccType" varchar,
 "SAC" varchar,
 "SSC_Zone" varchar,
-"SauidID" varchar,
+--"SauidID" varchar,
+"SS_Region" varchar,
+"Sauid_km2" float,
 adauid varchar,
 cdname varchar,
 cduid varchar,
@@ -37,7 +40,7 @@ structural float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_avg_losses_stats_b0(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,pruid,sauid,taxonomy,lon,lat,contents,nonstructural,occupants,structural)
+COPY psra_{prov}.psra_{prov}_avg_losses_stats_b0(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","OccType","SAC","SSC_Zone","SS_Region","Sauid_km2",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,pruid,sauid,taxonomy,lon,lat,contents,nonstructural,occupants,structural)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_avg_losses-stats_b0.csv'
         WITH 
           DELIMITER AS ','
@@ -56,9 +59,12 @@ asset_id varchar,
 "GenType" varchar,
 "LandUse" varchar,
 "OccClass" varchar,
+"OccType" varchar,
 "SAC" varchar,
 "SSC_Zone" varchar,
-"SauidID" varchar,
+--"SauidID" varchar,
+"SS_Region" varchar,
+"Sauid_km2" float,
 adauid varchar,
 cdname varchar,
 cduid varchar,
@@ -81,7 +87,7 @@ structural float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_avg_losses_stats_r1(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,pruid,sauid,taxonomy,lon,lat,contents,nonstructural,occupants,structural)
+COPY psra_{prov}.psra_{prov}_avg_losses_stats_r1(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","OccType","SAC","SSC_Zone","SS_Region","Sauid_km2",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,pruid,sauid,taxonomy,lon,lat,contents,nonstructural,occupants,structural)
     FROM '/usr/src/app/ebRisk/{prov}/ebR_{prov}_avg_losses-stats_r1.csv'
         WITH 
           DELIMITER AS ','
@@ -99,9 +105,12 @@ a."GenOcc",
 a."GenType",
 a."LandUse",
 a."OccClass",
+a."OccType",
 a."SAC",
 a."SSC_Zone",
-a."SauidID",
+--a."SauidID",
+a."SS_Region",
+a."Sauid_km2",
 a.adauid,
 a.cdname,
 a.cduid,

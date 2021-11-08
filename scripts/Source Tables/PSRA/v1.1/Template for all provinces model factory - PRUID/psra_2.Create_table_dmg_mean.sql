@@ -150,9 +150,12 @@ asset_id varchar,
 "GenType" varchar,
 "LandUse" varchar, 
 "OccClass" varchar,
+"OccType" varchar,
 "SAC" varchar, 
 "SSC_Zone" varchar,
-"SauidID" varchar,
+--"SauidID" varchar,
+"SS_Region" varchar,
+"Sauid_km2" float,
 adauid varchar, 
 cdname varchar, 
 cduid varchar,
@@ -175,8 +178,10 @@ structural_extensive float,
 structural_complete float
 );
 
+
+
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_ed_dmg_mean_b0(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
+COPY psra_{prov}.psra_{prov}_ed_dmg_mean_b0(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","OccType","SAC","SSC_Zone","SS_Region","Sauid_km2",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
 pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_moderate,structural_extensive,structural_complete)
     FROM '/usr/src/app/eDamage/{prov}/eD_{prov}_damages-mean_b0.csv'
         WITH 
@@ -195,9 +200,12 @@ asset_id varchar,
 "GenType" varchar,
 "LandUse" varchar, 
 "OccClass" varchar,
+"OccType" varchar,
 "SAC" varchar, 
 "SSC_Zone" varchar,
-"SauidID" varchar,
+--"SauidID" varchar,
+"SS_Region" varchar,
+"Sauid_km2" float,
 adauid varchar, 
 cdname varchar, 
 cduid varchar,
@@ -221,8 +229,8 @@ structural_complete float
 );
 
 -- import exposure from csv
-COPY psra_{prov}.psra_{prov}_ed_dmg_mean_r1(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","SAC","SSC_Zone","SauidID",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
-pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_moderate,structural_extensive,structural_complete)
+COPY psra_{prov}.psra_{prov}_ed_dmg_mean_r1(asset_id,"BldEpoch","BldgType","EqDesLev","GenOcc","GenType","LandUse","OccClass","OccType","SAC","SSC_Zone","SS_Region","Sauid_km2",adauid,cdname,cduid,csdname,csduid,dauid,ername,eruid,fsauid,prname,
+pruid,sauid,taxonomy,lon,lat,structural_no_damage,structural_slight,structural_moderate,structural_extensive,structural_complete))
     FROM '/usr/src/app/eDamage/{prov}/eD_{prov}_damages-mean_r1.csv'
         WITH 
           DELIMITER AS ','
@@ -240,9 +248,11 @@ a."GenOcc",
 a."GenType",
 a."LandUse",
 a."OccClass",
+a."OccType"
 a."SAC",
 a."SSC_Zone",
-a."SauidID",
+a."SS_Region",
+a."Saukd_km2",
 a.adauid,
 a.cdname,
 a.cduid,

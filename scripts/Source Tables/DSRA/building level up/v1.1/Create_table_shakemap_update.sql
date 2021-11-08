@@ -92,11 +92,9 @@ CREATE INDEX shakemap_sim9p0_cszlockedtrans_xref_idx ON gmf.shakemap_sim9p0_cszl
 
 
 
--- DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl;
--- CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl AS
-DROP TABLE  IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shakemap_tbl CASCADE;
-CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shakemap_tbl AS
-
+-- create shakemap table and view
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl AS
 SELECT 
 DISTINCT(a.site_id) AS "SiteID",
 a.lon AS "Lon",
@@ -114,36 +112,37 @@ a."gmv_SA(1.0)" AS "sH_Sa1p0",
 a."gmv_SA(2.0)" AS "sH_Sa2p0",
 a.geom
 
--- FROM gmf.shakemap_{eqScenario} a
--- LEFT JOIN gmf.shakemap_{eqScenario}_xref b ON a.site_id = b.site_id
--- LEFT JOIN dsra.dsra_{eqScenario} c ON b.id = c."AssetID"
--- LEFT JOIN ruptures.rupture_table d ON d.rupture_name = c."Rupture_Abbr"
-FROM gmf.shakemap_sim9p0_cascadiainterfacebestfault a
-LEFT JOIN gmf.shakemap_sim9p0_cascadiainterfacebestfault_xref b ON a.site_id = b.site_id
-LEFT JOIN dsra.dsra_sim9p0_cascadiainterfacebestfault c ON b.id = c."AssetID"
+FROM gmf.shakemap_{eqScenario} a
+LEFT JOIN gmf.shakemap_{eqScenario}_xref b ON a.site_id = b.site_id
+LEFT JOIN dsra.dsra_{eqScenario} c ON b.id = c."AssetID"
 LEFT JOIN ruptures.rupture_table d ON d.rupture_name = c."Rupture_Abbr"
 WHERE a."gmv_SA(0.3)" >= 0.02;
 
 
 -- update rupture, mag, gmpe information
--- UPDATE results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl
--- SET "sH_RupName" = (SELECT DISTINCT("Rupture_Abbr") FROM dsra.dsra_{eqScenario} WHERE LOWER("Rupture_Abbr") = '{eqScenario}'),
---	 "sH_Mag" = (SELECT DISTINCT(magnitude) FROM ruptures.rupture_table WHERE LOWER(rupture_name) = '{eqScenario}'),
---	 "sH_GMPE" = (SELECT DISTINCT("gmpe_Model") FROM dsra.dsra_{eqScenario} WHERE LOWER("Rupture_Abbr") = '{eqScenario}');
-UPDATE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shakemap_tbl
-SET "sH_RupName" = (SELECT DISTINCT("Rupture_Abbr") FROM dsra.dsra_sim9p0_cascadiainterfacebestfault WHERE LOWER("Rupture_Abbr") = 'sim9p0_cascadiainterfacebestfault'),
-	 "sH_Mag" = (SELECT DISTINCT(magnitude) FROM ruptures.rupture_table WHERE LOWER(rupture_name) = 'sim9p0_cascadiainterfacebestfault'),
-	 "sH_GMPE" = (SELECT DISTINCT("gmpe_Model") FROM dsra.dsra_sim9p0_cascadiainterfacebestfault WHERE LOWER("Rupture_Abbr") = 'sim9p0_cascadiainterfacebestfault');
-	 
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shakemap_temp CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shakemap_temp AS
+SELECT
+DISTINCT(a."Rupture_Abbr"),
+b.magnitude,
+a."gmpe_Model"
+
+FROM dsra.dsra_{eqScenario} a
+LEFT JOIN ruptures.rupture_table b ON a."Rupture_Abbr" = b.rupture_name;
+
+
+
+UPDATE results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl
+SET "sH_RupName" = (SELECT "Rupture_Abbr" FROM results_dsra_{eqScenario}.{eqScenario}_shakemap_temp),
+    "sH_Mag" = (SELECT magnitude FROM results_dsra_{eqScenario}.{eqScenario}_shakemap_temp),
+    "sH_GMPE" = (SELECT "gmpe_Model" FROM results_dsra_{eqScenario}.{eqScenario}_shakemap_temp);
+
 
 -- create indexes
--- CREATE INDEX IF NOT EXISTS dsra_{eqScenario}_siteid_idx ON results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl("SiteID");
--- CREATE INDEX IF NOT EXISTS dsra_{eqScenario}_geom_dx ON results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl USING GIST(geom);
-CREATE INDEX IF NOT EXISTS dsra_sim9p0_cascadiainterfacebestfault_shakemap_siteid_idx ON results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shakemap_tbl("SiteID");
-CREATE INDEX IF NOT EXISTS dsra_sim9p0_cascadiainterfacebestfault_shakemap_geom_dx ON results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shakemap_tbl USING GIST(geom);
+CREATE INDEX IF NOT EXISTS dsra_{eqScenario}_siteid_idx ON results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl("SiteID");
+CREATE INDEX IF NOT EXISTS dsra_{eqScenario}_geom_dx ON results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl USING GIST(geom);
 
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shakemap_temp;
 
--- DROP VIEW IF EXISTS  results_dsra_{eqScenario}.dsra_{eqScenario}_shakemap;
--- CREATE VIEW results_dsra_{eqScenario}.dsra_{eqScenario}_shakemap AS SELECT * FROM results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl;
-DROP VIEW IF EXISTS  results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_shakemap CASCADE;
-CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_shakemap AS SELECT * FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shakemap_tbl;
+DROP VIEW IF EXISTS  results_dsra_{eqScenario}.dsra_{eqScenario}_shakemap;
+CREATE VIEW results_dsra_{eqScenario}.dsra_{eqScenario}_shakemap AS SELECT * FROM results_dsra_{eqScenario}.{eqScenario}_shakemap_tbl;
