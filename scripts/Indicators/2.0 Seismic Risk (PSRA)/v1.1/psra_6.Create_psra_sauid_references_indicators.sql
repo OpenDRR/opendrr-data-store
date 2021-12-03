@@ -43,12 +43,12 @@ ORDER BY a.source ASC;
 DROP TABLE IF EXISTS results_psra_{prov}.psra_{prov}_src_loss_tbl CASCADE;
 CREATE TABLE results_psra_{prov}.psra_{prov}_src_loss_tbl AS
 SELECT
-src_zone,
-src_type,
-loss_type,
-region,
-CAST(CAST(ROUND(CAST(SUM(src_value_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "src_value_b0",
-CAST(CAST(ROUND(CAST(SUM(src_value_r1) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "src_value_r1"
+src_zone AS "eS_Zone",
+src_type AS "eS_Type",
+loss_type AS "eS_LossType",
+region AS "e_Aggregation",
+CAST(CAST(ROUND(CAST(SUM(src_value_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eS_Value_b0",
+CAST(CAST(ROUND(CAST(SUM(src_value_r1) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eS_value_r1"
 
 FROM results_psra_{prov}.psra_{prov}_src_loss_temp
 GROUP BY src_zone,src_type,loss_type,region;
