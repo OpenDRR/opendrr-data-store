@@ -259,12 +259,12 @@ CASE WHEN AVG((l.structural_complete_r1/a.number) * f.collapse_pc) >0.01 THEN SU
 
 -- 2.3 Affected People
 -- 2.3.1 Life Safety - b0
-CAST(CAST(ROUND(CAST(SUM(occupants_b0/0.00001) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCt_Fatality_b0",
-CAST(CAST(ROUND(CAST(AVG(COALESCE(occupants_b0/NULLIF(a.transit,0),0)/0.00001) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCtr_Fatality_b0",
+CAST(CAST(ROUND(CAST(SUM(occupants_b0/0.000001) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCt_Fatality_b0",
+CAST(CAST(ROUND(CAST(AVG(COALESCE(occupants_b0/NULLIF(a.transit,0),0)/0.000001) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCtr_Fatality_b0",
 
 -- 2.3.1 Life Safety - r1
-CAST(CAST(ROUND(CAST(SUM(occupants_r1/0.00001) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCt_Fatality_r1",
-CAST(CAST(ROUND(CAST(AVG(COALESCE(occupants_r1/NULLIF(a.transit,0),0)/0.00001) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCtr_Fatality_r1",
+CAST(CAST(ROUND(CAST(SUM(occupants_r1/0.000001) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCt_Fatality_r1",
+CAST(CAST(ROUND(CAST(AVG(COALESCE(occupants_r1/NULLIF(a.transit,0),0)/0.000001) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eCtr_Fatality_r1",
 
 -- 2.4.1 Average Annual Loss - b0
 CAST(CAST(ROUND(CAST(SUM(i.structural_b0 + i.nonstructural_b0 + i.contents_b0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "eAALt_Asset_b0",
