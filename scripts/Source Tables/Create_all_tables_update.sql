@@ -1,18 +1,55 @@
 -- update tables in one script
 
+-- create master dsra table
+DROP TABLE IF EXISTS dsra.dsra_all_scenarios_tbl CASCADE;
+CREATE TABLE dsra.dsra_all_scenarios_tbl(
+assetid varchar,
+sauid varchar,
+dauid varchar,
+csduid varchar,
+csdname varchar,
+fsauid varchar,
+cduid varchar,
+cdname varchar,
+eruid varchar,
+ername varchar,
+pruid varchar,
+prname varchar,
+sh_rupname varchar,
+sh_mag varchar,
+sh_hypolon float,
+sh_hypolat float,
+sh_hypodepth float,
+sh_rake varchar,
+geom_point geometry
+); 
+
+-- create gmf scenario extents table temp
+DROP TABLE IF EXISTS gmf.shakemap_scenario_extents_temp CASCADE;
+CREATE TABLE gmf.shakemap_scenario_extents_temp(
+scenario varchar,
+geom geometry);
+
+-- add coordinate system
+ALTER TABLE gmf.shakemap_scenario_extents_temp
+ALTER COLUMN geom TYPE geometry(POLYGON,4326) USING ST_SetSRID(geom,4326);
+
+
 /* Create_table_canada_exposure.psql */
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
 ALTER TABLE exposure.canada_exposure ADD COLUMN geom geometry(Point,4326);
 UPDATE exposure.canada_exposure SET geom = st_setsrid(st_makepoint(SauidLon,SauidLat),4326);
 
--- create spatial index
-CREATE INDEX canada_exposure_idx
-ON exposure.canada_exposure using GIST (geom);
+-- create index on canada exposure
+CREATE INDEX IF NOT EXISTS canada_exposure_idx ON exposure.canada_exposure using GIST (geom);
+CREATE INDEX IF NOT EXISTS canada_exposure_id_idx ON exposure.canada_exposure("id");
+CREATE INDEX IF NOT EXISTS canada_exposure_sauid_idx ON exposure.canada_exposure("sauid");
+
 
 --remove trailing space from 'manufactured ' in gentype
 UPDATE exposure.canada_exposure 
 SET gentype = REPLACE(gentype,'Manufactured ','Manufactured')
-WHERE gentype = 'Manufactured '
+WHERE gentype = 'Manufactured ';
 
 
 
@@ -25,9 +62,12 @@ UPDATE exposure.metrovan_site_exposure SET geom_site = st_setsrid(st_makepoint(s
 ALTER TABLE exposure.metrovan_site_exposure ADD COLUMN geom_sauid geometry(Point,4326);
 UPDATE exposure.metrovan_site_exposure SET geom_sauid = st_setsrid(st_makepoint(sauidlon,sauidlat),4326);
 
--- create spatial index
-CREATE INDEX metrovan_site_exposure_idx
-ON exposure.metrovan_site_exposure using GIST (geom_site,geom_sauid);
+-- create indexes on site exposure tables
+CREATE INDEX IF NOT EXISTS metrovan_site_exposure_id_idx ON exposure.metrovan_site_exposure("id");
+--CREATE INDEX IF NOT EXISTS metrovan_site_exposure_id_building_idx ON exposure.metrovan_site_exposure("id_building");
+CREATE INDEX IF NOT EXISTS metrovan_site_exposure_sauid_idx ON exposure.metrovan_site_exposure("sauidid");
+CREATE INDEX IF NOT EXISTS metrovan_site_exposure_geom_site_idx ON exposure.metrovan_site_exposure USING GIST("geom_site");
+CREATE INDEX IF NOT EXISTS metrovan_site_exposure_geom_sauid_idx ON exposure.metrovan_site_exposure USING GIST("geom_sauid");
 
 -- drop columns that are not needed
 ALTER TABLE exposure.metrovan_site_exposure
@@ -67,314 +107,91 @@ DROP COLUMN shape_area;
 
 
 
-/* Create_site_exposure_to_building_and_sauid.sql */
--- script to generate building level exposure from site level
-DROP TABLE IF EXISTS exposure.metrovan_building_exposure,exposure.metrovan_site_exposure_id_building,exposure.metrovan_building_exposure_temp,exposure.metrovan_sauid_exposure CASCADE;
-
-CREATE TABLE exposure.metrovan_building_exposure AS (
-SELECT sauid,
-sauidid,
-sauidlat,
-sauidlon,
-sauid_km2,
-sauid_ha,
-landuse,
-taxonomy,
-SUM(number) AS "number",
-SUM(structural) AS "structural",
-SUM(nonstructural) AS "nonstructural",
-SUM(contents) AS "contents",
-business,
-"limit",
-deductible,
-AVG(retrofitting) AS "retrofitting",
-SUM(day) AS "day",
-SUM(night) AS "night",
-SUM(transit) AS "transit",
-genocc,
-occclass1,
-occclass2,
-AVG(popdu) AS "popdu",
-gentype,
-bldgtype,
-ROUND(AVG(numfloors)) AS "numfloors",
-SUM(bldg_ft2) AS "bldg_ft2",
-ROUND(AVG(bldyear)) AS "bldyear",
-bldepoch,
-ssc_zone,
-eqdeslev,
-dauid,
-adauid,
-fsauid,
-csduid,
-csdname,
-cduid,
-cdname,
-sac,
-eruid,
-ername,
-pruid,
-prname,
-st_centroid(st_union(geom_site)) AS "geom_site"
-
-FROM exposure.metrovan_site_exposure
-GROUP BY sauid,sauidid,sauidlat,sauidlon,sauid_km2,sauid_ha,landuse,taxonomy,business,"limit",deductible,genocc,occclass1,occclass2,gentype,bldgtype,bldepoch,ssc_zone,
-eqdeslev,dauid,adauid,fsauid,csduid,csdname,cduid,cdname,sac,eruid,ername,pruid,prname
-ORDER BY sauid,taxonomy ASC);
-
--- create spatial index
-CREATE INDEX metrovan_building_exposure_idx
-ON exposure.metrovan_building_exposure USING GIST (geom_site);
-
--- add missing columns
-ALTER TABLE exposure.metrovan_building_exposure
-ADD COLUMN id varchar,
-ADD COLUMN rowid int,
-ADD COLUMN objid serial;
-
--- create new id from rowid / taxonomy
-UPDATE exposure.metrovan_building_exposure
-SET id = sauid||'-'||taxonomy;
-
--- create temp table to create partition by id
-SELECT id,
-objid,
-ROW_NUMBER() OVER(PARTITION BY id) as rowid
-
-INTO exposure.metrovan_building_exposure_temp
-
-FROM exposure.metrovan_building_exposure;
-
--- update rowid to site level aggegrate table
-UPDATE exposure.metrovan_building_exposure t1
-SET  rowid = t2.rowid
-FROM exposure.metrovan_building_exposure_temp t2
-WHERE t1.id = t2.id AND t1.objid = t2.objid;
-
-DROP TABLE IF EXISTS exposure.metrovan_building_exposure_temp;
-
--- update id to incorporate rowid
-UPDATE exposure.metrovan_building_exposure
-SET id = rowid||'-'||id;
-
--- add PK
-ALTER TABLE exposure.metrovan_building_exposure ADD PRIMARY KEY(id);
-
--- create temp table to reference newly generated id at the building level exposure to site level exposure for aggregation
-CREATE TABLE exposure.metrovan_site_exposure_id_building AS (
-SELECT a.id,
-b.id AS "id_building",
-a.sauid,
-a.landuse,
-a.taxonomy,
---a.business,
---a."limit",
---a.deductable
-a.genocc,
-a.occclass1,
-a.occclass2,
-a.gentype,
-a.bldgtype,
-a.bldepoch,
-a.ssc_zone,
-a.eqdeslev,
-a.dauid,
-a.adauid,
-a.fsauid,
-a.csduid,
-a.csdname,
-a.cduid,
-a.cdname,
-a.sac,
-a.eruid,
-a.ername,
-a.pruid,
-a.prname
-from exposure.metrovan_site_exposure a
-LEFT JOIN exposure.metrovan_building_exposure b ON a.sauid = b.sauid 
-AND a.sauidid = b.sauidid 
-AND a.sauidlat = b.sauidlat 
-AND a.sauidlon = b.sauidlon
-AND a.sauid_km2 = b.sauid_km2 
-AND a.sauid_ha = b.sauid_ha 
-AND a.landuse = b.landuse 
-AND a.taxonomy = b.taxonomy 
---AND a.business = b.business 
---AND a."limit" = b."limit"
---AND a.deductible = b.deductible 
-AND a.genocc = b.genocc 
-AND a.occclass1 = b.occclass1
-AND a.occclass2 = b.occclass2
-AND a.gentype = b.gentype
-AND a.bldgtype = b.bldgtype
-AND a.bldepoch = b.bldepoch
-AND a.ssc_zone = b.ssc_zone
-AND a.eqdeslev = b.eqdeslev
-AND a.dauid = b.dauid
-AND a.adauid = b.adauid
-AND a.fsauid = b.fsauid
-AND a.csduid = b.csduid
-AND a.cduid = b.cduid
-AND a.sac = b.sac
-AND a.eruid = b.eruid
-AND a.pruid = b.pruid
-
-ORDER BY a.sauid ASC);
-
--- add id_building column to site level for aggregation to building level
-ALTER TABLE exposure.metrovan_site_exposure
-ADD COLUMN IF NOT EXISTS id_building varchar;
-
--- update id_building column
-UPDATE exposure.metrovan_site_exposure t1
-SET id_building = t2.id_building
-FROM exposure.metrovan_site_exposure_id_building t2
-WHERE t1.id = t2.id;
-
-DROP TABLE IF EXISTS exposure.metrovan_site_exposure_id_building CASCADE;
-
--- aggregate exposure to sauid level
-CREATE TABLE exposure.metrovan_sauid_exposure AS (
-SELECT sauid,
-sauidlat,
-sauidlon,
-SUM(number) AS "number",
-SUM(structural) AS "structural",
-SUM(nonstructural) AS "nonstructural",
-SUM(contents) AS "contents",
-AVG(retrofitting) AS "retrofitting",
-SUM(day) AS "day",
-SUM(night) AS "night",
-SUM(transit) AS "transit",
-AVG(popdu) AS "popdu",
-ROUND(AVG(numfloors)) AS "numfloors",
-SUM(bldg_ft2) AS "bldg_ft2",
-ROUND(AVG(bldyear)) AS "bldyear",
-st_centroid(st_union(geom_site)) AS "geom_site"
-
-FROM exposure.metrovan_building_exposure
-GROUP BY sauid,sauidlat,sauidlon);
-
-
-
 /* Create_table_vs_30_CAN_site_model.sql */
 -- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
 ALTER TABLE vs30.vs30_can_site_model ADD COLUMN geom geometry(Point,4326);
 UPDATE vs30.vs30_can_site_model SET geom = st_setsrid(st_makepoint(lon,lat),4326);
 
--- create spatial index
-CREATE INDEX vs30_can_site_model_idx
-ON vs30.vs30_can_site_model using GIST (geom);`
+-- create index
+CREATE INDEX IF NOT EXISTS vs30_can_site_model_idx ON vs30.vs30_can_site_model using GIST(geom);
 
 
 
-/* Create_table_vs_30_BC_CAN_model_update_site_exposure.sql */
-DROP TABLE IF EXISTS vs30.vs30_can_site_model_metrovan_site_exposure_xref,vs30.vs30_can_site_model_metrovan_building_exposure_xref,vs30.vs30_can_site_model_metrovan_sauid_exposure_xref CASCADE;
 
--- attach vs30 value to assetid based on closest location site level exposure
-CREATE TABLE vs30.vs30_can_site_model_metrovan_site_exposure_xref AS
-SELECT
-a.id,
-a.sitelon AS "asset_lon",
-a.sitelat AS "asset_lat",
-b.vs30,
-b.z1pt0,
-b.z2pt5,
-b.lon AS "vs_lon",
-b.lat AS "vs_lat",
-ST_Distance(a.geom_site,b.geom) AS "distance"
-
-FROM exposure.metrovan_site_exposure a
-CROSS JOIN LATERAL 
-(
-SELECT vs30,
-	z1pt0,
-	z2pt5,
-	geom,
-	lon,
-	lat
-FROM vs30.vs30_can_site_model
-ORDER BY a.geom_site <-> geom
-LIMIT 1
-) AS b;
-
--- attach vs30 value to assetid based on closest location building level exposure
-CREATE TABLE vs30.vs30_can_site_model_metrovan_building_exposure_xref AS
-SELECT
-a.id,
-a.sauidlon AS "asset_lon",
-a.sauidlat AS "asset_lat",
-b.vs30,
-b.z1pt0,
-b.z2pt5,
-b.lon AS "vs_lon",
-b.lat AS "vs_lat",
-ST_Distance(a.geom_site,b.geom) AS "distance"
-
-FROM exposure.metrovan_building_exposure a
-CROSS JOIN LATERAL 
-(
-SELECT vs30,
-	z1pt0,
-	z2pt5,
-	geom,
-	lon,
-	lat
-FROM vs30.vs30_can_site_model
-ORDER BY a.geom_site <-> geom
-LIMIT 1
-) AS b;
-
--- attach vs30 value to assetid based on closest location building level exposure
-CREATE TABLE vs30.vs30_can_site_model_metrovan_sauid_exposure_xref AS
-SELECT
-a.sauid,
-a.sauidlon AS "asset_lon",
-a.sauidlat AS "asset_lat",
-b.vs30,
-b.z1pt0,
-b.z2pt5,
-b.lon AS "vs_lon",
-b.lat AS "vs_lat",
-ST_Distance(a.geom_site,b.geom) AS "distance"
-
-FROM exposure.metrovan_sauid_exposure a
-CROSS JOIN LATERAL 
-(
-SELECT vs30,
-	z1pt0,
-	z2pt5,
-	geom,
-	lon,
-	lat
-FROM vs30.vs30_can_site_model
-ORDER BY a.geom_site <-> geom
-LIMIT 1
-) AS b;
-
-
-/* Create_table_shakemap_update.sql */
-
-
-/* Create_table_shakemap_update_ste.sql */
+/* Create_table_vs_30_CAN_site_model_xref.sql */
+-- create indexes 
+CREATE INDEX IF NOT EXISTS vs30_can_site_model_xref_idx ON vs30.vs30_can_site_model_xref (id);
+CREATE INDEX IF NOT EXISTS vs_30_can_site_model_xref_id_idx ON vs30.vs30_can_site_model_xref("id");
 
 
 
 /* Create_table_2016_census_v3.sql */
+-- add missing sauid that is new in exposure model but missing in census
+INSERT INTO census.census_2016_canada(sauidt)
+VALUES(62000215);
+
 -- create index
-CREATE INDEX census_2016_canada_idx ON census.census_2016_canada (sauidt);
+CREATE INDEX IF NOT EXISTS census_2016_canada_sauid_idx ON census.census_2016_canada("sauidt");
 
 
 
 /* Create_table_sovi_index_canada_v2.sql */
 -- create index
-CREATE INDEX sovi_index_canada_idx ON sovi.sovi_index_canada(sauidt);
+CREATE INDEX sovi_index_canada_idx ON sovi.sovi_index_canada (sauidt);
 
 
 
 /* Create_table_sovi_census_canada.sql */
-CREATE INDEX sovi_census_canada_idx ON sovi.sovi_census_canada(sauidt);
+-- create indexes
+CREATE INDEX IF NOT EXISTS sovi_census_canada_sauid_idx ON sovi.sovi_census_canada(sauidt);
+CREATE INDEX IF NOT EXISTS sovi_census_canada_dauid_idx ON sovi.sovi_census_canada(dauidt);
+CREATE INDEX IF NOT EXISTS sovi_census_canada_cfsauid_idx ON sovi.sovi_census_canada(cfsauid);
+CREATE INDEX IF NOT EXISTS sovi_census_canada_csduid_idx ON sovi.sovi_census_canada(csduid);
+CREATE INDEX IF NOT EXISTS sovi_census_canada_adauid_idx ON sovi.sovi_census_canada(adauid);
+CREATE INDEX IF NOT EXISTS sovi_census_canada_cduid_idx ON sovi.sovi_census_canada(cduid);
+CREATE INDEX IF NOT EXISTS sovi_census_canada_eruid_idx ON sovi.sovi_census_canada(eruid);
+CREATE INDEX IF NOT EXISTS sovi_census_canada_pruid_idx ON sovi.sovi_census_canada(pruid);
+
+/* sovi_index */
+-- create indexes
+CREATE INDEX IF NOT EXISTS sovi_index_canada_sauid_idx ON sovi.sovi_index_canada(sauidt);
+CREATE INDEX IF NOT EXISTS sovi_index_canada_dauid_idx ON sovi.sovi_index_canada(dauidt);
+CREATE INDEX IF NOT EXISTS sovi_index_canada_cfsauid_idx ON sovi.sovi_index_canada(cfsauid);
+CREATE INDEX IF NOT EXISTS sovi_index_canada_csduid_idx ON sovi.sovi_index_canada(csduid);
+CREATE INDEX IF NOT EXISTS sovi_index_canada_adauid_idx ON sovi.sovi_index_canada(adauid);
+CREATE INDEX IF NOT EXISTS sovi_index_canada_cduid_idx ON sovi.sovi_index_canada(cduid);
+CREATE INDEX IF NOT EXISTS sovi_index_canada_eruid_idx ON sovi.sovi_index_canada(eruid);
+CREATE INDEX IF NOT EXISTS sovi_index_canada_pruid_idx ON sovi.sovi_index_canada(pruid);
 
 
 
-/* placeholder for Create_table_sovi_thresholds.psql */
+/* Create_table_GHSL.sql */
+-- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
+ALTER TABLE ghsl.ghsl_mh_intensity_ghsl ADD COLUMN geom geometry(Point,4326);
+UPDATE ghsl.ghsl_mh_intensity_ghsl SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+
+-- create indexes
+CREATE INDEX IF NOT EXISTS ghsl_mh_intensity_ghsl_idx ON ghsl.ghsl_mh_intensity_ghsl using GIST(geom);
+CREATE INDEX IF NOT EXISTS ghsl_mh_intensity_ghsl_ghslid_idx ON ghsl.ghsl_mh_intensity_ghsl("ghslid");
+CREATE INDEX IF NOT EXISTS ghsl_mh_intensity_ghsl_pruid_idx ON ghsl.ghsl_mh_intensity_ghsl("pruid");
+CREATE INDEX IF NOT EXISTS ghsl_mh_intensity_ghsl_cduid_idx ON ghsl.ghsl_mh_intensity_ghsl("cduid");
+CREATE INDEX IF NOT EXISTS ghsl_mh_intensity_ghsl_csduid_idx ON ghsl.ghsl_mh_intensity_ghsl("csduid");
+CREATE INDEX IF NOT EXISTS ghsl_mh_intensity_ghsl_eruid_idx ON ghsl.ghsl_mh_intensity_ghsl("eruid");
+
+-- some issue with the original source dataset, nulll values are present in ghslid. erase all null ghslid. 
+DELETE FROM ghsl.ghsl_mh_intensity_ghsl WHERE ghslid IS NULL;
+
+-- add pkey
+ALTER TABLE ghsl.ghsl_mh_intensity_ghsl DROP CONSTRAINT IF EXISTS ghsl_mh_intensity_ghsl_pkey;
+ALTER TABLE ghsl.ghsl_mh_intensity_ghsl ADD PRIMARY KEY(ghslID);
+
+
+
+/* Create_table_sovi_index_canada_v2.sql */
+-- add geometries field to enable PostGIS (WGS1984 SRID = 4326)
+ALTER TABLE mh.mh_intensity_canada ADD COLUMN geom geometry(Point,4326);
+UPDATE mh.mh_intensity_canada SET geom = st_setsrid(st_makepoint(lon,lat),4326);
+
+-- create indexes
+CREATE INDEX IF NOT EXISTS mh_intensity_canada_idx ON mh.mh_intensity_canada using GIST(geom);
+CREATE INDEX IF NOT EXISTS mh_intensity_canada_sauid_idx ON mh.mh_intensity_canada("sauidt");

@@ -989,9 +989,11 @@ LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
 --LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
 LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter k ON b.sauid = k."Sauid"
 --LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter k ON b.sauid = k."Sauid"
-WHERE e."gmv_SA(0.3)" >=0.02
+JOIN gmf.shakemap_scenario_extents_temp l ON ST_Intersects(b.geom,l.geom) WHERE l.scenario = 'SIM9p0_CascadiaInterfaceBestFault'
+--JOIN gmf.shakemap_scenario_extents_temp l ON ST_Intersects(b.geom,i.geom) WHERE l.scenario = '{eqScenario}'
+--WHERE e."gmv_SA(0.3)" >=0.02
 GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,d.vs30,d.z1pt0,d.z2pt5,f.source_type,
-f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2)",e."gmv_SA(0.3)",e."gmv_SA(0.5)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(0.3)",e."gmv_SA(2.0)",
+f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2)",e."gmv_SA(0.3)",e."gmv_SA(0.5)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(2.0)",
 i."PRUID",i."PRNAME",i."ERUID",i."ERNAME",i."CDUID",i."CDNAME",i."CSDUID",i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0",k."sCt_DisplHshld_r1",k."sCt_Shelter_b0",k."sCt_Shelter_r1",i.geom;
 /*
 GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,b.landuse,d.vs30,d.z1pt0,d.z2pt5,d.vs_lon,d.vs_lat,e.site_id,e.lon,e.lat,f.source_type,

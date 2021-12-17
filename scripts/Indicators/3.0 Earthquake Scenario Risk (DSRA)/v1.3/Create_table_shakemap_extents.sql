@@ -1,5 +1,5 @@
--- script to generate shakemap extents polygon table sa0.3 >= 0.02
-DROP TABLE IF EXISTS gmf.shakemap_scenario_extents_tbl,gmf.shakemap_scenario_extents_temp CASCADE;
+-- script to generate shakemap extents polygon table
+DROP TABLE IF EXISTS gmf.shakemap_scenario_extents_tbl CASCADE;
 
 CREATE TABLE gmf.shakemap_scenario_extents_temp(
 scenario varchar,
@@ -16,6 +16,15 @@ SELECT '{eqScenario}',st_astext(st_chaikinsmoothing(st_concavehull(st_collect(ge
 
 
 */
+-- no smoothing
+INSERT INTO gmf.shakemap_scenario_extents_temp(scenario,geom)
+SELECT 'SIM9p0_CascadiaInterfaceBestFault',st_astext(st_concavehull(st_collect(geom),0.98)) FROM gmf.shakemap_sim9p0_cascadiainterfacebestfault;
+
+-- smoothing
+INSERT INTO gmf.shakemap_scenario_extents_temp(scenario,geom)
+SELECT 'SIM9p0_CascadiaInterfaceBestFault',st_astext(st_chaikinsmoothing(st_concavehull(st_collect(geom),0.98))) FROM gmf.shakemap_sim9p0_cascadiainterfacebestfault;
+---
+
 
 INSERT INTO gmf.shakemap_scenario_extents_temp(scenario,geom)
 SELECT 'ACM6p5_Beaufort',st_astext(st_chaikinsmoothing(st_concavehull(st_collect(geom),0.98))) FROM gmf.shakemap_acm6p5_beaufort WHERE "gmv_SA(0.3)" >= 0.02;
@@ -92,6 +101,18 @@ INSERT INTO gmf.shakemap_scenario_extents_temp(scenario,geom)
 SELECT 'SIM9p0_CascadiaInterfaceBestFault',st_astext(st_chaikinsmoothing(st_concavehull(st_collect(geom),0.98))) FROM gmf.shakemap_sim9p0_cascadiainterfacebestfault WHERE "gmv_SA(0.3)" >= 0.02;
 
 
+-- fix invalid projection
+ALTER TABLE gmf.shakemap_scenario_extents_temp
+ALTER COLUMN geom TYPE geometry(POLYGON,4326) USING ST_SetSRID(geom,4326);
+
+
+
+-- add 10m buffer
+UPDATE gmf.shakemap_scenario_extents_temp
+SET geom = ST_BUFFER(geom,0.0001) WHERE scenario = 'SIM9p0_CascadiaInterfaceBestFault';
+--SET geom = ST_BUFFER(geom,0.0001) WHERE scenario = '{eqScenario};
+
+
 -- attach ruptures info from rupture table
 SELECT 
 a.scenario,
@@ -107,9 +128,12 @@ INTO gmf.shakemap_scenario_extents_tbl
 FROM gmf.shakemap_scenario_extents_temp a
 LEFT JOIN ruptures.rupture_table b on a.scenario = b.rupture_name;
 
+/*
 -- fix invalid projection
 ALTER TABLE gmf.shakemap_scenario_extents_tbl
 ALTER COLUMN geom TYPE geometry(POLYGON,4326) USING ST_SetSRID(geom,4326);
+*/
+
 
 -- create shakemap extents view
 DROP VIEW IF EXISTS gmf.shakemap_scenario_extents CASCADE;
