@@ -1,13 +1,12 @@
 -- create schema for new scenario
---CREATE SCHEMA IF NOT EXISTS results_dsra_{eqScenario};
-CREATE SCHEMA IF NOT EXISTS results_dsra_sim9p0_cascadiainterfacebestfault;
+CREATE SCHEMA IF NOT EXISTS results_dsra_{eqScenario};
+
+
 
 
 --intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 AS
-DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc1 CASCADE;
-CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc1 AS
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 AS
 (
 SELECT 
 a."Sauid",
@@ -15,18 +14,15 @@ SUM(a."sC_Hshld_b0") AS "sCt_DisplHshld_b0",
 SUM(a."sC_Hshld_r1") AS "sCt_DisplHshld_r1",
 SUM(b."E_PopNight") AS "Et_PopNight"
 	
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_b a
---FROM results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_b a
+FROM results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_b a
 LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_b b ON a."AssetID" = b."BldgID"
 GROUP BY a."Sauid"
 );
 
 
 --intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 AS
-DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2 CASCADE;
-CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2 AS
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 AS
 (
 SELECT
 a."Sauid",
@@ -49,19 +45,14 @@ c.age_lt6,
 --IM
 --IF [Inc_Hshld] =< $15,000, THEN 0.62 = IM1
 CASE WHEN c.inc_hshld <= 15000 THEN 1 * 0.62 ELSE 0 END AS "IM1",
-
 --IF [Inc_Hshld] > $15,000 AND [Inc_Hshld] =<, $20,000 THEN 0.42 = IM2
 CASE WHEN c.inc_hshld > 15000 AND c.inc_hshld <= 20000 THEN 1 * 0.42 ELSE 0 END AS "IM2",
-
 --IF [Inc_Hshld] > $20,000 AND [Inc_Hshld] =<, $35,000 THEN 0.29 = IM3
 CASE WHEN c.inc_hshld > 20000 AND c.inc_hshld <= 35000 THEN 1 * 0.29 ELSE 0 END AS "IM3",
-
 --IF [Inc_Hshld] > $35,000 AND [Inc_Hshld] =<, $50,000 THEN  0.22 = IM4
 CASE WHEN c.inc_hshld > 35000 AND c.inc_hshld <= 50000 THEN 1 *  0.22 ELSE 0 END AS "IM4",
-
 --IF [Inc_Hshld] > $50,000 THEN 0.13 = IM5
 CASE WHEN c.inc_hshld > 50000 THEN 1 * 0.13 ELSE 0 END AS "IM5",
-
 
 --EM
 --1 - vis_min - indigenous *0.24 = white
@@ -73,7 +64,7 @@ c.vis_min * 0.40 AS "EM2",
 --indigenous * 0.26 = EM3
 c.indigenous * 0.26 AS "EM3",
 
---OM
+---OM
 --renter * 0.40 = OM1
 c.renter * 0.40 AS "OM1",
 
@@ -85,24 +76,22 @@ c.renter * 0.40 AS "OM1",
 --age_lt6 * 0.40 = AM1
 c.age_lt6 * 0.40 AS "AM1",
 
--- 1 - (age_lt6 + c.age_gt65) * 0.40, percentage of population between6 and 65
+--1 - (age_lt6 + c.age_gt65) * 0.40, percentage of population between6 and 65
 1 - (c.age_lt6 + c.age_gt65) * 0.40 AS "AM2",
 	
--- age_gt65 * 0.40 = AM3
+--age_gt65 * 0.40 = AM3
 c.age_gt65 * 0.40 AS "AM3"
 
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc1 a
---FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 a
+
+FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc1 a
 LEFT JOIN results_nhsl_physical_exposure.nhsl_physical_exposure_indicators_s b ON a."Sauid" = b."Sauid"
 LEFT JOIN census.census_2016_canada c ON b."Sauid" = c.sauidt
 );
 
 
 -- intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc3 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc3 AS
-DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc3 CASCADE;
-CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc3 AS
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc3 CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc3 AS
 (
 SELECT
 "Sauid",
@@ -111,17 +100,13 @@ SELECT
 COALESCE(((a."sCt_DisplHshld_b0" * a."Et_PopNight") / NULLIF((a."Et_SFHshld" + a."Et_MFHshld"),0)),0) AS "ppl_b0",
 COALESCE(((a."sCt_DisplHshld_r1" * a."Et_PopNight") / NULLIF((a."Et_SFHshld" + a."Et_MFHshld"),0)),0) AS "ppl_r1"
 
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2 a
---FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 a
+FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 a
 );
 
 
-
 -- intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc4 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc4 AS
-DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc4 CASCADE;
-CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc4 AS
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc4 CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc4 AS
 (
 SELECT A."Sauid",
 --IM1, EM1, OM1, AM* = X1
@@ -274,19 +259,15 @@ SELECT A."Sauid",
 ((0.73 * a."IM5") + (0.27 * a."EM3") + (0 * a."OM2") + (0 * a."AM2")) + 
 ((0.73 * a."IM5") + (0.27 * a."EM3") + (0 * a."OM2") + (0 * a."AM3")) AS "X30"
 
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2 a
---FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 a
-LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc3 b ON a."Sauid" = b."Sauid"
---LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter_calc3 b ON a."Sauid" = b."Sauid"
+FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 a
+LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter_calc3 b ON a."Sauid" = b."Sauid"
 );
 
 
 
 -- intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc5 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc5 AS
-DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc5 CASCADE;
-CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc5 AS
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc5 CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc5 AS
 (
 SELECT 
 a."Sauid",
@@ -296,17 +277,14 @@ a."Sauid",
 "X11" + "X12" + "X13" + "X14" + "X15" + "X16" + "X17" + "X18" + "X19" + "X20" + 
 "X21" + "X22" + "X23" + "X24" + "X25" + "X26" + "X27" + "X28" + "X29" + "X30" AS "alpha"
 
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc4 a
---FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc4 a
+FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc4 a
 );
 
 
 
 -- intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc6 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc6 AS
-DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc6 CASCADE;
-CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc6 AS
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc6 CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc6 AS
 (
 SELECT 
 a."Sauid",
@@ -612,21 +590,16 @@ a."Sauid",
 ((c.alpha) * (b."ppl_r1") * (a."IM5") * (a."EM3") * (a."OM2") * (a."AM2")) +
 ((c.alpha) * (b."ppl_r1") * (a."IM5") * (a."EM3") * (a."OM2") * (a."AM3")) AS "X30_r1"
 
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2 a
---FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 a
-LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc3 b ON a."Sauid" = b."Sauid"
---LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter_calc3 b ON a."Sauid" = b."Sauid"
-LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc5 c ON a."Sauid" = c."Sauid"
---LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter_calc5 c ON a."Sauid" = c."Sauid"
+FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 a
+LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter_calc3 b ON a."Sauid" = b."Sauid"
+LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter_calc5 c ON a."Sauid" = c."Sauid"
 );
 
 
 
 --intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc7 CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc7 AS
-DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc7 CASCADE;
-CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc7 AS
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc7 CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter_calc7 AS
 (
 SELECT
 a."Sauid",
@@ -641,17 +614,14 @@ a."X1_r1" + a."X2_r1" + a."X3_r1" + a."X4_r1" + a."X5_r1" + a."X6_r1" + a."X7_r1
 a."X11_r1" + a."X12_r1" + a."X13_r1" + a."X14_r1" + a."X15_r1" + a."X16_r1" + a."X17_r1" + a."X18_r1" + a."X19_r1" + a."X20_r1" +
 a."X21_r1" + a."X22_r1" + a."X23_r1" + a."X24_r1" + a."X25_r1" + a."X26_r1" + a."X27_r1" + a."X28_r1" + a."X29_r1" + a."X30_r1" AS "sCt_Shelter_r1"
 
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc6 a
---FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc6 a
+FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc6 a
 );
 
 
 
 --intermediates table to calculate shelter for DSRA
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter CASCADE;
---CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter AS
-DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter CASCADE;
-CREATE TABLE results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter AS
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter CASCADE;
+CREATE TABLE results_dsra_{eqScenario}.{eqScenario}_shelter AS
 (
 SELECT
 a."Sauid",
@@ -685,28 +655,21 @@ a."AM3",
 b."sCt_Shelter_b0",
 b."sCt_Shelter_r1"
 
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2 a
---FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 a
-LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc7 b ON a."Sauid" = b."Sauid"
---LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter_calc7 b ON a."Sauid" = b."Sauid"
+FROM results_dsra_{eqScenario}.{eqScenario}_shelter_calc2 a
+LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter_calc7 b ON a."Sauid" = b."Sauid"
 );
 
 
 
---DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc1,results_dsra_{eqScenario}.{eqScenario}_shelter_calc2,results_dsra_{eqScenario}.{eqScenario}_shelter_calc3,results_dsra_{eqScenario}.{eqScenario}_shelter_calc4,results_dsra_{eqScenario}.{eqScenario}_shelter_calc5,results_dsra_{eqScenario}.{eqScenario}_shelter_calc6,results_dsra_{eqScenario}.{eqScenario}_shelter_calc7;
-DROP TABLE IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc1,results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc2,
-results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc3,results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc4,
-results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc5,results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc6,
-results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter_calc7;
+DROP TABLE IF EXISTS results_dsra_{eqScenario}.{eqScenario}_shelter_calc1,results_dsra_{eqScenario}.{eqScenario}_shelter_calc2,results_dsra_{eqScenario}.{eqScenario}_shelter_calc3,
+results_dsra_{eqScenario}.{eqScenario}_shelter_calc4,results_dsra_{eqScenario}.{eqScenario}_shelter_calc5,results_dsra_{eqScenario}.{eqScenario}_shelter_calc6,results_dsra_{eqScenario}.{eqScenario}_shelter_calc7;
 
 
 
 
 -- create scenario risk sauid indicators
---DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario}_indicators_s CASCADE;
---CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_{eqScenario}_indicators_s AS 
-DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_s CASCADE;
-CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_s AS 
+DROP VIEW IF EXISTS results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_s CASCADE;
+CREATE VIEW results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_s AS 
 
 SELECT
 b.sauid AS "Sauid",
@@ -721,15 +684,9 @@ CAST(CAST(ROUND(CAST(f.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoLat",
 CAST(CAST(ROUND(CAST(f.depth AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_HypoDepth",
 f.rake AS "sH_Rake",
 a."gmpe_Model" AS "sH_GMPE",
---e.site_id AS "sH_SiteID",
---CAST(CAST(ROUND(CAST(e.lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_SiteLon",
---CAST(CAST(ROUND(CAST(e.lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_SiteLat",
---CAST(CAST(ROUND(CAST(d.vs_lon AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS  "sH_Vs30Lon",
---CAST(CAST(ROUND(CAST(d.vs_lat AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs30Lat",
 CAST(CAST(ROUND(CAST(d.vs30 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Vs30",
 CAST(CAST(ROUND(CAST(d.z1pt0 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_z1p0",
 CAST(CAST(ROUND(CAST(d.z2pt5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_z2p5",
---CAST(CAST(ROUND(CAST(e."gmv_pgv" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_PGV",
 CAST(CAST(ROUND(CAST(e."gmv_pga" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_PGA",
 CAST(CAST(ROUND(CAST(e."gmv_SA(0.1)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p1",
 CAST(CAST(ROUND(CAST(e."gmv_SA(0.2)" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sH_Sa0p2",
@@ -744,68 +701,43 @@ CAST(CAST(ROUND(CAST(e."gmv_SA(2.0)" AS NUMERIC),6) AS FLOAT) AS NUMERIC)AS "sH_
 -- 3.2.1 Damage State - b0
 CAST(CAST(ROUND(CAST(SUM(a."sD_None_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_None_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sD_None_b0" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_None_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sD_None_stdv_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_None_b0",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Slight_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Slight_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Slight_b0" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Slight_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Slight_stdv_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Slight_b0",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Moderate_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Moderate_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Moderate_b0" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Moderate_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Moderate_stdv_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Moderate_b0",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Extensive_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Extensive_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Extensive_b0" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Extensive_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Extensive_stdv_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Extensive_b0",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Complete_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_b0" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Complete_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_stdv_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Complete_b0",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Collapse_b0" * b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Collapse_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Collapse_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Collapse_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_stdv_b0" * g.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Collapse_b0",
 
 -- 3.2.1 Damage State - r1
 CAST(CAST(ROUND(CAST(SUM(a."sD_None_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_None_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sD_None_r1" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_None_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sD_None_stdv_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_None_r1",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Slight_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Slight_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Slight_r1" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Slight_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Slight_stdv_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Slight_r1",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Moderate_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Moderate_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Moderate_r1" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Moderate_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Moderate_stdv_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Moderate_r1",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Extensive_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Extensive_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Extensive_r1" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Extensive_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Extensive_stdv_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Extensive_r1",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Complete_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_r1" / b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Complete_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_stdv_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Complete_r1",
 
 CAST(CAST(ROUND(CAST(SUM(a."sD_Collapse_r1" * b.number) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Collapse_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sD_Collapse_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtr_Collapse_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sD_Complete_stdv_r1" * g.collapse_pc) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDtsd_Collapse_r1",
 
 -- 3.2.1 Recovery - b0
---CAST(CAST(ROUND(CAST(SUM(a."sD_None_b0" + a."sD_Slight_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_GreenTag_b_b0",
---CAST(CAST(ROUND(CAST(SUM(a."sD_None_b0" + a."sD_Slight_b0")/5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_GreenTag_i_b0",
---CAST(CAST(ROUND(CAST(SUM(a."sD_Extensive_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_YellowTag_d_b0",
---CAST(CAST(ROUND(CAST(SUM(a."sD_Extensive_b0")/2.5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_YellowTag_i_b0",
---CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_RedTag_b_b0",
---CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_b0")/5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_RedTag_i_b0" ,
---CAST(CAST(ROUND(CAST(SUM(a."sD_None_b0" + (a."sD_Slight_b0"*0.2) +(a."sD_Moderate_b0"*0.05)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Operational_b0",
---CAST(CAST(ROUND(CAST(SUM((a."sD_Slight_b0"*0.8) + (a."sD_Moderate_b0"*0.75) + (a."sD_Extensive_b0"*0.2)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Functional_b0",
---CAST(CAST(ROUND(CAST(SUM((a."sD_Moderate_b0"*0.2) + (a."sD_Extensive_b0"*0.4)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Repairable_b0",
---CAST(CAST(ROUND(CAST(SUM((a."sD_Extensive_b0"*0.3) + (a."sD_Complete_b0"*0.2)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Failure_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_b0")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Downtime_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_b0")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sC_Construxn_b0")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_b0",
---CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Downtime_b0",
+
 CAST(CAST(ROUND(CAST(AVG(a."sC_Interruption_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Interruption_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_b0",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Recovery_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_b0",
@@ -814,20 +746,6 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisBW_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC
 CAST(CAST(ROUND(CAST(SUM(a."sC_DebrisC_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_DebrisCS_b0",
 
 -- 3.2.1 Recovery - r1
---CAST(CAST(ROUND(CAST(SUM(a."sD_None_r1" + a."sD_Slight_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_GreenTag_b_r1",
---CAST(CAST(ROUND(CAST(SUM(a."sD_None_r1" + a."sD_Slight_r1")/5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_GreenTag_i_r1",
---CAST(CAST(ROUND(CAST(SUM(a."sD_Extensive_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_YellowTag_d_r1",
---CAST(CAST(ROUND(CAST(SUM(a."sD_Extensive_r1")/2.5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_YellowTag_i_r1",
---CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_RedTag_b_r1",
---CAST(CAST(ROUND(CAST(SUM(a."sD_Complete_r1")/5 AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_RedTag_i_r1" ,
---CAST(CAST(ROUND(CAST(SUM(a."sD_None_r1" + (a."sD_Slight_r1"*0.2) +(a."sD_Moderate_r1"*0.05)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Operational_r1",
---CAST(CAST(ROUND(CAST(SUM((a."sD_Slight_r1"*0.8) + (a."sD_Moderate_r1"*0.75) + (a."sD_Extensive_r1"*0.2)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Functional_r1",
---CAST(CAST(ROUND(CAST(SUM((a."sD_Moderate_r1"*0.2) + (a."sD_Extensive_r1"*0.4)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Repairable_r1",
---CAST(CAST(ROUND(CAST(SUM((a."sD_Extensive_r1"*0.3) + (a."sD_Complete_r1"*0.2)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sDt_Failure_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_r1")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Downtime_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_r1")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sC_Construxn_r1")/(AVG(b.number)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_r1",
---CAST(CAST(ROUND(CAST(AVG(a."sC_Downtime_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Downtime_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Interruption_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Interruption_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Repair_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCm_Repair_r1",
 CAST(CAST(ROUND(CAST(AVG(a."sC_Recovery_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "SCm_Recovery_r1",
@@ -870,15 +788,6 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_CasTransitL4_r1") AS NUMERIC),6) AS FLOAT) AS NUM
 
 -- 3.3.2 Social Disruption - b0
 CAST(CAST(ROUND(CAST(k."sCt_Shelter_b0" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Shelter_b0",
-/*
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_b0",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_b0",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_b0",
-CAST(CAST(ROUND(CAST(AVG(a."sC_DisplRes_90_b0")/AVG(b.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_DisplRes90_b0",
---CAST(CAST(ROUND(CAST(AVG(COALESCE(a."sC_DisplRes_90_b0"/NULLIF((b.night),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_DisplRes90_b0",
-CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_180_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res180_b0",
-CAST(CAST(ROUND(CAST(SUM(a."sC_AfftRes_360_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res360_b0",
-*/
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_b0",
@@ -896,15 +805,6 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_360_b0") AS NUMERIC),6) AS FLOAT) AS N
 
 -- 3.3.2 Social Disruption - r1
 CAST(CAST(ROUND(CAST(k."sCt_Shelter_r1" AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Shelter_r1",
-/*
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_r1",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_r1",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_r1",
-CAST(CAST(ROUND(CAST(AVG(a."sC_DisplRes_90_r1")/AVG(b.night) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_DisplRes90_r1",
---CAST(CAST(ROUND(CAST(AVG(COALESCE(a."sC_DisplRes_90_r1"/NULLIF((b.night),0),0)) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCr_DisplRes90_r1",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_180_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res180_r1",
-CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_360_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res360_r1",
-*/
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_3_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res3_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_30_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res30_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sC_DisplRes_90_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sCt_Res90_r1",
@@ -925,41 +825,19 @@ CAST(CAST(ROUND(CAST(SUM(a."sC_DisrupEmpl_360_r1") AS NUMERIC),6) AS FLOAT) AS N
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Asset_b0",
 CAST(CAST(ROUND(CAST(COALESCE(AVG((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0")/(NULLIF((b.structural + b.nonstructural + b.contents),0))),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLm_Asset_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_b0" + a."sL_NStr_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Bldg_b0",
---CAST(CAST(ROUND(CAST(COALESCE(AVG((a."sL_Str_b0" + a."sL_NStr_b0")/(NULLIF((b.structural + b.nonstructural + b.contents),0))),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmr_Bldg_b0",
 CAST(CAST(ROUND(CAST(COALESCE(AVG((a."sL_Str_b0" + a."sL_NStr_b0")/(NULLIF((b.structural + b.nonstructural),0))),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmr_Bldg_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Str_b0",
---CAST(CAST(ROUND(CAST(SUM(a."sL_Str_stdv_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmsd_Str_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sL_NStr_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_NStr_b0",
---CAST(CAST(ROUND(CAST(SUM(a."sL_NStr_stdv_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmsd_NStr_b0",
 CAST(CAST(ROUND(CAST(SUM(a."sL_Cont_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Cont_b0",
---CAST(CAST(ROUND(CAST(SUM(a."sL_Cont_stdv_b0") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmsd_Cont_b0",
 
 -- 3.4.1 Economic Loss - r1
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r1" + a."sL_NStr_r1" + a."sL_Cont_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Asset_r1",
 CAST(CAST(ROUND(CAST(COALESCE(AVG((a."sL_Str_r1" + a."sL_NStr_r1" + a."sL_Cont_r1")/(NULLIF((b.structural + b.nonstructural + b.contents),0))),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLm_Asset_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r1" + a."sL_NStr_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Bldg_r1",
---CAST(CAST(ROUND(CAST(COALESCE(AVG((a."sL_Str_r1" + a."sL_NStr_r1")/(NULLIF((b.structural + b.nonstructural + b.contents),0))),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmr_Bldg_r1",
 CAST(CAST(ROUND(CAST(COALESCE(AVG((a."sL_Str_r1" + a."sL_NStr_r1")/(NULLIF((b.structural + b.nonstructural),0))),0) AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmr_Bldg_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sL_Str_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Str_r1",
---CAST(CAST(ROUND(CAST(SUM(a."sL_Str_stdv_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmsd_Str_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sL_NStr_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_NStr_r1",
---CAST(CAST(ROUND(CAST(SUM(a."sL_NStr_stdv_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmsd_NStr_r1",
 CAST(CAST(ROUND(CAST(SUM(a."sL_Cont_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLt_Cont_r1",
---CAST(CAST(ROUND(CAST(SUM(a."sL_Cont_stdv_r1") AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmsd_Cont_r1",
-
-/*
-CAST(CAST(ROUND(CAST(CASE WHEN (AVG((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r1" + a."sL_NStr_r1"))/(b.number))/((b.retrofitting)/(b.number)))) > 0 
-THEN (AVG((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r1" + a."sL_NStr_r1"))/(b.number))/((b.retrofitting)/(b.number)))) ELSE 1 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmr1_BCR" ,
-*/
---CAST(CAST(ROUND(CAST(CASE WHEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r1" + a."sL_NStr_r1" + a."sL_Cont_r1"))/(b.retrofitting))) > 0
---THEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r1" + a."sL_NStr_r1" + a."sL_Cont_r1"))/(b.retrofitting))) ELSE 1 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmr1_BCR" ,
-
-/*
-CAST(CAST(ROUND(CAST(CASE WHEN (AVG((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r1" + a."sL_NStr_r1"))/(b.number)) * ((EXP(-0.025*0.50)/0.025)/((b.retrofitting)/(b.number))))) > 0
-THEN (AVG((((a."sL_Str_b0" + a."sL_NStr_b0") - (a."sL_Str_r1" + a."sL_NStr_r1"))/(b.number)) * ((EXP(-0.025*0.50)/0.025)/((b.retrofitting)/(b.number))))) ELSE 1 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmr1_RoI",
-*/
---CAST(CAST(ROUND(CAST(CASE WHEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r1" + a."sL_NStr_r1" + a."sL_Cont_r1")) * ((EXP(-0.03*100)/0.03)/(b.retrofitting)))) > 0
---THEN (AVG(((a."sL_Str_b0" + a."sL_NStr_b0" + a."sL_Cont_b0") - (a."sL_Str_r1" + a."sL_NStr_r1" + a."sL_Cont_r1")) * ((EXP(-0.03*100)/0.03)/(b.retrofitting)))) ELSE 1 END AS NUMERIC),6) AS FLOAT) AS NUMERIC) AS "sLmr1_RoI",
 
 i."PRUID" AS "pruid",
 i."PRNAME" AS "prname",
@@ -976,38 +854,25 @@ i."SACTYPE" AS "sactype",
 --b.landuse,
 i.geom AS "geom_poly"
 
-FROM dsra.dsra_sim9p0_cascadiainterfacebestfault a
---FROM dsra.{eqScenario} a
+FROM dsra.dsra_{eqScenario} a
 LEFT JOIN exposure.canada_exposure b ON a."AssetID" = b.id 
 LEFT JOIN vs30.vs30_can_site_model_xref d ON a."AssetID" = d.id
-LEFT JOIN gmf.shakemap_sim9p0_cascadiainterfacebestfault_xref e ON b.id = e.id
---LEFT JOIN gmf.shakemap_{eqScenario}_xref e ON b.id = e.id
+LEFT JOIN gmf.shakemap_{eqScenario}_xref e ON b.id = e.id
 LEFT JOIN ruptures.rupture_table f ON f.rupture_name = a."Rupture_Abbr"
---LEFT JOIN lut.collapse_probability g ON b.bldgtype = g.eqbldgtype
---LEFT JOIN census.census_2016_canada h ON b.sauid = h.sauidt
 LEFT JOIN boundaries."Geometry_SAUID" i ON b.sauid = i."SAUIDt"
---LEFT JOIN sovi.sovi_census_canada j ON b.sauid = j.sauidt
-LEFT JOIN results_dsra_sim9p0_cascadiainterfacebestfault.sim9p0_cascadiainterfacebestfault_shelter k ON b.sauid = k."Sauid"
---LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter k ON b.sauid = k."Sauid"
-JOIN gmf.shakemap_scenario_extents_temp l ON ST_Intersects(b.geom,l.geom) WHERE l.scenario = 'SIM9p0_CascadiaInterfaceBestFault'
---JOIN gmf.shakemap_scenario_extents_temp l ON ST_Intersects(b.geom,i.geom) WHERE l.scenario = '{eqScenario}'
+LEFT JOIN results_dsra_{eqScenario}.{eqScenario}_shelter k ON b.sauid = k."Sauid"
+JOIN gmf.shakemap_scenario_extents_temp l ON ST_Intersects(b.geom,l.geom) WHERE l.scenario = '{eqScenario}'
 --WHERE e."gmv_SA(0.3)" >=0.02
 GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,d.vs30,d.z1pt0,d.z2pt5,f.source_type,
 f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2)",e."gmv_SA(0.3)",e."gmv_SA(0.5)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(2.0)",
 i."PRUID",i."PRNAME",i."ERUID",i."ERNAME",i."CDUID",i."CDNAME",i."CSDUID",i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0",k."sCt_DisplHshld_r1",k."sCt_Shelter_b0",k."sCt_Shelter_r1",i.geom;
-/*
-GROUP BY a."Rupture_Abbr",a."gmpe_Model",b.sauid,b.landuse,d.vs30,d.z1pt0,d.z2pt5,d.vs_lon,d.vs_lat,e.site_id,e.lon,e.lat,f.source_type,
-f.magnitude,f.lon,f.lat,f.depth,f.rake,e."gmv_pga",e."gmv_SA(0.1)",e."gmv_SA(0.2)",e."gmv_SA(0.3)",e."gmv_SA(0.5)",e."gmv_SA(0.6)",e."gmv_SA(1.0)",e."gmv_SA(0.3)",e."gmv_SA(2.0)",
-h.censuspop,h.censusdu,b.popdu,j.inc_hshld,j.imm_lt5,j.live_alone,j.no_engfr,j.lonepar3kids,j.indigenous,j.renter,j.age_lt6,j.age_gt65,i."PRUID",i."PRNAME",i."ERUID",i."ERNAME",i."CDUID",i."CDNAME",i."CSDUID",
-i."CSDNAME",i."CFSAUID",i."DAUIDt",i."SACCODE",i."SACTYPE",k."sCt_DisplHshld_b0",k."sCt_DisplHshld_r1",i.geom;
-*/
+
 
 
 -- aggregate to CSD level
---DROP VIEW IF EXISTS results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_csd CASCADE;
---CREATE VIEW results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_csd AS 
-DROP VIEW IF EXISTS results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_csd CASCADE;
-CREATE VIEW results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_csd AS 
+DROP VIEW IF EXISTS results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_csd CASCADE;
+CREATE VIEW results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_csd AS 
+
 SELECT
 a.csduid,
 a.csdname,
@@ -1106,7 +971,7 @@ ROUND(SUM(a."sCt_Res180_b0"),6) AS "sCt_Res180_b0",
 ROUND(SUM(a."sCt_Res360_b0"),6) AS "sCt_Res360_b0",
 ROUND(SUM(a."sCt_Hshld_b0"),6) AS "sCt_Hshld_b0",
 ROUND(SUM(a."sCt_Empl30_b0"),6) AS "sCt_Empl30_b0",
-ROUND(SUM(a."sCr_Empl90_b0"),6) AS "sCt_Empl90_b0",
+ROUND(SUM(a."sCt_Empl90_b0"),6) AS "sCt_Empl90_b0",
 ROUND(AVG(a."sCr_Empl90_b0"),6) AS "sCr_Empl90_b0",
 ROUND(SUM(a."sCt_Empl180_b0"),6) AS "sCt_Empl180_b0",
 ROUND(SUM(a."sCt_Empl360_b0"),6) AS "sCt_Empl360_b0",
@@ -1119,7 +984,7 @@ ROUND(SUM(a."sCt_Res180_r1"),6) AS "sCt_Res180_r1",
 ROUND(SUM(a."sCt_Res360_r1"),6) AS "sCt_Res360_r1",
 ROUND(SUM(a."sCt_Hshld_r1"),6) AS "sCt_Hshld_r1",
 ROUND(SUM(a."sCt_Empl30_r1"),6) AS "sCt_Empl30_r1",
-ROUND(SUM(a."sCr_Empl90_r1"),6) AS "sCt_Empl90_r1",
+ROUND(SUM(a."sCt_Empl90_r1"),6) AS "sCt_Empl90_r1",
 ROUND(AVG(a."sCr_Empl90_r1"),6) AS "sCr_Empl90_r1",
 ROUND(SUM(a."sCt_Empl180_r1"),6) AS "sCt_Empl180_r1",
 ROUND(SUM(a."sCt_Empl360_r1"),6) AS "sCt_Empl360_r1",
@@ -1142,8 +1007,7 @@ ROUND(SUM(a."sLt_Cont_r1"),6) AS "sLt_Cont_r1",
 
 b.geom
 
-FROM results_dsra_sim9p0_cascadiainterfacebestfault.dsra_sim9p0_cascadiainterfacebestfault_indicators_s a
---FROM results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_s a
+FROM results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_s a
 LEFT JOIN boundaries."Geometry_CSDUID" b ON a.csduid = b."CSDUID"
 GROUP BY a.csduid,a.csdname,a."sH_RupName",a."sH_Source",a."sH_Mag",a."sH_HypoLon",a."sH_HypoLat",a."sH_HypoDepth",a."sH_Rake",a."sH_GMPE",
 b.geom;
