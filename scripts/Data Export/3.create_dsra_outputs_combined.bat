@@ -4,25 +4,78 @@ ECHO %TIME%
 REM Geopackage dsra, _indicators_b
 FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
 dsra_idm7p1_sidney, ^
-dsra_sim9p0_cascadiainterfacebestfault) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_indicators_b.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_%%x.%%x_indicators_b" -nln %%x_indicators_b
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_indicators_b.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_indicators_b" -nln %%x_indicators_b
 
 
 REM Geopackage dsra, _indicators_s
 FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
 dsra_idm7p1_sidney, ^
-dsra_sim9p0_cascadiainterfacebestfault) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_indicators_s.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_%%x.%%x_indicators_s" -nln %%x_indicators_s
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_indicators_s.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_indicators_s" -nln %%x_indicators_s
 
 
 REM Geopackage dsra, _indicators_csd
 FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
 dsra_idm7p1_sidney, ^
-dsra_sim9p0_cascadiainterfacebestfault) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_indicators_csd.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_%%x.%%x_indicators_csd" -nln %%x_indicators_csd
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_indicators_csd.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_indicators_csd" -nln %%x_indicators_csd
 
 
 REM Geopackage dsra, _shakemap
 FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
 dsra_idm7p1_sidney, ^
-dsra_sim9p0_cascadiainterfacebestfault) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin" -sql "SELECT * FROM results_%%x.%%x_shakemap" -nln %%x_shakemap
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_shakemap" -nln %%x_shakemap
+
+
+REM Export DSRA views from postgis db into Geopackage. Change ogr2ogr path, location paths, db information if needed.
+
+REM Geopackage dsra, _shakemap_hexbin_1km
+FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
+dsra_idm7p1_sidney, ^
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap_hexbin_1km.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_shakemap_hexbin_1km" -nln %%x_shakemap_hexbin_1km
+
+REM Geopackage dsra, _shakemap_hexbin_5km
+FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
+dsra_idm7p1_sidney, ^
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap_hexbin_5km.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_shakemap_hexbin_5km" -nln %%x_shakemap_hexbin_5km
+
+REM Geopackage dsra, _shakemap_hexbin_10km
+FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
+dsra_idm7p1_sidney, ^
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap_hexbin_10km.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_shakemap_hexbin_10km" -nln %%x_shakemap_hexbin_10km
+
+REM Geopackage dsra, _shakemap_hexbin_25km
+FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
+dsra_idm7p1_sidney, ^
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap_hexbin_25km.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_shakemap_hexbin_25km" -nln %%x_shakemap_hexbin_25km
+
+REM Geopackage dsra, _shakemap_hexbin_50km
+FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
+dsra_idm7p1_sidney, ^
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap_hexbin_50km.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_shakemap_hexbin_50km" -nln %%x_shakemap_hexbin_50km
+
+REM Geopackage dsra, _shakemap_hexbin_100km
+FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
+dsra_idm7p1_sidney, ^
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap_hexbin_100km.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_shakemap_hexbin_100km" -nln %%x_shakemap_hexbin_100km
 
 
 REM Export DSRA master all scenarios views from postgis db into Geopackage. Change ogr2ogr path, location paths, db information if needed.
