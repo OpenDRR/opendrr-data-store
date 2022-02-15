@@ -276,6 +276,9 @@ CREATE VIEW results_dsra_{eqScenario}.dsra_{eqScenario}_indicators_b AS
 --3.1 Scenario Hazard
 SELECT 
 a."AssetID",
+b.eqdeslev AS "E_BldgDesLev",
+b.occclass1 AS "E_BldgOccS1",
+b.gentype AS "E_BldgTypeG",
 
 -- 3.1.1 Shakemap Intensity
 a."Rupture_Abbr" AS "sH_RupName",

@@ -116,7 +116,7 @@ FROM gmf.shakemap_{eqScenario} a
 LEFT JOIN gmf.shakemap_{eqScenario}_xref b ON a.site_id = b.site_id
 LEFT JOIN dsra.dsra_{eqScenario} c ON b.id = c."AssetID"
 LEFT JOIN ruptures.rupture_table d ON d.rupture_name = c."Rupture_Abbr"
-WHERE a."gmv_SA(0.3)" >= 0.02;
+--WHERE a."gmv_SA(0.3)" >= 0.02;
 
 
 -- update rupture, mag, gmpe information
