@@ -117,7 +117,17 @@ psra_expected_loss_fsa, ^
 psra_src_loss, ^
 psra_canada_agg_loss, ^
 psra_canada_expected_loss, ^
-psra_canada_src_loss) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\seismic_risk\national\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_psra_national.%%x" -nln %%x
+psra_canada_src_loss, ^
+psra_indicators_hexbin_1km, ^
+psra_indicators_hexbin_1km_uc, ^
+psra_indicators_hexbin_5km, ^
+psra_indicators_hexbin_5km_uc, ^
+psra_indicators_hexbin_10km, ^
+psra_indicators_hexbin_10km_uc, ^
+psra_indicators_hexbin_25km, ^
+psra_indicators_hexbin_25km_uc, ^
+psra_indicators_hexbin_50km_uc, ^
+psra_indicators_hexbin_100km_uc) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\seismic_risk\national\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_psra_national.%%x" -nln %%x
 
 ECHO %TIME%
 PAUSE
