@@ -30,15 +30,15 @@ nhsl_physical_exposure_indicators_s_pe, ^
 nhsl_physical_exposure_indicators_s_qc, ^
 nhsl_physical_exposure_indicators_s_sk, ^
 nhsl_physical_exposure_indicators_s_yt, ^
-nhsl_physical_exposure_indicators_hexbin_1km, ^
-nhsl_physical_exposure_indicators_hexbin_1km_uc, ^
-nhsl_physical_exposure_indicators_hexbin_5km, ^
-nhsl_physical_exposure_indicators_hexbin_5km_uc, ^
-nhsl_physical_exposure_indicators_hexbin_10km, ^
-nhsl_physical_exposure_indicators_hexbin_10km_uc, ^
-nhsl_physical_exposure_indicators_hexbin_25km_uc, ^
-nhsl_physical_exposure_indicators_hexbin_50km_uc, ^
-nhsl_physical_exposure_indicators_hexbin_100km_uc) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\physical_exposure\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_nhsl_physical_exposure.%%x" -nln %%x
+nhsl_physical_exposure_indicators_hex_1km, ^
+nhsl_physical_exposure_indicators_hexgrid_1km_uc, ^
+nhsl_physical_exposure_indicators_hexgrid_5km, ^
+nhsl_physical_exposure_indicators_hexgrid_5km_uc, ^
+nhsl_physical_exposure_indicators_hexgrid_10km, ^
+nhsl_physical_exposure_indicators_hexgrid_10km_uc, ^
+nhsl_physical_exposure_indicators_hexgrid_25km_uc, ^
+nhsl_physical_exposure_indicators_hexgrid_50km_uc, ^
+nhsl_physical_exposure_indicators_hexgrid_100km_uc) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\physical_exposure\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_nhsl_physical_exposure.%%x" -nln %%x
 
 @REM REM Geopackage risk dynamics
 @REM FOR %%x IN (nhsl_risk_dynamics_indicators, ^
