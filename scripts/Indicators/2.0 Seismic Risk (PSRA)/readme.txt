@@ -8,3 +8,6 @@ v1.1
 
 v1.2
 - revised indicators
+
+v1.3
+- revised indicators in line with model-factory v1.4.1

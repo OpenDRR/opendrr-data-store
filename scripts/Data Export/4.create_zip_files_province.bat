@@ -21,6 +21,10 @@ REM risk_dynamics
 CD /D "D:\Workspace\data\view_outputs\all_indicators\risk_dynamics\province\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
 DEL *.gpkg
 
+REM social_fabric
+CD /D "D:\Workspace\data\view_outputs\all_indicators\social_fabric\province\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
 REM seismic_risk
 REM AB
 CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\ab\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
@@ -77,11 +81,6 @@ DEL *.gpkg
 REM national
 CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\national\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
 DEL *.gpkg
-
-REM social_fabric
-CD /D "D:\Workspace\data\view_outputs\all_indicators\social_fabric\province\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
-DEL *.gpkg
-
 
 ECHO %TIME%
 PAUSE

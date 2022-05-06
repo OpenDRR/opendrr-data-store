@@ -1,4 +1,4 @@
-REM Export PSRA views from postgis db into Geopackage by province. Change ogr2ogr path, location paths, db information if needed.
+REM Export PSRA views from postgis db into GeoPackages by P/T. Change ogr2ogr path, location paths, db information if needed.
 ECHO %TIME%
 
 REM Geopackage AB PSRA
@@ -106,7 +106,7 @@ psra_yt_agg_loss_fsa, ^
 psra_yt_src_loss) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\yt\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_psra_yt.%%x" -nln %%x
 
 
-REM Export PSRA views from postgis db into Geopackage for national level. Change ogr2ogr path, location paths, db information if needed.
+REM Export PSRA views from postgis db into GeoPackages for national level. Change ogr2ogr path, location paths, db information if needed.
 
 REM Geopackage national PSRA
 FOR %%x IN (psra_indicators_b, ^
@@ -118,16 +118,79 @@ psra_src_loss, ^
 psra_canada_agg_loss, ^
 psra_canada_expected_loss, ^
 psra_canada_src_loss, ^
-psra_indicators_hexbin_1km, ^
-psra_indicators_hexbin_1km_uc, ^
-psra_indicators_hexbin_5km, ^
-psra_indicators_hexbin_5km_uc, ^
-psra_indicators_hexbin_10km, ^
-psra_indicators_hexbin_10km_uc, ^
-psra_indicators_hexbin_25km, ^
-psra_indicators_hexbin_25km_uc, ^
-psra_indicators_hexbin_50km_uc, ^
-psra_indicators_hexbin_100km_uc) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\seismic_risk\national\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_psra_national.%%x" -nln %%x
+psra_indicators_hexgrid_1km, ^
+psra_indicators_hexgrid_1km_uc, ^
+psra_indicators_hexgrid_5km, ^
+psra_indicators_hexgrid_5km_uc, ^
+psra_indicators_hexgrid_10km, ^
+psra_indicators_hexgrid_10km_uc, ^
+psra_indicators_hexgrid_25km, ^
+psra_indicators_hexgrid_25km_uc, ^
+psra_indicators_hexgrid_50km_uc, ^
+psra_indicators_hexgrid_100km_uc) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\seismic_risk\national\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_psra_national.%%x" -nln %%x
+
+
+REM Create zip of each geopackage in given folders using 7zip.exe.  Delete all geopackages after zipping in directory.
+REM AB
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\ab\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM BC
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\bc\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM MB
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\mb\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM NB
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\nb\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM NL
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\nl\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM NS
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\ns\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM NT
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\nt\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM NU
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\nu\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM ON
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\on\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM PE
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\pe\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM QC
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\qc\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM SK
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\sk\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM YT
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\province\yt\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM national
+CD /D "D:\Workspace\data\view_outputs\all_indicators\seismic_risk\national\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
+REM social_fabric
+CD /D "D:\Workspace\data\view_outputs\all_indicators\social_fabric\province\" && FOR %%i IN (*.*) DO 7z.exe a "%%~ni.zip" "%%i"
+DEL *.gpkg
+
 
 ECHO %TIME%
 PAUSE

@@ -11,3 +11,6 @@ v1.3
 - revised/updated indicators (https://github.com/OpenDRR/opendrr-data-store/issues/54)
 - renamed all_indicators to indicators
 - shakemap hexbins aggregation
+
+v1.4
+- updates to support model-factory v1.4.1

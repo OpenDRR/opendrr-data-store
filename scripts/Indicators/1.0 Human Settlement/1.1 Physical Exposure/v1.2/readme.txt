@@ -13,4 +13,6 @@ v1.2
 - removed centroid hexbin aggregations
 - removed all_indicators to indicators
 
-
+v1.3
+- update hexbin to hexgrid
+- remove site level
