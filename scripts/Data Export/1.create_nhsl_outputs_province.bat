@@ -30,7 +30,7 @@ nhsl_physical_exposure_indicators_s_pe, ^
 nhsl_physical_exposure_indicators_s_qc, ^
 nhsl_physical_exposure_indicators_s_sk, ^
 nhsl_physical_exposure_indicators_s_yt, ^
-nhsl_physical_exposure_indicators_hex_1km, ^
+nhsl_physical_exposure_indicators_hexgrid_1km, ^
 nhsl_physical_exposure_indicators_hexgrid_1km_uc, ^
 nhsl_physical_exposure_indicators_hexgrid_5km, ^
 nhsl_physical_exposure_indicators_hexgrid_5km_uc, ^
