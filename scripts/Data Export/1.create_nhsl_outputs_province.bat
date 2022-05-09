@@ -36,6 +36,7 @@ nhsl_physical_exposure_indicators_hexgrid_5km, ^
 nhsl_physical_exposure_indicators_hexgrid_5km_uc, ^
 nhsl_physical_exposure_indicators_hexgrid_10km, ^
 nhsl_physical_exposure_indicators_hexgrid_10km_uc, ^
+nhsl_physical_exposure_indicators_hexgrid_25km, ^
 nhsl_physical_exposure_indicators_hexgrid_25km_uc, ^
 nhsl_physical_exposure_indicators_hexgrid_50km_uc, ^
 nhsl_physical_exposure_indicators_hexgrid_100km_uc) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\physical_exposure\province\%%x.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_nhsl_physical_exposure.%%x" -nln %%x

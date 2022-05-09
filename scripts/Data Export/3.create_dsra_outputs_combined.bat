@@ -77,6 +77,13 @@ dsra_sim9p0_cascadiainterfacebestfault, ^
 dsra_acm7p0_georgiastraitfault, ^
 dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap_hexgrid_10km_uc.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_sm_hg_10_uc" -nln %%x_shakemap_hexgrid_10km_uc
 
+REM Geopackage dsra, _shakemap_hexgrid_25km
+FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
+dsra_idm7p1_sidney, ^
+dsra_sim9p0_cascadiainterfacebestfault, ^
+dsra_acm7p0_georgiastraitfault, ^
+dsra_scm7p5_valdesbois) DO ogr2ogr -f "gpkg" D:\Workspace\data\view_outputs\all_indicators\earthquake_scenarios\%%x_shakemap_hexgrid_25km.gpkg PG:"host=localhost user=postgres dbname=opendrr password=admin port=5433" -sql "SELECT * FROM results_%%x.%%x_sm_hg_25" -nln %%x_shakemap_hexgrid_25km
+
 REM Geopackage dsra, _shakemap_hexgrid_25km_uc
 FOR %%x IN (dsra_acm7p3_leechriverfullfault, ^
 dsra_idm7p1_sidney, ^
