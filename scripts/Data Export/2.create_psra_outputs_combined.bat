@@ -117,6 +117,7 @@ psra_expected_loss_fsa, ^
 psra_src_loss, ^
 psra_canada_agg_loss, ^
 psra_canada_expected_loss, ^
+psra_canada_expected_loss_500yr, ^
 psra_canada_src_loss, ^
 psra_indicators_hexgrid_1km, ^
 psra_indicators_hexgrid_1km_uc, ^

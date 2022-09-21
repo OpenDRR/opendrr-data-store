@@ -16,3 +16,6 @@ v1.2
 v1.3
 - update hexbin to hexgrid
 - remove site level
+
+v1.4
+- 3857 hexgrid

@@ -14,3 +14,6 @@ v1.3
 
 v1.4
 - updates to support model-factory v1.4.1
+
+v1.5
+- 3857 hexgrid

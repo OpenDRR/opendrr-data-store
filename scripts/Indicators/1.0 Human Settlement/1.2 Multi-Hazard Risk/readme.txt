@@ -6,3 +6,6 @@ v1.1
 
 v1.2
 - resource sovi_census_canada to sovi_sauid_nov2021
+
+v1.3
+- 3857 hexgrid

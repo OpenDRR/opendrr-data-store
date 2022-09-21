@@ -11,3 +11,7 @@ v1.2
 
 v1.3
 - revised indicators in line with model-factory v1.4.1
+
+v1.4
+- 3857 hexgrid aggregation
+- psra eqri revisions
