@@ -1,0 +1,10 @@
+Tableaux sources - Notes de mise à jour de l'exposition
+v1.1
+- mise à jour de la source d'exposition pour inclure ss_region, nation tags
+
+/fix_oqbldgexp_fsauid
+- scripts pour corriger et mettre à jour les fsauid dans diverses tables oqbldgexp
+
+
+/updates
+- scripts pour corriger et mettre à jour le fichier source BldgExpRef_CA_master_v3p2.csv

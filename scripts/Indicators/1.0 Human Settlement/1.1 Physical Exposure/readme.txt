@@ -1,3 +1,5 @@
+Physical Exposure update notes
+
 v1.1
 - update to include ss_region, nation tags in indicators
 - hexbin aggregations, area and centroid for testing

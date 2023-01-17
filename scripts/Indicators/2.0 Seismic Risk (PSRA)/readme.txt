@@ -1,3 +1,4 @@
+Seismic Risk (PSRA) update notes
 v1.0
 - change r2 to r1
 
@@ -14,4 +15,7 @@ v1.3
 
 v1.4
 - 3857 hexgrid aggregation
+- revised indicators
 - psra eqri revisions
+- added back previous removed **total** row for psra_canada tables
+- update decimal places for psra ect_fatality, ectr_fatality

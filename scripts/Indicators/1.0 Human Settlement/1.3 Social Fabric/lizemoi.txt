@@ -1,0 +1,10 @@
+Notes de mise à jour du tissu social
+v1.1
+- mises à jour des indicateurs
+- incorporation d'une nouvelle table de consultation des seuils sovi
+
+v1.2
+- nouvelles tables sources sovi mises à jour avec tous les seuils et calculs inclus.  Mise à jour de la v1.1 pour ne charger que la source.
+
+v1.3
+- 3857 hexgrid

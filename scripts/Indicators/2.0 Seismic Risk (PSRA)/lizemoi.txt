@@ -1,0 +1,21 @@
+Notes de mise à jour sur le risque sismique (PSRA)
+v1.0
+- changement de r2 en r1
+
+v1.1
+- indicateurs révisés
+- nouvel indicateur EQRiskIndex
+- renommé all_indicators en indicators
+
+v1.2
+- indicateurs révisés
+
+v1.3
+- indicateurs révisés en accord avec model-factory v1.4.1
+
+v1.4
+- agrégation 3857 hexgrid
+- indicateurs révisés
+- révisions de psra eqri
+- réintroduction de la ligne **total** précédemment supprimée pour les tables psra_canada
+- mise à jour des décimales pour psra ect_fatality, ectr_fatality

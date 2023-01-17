@@ -1,4 +1,4 @@
-Source Tables - Exposure
+Source Tables - Exposure update notes
 v1.1
 - update exposure source to include ss_region, nation tags
 

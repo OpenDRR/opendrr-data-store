@@ -1,0 +1,11 @@
+Notes de mise à jour de Multi-Hazard Risk
+v1.1
+- basé sur la v1.0 et incluant des indicateurs de tissu social pour créer une nouvelle hiérarchisation des risques d'accident
+- nouvelle table de consultation pour la priorisation des risques inclus
+- remplacement de all_indicators par indicators
+
+v1.2
+- ressource sovi_census_canada en sovi_sauid_nov2021
+
+v1.3
+- 3857 hexgrid

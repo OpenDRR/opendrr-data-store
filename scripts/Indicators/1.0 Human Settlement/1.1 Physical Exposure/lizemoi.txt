@@ -1,0 +1,23 @@
+Notes de mise à jour sur l'exposition physique
+
+v1.1
+- mise à jour pour inclure les balises ss_region, nation dans les indicateurs
+- agrégations hexbin, zone et centroïde pour les tests
+- mise à jour des indicateurs PPH, précédemment personnes par hectare mais qui devrait être personnes par ménage.  Ajout d'un indicateur supplémentaire pour représenter les personnes par hectare
+
+v1.2
+- mise à jour de E_AreaKm2, E_AreaHa (à partir de la source)
+- mise à jour des indicateurs Et_BldgArea, Et_BldgAreaRes, Et_BldgAreaComm, Et_BldgAreaInd, Et_BldgAreaCivic, Et_BldgAreaAgr
+- renommage des indicateurs Et_Pop_Km2, Et_Pop_Ha en Et_PopDay_Km2, Et_PopDay_Ha
+- nouveaux indicateurs Et_PopNight_Km2, Et_PopNight_Ha
+- suppression des indicateurs E_CensusBldg, E_SAC, ss_region
+- mise à jour de Et_SFHshld,Et_MFHshld
+- suppression des agrégations hexagonales centroïdes
+- suppression de all_indicators dans les indicateurs
+
+v1.3
+- mise à jour de hexbin en hexgrid
+- suppression du niveau site
+
+v1.4
+- 3857 hexgrid
