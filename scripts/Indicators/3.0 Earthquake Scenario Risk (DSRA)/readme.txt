@@ -1,19 +1,19 @@
-Notes de mise à jour sur le scénario de risque sismique (DSRA)
+Earthquake Scenario Risk (DSRA) update notes
 v1.1
-- révisions de l'indicateur
+- indicator revisions
 
 v1.2
-- repo des ressources vers le nouveau repo final de la dsra
-- indicateurs supplémentaires ajoutés au niveau des bâtiments
-- renommage de tous les indicateurs r2, références r2 en r1 sauf pour metrovan
+- resource repo to new final dsra repo
+- additional indicators added in building level
+- rename all r2 indicators, r2 references to r1 except for metrovan
 
 v1.3
-- indicateurs révisés/mises à jour (https://github.com/OpenDRR/opendrr-data-store/issues/54)
-- renommé all_indicators en indicators
-- agrégation shakemap hexgrid
+- revised/updated indicators (https://github.com/OpenDRR/opendrr-data-store/issues/54)
+- renamed all_indicators to indicators
+- shakemap hexgrid aggregation
 
 v1.4
-- mises à jour pour supporter model-factory v1.4.1
+- updates to support model-factory v1.4.1
 
 v1.5
 - 3857 hexgrid
